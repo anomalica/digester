@@ -1,0 +1,15 @@
+# https://github.com/markhedleyjones/container-magic
+names:
+  image: anomalica-digester
+  workspace: workspace
+  user: nonroot
+
+stages:
+  base:
+    from: python:3.12-slim
+  development:
+    from: base
+  production:
+    from: base
+    steps:
+      - copy: workspace
