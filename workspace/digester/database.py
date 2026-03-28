@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS records (
 CREATE TABLE IF NOT EXISTS claims (
     id TEXT PRIMARY KEY,
     content TEXT NOT NULL,
+    original_excerpt TEXT,
     claim_type TEXT NOT NULL,
     attestation TEXT NOT NULL,
     record_id TEXT NOT NULL REFERENCES records(id),
@@ -183,12 +184,13 @@ def insert_claim(conn: sqlite3.Connection, claim: Claim) -> Claim:
     now = _now()
     metadata_json = json.dumps(claim.metadata) if claim.metadata else None
     conn.execute(
-        "INSERT INTO claims (id, content, claim_type, attestation, record_id, speaker_id, "
+        "INSERT INTO claims (id, content, original_excerpt, claim_type, attestation, record_id, speaker_id, "
         "location_in_record, date, date_end, confidence, metadata, created_at) "
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         (
             claim.id,
             claim.content,
+            claim.original_excerpt,
             claim.claim_type.value,
             claim.attestation.value,
             claim.record_id,
@@ -332,14 +334,15 @@ def _row_to_claim(row: tuple) -> Claim:
     return Claim(
         id=row[0],
         content=row[1],
-        claim_type=row[2],
-        attestation=row[3],
-        record_id=row[4],
-        speaker_id=row[5],
-        location_in_record=row[6],
-        date=row[7],
-        date_end=row[8],
-        confidence=row[9],
-        metadata=json.loads(row[10]) if row[10] else None,
-        created_at=datetime.fromisoformat(row[11]),
+        original_excerpt=row[2],
+        claim_type=row[3],
+        attestation=row[4],
+        record_id=row[5],
+        speaker_id=row[6],
+        location_in_record=row[7],
+        date=row[8],
+        date_end=row[9],
+        confidence=row[10],
+        metadata=json.loads(row[11]) if row[11] else None,
+        created_at=datetime.fromisoformat(row[12]),
     )

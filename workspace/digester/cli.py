@@ -163,6 +163,7 @@ def digest(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
             conn,
             Claim(
                 content=extracted_claim.content,
+                original_excerpt=extracted_claim.original_excerpt,
                 claim_type=extracted_claim.claim_type,
                 attestation=extracted_claim.attestation,
                 record_id=record.id,

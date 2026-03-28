@@ -55,6 +55,8 @@ RULES:
 6. Normalise all text to English regardless of source language.
 7. speaker is the person making the assertion (may differ from the document's author).
 8. location_in_record is where in the document the claim appears (page, timestamp, paragraph).
+9. UNIT NORMALISATION: Convert all measurements in "content" to metric units using full unit names. Write "10 metres" not "10m", "24,000 metres" not "24km", "1,200 kilometres per hour" not "1200 km/h". Use the exact format: number + space + full unit name (metres, kilometres, kilograms, degrees Celsius, etc.).
+10. original_excerpt: Preserve the EXACT original wording from the source document, including original units, language, and phrasing. This is for attribution and provenance. If the source says "about 30 to 40 feet", the original_excerpt must say exactly that.
 
 OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
 
@@ -65,7 +67,8 @@ OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
     {{"name": "canonical short name", "node_type": "person|organisation|place|event|matter|object", "metadata": {{"date_start": "...", "date_end": "..."}}}}
 ],
 "claims": [
-    {{"content": "atomic assertion text",
+    {{"content": "normalised assertion with metric units",
+      "original_excerpt": "exact original wording from the source document",
       "claim_type": "observation|testimony|hearsay|opinion|measurement|administrative",
       "attestation": "first_hand|second_hand|third_hand",
       "speaker": "person name or null",
@@ -221,9 +224,13 @@ def _parse_response(raw: str) -> ExtractionResult:
         refs = c.get("node_references", [])
         if not isinstance(refs, list):
             refs = []
+        original = c.get("original_excerpt")
+        if isinstance(original, str):
+            original = original.strip() or None
         claims.append(
             ExtractedClaim(
                 content=str(c.get("content", "")),
+                original_excerpt=original,
                 claim_type=ClaimType(claim_type),
                 attestation=AttestationLevel(attestation),
                 speaker=c.get("speaker"),

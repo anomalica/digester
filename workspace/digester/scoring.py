@@ -123,15 +123,14 @@ def score_all_claims(conn: sqlite3.Connection) -> dict[str, ScoreBreakdown]:
 
 
 def tier_label(score: float) -> str:
-    """Convert a numeric score to a human-readable tier label."""
+    """Convert a numeric score to a human-readable tier label.
+
+    Labels describe evidence strength, not editorial judgement about the claim.
+    """
     if score >= 0.85:
-        return "verified"
+        return "strong"
     if score >= 0.65:
-        return "probable"
+        return "moderate"
     if score >= 0.40:
-        return "disputed"
-    if score >= 0.20:
-        return "legend"
-    if score >= 0.10:
-        return "misidentified"
-    return "hoax"
+        return "weak"
+    return "insufficient"

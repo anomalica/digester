@@ -68,6 +68,7 @@ class Claim(BaseModel):
 
     id: str = Field(default_factory=_uuid)
     content: str
+    original_excerpt: str | None = None
     claim_type: ClaimType
     attestation: AttestationLevel
     record_id: str
@@ -96,6 +97,7 @@ class ExtractedClaim(BaseModel):
     """A claim identified during extraction, before storage."""
 
     content: str
+    original_excerpt: str | None = None
     claim_type: ClaimType
     attestation: AttestationLevel
     speaker: str | None = None
