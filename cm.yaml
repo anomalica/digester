@@ -13,6 +13,7 @@ stages:
             - anthropic
             - click
             - fastembed
+            - levenshtein
             - huggingface-hub
             - pydantic
             - sqlite-vec

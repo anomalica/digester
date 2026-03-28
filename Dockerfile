@@ -45,6 +45,7 @@ RUN pip install --no-cache-dir \
         anthropic \
         click \
         fastembed \
+        levenshtein \
         huggingface-hub \
         pydantic \
         sqlite-vec

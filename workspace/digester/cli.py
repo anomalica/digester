@@ -11,12 +11,20 @@ from digester.database import (
     get_stats,
     find_node_by_name,
     init_db,
+    insert_alias,
     insert_claim,
     insert_node,
     insert_record,
 )
-from digester.embeddings import embed_text, init_vec, store_node_embedding
+from digester.embeddings import (
+    embed_batch,
+    embed_text,
+    init_vec,
+    store_claim_embedding,
+    store_node_embedding,
+)
 from digester.extract import extract
+from digester.matching import match_node
 from digester.models import Claim, Node, Record
 from digester.record_parser import parse_record
 from digester.scoring import score_claim, tier_label
@@ -77,19 +85,27 @@ def digest(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
     )
     click.echo(f"  Record: {record.title} [{record.id[:8]}]")
 
-    # Create or find domain nodes
-    # Node deduplication relies on the extraction prompt receiving the existing
-    # node directory so Claude uses canonical names. Exact name and alias matching
-    # handles the rest. Embedding similarity is not used for node matching because
-    # short names in the same domain cluster too tightly to distinguish.
+    # Create or find domain nodes using exact, fuzzy, and alias matching.
+    # The extraction prompt receives the existing node directory so Claude
+    # uses canonical names where possible. Matching catches the rest.
     node_map: dict[str, str] = {}  # name -> node_id
     for extracted in result.nodes:
-        existing = find_node_by_name(conn, extracted.name, extracted.node_type.value)
-        if existing:
-            node_map[extracted.name] = existing.id
-            click.echo(
-                f"  Existing node: {extracted.name} ({extracted.node_type.value}) [{existing.id[:8]}]"
-            )
+        match = match_node(conn, extracted.name, extracted.node_type.value)
+        if match:
+            node_id, method = match
+            node_map[extracted.name] = node_id
+            existing_name = conn.execute(
+                "SELECT name FROM nodes WHERE id = ?", (node_id,)
+            ).fetchone()[0]
+            if method == "fuzzy" and extracted.name != existing_name:
+                insert_alias(conn, extracted.name, node_id)
+                click.echo(
+                    f"  Matched ({method}): {extracted.name} -> {existing_name} [{node_id[:8]}]"
+                )
+            else:
+                click.echo(
+                    f"  Existing node: {extracted.name} ({extracted.node_type.value}) [{node_id[:8]}]"
+                )
         else:
             node = insert_node(
                 conn,
@@ -120,16 +136,28 @@ def digest(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
 
     # Create claims
     for extracted_claim in result.claims:
-        # Resolve node references to IDs
+        # Resolve node references to IDs (check node_map first, then database)
         ref_ids = []
         for ref_name in extracted_claim.node_references:
             if ref_name in node_map:
                 ref_ids.append(node_map[ref_name])
+            else:
+                # Claim references a node not in result.nodes (already in graph)
+                ref_match = match_node(conn, ref_name, None)
+                if ref_match:
+                    ref_ids.append(ref_match[0])
+                    node_map[ref_name] = ref_match[0]
 
-        # Resolve speaker
+        # Resolve speaker (check node_map first, then database)
         speaker_id = None
-        if extracted_claim.speaker and extracted_claim.speaker in node_map:
-            speaker_id = node_map[extracted_claim.speaker]
+        if extracted_claim.speaker:
+            if extracted_claim.speaker in node_map:
+                speaker_id = node_map[extracted_claim.speaker]
+            else:
+                speaker_match = match_node(conn, extracted_claim.speaker, "person")
+                if speaker_match:
+                    speaker_id = speaker_match[0]
+                    node_map[extracted_claim.speaker] = speaker_match[0]
 
         insert_claim(
             conn,
@@ -206,10 +234,6 @@ def show(ctx: click.Context, name: str) -> None:
 @click.pass_context
 def embed(ctx: click.Context) -> None:
     """Embed all claims and nodes for similarity search."""
-    from digester.embeddings import (
-        embed_batch,
-        store_claim_embedding,
-    )
 
     conn = _connect(ctx.obj["db_path"])
     init_vec(conn)

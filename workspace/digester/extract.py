@@ -85,7 +85,9 @@ DEFAULT_MODEL = "sonnet"
 
 
 NODE_DIRECTORY_HEADER = """EXISTING NODE DIRECTORY - use these EXACT names when referring to known items.
-Do NOT create new nodes for items already listed here.
+Do NOT create new nodes for items already listed here. Include them in node_references using the exact name from this list.
+
+CRITICAL: Every claim MUST list ALL nodes it mentions in node_references. If a claim says "Kevin Day tracked objects on the USS Princeton", then node_references must include both "Kevin Day" and "USS Princeton". Missing node_references break the knowledge graph.
 
 {directory}
 
