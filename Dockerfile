@@ -45,8 +45,11 @@ RUN pip install --no-cache-dir \
         anthropic \
         click \
         fastembed \
+        huggingface-hub \
         pydantic \
         sqlite-vec
+ENV EMBEDDING_MODEL_PATH="/opt/models/qwen3-embedding"
+RUN python -c "from huggingface_hub import snapshot_download; snapshot_download('electroglyph/Qwen3-Embedding-0.6B-onnx-uint8', local_dir='/opt/models/qwen3-embedding')"
 
 ################################################################################
 # Stage: development

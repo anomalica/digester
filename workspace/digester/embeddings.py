@@ -12,33 +12,50 @@ import struct
 
 import sqlite_vec
 
-DEFAULT_MODEL = "mixedbread-ai/mxbai-embed-large-v1"
+MODEL_NAME = "electroglyph/Qwen3-Embedding-0.6B-onnx-uint8"
+MODEL_FILE = "dynamic_uint8.onnx"
 EMBEDDING_DIMS = 1024
 
 _embedder = None
 
 
-def _get_embedder(model: str = DEFAULT_MODEL):
+def _get_embedder():
     global _embedder
     if _embedder is None:
-        from fastembed import TextEmbedding
+        import os
 
-        _embedder = TextEmbedding(model_name=model)
+        from fastembed import TextEmbedding
+        from fastembed.common.model_description import ModelSource, PoolingType
+
+        model_path = os.environ.get("EMBEDDING_MODEL_PATH")
+
+        TextEmbedding.add_custom_model(
+            model=MODEL_NAME,
+            pooling=PoolingType.MEAN,
+            normalization=True,
+            sources=ModelSource(hf=MODEL_NAME),
+            dim=EMBEDDING_DIMS,
+            model_file=MODEL_FILE,
+        )
+
+        kwargs = {"model_name": MODEL_NAME}
+        if model_path and os.path.isdir(model_path):
+            kwargs["specific_model_path"] = model_path
+
+        _embedder = TextEmbedding(**kwargs)
     return _embedder
 
 
-def embed_text(text: str, model: str = DEFAULT_MODEL) -> list[float]:
-    embedder = _get_embedder(model)
+def embed_text(text: str) -> list[float]:
+    embedder = _get_embedder()
     results = list(embedder.embed([text]))
     return results[0].tolist()
 
 
-def embed_batch(texts: list[str], model: str = DEFAULT_MODEL) -> list[list[float]]:
+def embed_batch(texts: list[str]) -> list[list[float]]:
     if not texts:
         return []
-    embedder = _get_embedder(model)
-    results = list(embedder.embed(texts))
-    return [r.tolist() for r in results]
+    return [embed_text(t) for t in texts]
 
 
 def serialise_f32(vector: list[float]) -> bytes:
