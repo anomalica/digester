@@ -84,14 +84,40 @@ VALID_ATTESTATION = {t.value for t in AttestationLevel}
 DEFAULT_MODEL = "sonnet"
 
 
+NODE_DIRECTORY_HEADER = """EXISTING NODE DIRECTORY - use these EXACT names when referring to known items.
+Do NOT create new nodes for items already listed here.
+
+{directory}
+
+Now extract from the document below. Use canonical names from the directory above where applicable.
+
+"""
+
+
 def extract(
-    text: str, model: str = DEFAULT_MODEL, use_api: bool = False
+    text: str,
+    model: str = DEFAULT_MODEL,
+    use_api: bool = False,
+    existing_nodes: list[tuple[str, str]] | None = None,
 ) -> ExtractionResult:
-    """Extract nodes and claims from record text."""
+    """Extract nodes and claims from record text.
+
+    Args:
+        existing_nodes: list of (name, node_type) tuples for the node directory.
+    """
+    prompt = EXTRACTION_PROMPT
+    if existing_nodes:
+        directory_lines = [
+            f"  - {name} ({node_type})" for name, node_type in existing_nodes
+        ]
+        prompt = (
+            NODE_DIRECTORY_HEADER.format(directory="\n".join(directory_lines)) + prompt
+        )
+
     if use_api:
-        raw = _call_api(EXTRACTION_PROMPT, text, model)
+        raw = _call_api(prompt, text, model)
     else:
-        raw = _call_cli(EXTRACTION_PROMPT, text, model)
+        raw = _call_cli(prompt, text, model)
     return _parse_response(raw)
 
 

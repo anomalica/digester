@@ -7,6 +7,7 @@ import click
 
 from digester.database import (
     get_claims_for_node,
+    get_nodes,
     get_stats,
     find_node_by_name,
     init_db,
@@ -14,6 +15,7 @@ from digester.database import (
     insert_node,
     insert_record,
 )
+from digester.embeddings import embed_text, init_vec, store_node_embedding
 from digester.extract import extract
 from digester.models import Claim, Node, Record
 from digester.record_parser import parse_record
@@ -52,8 +54,17 @@ def digest(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
     click.echo(f"Parsing record: {path.name}")
     parsed = parse_record(text)
 
+    # Build node directory from existing graph
+    existing_nodes = []
+    all_nodes = get_nodes(conn)
+    if all_nodes:
+        existing_nodes = [(n.name, n.node_type.value) for n in all_nodes]
+        click.echo(f"  Node directory: {len(existing_nodes)} existing nodes")
+
     click.echo(f"Extracting from: {parsed.title or path.name}")
-    result = extract(parsed.body, model=model, use_api=api)
+    result = extract(
+        parsed.body, model=model, use_api=api, existing_nodes=existing_nodes or None
+    )
 
     # Create the record node
     record = insert_record(
@@ -67,6 +78,10 @@ def digest(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
     click.echo(f"  Record: {record.title} [{record.id[:8]}]")
 
     # Create or find domain nodes
+    # Node deduplication relies on the extraction prompt receiving the existing
+    # node directory so Claude uses canonical names. Exact name and alias matching
+    # handles the rest. Embedding similarity is not used for node matching because
+    # short names in the same domain cluster too tightly to distinguish.
     node_map: dict[str, str] = {}  # name -> node_id
     for extracted in result.nodes:
         existing = find_node_by_name(conn, extracted.name, extracted.node_type.value)
@@ -193,9 +208,7 @@ def embed(ctx: click.Context) -> None:
     """Embed all claims and nodes for similarity search."""
     from digester.embeddings import (
         embed_batch,
-        init_vec,
         store_claim_embedding,
-        store_node_embedding,
     )
 
     conn = _connect(ctx.obj["db_path"])
@@ -235,7 +248,7 @@ def embed(ctx: click.Context) -> None:
 @click.pass_context
 def search(ctx: click.Context, query: str, limit: int) -> None:
     """Search claims by semantic similarity."""
-    from digester.embeddings import embed_text, init_vec, search_similar_claims
+    from digester.embeddings import search_similar_claims
 
     conn = _connect(ctx.obj["db_path"])
     init_vec(conn)
