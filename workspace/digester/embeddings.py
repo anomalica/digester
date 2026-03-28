@@ -12,8 +12,8 @@ import struct
 
 import sqlite_vec
 
-DEFAULT_MODEL = "BAAI/bge-small-en-v1.5"
-EMBEDDING_DIMS = 384
+DEFAULT_MODEL = "mixedbread-ai/mxbai-embed-large-v1"
+EMBEDDING_DIMS = 1024
 
 _embedder = None
 
