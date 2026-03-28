@@ -270,45 +270,108 @@ def embed(ctx: click.Context) -> None:
     conn.close()
 
 
+CORROBORATION_VERIFY_PROMPT = """Below are pairs of claims from different records. For each pair, decide whether they assert the SAME underlying fact or are genuinely DIFFERENT assertions.
+
+RULES:
+- "same": the claims make the same factual assertion, possibly with different wording or detail level.
+- "different": the claims are about different things, even if they are thematically related.
+- Two claims about the same TOPIC but making different ASSERTIONS are "different".
+  Example: "The object was 12 metres long" and "The object had no wings" are both about the object, but different assertions.
+- Two claims making the same ASSERTION in different words are "same".
+  Example: "The object traversed 100km in seconds" and "The UAP covered approximately 100 kilometres almost instantly" are the same.
+
+{pairs_text}
+
+OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
+
+{{"decisions": [
+    {{"pair_id": 1, "verdict": "same"}},
+    {{"pair_id": 2, "verdict": "different"}}
+]}}"""
+
+
 @main.command()
-@click.option("--threshold", default=0.90, help="Minimum similarity for corroboration")
+@click.option(
+    "--threshold",
+    default=0.99,
+    help="Minimum embedding similarity to consider as candidate",
+)
+@click.option("--model", default="sonnet", help="Claude model for verification")
 @click.pass_context
-def corroborate(ctx: click.Context, threshold: float) -> None:
-    """Find and store cross-record claim corroborations via embedding similarity."""
+def corroborate(ctx: click.Context, threshold: float, model: str) -> None:
+    """Find cross-record corroborations: embedding similarity then AI verification."""
     from digester.database import insert_corroboration
     from digester.embeddings import deserialise_f32, search_similar_claims
+    from digester.extract import _call_cli, _parse_json
 
     conn = _connect(ctx.obj["db_path"])
     init_vec(conn)
 
-    claims = conn.execute("SELECT id, record_id FROM claims").fetchall()
-    claim_records = {cid: rid for cid, rid in claims}
+    claims = conn.execute("SELECT id, record_id, content FROM claims").fetchall()
+    claim_records = {cid: rid for cid, rid, _ in claims}
+    claim_content = {cid: content for cid, _, content in claims}
 
-    found = 0
-    for claim_id, record_id in claims:
+    # Step 1: find candidate pairs via embedding similarity
+    candidates = []
+    seen_pairs = set()
+    for claim_id, record_id, _ in claims:
         emb_row = conn.execute(
             "SELECT embedding FROM vec_claims WHERE claim_id = ?", (claim_id,)
         ).fetchone()
         if not emb_row:
             continue
         vec = deserialise_f32(emb_row[0])
-        matches = search_similar_claims(conn, vec, limit=10)
+        matches = search_similar_claims(conn, vec, limit=5)
         for match_id, distance in matches:
             if match_id == claim_id:
                 continue
-            similarity = 1.0 - distance
-            if similarity < threshold:
-                continue
-            # Only corroborate across different records
             if claim_records.get(match_id) == record_id:
                 continue
-            insert_corroboration(conn, claim_id, match_id, similarity)
-            found += 1
+            pair_key = tuple(sorted([claim_id, match_id]))
+            if pair_key in seen_pairs:
+                continue
+            similarity = 1.0 - distance
+            if similarity >= threshold:
+                seen_pairs.add(pair_key)
+                candidates.append((claim_id, match_id, similarity))
+
+    click.echo(f"Found {len(candidates)} candidate pairs above {threshold} similarity")
+
+    if not candidates:
+        conn.close()
+        return
+
+    # Step 2: AI verification in batches
+    batch_size = 20
+    verified = 0
+    for batch_start in range(0, len(candidates), batch_size):
+        batch = candidates[batch_start : batch_start + batch_size]
+        lines = []
+        for i, (cid_a, cid_b, sim) in enumerate(batch, 1):
+            lines.append(f"PAIR {i} (similarity: {sim:.3f}):")
+            lines.append(f'  A: "{claim_content[cid_a]}"')
+            lines.append(f'  B: "{claim_content[cid_b]}"')
+            lines.append("")
+
+        prompt = CORROBORATION_VERIFY_PROMPT.format(pairs_text="\n".join(lines))
+        click.echo(f"  Verifying pairs {batch_start + 1}-{batch_start + len(batch)}...")
+        raw = _call_cli(prompt, "", model)
+        data = _parse_json(raw)
+        decisions = {
+            d.get("pair_id"): d.get("verdict") for d in data.get("decisions", [])
+        }
+
+        for i, (cid_a, cid_b, sim) in enumerate(batch, 1):
+            verdict = decisions.get(i, "different")
+            if verdict == "same":
+                insert_corroboration(conn, cid_a, cid_b, sim)
+                verified += 1
 
     conn.commit()
-    # Deduplicate count (each pair counted twice)
     actual = conn.execute("SELECT COUNT(*) FROM corroborations").fetchone()[0]
-    click.echo(f"Found {actual} cross-record corroborations (threshold: {threshold})")
+    click.echo(
+        f"Verified {actual} genuine corroborations (from {len(candidates)} candidates)"
+    )
     conn.close()
 
 
