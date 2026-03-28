@@ -17,6 +17,7 @@ from digester.database import (
 from digester.extract import extract
 from digester.models import Claim, Node, Record
 from digester.record_parser import parse_record
+from digester.scoring import score_claim, tier_label
 
 DEFAULT_DB = Path.home() / ".local" / "share" / "digester" / "knowledge.db"
 
@@ -177,7 +178,83 @@ def show(ctx: click.Context, name: str) -> None:
     if claims:
         click.echo(f"\n{len(claims)} claim(s):")
         for c in claims:
-            click.echo(f"  [{c.claim_type.value}/{c.attestation.value}] {c.content}")
+            breakdown = score_claim(conn, c.id)
+            label = tier_label(breakdown.score)
+            click.echo(
+                f"  [{c.claim_type.value}/{c.attestation.value}] "
+                f"({label}, {breakdown.score:.2f}) {c.content}"
+            )
+    conn.close()
+
+
+@main.command()
+@click.pass_context
+def embed(ctx: click.Context) -> None:
+    """Embed all claims and nodes for similarity search."""
+    from digester.embeddings import (
+        embed_batch,
+        init_vec,
+        store_claim_embedding,
+        store_node_embedding,
+    )
+
+    conn = _connect(ctx.obj["db_path"])
+    init_vec(conn)
+
+    # Embed claims
+    rows = conn.execute("SELECT id, content FROM claims").fetchall()
+    if rows:
+        click.echo(f"Embedding {len(rows)} claims...")
+        ids = [r[0] for r in rows]
+        texts = [r[1] for r in rows]
+        embeddings = embed_batch(texts)
+        for claim_id, emb in zip(ids, embeddings):
+            store_claim_embedding(conn, claim_id, emb)
+        click.echo(f"  Stored {len(rows)} claim embeddings.")
+
+    # Embed nodes
+    node_rows = conn.execute(
+        "SELECT id, name FROM nodes WHERE retired_at IS NULL"
+    ).fetchall()
+    if node_rows:
+        click.echo(f"Embedding {len(node_rows)} nodes...")
+        ids = [r[0] for r in node_rows]
+        texts = [r[1] for r in node_rows]
+        embeddings = embed_batch(texts)
+        for node_id, emb in zip(ids, embeddings):
+            store_node_embedding(conn, node_id, emb)
+        click.echo(f"  Stored {len(node_rows)} node embeddings.")
+
+    conn.commit()
+    conn.close()
+
+
+@main.command()
+@click.argument("query")
+@click.option("--limit", default=5, help="Number of results")
+@click.pass_context
+def search(ctx: click.Context, query: str, limit: int) -> None:
+    """Search claims by semantic similarity."""
+    from digester.embeddings import embed_text, init_vec, search_similar_claims
+
+    conn = _connect(ctx.obj["db_path"])
+    init_vec(conn)
+
+    query_embedding = embed_text(query)
+    results = search_similar_claims(conn, query_embedding, limit=limit)
+
+    if not results:
+        click.echo("No results. Run 'embed' first to generate embeddings.")
+        conn.close()
+        return
+
+    for claim_id, distance in results:
+        similarity = 1.0 - distance
+        row = conn.execute(
+            "SELECT content, claim_type FROM claims WHERE id = ?", (claim_id,)
+        ).fetchone()
+        if row:
+            click.echo(f"  [{similarity:.2f}] ({row[1]}) {row[0]}")
     conn.close()
 
 
