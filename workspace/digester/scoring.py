@@ -14,7 +14,7 @@ from __future__ import annotations
 import sqlite3
 from dataclasses import dataclass, field
 
-from digester.database import get_corroborations, get_independent_record_count
+from digester.database import get_corroborations, get_independent_source_count
 from digester.models import AttestationLevel, ClaimType
 
 
@@ -82,18 +82,20 @@ def score_claim(conn: sqlite3.Connection, claim_id: str) -> ScoreBreakdown:
     attestation_weight = ATTESTATION_WEIGHTS.get(attestation, 0.5)
     base_weight = type_weight * attestation_weight
 
-    # Corroboration from independent records
+    # Corroboration from independent sources (not just records)
+    # Two claims from the same speaker in different records share a provenance
+    # root and count as one source, not two.
     corroborations = get_corroborations(conn, claim_id)
-    record_count = get_independent_record_count(conn, claim_id)
+    source_count = get_independent_source_count(conn, claim_id)
 
     # Noisy-OR: each independent corroborating record increases confidence
     # The intuition: if one source is wrong with probability (1 - base_weight),
     # two independent sources are both wrong with probability (1 - base_weight)^2
-    if record_count <= 1:
+    if source_count <= 1:
         combined = base_weight
     else:
         product = 1.0
-        for _ in range(record_count):
+        for _ in range(source_count):
             product *= 1.0 - base_weight
         combined = 1.0 - product
 
@@ -101,7 +103,7 @@ def score_claim(conn: sqlite3.Connection, claim_id: str) -> ScoreBreakdown:
 
     return ScoreBreakdown(
         score=final,
-        record_count=record_count,
+        record_count=source_count,
         corroboration_count=len(corroborations),
         attestation=attestation.value,
         claim_type=claim_type.value,

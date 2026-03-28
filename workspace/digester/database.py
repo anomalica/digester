@@ -259,22 +259,36 @@ def get_corroborations(
     return [(row[0], row[1]) for row in rows]
 
 
-def get_independent_record_count(conn: sqlite3.Connection, claim_id: str) -> int:
-    """Count distinct records that corroborate a claim (including its own record)."""
+def get_independent_source_count(conn: sqlite3.Connection, claim_id: str) -> int:
+    """Count independent sources corroborating a claim.
+
+    Two claims genuinely corroborate each other only if their provenance
+    chains do not share a common root. If two claims have the same speaker,
+    they originate from the same person's testimony and count as one source
+    regardless of how many records they appear in.
+
+    Claims with no speaker are grouped by record (each record is a source).
+    """
     corroborated = get_corroborations(conn, claim_id)
-    record_ids = set()
-    own_record = conn.execute(
-        "SELECT record_id FROM claims WHERE id = ?", (claim_id,)
-    ).fetchone()
-    if own_record:
-        record_ids.add(own_record[0])
-    for corr_id, _ in corroborated:
-        rec = conn.execute(
-            "SELECT record_id FROM claims WHERE id = ?", (corr_id,)
+
+    # Collect all claim IDs in the corroboration group (including self)
+    all_claim_ids = [claim_id] + [cid for cid, _ in corroborated]
+
+    # Group by provenance root: speaker if known, otherwise record
+    provenance_roots = set()
+    for cid in all_claim_ids:
+        row = conn.execute(
+            "SELECT speaker_id, record_id FROM claims WHERE id = ?", (cid,)
         ).fetchone()
-        if rec:
-            record_ids.add(rec[0])
-    return len(record_ids)
+        if row is None:
+            continue
+        speaker_id, record_id = row
+        if speaker_id:
+            provenance_roots.add(("speaker", speaker_id))
+        else:
+            provenance_roots.add(("record", record_id))
+
+    return len(provenance_roots)
 
 
 def get_stats(conn: sqlite3.Connection) -> dict:
