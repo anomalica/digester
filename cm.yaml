@@ -7,8 +7,27 @@ names:
 stages:
   base:
     from: python:3.12-slim
+    steps:
+      - pip:
+          install:
+            - anthropic
+            - click
+            - fastembed
+            - pydantic
+            - sqlite-vec
+
   development:
     from: base
+    runtime:
+      network_mode: host
+      volumes:
+        - ~/.local/bin/claude:/usr/local/bin/claude:ro
+        - ~/.claude:~/.claude
+    steps:
+      - pip:
+          install:
+            - pytest
+
   production:
     from: base
     steps:

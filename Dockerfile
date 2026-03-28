@@ -38,6 +38,15 @@ RUN if [ "${USER_NAME}" != "root" ]; then \
         # Ensure home directory ownership (may have been created by WORKDIR)
         chown "${USER_UID}:${USER_GID}" "${USER_HOME}"; \
     fi
+RUN test -f /opt/venv/pyvenv.cfg || python3 -m venv --system-site-packages /opt/venv
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
+RUN pip install --no-cache-dir \
+        anthropic \
+        click \
+        fastembed \
+        pydantic \
+        sqlite-vec
 
 ################################################################################
 # Stage: development
@@ -48,6 +57,8 @@ ARG USER_GID=1000 \
     USER_UID=1000 \
     USER_NAME=nonroot \
     USER_HOME=/home/nonroot
+RUN pip install --no-cache-dir pytest
+RUN chown -R "${USER_UID}:${USER_GID}" /opt/venv
 USER ${USER_NAME}
 
 ################################################################################
@@ -60,4 +71,5 @@ ARG USER_GID=1000 \
     USER_NAME=nonroot \
     USER_HOME=/home/nonroot
 COPY workspace ${WORKSPACE}
+RUN chown -R "${USER_UID}:${USER_GID}" /opt/venv
 USER ${USER_NAME}
