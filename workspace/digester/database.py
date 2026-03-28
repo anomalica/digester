@@ -53,12 +53,21 @@ CREATE TABLE IF NOT EXISTS aliases (
     PRIMARY KEY (alias, node_id)
 );
 
+CREATE TABLE IF NOT EXISTS corroborations (
+    claim_a TEXT NOT NULL REFERENCES claims(id),
+    claim_b TEXT NOT NULL REFERENCES claims(id),
+    similarity REAL NOT NULL,
+    PRIMARY KEY (claim_a, claim_b)
+);
+
 CREATE INDEX IF NOT EXISTS idx_nodes_type ON nodes(node_type);
 CREATE INDEX IF NOT EXISTS idx_nodes_name ON nodes(name);
 CREATE INDEX IF NOT EXISTS idx_claims_record ON claims(record_id);
 CREATE INDEX IF NOT EXISTS idx_claims_speaker ON claims(speaker_id);
 CREATE INDEX IF NOT EXISTS idx_claim_refs_node ON claim_node_refs(node_id);
 CREATE INDEX IF NOT EXISTS idx_aliases_node ON aliases(node_id);
+CREATE INDEX IF NOT EXISTS idx_corr_a ON corroborations(claim_a);
+CREATE INDEX IF NOT EXISTS idx_corr_b ON corroborations(claim_b);
 """
 
 
@@ -227,9 +236,55 @@ def get_claims_for_record(conn: sqlite3.Connection, record_id: str) -> list[Clai
     return claims
 
 
+def insert_corroboration(
+    conn: sqlite3.Connection, claim_a: str, claim_b: str, similarity: float
+) -> None:
+    a, b = sorted([claim_a, claim_b])
+    conn.execute(
+        "INSERT OR IGNORE INTO corroborations (claim_a, claim_b, similarity) VALUES (?, ?, ?)",
+        (a, b, similarity),
+    )
+
+
+def get_corroborations(
+    conn: sqlite3.Connection, claim_id: str
+) -> list[tuple[str, float]]:
+    rows = conn.execute(
+        "SELECT claim_b, similarity FROM corroborations WHERE claim_a = ? "
+        "UNION SELECT claim_a, similarity FROM corroborations WHERE claim_b = ?",
+        (claim_id, claim_id),
+    ).fetchall()
+    return [(row[0], row[1]) for row in rows]
+
+
+def get_independent_record_count(conn: sqlite3.Connection, claim_id: str) -> int:
+    """Count distinct records that corroborate a claim (including its own record)."""
+    corroborated = get_corroborations(conn, claim_id)
+    record_ids = set()
+    own_record = conn.execute(
+        "SELECT record_id FROM claims WHERE id = ?", (claim_id,)
+    ).fetchone()
+    if own_record:
+        record_ids.add(own_record[0])
+    for corr_id, _ in corroborated:
+        rec = conn.execute(
+            "SELECT record_id FROM claims WHERE id = ?", (corr_id,)
+        ).fetchone()
+        if rec:
+            record_ids.add(rec[0])
+    return len(record_ids)
+
+
 def get_stats(conn: sqlite3.Connection) -> dict:
     stats = {}
-    for table in ("nodes", "records", "claims", "claim_node_refs", "aliases"):
+    for table in (
+        "nodes",
+        "records",
+        "claims",
+        "claim_node_refs",
+        "aliases",
+        "corroborations",
+    ):
         row = conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()  # noqa: S608
         stats[table] = row[0]
     active_nodes = conn.execute(

@@ -196,6 +196,7 @@ def stats(ctx: click.Context) -> None:
     click.echo(f"Claims: {s['claims']}")
     click.echo(f"Claim-node references: {s['claim_node_refs']}")
     click.echo(f"Aliases: {s['aliases']}")
+    click.echo(f"Corroborations: {s['corroborations']}")
     if s.get("by_type"):
         click.echo("\nBy type:")
         for node_type, count in sorted(s["by_type"].items()):
@@ -223,9 +224,12 @@ def show(ctx: click.Context, name: str) -> None:
         for c in claims:
             breakdown = score_claim(conn, c.id)
             label = tier_label(breakdown.score)
+            corr_str = ""
+            if breakdown.corroboration_count > 0:
+                corr_str = f", {breakdown.record_count} records"
             click.echo(
                 f"  [{c.claim_type.value}/{c.attestation.value}] "
-                f"({label}, {breakdown.score:.2f}) {c.content}"
+                f"({label}, {breakdown.score:.2f}{corr_str}) {c.content}"
             )
     conn.close()
 
@@ -263,6 +267,48 @@ def embed(ctx: click.Context) -> None:
         click.echo(f"  Stored {len(node_rows)} node embeddings.")
 
     conn.commit()
+    conn.close()
+
+
+@main.command()
+@click.option("--threshold", default=0.90, help="Minimum similarity for corroboration")
+@click.pass_context
+def corroborate(ctx: click.Context, threshold: float) -> None:
+    """Find and store cross-record claim corroborations via embedding similarity."""
+    from digester.database import insert_corroboration
+    from digester.embeddings import deserialise_f32, search_similar_claims
+
+    conn = _connect(ctx.obj["db_path"])
+    init_vec(conn)
+
+    claims = conn.execute("SELECT id, record_id FROM claims").fetchall()
+    claim_records = {cid: rid for cid, rid in claims}
+
+    found = 0
+    for claim_id, record_id in claims:
+        emb_row = conn.execute(
+            "SELECT embedding FROM vec_claims WHERE claim_id = ?", (claim_id,)
+        ).fetchone()
+        if not emb_row:
+            continue
+        vec = deserialise_f32(emb_row[0])
+        matches = search_similar_claims(conn, vec, limit=10)
+        for match_id, distance in matches:
+            if match_id == claim_id:
+                continue
+            similarity = 1.0 - distance
+            if similarity < threshold:
+                continue
+            # Only corroborate across different records
+            if claim_records.get(match_id) == record_id:
+                continue
+            insert_corroboration(conn, claim_id, match_id, similarity)
+            found += 1
+
+    conn.commit()
+    # Deduplicate count (each pair counted twice)
+    actual = conn.execute("SELECT COUNT(*) FROM corroborations").fetchone()[0]
+    click.echo(f"Found {actual} cross-record corroborations (threshold: {threshold})")
     conn.close()
 
 

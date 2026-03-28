@@ -7,7 +7,6 @@ Scoring factors:
 - Number of independent records corroborating a claim
 - Attestation depth (first-hand > second-hand > third-hand)
 - Claim type weight (measurement > testimony > observation > hearsay > opinion)
-- Whether claims have been contradicted
 """
 
 from __future__ import annotations
@@ -15,6 +14,7 @@ from __future__ import annotations
 import sqlite3
 from dataclasses import dataclass, field
 
+from digester.database import get_corroborations, get_independent_record_count
 from digester.models import AttestationLevel, ClaimType
 
 
@@ -38,10 +38,11 @@ CLAIM_TYPE_WEIGHTS = {
 class ScoreBreakdown:
     score: float
     record_count: int
+    corroboration_count: int
     attestation: str
     claim_type: str
     base_weight: float
-    corroboration_factor: float
+    corroboration_bonus: float
     components: dict[str, float] = field(default_factory=dict)
 
     def summary(self) -> str:
@@ -49,8 +50,10 @@ class ScoreBreakdown:
             f"{self.record_count} record(s)",
             self.attestation,
             self.claim_type,
-            f"score: {self.score:.2f}",
         ]
+        if self.corroboration_count > 0:
+            parts.append(f"{self.corroboration_count} corroboration(s)")
+        parts.append(f"score: {self.score:.2f}")
         return ", ".join(parts)
 
 
@@ -64,10 +67,11 @@ def score_claim(conn: sqlite3.Connection, claim_id: str) -> ScoreBreakdown:
         return ScoreBreakdown(
             score=0.0,
             record_count=0,
+            corroboration_count=0,
             attestation="unknown",
             claim_type="unknown",
             base_weight=0.0,
-            corroboration_factor=0.0,
+            corroboration_bonus=0.0,
         )
 
     claim_type = ClaimType(row[0])
@@ -78,36 +82,36 @@ def score_claim(conn: sqlite3.Connection, claim_id: str) -> ScoreBreakdown:
     attestation_weight = ATTESTATION_WEIGHTS.get(attestation, 0.5)
     base_weight = type_weight * attestation_weight
 
-    # Count corroborating records (records containing similar claims)
-    # For now, count records that share the same claim content
-    record_count = conn.execute(
-        "SELECT COUNT(DISTINCT record_id) FROM claims WHERE content = (SELECT content FROM claims WHERE id = ?)",
-        (claim_id,),
-    ).fetchone()[0]
+    # Corroboration from independent records
+    corroborations = get_corroborations(conn, claim_id)
+    record_count = get_independent_record_count(conn, claim_id)
 
-    # Noisy-OR corroboration: each independent record increases confidence
+    # Noisy-OR: each independent corroborating record increases confidence
+    # The intuition: if one source is wrong with probability (1 - base_weight),
+    # two independent sources are both wrong with probability (1 - base_weight)^2
     if record_count <= 1:
-        corroboration_factor = 1.0
+        combined = base_weight
     else:
         product = 1.0
         for _ in range(record_count):
             product *= 1.0 - base_weight
-        corroboration_factor = (1.0 - product) / base_weight if base_weight > 0 else 1.0
+        combined = 1.0 - product
 
-    final = min(1.0, base_weight * corroboration_factor)
+    final = min(1.0, combined)
 
     return ScoreBreakdown(
         score=final,
         record_count=record_count,
+        corroboration_count=len(corroborations),
         attestation=attestation.value,
         claim_type=claim_type.value,
         base_weight=base_weight,
-        corroboration_factor=corroboration_factor,
+        corroboration_bonus=combined - base_weight,
         components={
             "type_weight": type_weight,
             "attestation_weight": attestation_weight,
             "base": base_weight,
-            "corroboration": corroboration_factor,
+            "combined": combined,
         },
     )
 
