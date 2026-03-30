@@ -84,6 +84,58 @@ VALID_NODE_TYPES = {
 VALID_CLAIM_TYPES = {t.value for t in ClaimType}
 VALID_ATTESTATION = {t.value for t in AttestationLevel}
 
+INFRASTRUCTURE_PROMPT = """You are extracting INFRASTRUCTURE information from a document. This is NOT about the phenomena described in the document. It is about the information ecosystem: who produced this content, who interviews whom, what other sources or media are mentioned, career backgrounds, and opinions about other sources.
+
+The knowledge graph uses these node types:
+- "person": a named human individual
+- "organisation": a named entity distinct from any single person (includes podcasts, news outlets, publications, agencies, companies)
+- "place": a named geographic location
+- "event": a discrete thing that happened at a specific time (must have a date)
+- "matter": an ongoing situation spanning a period of time
+- "object": a specific named physical thing
+- "record": a specific piece of content (a book, a podcast episode, a documentary, an article)
+
+Claim types:
+- "observation": the speaker directly perceived something
+- "testimony": formally stated on record or under oath
+- "hearsay": relaying what someone else said
+- "opinion": expressing a belief or interpretation
+- "measurement": instrument or sensor data
+- "administrative": dates, career facts, organisational facts
+
+TASK: Extract ONLY infrastructure information. Ignore claims about the phenomena itself. Focus on:
+
+1. INTER-SOURCE REFERENCES: mentions of other media, books, podcasts, documentaries, articles. Include the sentiment (positive, negative, neutral) in metadata.
+2. PRODUCTION CONTEXT: who produced this content, who hosts the show, who conducted the interview.
+3. CAREER AND BACKGROUND: career history, qualifications, and credentials of speakers and people mentioned, where these are not directly about the phenomena.
+4. NETWORK CONNECTIONS: who knows whom, who worked with whom, professional relationships between people in the information ecosystem.
+5. OPINIONS ABOUT SOURCES: what speakers think about other media, journalists, organisations in terms of credibility or quality.
+
+Do NOT extract:
+- Claims about anomalous phenomena, sightings, encounters, or programmes
+- Testimony about what witnesses saw or experienced
+- Evidence, sensor data, or investigation findings
+
+OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
+
+{{"record_title": "short title for this document",
+"record_date": "YYYY-MM-DD or YYYY-MM or YYYY if known",
+"record_producer": "person or organisation that produced this document",
+"nodes": [
+    {{"name": "canonical short name", "node_type": "person|organisation|place|event|matter|object|record", "metadata": {{"sentiment": "positive|negative|neutral"}}}}
+],
+"claims": [
+    {{"content": "infrastructure assertion",
+      "original_excerpt": "exact original wording from the source document",
+      "claim_type": "observation|testimony|hearsay|opinion|measurement|administrative",
+      "attestation": "first_hand|second_hand|third_hand",
+      "speaker": "person name or null",
+      "location_in_record": "page or timestamp",
+      "date": "YYYY-MM-DD if applicable",
+      "node_references": ["Node A", "Node B"],
+      "confidence": 1.0}}
+]}}"""
+
 DEFAULT_MODEL = "sonnet"
 
 
@@ -111,6 +163,33 @@ def extract(
         existing_nodes: list of (name, node_type) tuples for the node directory.
     """
     prompt = EXTRACTION_PROMPT
+    if existing_nodes:
+        directory_lines = [
+            f"  - {name} ({node_type})" for name, node_type in existing_nodes
+        ]
+        prompt = (
+            NODE_DIRECTORY_HEADER.format(directory="\n".join(directory_lines)) + prompt
+        )
+
+    if use_api:
+        raw = _call_api(prompt, text, model)
+    else:
+        raw = _call_cli(prompt, text, model)
+    return _parse_response(raw)
+
+
+def extract_infrastructure(
+    text: str,
+    model: str = DEFAULT_MODEL,
+    use_api: bool = False,
+    existing_nodes: list[tuple[str, str]] | None = None,
+) -> ExtractionResult:
+    """Extract infrastructure information from record text.
+
+    Focuses on the information ecosystem: inter-source references,
+    production context, career backgrounds, network connections.
+    """
+    prompt = INFRASTRUCTURE_PROMPT
     if existing_nodes:
         directory_lines = [
             f"  - {name} ({node_type})" for name, node_type in existing_nodes
