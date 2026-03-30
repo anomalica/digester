@@ -50,65 +50,82 @@ def main(ctx: click.Context, db: str) -> None:
     ctx.obj["infra_db_path"] = Path(db).parent / "infrastructure.db"
 
 
-@main.command()
-@click.argument("file_path", type=click.Path(exists=True))
-@click.option("--model", default="sonnet", help="Claude model to use for extraction")
-@click.option("--api", is_flag=True, help="Use Anthropic API instead of CLI")
-@click.pass_context
-def digest(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
-    """Digest a record file into the knowledge graph."""
-    conn = _connect(ctx.obj["db_path"])
-    path = Path(file_path)
-    text = path.read_text()
+def _integrate_extraction(
+    conn: sqlite3.Connection,
+    result,
+    parsed,
+    path: Path,
+    lookup_conns: list[sqlite3.Connection] | None = None,
+) -> None:
+    """Shared logic for integrating an extraction result into a database.
 
-    click.echo(f"Parsing record: {path.name}")
-    parsed = parse_record(text)
-
-    # Build node directory from existing graph
-    existing_nodes = []
-    all_nodes = get_nodes(conn)
-    if all_nodes:
-        existing_nodes = [(n.name, n.node_type.value) for n in all_nodes]
-        click.echo(f"  Node directory: {len(existing_nodes)} existing nodes")
-
-    click.echo(f"Extracting from: {parsed.title or path.name}")
-    result = extract(
-        parsed.body, model=model, use_api=api, existing_nodes=existing_nodes or None
-    )
+    Args:
+        conn: database to write to
+        result: ExtractionResult from either domain or infrastructure extraction
+        parsed: ParsedRecord from record_parser
+        path: original file path
+        lookup_conns: additional databases to check for existing nodes (e.g. domain db when writing to infra db)
+    """
+    all_conns = [conn] + (lookup_conns or [])
 
     # Create the record node
-    record = insert_record(
-        conn,
-        Record(
-            title=result.record_title or parsed.title or path.name,
-            reference=parsed.reference,
-            date=result.record_date or parsed.date,
-        ),
-    )
-    click.echo(f"  Record: {record.title} [{record.id[:8]}]")
+    from digester.database import get_record_by_title
 
-    # Create or find domain nodes using exact, fuzzy, and alias matching.
-    # The extraction prompt receives the existing node directory so Claude
-    # uses canonical names where possible. Matching catches the rest.
-    node_map: dict[str, str] = {}  # name -> node_id
+    existing_record = get_record_by_title(
+        conn, result.record_title or parsed.title or path.name
+    )
+    if existing_record:
+        record = existing_record
+        click.echo(f"  Existing record: {record.title} [{record.id[:8]}]")
+    else:
+        record = insert_record(
+            conn,
+            Record(
+                title=result.record_title or parsed.title or path.name,
+                reference=parsed.reference,
+                date=result.record_date or parsed.date,
+            ),
+        )
+        click.echo(f"  Record: {record.title} [{record.id[:8]}]")
+
+    # Create or find nodes
+    node_map: dict[str, str] = {}
     for extracted in result.nodes:
-        match = match_node(conn, extracted.name, extracted.node_type.value)
-        if match:
-            node_id, method = match
-            node_map[extracted.name] = node_id
-            existing_name = conn.execute(
-                "SELECT name FROM nodes WHERE id = ?", (node_id,)
-            ).fetchone()[0]
-            if method == "fuzzy" and extracted.name != existing_name:
-                insert_alias(conn, extracted.name, node_id)
-                click.echo(
-                    f"  Matched ({method}): {extracted.name} -> {existing_name} [{node_id[:8]}]"
-                )
-            else:
-                click.echo(
-                    f"  Existing node: {extracted.name} ({extracted.node_type.value}) [{node_id[:8]}]"
-                )
-        else:
+        found = False
+        for lookup_conn in all_conns:
+            m = match_node(lookup_conn, extracted.name, extracted.node_type.value)
+            if m:
+                node_id, method = m
+                node_map[extracted.name] = node_id
+                existing_name = lookup_conn.execute(
+                    "SELECT name FROM nodes WHERE id = ?", (node_id,)
+                ).fetchone()[0]
+                # Ensure node exists in target database
+                if lookup_conn is not conn:
+                    if not find_node_by_name(
+                        conn, extracted.name, extracted.node_type.value
+                    ):
+                        insert_node(
+                            conn,
+                            Node(
+                                id=node_id,
+                                node_type=extracted.node_type,
+                                name=extracted.name,
+                                metadata=extracted.metadata,
+                            ),
+                        )
+                if method == "fuzzy" and extracted.name != existing_name:
+                    insert_alias(conn, extracted.name, node_id)
+                    click.echo(
+                        f"  Matched ({method}): {extracted.name} -> {existing_name} [{node_id[:8]}]"
+                    )
+                else:
+                    click.echo(
+                        f"  Existing node: {extracted.name} ({extracted.node_type.value}) [{node_id[:8]}]"
+                    )
+                found = True
+                break
+        if not found:
             node = insert_node(
                 conn,
                 Node(
@@ -122,15 +139,16 @@ def digest(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
                 f"  New node: {extracted.name} ({extracted.node_type.value}) [{node.id[:8]}]"
             )
 
-    # If the record has a producer, link it
+    # Link record producer
     if result.record_producer:
-        producer = find_node_by_name(conn, result.record_producer)
-        if producer:
-            record.model_copy(update={"producer_id": producer.id})
-            conn.execute(
-                "UPDATE records SET producer_id = ? WHERE id = ?",
-                (producer.id, record.id),
-            )
+        for lookup_conn in all_conns:
+            producer_match = match_node(lookup_conn, result.record_producer)
+            if producer_match:
+                conn.execute(
+                    "UPDATE records SET producer_id = ? WHERE id = ?",
+                    (producer_match[0], record.id),
+                )
+                break
         else:
             click.echo(
                 f"  Warning: producer '{result.record_producer}' not found in nodes"
@@ -138,28 +156,31 @@ def digest(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
 
     # Create claims
     for extracted_claim in result.claims:
-        # Resolve node references to IDs (check node_map first, then database)
         ref_ids = []
         for ref_name in extracted_claim.node_references:
             if ref_name in node_map:
                 ref_ids.append(node_map[ref_name])
             else:
-                # Claim references a node not in result.nodes (already in graph)
-                ref_match = match_node(conn, ref_name, None)
-                if ref_match:
-                    ref_ids.append(ref_match[0])
-                    node_map[ref_name] = ref_match[0]
+                for lookup_conn in all_conns:
+                    ref_match = match_node(lookup_conn, ref_name)
+                    if ref_match:
+                        ref_ids.append(ref_match[0])
+                        node_map[ref_name] = ref_match[0]
+                        break
 
-        # Resolve speaker (check node_map first, then database)
         speaker_id = None
         if extracted_claim.speaker:
             if extracted_claim.speaker in node_map:
                 speaker_id = node_map[extracted_claim.speaker]
             else:
-                speaker_match = match_node(conn, extracted_claim.speaker, "person")
-                if speaker_match:
-                    speaker_id = speaker_match[0]
-                    node_map[extracted_claim.speaker] = speaker_match[0]
+                for lookup_conn in all_conns:
+                    speaker_match = match_node(
+                        lookup_conn, extracted_claim.speaker, "person"
+                    )
+                    if speaker_match:
+                        speaker_id = speaker_match[0]
+                        node_map[extracted_claim.speaker] = speaker_match[0]
+                        break
 
         insert_claim(
             conn,
@@ -180,9 +201,47 @@ def digest(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
 
     conn.commit()
 
+
+def _build_node_directory(*connections: sqlite3.Connection) -> list[tuple[str, str]]:
+    """Build a deduplicated node directory from one or more databases."""
+    seen = set()
+    directory = []
+    for conn in connections:
+        for n in get_nodes(conn):
+            if n.name not in seen:
+                seen.add(n.name)
+                directory.append((n.name, n.node_type.value))
+    return directory
+
+
+@main.command(name="digest-domain")
+@click.argument("file_path", type=click.Path(exists=True))
+@click.option("--model", default="sonnet", help="Claude model to use for extraction")
+@click.option("--api", is_flag=True, help="Use Anthropic API instead of CLI")
+@click.pass_context
+def digest_domain(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
+    """Extract domain knowledge from a record into the knowledge graph."""
+    conn = _connect(ctx.obj["db_path"])
+    path = Path(file_path)
+    text = path.read_text()
+
+    click.echo(f"Parsing record: {path.name}")
+    parsed = parse_record(text)
+
+    existing_nodes = _build_node_directory(conn)
+    if existing_nodes:
+        click.echo(f"  Node directory: {len(existing_nodes)} existing nodes")
+
+    click.echo(f"Extracting domain knowledge from: {parsed.title or path.name}")
+    result = extract(
+        parsed.body, model=model, use_api=api, existing_nodes=existing_nodes or None
+    )
+
+    _integrate_extraction(conn, result, parsed, path)
+
     stats = get_stats(conn)
     click.echo(
-        f"\nDone. Graph now has {stats['active_nodes']} nodes, "
+        f"\nDomain: {stats['active_nodes']} nodes, "
         f"{stats['records']} records, {stats['claims']} claims."
     )
     conn.close()
@@ -194,7 +253,7 @@ def digest(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
 @click.option("--api", is_flag=True, help="Use Anthropic API instead of CLI")
 @click.pass_context
 def digest_infra(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
-    """Extract infrastructure information from a record into the infrastructure database."""
+    """Extract infrastructure information from a record."""
     domain_conn = _connect(ctx.obj["db_path"])
     infra_conn = _connect(ctx.obj["infra_db_path"])
     path = Path(file_path)
@@ -203,20 +262,7 @@ def digest_infra(ctx: click.Context, file_path: str, model: str, api: bool) -> N
     click.echo(f"Parsing record: {path.name}")
     parsed = parse_record(text)
 
-    # Build node directory from BOTH databases for consistent IDs
-    existing_nodes = []
-    for conn in [domain_conn, infra_conn]:
-        for n in get_nodes(conn):
-            existing_nodes.append((n.name, n.node_type.value))
-    # Deduplicate by name
-    seen = set()
-    unique_nodes = []
-    for name, ntype in existing_nodes:
-        if name not in seen:
-            seen.add(name)
-            unique_nodes.append((name, ntype))
-    existing_nodes = unique_nodes
-
+    existing_nodes = _build_node_directory(domain_conn, infra_conn)
     if existing_nodes:
         click.echo(f"  Node directory: {len(existing_nodes)} existing nodes")
 
@@ -225,126 +271,26 @@ def digest_infra(ctx: click.Context, file_path: str, model: str, api: bool) -> N
         parsed.body, model=model, use_api=api, existing_nodes=existing_nodes or None
     )
 
-    # Create or reuse record node
-    from digester.database import get_record_by_title
-
-    existing_record = get_record_by_title(
-        infra_conn, result.record_title or parsed.title or path.name
-    )
-    if existing_record:
-        record = existing_record
-        click.echo(f"  Existing record: {record.title} [{record.id[:8]}]")
-    else:
-        record = insert_record(
-            infra_conn,
-            Record(
-                title=result.record_title or parsed.title or path.name,
-                reference=parsed.reference,
-                date=result.record_date or parsed.date,
-            ),
-        )
-        click.echo(f"  Record: {record.title} [{record.id[:8]}]")
-
-    # Create or find nodes - check domain database first, then infra
-    node_map: dict[str, str] = {}
-    for extracted in result.nodes:
-        # Check domain database for existing node
-        domain_match = match_node(
-            domain_conn, extracted.name, extracted.node_type.value
-        )
-        if domain_match:
-            node_map[extracted.name] = domain_match[0]
-            # Ensure node exists in infra database too
-            if not find_node_by_name(
-                infra_conn, extracted.name, extracted.node_type.value
-            ):
-                insert_node(
-                    infra_conn,
-                    Node(
-                        id=domain_match[0],
-                        node_type=extracted.node_type,
-                        name=extracted.name,
-                        metadata=extracted.metadata,
-                    ),
-                )
-            click.echo(
-                f"  Domain node: {extracted.name} ({extracted.node_type.value}) [{domain_match[0][:8]}]"
-            )
-            continue
-
-        # Check infra database
-        infra_match = match_node(infra_conn, extracted.name, extracted.node_type.value)
-        if infra_match:
-            node_map[extracted.name] = infra_match[0]
-            click.echo(
-                f"  Existing node: {extracted.name} ({extracted.node_type.value}) [{infra_match[0][:8]}]"
-            )
-        else:
-            node = insert_node(
-                infra_conn,
-                Node(
-                    node_type=extracted.node_type,
-                    name=extracted.name,
-                    metadata=extracted.metadata,
-                ),
-            )
-            node_map[extracted.name] = node.id
-            click.echo(
-                f"  New node: {extracted.name} ({extracted.node_type.value}) [{node.id[:8]}]"
-            )
-
-    # Create claims - resolve references against both databases
-    for extracted_claim in result.claims:
-        ref_ids = []
-        for ref_name in extracted_claim.node_references:
-            if ref_name in node_map:
-                ref_ids.append(node_map[ref_name])
-            else:
-                for conn in [domain_conn, infra_conn]:
-                    ref_match = match_node(conn, ref_name)
-                    if ref_match:
-                        ref_ids.append(ref_match[0])
-                        node_map[ref_name] = ref_match[0]
-                        break
-
-        speaker_id = None
-        if extracted_claim.speaker:
-            if extracted_claim.speaker in node_map:
-                speaker_id = node_map[extracted_claim.speaker]
-            else:
-                for conn in [domain_conn, infra_conn]:
-                    speaker_match = match_node(conn, extracted_claim.speaker, "person")
-                    if speaker_match:
-                        speaker_id = speaker_match[0]
-                        node_map[extracted_claim.speaker] = speaker_match[0]
-                        break
-
-        insert_claim(
-            infra_conn,
-            Claim(
-                content=extracted_claim.content,
-                original_excerpt=extracted_claim.original_excerpt,
-                claim_type=extracted_claim.claim_type,
-                attestation=extracted_claim.attestation,
-                record_id=record.id,
-                speaker_id=speaker_id,
-                location_in_record=extracted_claim.location_in_record,
-                date=extracted_claim.date,
-                date_end=extracted_claim.date_end,
-                node_references=ref_ids,
-                confidence=extracted_claim.confidence,
-            ),
-        )
-
-    infra_conn.commit()
+    _integrate_extraction(infra_conn, result, parsed, path, lookup_conns=[domain_conn])
 
     stats = get_stats(infra_conn)
     click.echo(
-        f"\nInfrastructure database: {stats['active_nodes']} nodes, "
+        f"\nInfrastructure: {stats['active_nodes']} nodes, "
         f"{stats['records']} records, {stats['claims']} claims."
     )
     domain_conn.close()
     infra_conn.close()
+
+
+@main.command()
+@click.argument("file_path", type=click.Path(exists=True))
+@click.option("--model", default="sonnet", help="Claude model to use for extraction")
+@click.option("--api", is_flag=True, help="Use Anthropic API instead of CLI")
+@click.pass_context
+def digest(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
+    """Digest a record: runs both domain and infrastructure extraction."""
+    ctx.invoke(digest_domain, file_path=file_path, model=model, api=api)
+    ctx.invoke(digest_infra, file_path=file_path, model=model, api=api)
 
 
 @main.command()
