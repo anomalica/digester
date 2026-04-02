@@ -11,10 +11,6 @@ from digester.database import (
     get_stats,
     find_node_by_name,
     init_db,
-    insert_alias,
-    insert_claim,
-    insert_node,
-    insert_record,
 )
 from digester.embeddings import (
     embed_batch,
@@ -24,13 +20,12 @@ from digester.embeddings import (
     store_node_embedding,
 )
 from digester.extract import extract, extract_infrastructure
-from digester.matching import match_node
-from digester.models import Claim, Node, Record
+from digester.import_markdown import import_extraction
+from digester.markdown_format import extraction_to_markdown, parse_extraction_markdown
 from digester.record_parser import parse_record
 from digester.scoring import score_claim, tier_label
 
 DEFAULT_DB = Path.home() / ".local" / "share" / "digester" / "knowledge.db"
-DEFAULT_INFRA_DB = Path.home() / ".local" / "share" / "digester" / "infrastructure.db"
 
 
 def _connect(db_path: Path) -> sqlite3.Connection:
@@ -38,6 +33,17 @@ def _connect(db_path: Path) -> sqlite3.Connection:
     conn = sqlite3.connect(str(db_path))
     init_db(conn)
     return conn
+
+
+def _build_node_directory(*connections: sqlite3.Connection) -> list[tuple[str, str]]:
+    seen = set()
+    directory = []
+    for conn in connections:
+        for n in get_nodes(conn):
+            if n.name not in seen:
+                seen.add(n.name)
+                directory.append((n.name, n.node_type.value))
+    return directory
 
 
 @click.group()
@@ -50,247 +56,163 @@ def main(ctx: click.Context, db: str) -> None:
     ctx.obj["infra_db_path"] = Path(db).parent / "infrastructure.db"
 
 
-def _integrate_extraction(
-    conn: sqlite3.Connection,
-    result,
-    parsed,
-    path: Path,
-    lookup_conns: list[sqlite3.Connection] | None = None,
-) -> None:
-    """Shared logic for integrating an extraction result into a database.
-
-    Args:
-        conn: database to write to
-        result: ExtractionResult from either domain or infrastructure extraction
-        parsed: ParsedRecord from record_parser
-        path: original file path
-        lookup_conns: additional databases to check for existing nodes (e.g. domain db when writing to infra db)
-    """
-    all_conns = [conn] + (lookup_conns or [])
-
-    # Create the record node
-    from digester.database import get_record_by_title
-
-    existing_record = get_record_by_title(
-        conn, result.record_title or parsed.title or path.name
-    )
-    if existing_record:
-        record = existing_record
-        click.echo(f"  Existing record: {record.title} [{record.id[:8]}]")
-    else:
-        record = insert_record(
-            conn,
-            Record(
-                title=result.record_title or parsed.title or path.name,
-                reference=parsed.reference,
-                date=result.record_date or parsed.date,
-            ),
-        )
-        click.echo(f"  Record: {record.title} [{record.id[:8]}]")
-
-    # Create or find nodes
-    node_map: dict[str, str] = {}
-    for extracted in result.nodes:
-        found = False
-        for lookup_conn in all_conns:
-            m = match_node(lookup_conn, extracted.name, extracted.node_type.value)
-            if m:
-                node_id, method = m
-                node_map[extracted.name] = node_id
-                existing_name = lookup_conn.execute(
-                    "SELECT name FROM nodes WHERE id = ?", (node_id,)
-                ).fetchone()[0]
-                # Ensure node exists in target database
-                if lookup_conn is not conn:
-                    if not find_node_by_name(
-                        conn, extracted.name, extracted.node_type.value
-                    ):
-                        insert_node(
-                            conn,
-                            Node(
-                                id=node_id,
-                                node_type=extracted.node_type,
-                                name=extracted.name,
-                                metadata=extracted.metadata,
-                            ),
-                        )
-                if method == "fuzzy" and extracted.name != existing_name:
-                    insert_alias(conn, extracted.name, node_id)
-                    click.echo(
-                        f"  Matched ({method}): {extracted.name} -> {existing_name} [{node_id[:8]}]"
-                    )
-                else:
-                    click.echo(
-                        f"  Existing node: {extracted.name} ({extracted.node_type.value}) [{node_id[:8]}]"
-                    )
-                found = True
-                break
-        if not found:
-            node = insert_node(
-                conn,
-                Node(
-                    node_type=extracted.node_type,
-                    name=extracted.name,
-                    metadata=extracted.metadata,
-                ),
-            )
-            node_map[extracted.name] = node.id
-            click.echo(
-                f"  New node: {extracted.name} ({extracted.node_type.value}) [{node.id[:8]}]"
-            )
-
-    # Link record producer
-    if result.record_producer:
-        for lookup_conn in all_conns:
-            producer_match = match_node(lookup_conn, result.record_producer)
-            if producer_match:
-                conn.execute(
-                    "UPDATE records SET producer_id = ? WHERE id = ?",
-                    (producer_match[0], record.id),
-                )
-                break
-        else:
-            click.echo(
-                f"  Warning: producer '{result.record_producer}' not found in nodes"
-            )
-
-    # Create claims
-    for extracted_claim in result.claims:
-        ref_ids = []
-        for ref_name in extracted_claim.node_references:
-            if ref_name in node_map:
-                ref_ids.append(node_map[ref_name])
-            else:
-                for lookup_conn in all_conns:
-                    ref_match = match_node(lookup_conn, ref_name)
-                    if ref_match:
-                        ref_ids.append(ref_match[0])
-                        node_map[ref_name] = ref_match[0]
-                        break
-
-        speaker_id = None
-        if extracted_claim.speaker:
-            if extracted_claim.speaker in node_map:
-                speaker_id = node_map[extracted_claim.speaker]
-            else:
-                for lookup_conn in all_conns:
-                    speaker_match = match_node(
-                        lookup_conn, extracted_claim.speaker, "person"
-                    )
-                    if speaker_match:
-                        speaker_id = speaker_match[0]
-                        node_map[extracted_claim.speaker] = speaker_match[0]
-                        break
-
-        insert_claim(
-            conn,
-            Claim(
-                content=extracted_claim.content,
-                original_excerpt=extracted_claim.original_excerpt,
-                claim_type=extracted_claim.claim_type,
-                attestation=extracted_claim.attestation,
-                record_id=record.id,
-                speaker_id=speaker_id,
-                location_in_record=extracted_claim.location_in_record,
-                date=extracted_claim.date,
-                date_end=extracted_claim.date_end,
-                node_references=ref_ids,
-                confidence=extracted_claim.confidence,
-            ),
-        )
-
-    conn.commit()
+# --- Extract: AI produces markdown ---
 
 
-def _build_node_directory(*connections: sqlite3.Connection) -> list[tuple[str, str]]:
-    """Build a deduplicated node directory from one or more databases."""
-    seen = set()
-    directory = []
-    for conn in connections:
-        for n in get_nodes(conn):
-            if n.name not in seen:
-                seen.add(n.name)
-                directory.append((n.name, n.node_type.value))
-    return directory
-
-
-@main.command(name="digest-domain")
+@main.command(name="extract")
 @click.argument("file_path", type=click.Path(exists=True))
-@click.option("--model", default="sonnet", help="Claude model to use for extraction")
+@click.option(
+    "--output", "-o", type=click.Path(), default=None, help="Output markdown path"
+)
+@click.option("--model", default="sonnet", help="Claude model to use")
 @click.option("--api", is_flag=True, help="Use Anthropic API instead of CLI")
+@click.option("--domain-only", is_flag=True, help="Skip infrastructure extraction")
 @click.pass_context
-def digest_domain(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
-    """Extract domain knowledge from a record into the knowledge graph."""
-    conn = _connect(ctx.obj["db_path"])
+def extract_cmd(
+    ctx: click.Context,
+    file_path: str,
+    output: str | None,
+    model: str,
+    api: bool,
+    domain_only: bool,
+) -> None:
+    """Extract knowledge from a record into a reviewable markdown file."""
     path = Path(file_path)
     text = path.read_text()
 
     click.echo(f"Parsing record: {path.name}")
     parsed = parse_record(text)
 
-    existing_nodes = _build_node_directory(conn)
-    if existing_nodes:
-        click.echo(f"  Node directory: {len(existing_nodes)} existing nodes")
-
-    click.echo(f"Extracting domain knowledge from: {parsed.title or path.name}")
-    result = extract(
-        parsed.body, model=model, use_api=api, existing_nodes=existing_nodes or None
-    )
-
-    _integrate_extraction(conn, result, parsed, path)
-
-    stats = get_stats(conn)
-    click.echo(
-        f"\nDomain: {stats['active_nodes']} nodes, "
-        f"{stats['records']} records, {stats['claims']} claims."
-    )
-    conn.close()
-
-
-@main.command(name="digest-infra")
-@click.argument("file_path", type=click.Path(exists=True))
-@click.option("--model", default="sonnet", help="Claude model to use for extraction")
-@click.option("--api", is_flag=True, help="Use Anthropic API instead of CLI")
-@click.pass_context
-def digest_infra(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
-    """Extract infrastructure information from a record."""
+    # Build node directory from existing databases
     domain_conn = _connect(ctx.obj["db_path"])
     infra_conn = _connect(ctx.obj["infra_db_path"])
-    path = Path(file_path)
-    text = path.read_text()
-
-    click.echo(f"Parsing record: {path.name}")
-    parsed = parse_record(text)
-
     existing_nodes = _build_node_directory(domain_conn, infra_conn)
     if existing_nodes:
         click.echo(f"  Node directory: {len(existing_nodes)} existing nodes")
+    domain_conn.close()
+    infra_conn.close()
 
-    click.echo(f"Extracting infrastructure from: {parsed.title or path.name}")
-    result = extract_infrastructure(
+    # Domain extraction
+    click.echo(f"Extracting domain knowledge from: {parsed.title or path.name}")
+    domain_result = extract(
         parsed.body, model=model, use_api=api, existing_nodes=existing_nodes or None
     )
-
-    _integrate_extraction(infra_conn, result, parsed, path, lookup_conns=[domain_conn])
-
-    stats = get_stats(infra_conn)
     click.echo(
-        f"\nInfrastructure: {stats['active_nodes']} nodes, "
-        f"{stats['records']} records, {stats['claims']} claims."
+        f"  {len(domain_result.nodes)} nodes, {len(domain_result.claims)} domain claims"
     )
+
+    # Infrastructure extraction
+    infra_result = None
+    if not domain_only:
+        click.echo("Extracting infrastructure...")
+        infra_result = extract_infrastructure(
+            parsed.body, model=model, use_api=api, existing_nodes=existing_nodes or None
+        )
+        click.echo(f"  {len(infra_result.claims)} infrastructure claims")
+
+    # Write markdown
+    md = extraction_to_markdown(domain_result, infra_result=infra_result, model=model)
+
+    if output:
+        out_path = Path(output)
+    else:
+        out_path = path.with_suffix(".extract.md")
+
+    out_path.write_text(md)
+    click.echo(f"\nWritten to: {out_path}")
+
+
+# --- Import: deterministic markdown to database ---
+
+
+@main.command(name="import")
+@click.argument("file_path", type=click.Path(exists=True))
+@click.pass_context
+def import_cmd(ctx: click.Context, file_path: str) -> None:
+    """Import a reviewed extraction markdown into the database. No AI involved."""
+    path = Path(file_path)
+    text = path.read_text()
+
+    click.echo(f"Parsing extraction: {path.name}")
+    parsed = parse_extraction_markdown(text)
+
+    domain_conn = _connect(ctx.obj["db_path"])
+    infra_conn = _connect(ctx.obj["infra_db_path"])
+
+    # Import domain claims
+    if parsed["domain_claims"]:
+        click.echo("Importing domain claims...")
+        counts = import_extraction(
+            domain_conn,
+            parsed,
+            section="domain",
+            lookup_conns=[infra_conn],
+            on_progress=click.echo,
+        )
+        click.echo(
+            f"  Domain: {counts['nodes_created']} new nodes, "
+            f"{counts['nodes_matched']} matched, "
+            f"{counts['claims_created']} claims"
+        )
+
+    # Import infrastructure claims
+    if parsed["infrastructure_claims"]:
+        click.echo("Importing infrastructure claims...")
+        counts = import_extraction(
+            infra_conn,
+            parsed,
+            section="infrastructure",
+            lookup_conns=[domain_conn],
+            on_progress=click.echo,
+        )
+        click.echo(
+            f"  Infrastructure: {counts['nodes_created']} new nodes, "
+            f"{counts['nodes_matched']} matched, "
+            f"{counts['claims_created']} claims"
+        )
+
     domain_conn.close()
     infra_conn.close()
 
 
+# --- Digest: extract then import (convenience) ---
+
+
 @main.command()
 @click.argument("file_path", type=click.Path(exists=True))
-@click.option("--model", default="sonnet", help="Claude model to use for extraction")
+@click.option(
+    "--output", "-o", type=click.Path(), default=None, help="Output markdown path"
+)
+@click.option("--model", default="sonnet", help="Claude model to use")
 @click.option("--api", is_flag=True, help="Use Anthropic API instead of CLI")
+@click.option("--domain-only", is_flag=True, help="Skip infrastructure extraction")
 @click.pass_context
-def digest(ctx: click.Context, file_path: str, model: str, api: bool) -> None:
-    """Digest a record: runs both domain and infrastructure extraction."""
-    ctx.invoke(digest_domain, file_path=file_path, model=model, api=api)
-    ctx.invoke(digest_infra, file_path=file_path, model=model, api=api)
+def digest(
+    ctx: click.Context,
+    file_path: str,
+    output: str | None,
+    model: str,
+    api: bool,
+    domain_only: bool,
+) -> None:
+    """Digest a record: extract to markdown then import into database."""
+    ctx.invoke(
+        extract_cmd,
+        file_path=file_path,
+        output=output,
+        model=model,
+        api=api,
+        domain_only=domain_only,
+    )
+
+    # Determine the markdown path
+    path = Path(file_path)
+    md_path = Path(output) if output else path.with_suffix(".extract.md")
+
+    ctx.invoke(import_cmd, file_path=str(md_path))
+
+
+# --- Query commands ---
 
 
 @main.command()
@@ -334,7 +256,7 @@ def show(ctx: click.Context, name: str) -> None:
             label = tier_label(breakdown.score)
             corr_str = ""
             if breakdown.corroboration_count > 0:
-                corr_str = f", {breakdown.record_count} records"
+                corr_str = f", {breakdown.record_count} sources"
             click.echo(
                 f"  [{c.claim_type.value}/{c.attestation.value}] "
                 f"({label}, {breakdown.score:.2f}{corr_str}) {c.content}"
@@ -346,11 +268,9 @@ def show(ctx: click.Context, name: str) -> None:
 @click.pass_context
 def embed(ctx: click.Context) -> None:
     """Embed all claims and nodes for similarity search."""
-
     conn = _connect(ctx.obj["db_path"])
     init_vec(conn)
 
-    # Embed claims
     rows = conn.execute("SELECT id, content FROM claims").fetchall()
     if rows:
         click.echo(f"Embedding {len(rows)} claims...")
@@ -361,7 +281,6 @@ def embed(ctx: click.Context) -> None:
             store_claim_embedding(conn, claim_id, emb)
         click.echo(f"  Stored {len(rows)} claim embeddings.")
 
-    # Embed nodes
     node_rows = conn.execute(
         "SELECT id, name FROM nodes WHERE retired_at IS NULL"
     ).fetchall()
@@ -419,7 +338,6 @@ def corroborate(ctx: click.Context, threshold: float, model: str) -> None:
     claim_records = {cid: rid for cid, rid, _ in claims}
     claim_content = {cid: content for cid, _, content in claims}
 
-    # Step 1: find candidate pairs via embedding similarity
     candidates = []
     seen_pairs = set()
     for claim_id, record_id, _ in claims:
@@ -449,9 +367,7 @@ def corroborate(ctx: click.Context, threshold: float, model: str) -> None:
         conn.close()
         return
 
-    # Step 2: AI verification in batches
     batch_size = 20
-    verified = 0
     for batch_start in range(0, len(candidates), batch_size):
         batch = candidates[batch_start : batch_start + batch_size]
         lines = []
@@ -473,7 +389,6 @@ def corroborate(ctx: click.Context, threshold: float, model: str) -> None:
             verdict = decisions.get(i, "different")
             if verdict == "same":
                 insert_corroboration(conn, cid_a, cid_b, sim)
-                verified += 1
 
     conn.commit()
     actual = conn.execute("SELECT COUNT(*) FROM corroborations").fetchone()[0]
