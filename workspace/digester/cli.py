@@ -175,6 +175,50 @@ def import_cmd(ctx: click.Context, file_path: str) -> None:
     infra_conn.close()
 
 
+@main.command()
+@click.argument("directory", type=click.Path(exists=True))
+@click.pass_context
+def rebuild(ctx: click.Context, directory: str) -> None:
+    """Rebuild the database from a directory of extraction markdown files.
+
+    Deletes and recreates both domain and infrastructure databases,
+    then imports all .extract.md files from the given directory.
+    """
+    import os
+
+    db_path = ctx.obj["db_path"]
+    infra_path = ctx.obj["infra_db_path"]
+
+    # Delete existing databases
+    for p in [db_path, infra_path]:
+        if p.exists():
+            os.remove(p)
+            click.echo(f"Deleted {p}")
+
+    # Find all extraction files
+    directory_path = Path(directory)
+    files = sorted(directory_path.glob("**/*.extract.md"))
+    if not files:
+        click.echo(f"No .extract.md files found in {directory}")
+        return
+
+    click.echo(f"Found {len(files)} extraction files in {directory}")
+
+    # Import each file sequentially
+    for i, f in enumerate(files, 1):
+        click.echo(f"\n[{i}/{len(files)}] {f.name}")
+        ctx.invoke(import_cmd, file_path=str(f))
+
+    # Show final stats
+    domain_conn = _connect(db_path)
+    s = get_stats(domain_conn)
+    click.echo(
+        f"\nRebuild complete. Domain: {s['active_nodes']} nodes, "
+        f"{s['records']} records, {s['claims']} claims."
+    )
+    domain_conn.close()
+
+
 # --- Digest: extract then import (convenience) ---
 
 
