@@ -3,11 +3,15 @@ import pytest
 from digester.extract import (
     DOMAIN_SCHEMA,
     INFRASTRUCTURE_SCHEMA,
+    _build_chunks,
     _chunk_text,
     _extraction_schema,
     _find_split_point,
+    _format_exclude_list,
     _parse_json,
+    _split_at_chapters,
 )
+from digester.models import AttestationLevel, ClaimType, ExtractedClaim
 
 
 def test_parse_json_strips_markdown_fence():
@@ -123,3 +127,79 @@ def test_chunk_text_falls_back_to_hard_cap_when_no_boundaries():
     assert len(chunks) == 4
     assert all(len(c) <= 50_000 for c in chunks)
     assert "".join(chunks) == text
+
+
+def test_split_at_chapters_uses_record_format_markers():
+    body = "Paragraph sentence here. " * 200
+    text = (
+        "<!-- chapter: 1 -->\n"
+        + body
+        + "\n<!-- chapter: 2 -->\n"
+        + body
+        + "\n<!-- chapter: 3 -->\n"
+        + body
+    )
+    chapters = _split_at_chapters(text)
+    assert chapters is not None
+    assert len(chapters) == 3
+    assert chapters[0].startswith("<!-- chapter: 1 -->")
+    assert chapters[2].startswith("<!-- chapter: 3 -->")
+
+
+def test_split_at_chapters_returns_none_without_chapter_markers():
+    text = "## Just a heading\n" + ("Body text. " * 200)
+    assert _split_at_chapters(text) is None
+
+
+def test_split_at_chapters_returns_none_with_only_one_marker():
+    # A single chapter marker (front matter only) is not a meaningful split.
+    text = "<!-- chapter: 1 -->\nbody body body"
+    assert _split_at_chapters(text) is None
+
+
+def test_build_chunks_uses_chapter_markers_when_present():
+    body = "Paragraph here. " * 2000  # ~32KB
+    text = (
+        "<!-- chapter: 1 -->\n"
+        + body
+        + "\n<!-- chapter: 2 -->\n"
+        + body
+        + "\n<!-- chapter: 3 -->\n"
+        + body
+    )
+    chunks = _build_chunks(text)
+    assert len(chunks) == 3
+    assert all(c.startswith("<!-- chapter: ") for c in chunks)
+
+
+def test_build_chunks_subsplits_oversized_chapter():
+    # One huge chapter that exceeds the hard cap, plus a small one after.
+    huge = "Paragraph break here.\n\n" * 10000  # ~230KB
+    text = "<!-- chapter: 1 -->\n" + huge + "\n<!-- chapter: 2 -->\nshort body"
+    chunks = _build_chunks(text)
+    # The big chapter splits into multiple chunks; the small one stays as one.
+    assert len(chunks) >= 3
+    from digester.extract import CHUNK_HARD_MAX
+
+    assert all(len(c) <= CHUNK_HARD_MAX for c in chunks)
+
+
+def test_build_chunks_falls_back_to_windows_without_chapter_markers():
+    text = "No chapter markers. " * 5000  # ~100KB
+    chunks = _build_chunks(text)
+    assert len(chunks) > 1
+
+
+def test_format_exclude_list_renders_compactly():
+    claims = [
+        ExtractedClaim(
+            content=f"Claim number {i}",
+            claim_type=ClaimType.observation,
+            attestation=AttestationLevel.first_hand,
+        )
+        for i in range(3)
+    ]
+    out = _format_exclude_list(claims)
+    assert "1. Claim number 0" in out
+    assert "2. Claim number 1" in out
+    assert "3. Claim number 2" in out
