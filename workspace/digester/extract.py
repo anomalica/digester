@@ -241,7 +241,7 @@ def _call_api(prompt: str, text: str, model: str) -> str:
 
     model_map = {
         "sonnet": "claude-sonnet-4-6",
-        "opus": "claude-opus-4-6",
+        "opus": "claude-opus-4-7",
         "haiku": "claude-haiku-4-5-20251001",
     }
     model_id = model_map.get(model, model)
