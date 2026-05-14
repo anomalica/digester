@@ -202,6 +202,58 @@ OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
 
 DEFAULT_MODEL = "sonnet"
 
+# Max characters per Claude call. ~50K chars is ~12K tokens, leaving plenty of
+# budget for the JSON response. Records above this get chunked so a long book
+# does not lose hundreds of claims to the model's "give me the highlights"
+# behaviour inside a fixed output budget.
+CHUNK_MAX_CHARS = 50_000
+CHUNK_MIN_CHARS = 20_000
+
+
+def _find_split_point(text: str, lo: int, hi: int) -> int | None:
+    """Return the latest natural boundary inside text[lo:hi], or None.
+
+    Preference order: page marker > heading > paragraph break > line break.
+    """
+    window = text[lo:hi]
+    for pattern in (
+        "\n<!-- file_page: ",
+        "\n## ",
+        "\n\n",
+        "\n",
+    ):
+        idx = window.rfind(pattern)
+        if idx > 0:
+            return lo + idx + 1  # split after the preceding newline
+    return None
+
+
+def _chunk_text(
+    text: str,
+    max_chars: int = CHUNK_MAX_CHARS,
+    min_chars: int = CHUNK_MIN_CHARS,
+) -> list[str]:
+    """Split text into chunks respecting natural boundaries.
+
+    Each chunk is at most `max_chars` characters. Boundaries are chosen
+    backwards from the max so paragraphs and headings are not cut. For text
+    shorter than max_chars, returns a single-element list.
+    """
+    if len(text) <= max_chars:
+        return [text]
+
+    chunks: list[str] = []
+    pos = 0
+    while pos < len(text):
+        end = min(pos + max_chars, len(text))
+        if end < len(text):
+            split = _find_split_point(text, pos + min_chars, end)
+            if split is not None:
+                end = split
+        chunks.append(text[pos:end])
+        pos = end
+    return chunks
+
 
 NODE_DIRECTORY_HEADER = """EXISTING NODE DIRECTORY - use these EXACT names when referring to known items.
 Do NOT create new nodes for items already listed here. Include them in node_references using the exact name from this list.
@@ -215,31 +267,97 @@ Now extract from the document below. Use canonical names from the directory abov
 """
 
 
+def _extract_chunked(
+    text: str,
+    base_prompt: str,
+    schema: dict,
+    model: str,
+    use_api: bool,
+    existing_nodes: list[tuple[str, str]] | None,
+    on_progress=None,
+) -> ExtractionResult:
+    """Shared chunked-extraction implementation.
+
+    Long records are split into chunks; each chunk is sent to Claude with the
+    running node directory (so canonical names stay consistent across chunks),
+    and the results are merged - nodes deduped by name, claims concatenated.
+    """
+    chunks = _chunk_text(text)
+    directory: list[tuple[str, str]] = list(existing_nodes or [])
+    merged_nodes: list[ExtractedNode] = []
+    seen_names: set[str] = set()
+    merged_claims: list[ExtractedClaim] = []
+    record_title = ""
+    record_date = None
+    record_producer = None
+    record_reference = None
+
+    for idx, chunk in enumerate(chunks):
+        if on_progress and len(chunks) > 1:
+            on_progress(f"  chunk {idx + 1}/{len(chunks)} ({len(chunk):,} chars)")
+
+        prompt = base_prompt
+        if directory:
+            directory_lines = [
+                f"  - {name} ({node_type})" for name, node_type in directory
+            ]
+            prompt = (
+                NODE_DIRECTORY_HEADER.format(directory="\n".join(directory_lines))
+                + prompt
+            )
+
+        if use_api:
+            raw = _call_api(prompt, chunk, model)
+        else:
+            raw = _call_cli(prompt, chunk, model, schema=schema)
+
+        result = _parse_response(raw)
+
+        if idx == 0:
+            record_title = result.record_title
+            record_date = result.record_date
+            record_producer = result.record_producer
+            record_reference = result.record_reference
+
+        for node in result.nodes:
+            if node.name not in seen_names:
+                seen_names.add(node.name)
+                merged_nodes.append(node)
+                directory.append((node.name, node.node_type.value))
+        merged_claims.extend(result.claims)
+
+    return ExtractionResult(
+        record_title=record_title,
+        record_reference=record_reference,
+        record_date=record_date,
+        record_producer=record_producer,
+        nodes=merged_nodes,
+        claims=merged_claims,
+    )
+
+
 def extract(
     text: str,
     model: str = DEFAULT_MODEL,
     use_api: bool = False,
     existing_nodes: list[tuple[str, str]] | None = None,
+    on_progress=None,
 ) -> ExtractionResult:
     """Extract nodes and claims from record text.
 
     Args:
         existing_nodes: list of (name, node_type) tuples for the node directory.
+        on_progress: optional callback receiving status strings (for chunked runs).
     """
-    prompt = EXTRACTION_PROMPT
-    if existing_nodes:
-        directory_lines = [
-            f"  - {name} ({node_type})" for name, node_type in existing_nodes
-        ]
-        prompt = (
-            NODE_DIRECTORY_HEADER.format(directory="\n".join(directory_lines)) + prompt
-        )
-
-    if use_api:
-        raw = _call_api(prompt, text, model)
-    else:
-        raw = _call_cli(prompt, text, model, schema=DOMAIN_SCHEMA)
-    return _parse_response(raw)
+    return _extract_chunked(
+        text=text,
+        base_prompt=EXTRACTION_PROMPT,
+        schema=DOMAIN_SCHEMA,
+        model=model,
+        use_api=use_api,
+        existing_nodes=existing_nodes,
+        on_progress=on_progress,
+    )
 
 
 def extract_infrastructure(
@@ -247,26 +365,22 @@ def extract_infrastructure(
     model: str = DEFAULT_MODEL,
     use_api: bool = False,
     existing_nodes: list[tuple[str, str]] | None = None,
+    on_progress=None,
 ) -> ExtractionResult:
     """Extract infrastructure information from record text.
 
     Focuses on the information ecosystem: inter-source references,
     production context, career backgrounds, network connections.
     """
-    prompt = INFRASTRUCTURE_PROMPT
-    if existing_nodes:
-        directory_lines = [
-            f"  - {name} ({node_type})" for name, node_type in existing_nodes
-        ]
-        prompt = (
-            NODE_DIRECTORY_HEADER.format(directory="\n".join(directory_lines)) + prompt
-        )
-
-    if use_api:
-        raw = _call_api(prompt, text, model)
-    else:
-        raw = _call_cli(prompt, text, model, schema=INFRASTRUCTURE_SCHEMA)
-    return _parse_response(raw)
+    return _extract_chunked(
+        text=text,
+        base_prompt=INFRASTRUCTURE_PROMPT,
+        schema=INFRASTRUCTURE_SCHEMA,
+        model=model,
+        use_api=use_api,
+        existing_nodes=existing_nodes,
+        on_progress=on_progress,
+    )
 
 
 def _call_cli(prompt: str, text: str, model: str, schema: dict | None = None) -> str:

@@ -95,7 +95,11 @@ def extract_cmd(
     # Domain extraction
     click.echo(f"Extracting domain knowledge from: {parsed.title or path.name}")
     domain_result = extract(
-        parsed.body, model=model, use_api=api, existing_nodes=existing_nodes or None
+        parsed.body,
+        model=model,
+        use_api=api,
+        existing_nodes=existing_nodes or None,
+        on_progress=click.echo,
     )
     click.echo(
         f"  {len(domain_result.nodes)} nodes, {len(domain_result.claims)} domain claims"
@@ -106,7 +110,11 @@ def extract_cmd(
     if not domain_only:
         click.echo("Extracting infrastructure...")
         infra_result = extract_infrastructure(
-            parsed.body, model=model, use_api=api, existing_nodes=existing_nodes or None
+            parsed.body,
+            model=model,
+            use_api=api,
+            existing_nodes=existing_nodes or None,
+            on_progress=click.echo,
         )
         click.echo(f"  {len(infra_result.claims)} infrastructure claims")
 
