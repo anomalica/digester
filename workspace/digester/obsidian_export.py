@@ -33,6 +33,7 @@ _TYPE_FOLDERS: dict[str, tuple[str, str]] = {
     "event": ("Events", "Event"),
     "matter": ("Matters", "Matter"),
     "object": ("Objects", "Object"),
+    "document": ("Documents", "Document"),
     "record": ("Media", "Media"),  # infra-pass record-node-type (mentioned media)
 }
 
@@ -324,10 +325,14 @@ Each folder collects one kind of entity extracted from the source documents:
 - **Places/** - geographic locations
 - **Events/** - discrete things that happened at a specific time
 - **Matters/** - ongoing situations spanning a period of time
-- **Objects/** - specific named physical things (craft, materials, devices)
-- **Records/** - the source documents themselves (one per ingest)
-- **Media/** - external media (books, podcasts, articles) referenced from
-  inside a record but not themselves ingested
+- **Objects/** - specific named physical things (craft, materials, devices, sensors)
+- **Documents/** - memos, reports, letters, articles, papers, books, video footage,
+  briefings, statements - i.e. written or recorded artefacts (distinct from physical
+  objects and from the source records themselves)
+- **Records/** - the source documents that were ingested into the digester (one
+  per ingest)
+- **Media/** - external media referenced from inside a record but not themselves
+  ingested
 
 ## How a claim is stored
 

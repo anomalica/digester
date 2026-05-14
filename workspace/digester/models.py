@@ -18,6 +18,7 @@ class NodeType(str, Enum):
     event = "event"
     matter = "matter"
     object = "object"
+    document = "document"
     record = "record"
     claim = "claim"
 

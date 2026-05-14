@@ -540,6 +540,28 @@ def search(ctx: click.Context, query: str, limit: int, mode: str, rerank: bool) 
     conn.close()
 
 
+@main.command(name="reclassify-documents")
+@click.argument("extracts_dir", type=click.Path(exists=True))
+def reclassify_documents_cmd(extracts_dir: str) -> None:
+    """Rewrite object/matter nodes that look like documents to type 'document'.
+
+    Conservative pattern match against suffixes like Memo, Report, Letter,
+    Article, Paper, Book, Brief, Slides, Video, Disclosure, Statement,
+    Testimony, Affidavit - excluding nodes whose names also contain System,
+    Programme, Program, Centre, Database, Network. Writes changes back to
+    each .extract.md file; rebuild the DB afterwards to pick them up.
+    """
+    from digester.reclassify import reclassify_documents_in_dir
+
+    results = reclassify_documents_in_dir(Path(extracts_dir))
+    total = sum(results.values())
+    click.echo(
+        f"Reclassified {total} nodes to type 'document' across {len(results)} files."
+    )
+    for fname, count in sorted(results.items(), key=lambda x: -x[1]):
+        click.echo(f"  {count:4d}  {fname}")
+
+
 @main.command(name="export-obsidian")
 @click.argument("output_dir", type=click.Path())
 @click.pass_context

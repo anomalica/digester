@@ -26,10 +26,11 @@ EXTRACTION_PROMPT = """You are extracting structured knowledge from a document f
 The knowledge graph uses these node types:
 - "person": a named human individual
 - "organisation": a named group (government bodies, military units, companies, programmes)
-- "place": a named geographic location
+- "place": a named geographic location. Use "Country, Region, City" or "Country, Feature" format - largest geographic unit first (e.g. "USA, Nevada, Area 51" not "Area 51"; "Australia, Queensland, Tully" not "Tully Queensland"; "Mexico, Gulf of Mexico" not "Gulf of Mexico"). For features that span countries (Persian Gulf, Bermuda Triangle), use the region: "Middle East, Persian Gulf".
 - "event": a discrete thing that happened at a specific time (must have a date)
-- "matter": an ongoing situation spanning a period of time
-- "object": a specific named physical thing (craft, materials, devices, samples)
+- "matter": an ongoing situation spanning a period of time (programmes, investigations, policy positions)
+- "object": a specific named physical thing (craft, materials, devices, samples, sensors, weapons). NOT documents.
+- "document": a written or recorded artefact (memo, report, letter, article, paper, book, briefing, video footage, slides, statement, testimony, affidavit, FOIA release). Always use this for textual or recorded artefacts, never "object".
 
 And these claim types:
 - "observation": the speaker directly perceived something
@@ -66,7 +67,7 @@ OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
 "record_date": "YYYY-MM-DD or YYYY-MM or YYYY if known",
 "record_producer": "person or organisation that produced this document",
 "nodes": [
-    {{"name": "canonical short name", "node_type": "person|organisation|place|event|matter|object", "metadata": {{"date_start": "...", "date_end": "..."}}}}
+    {{"name": "canonical short name", "node_type": "person|organisation|place|event|matter|object|document", "metadata": {{"date_start": "...", "date_end": "..."}}}}
 ],
 "claims": [
     {{"content": "normalised assertion with metric units",
