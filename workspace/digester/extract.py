@@ -44,7 +44,9 @@ Attestation levels:
 - "second_hand": speaker reporting what someone else observed
 - "third_hand": speaker reporting what someone heard from someone else
 
-TASK: Extract all nodes and claims from the document below.
+TASK: Extract EVERY factual assertion from the document below.
+
+EXHAUSTIVE EXTRACTION: Do not summarise or curate. Capture every factual statement, however incidental - dates, names, places, quoted figures, asides, parenthetical remarks, footnotes, brief observations. A 300-page book contains thousands of claims, not dozens. Coverage matters more than highlighting "important" points.
 
 RULES:
 1. Claims must be atomic - one assertion per claim. Split compound statements.
@@ -167,7 +169,11 @@ Claim types:
 - "measurement": instrument or sensor data
 - "administrative": dates, career facts, organisational facts
 
-TASK: Extract ONLY infrastructure information. Ignore claims about the phenomena itself. Focus on:
+TASK: Extract EVERY infrastructure claim from the document below.
+
+EXHAUSTIVE EXTRACTION: Do not summarise or curate. Capture every infrastructure-related statement, however incidental - every credential mentioned, every show appearance, every cited article, every working relationship, every aside about another journalist. Coverage matters more than highlighting "important" points.
+
+Ignore claims about the phenomena itself. Focus on:
 
 1. INTER-SOURCE REFERENCES: mentions of other media, books, podcasts, documentaries, articles. Include the sentiment (positive, negative, neutral) in metadata.
 2. PRODUCTION CONTEXT: who produced this content, who hosts the show, who conducted the interview.
@@ -202,12 +208,19 @@ OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
 
 DEFAULT_MODEL = "sonnet"
 
-# Max characters per Claude call. ~50K chars is ~12K tokens, leaving plenty of
-# budget for the JSON response. Records above this get chunked so a long book
-# does not lose hundreds of claims to the model's "give me the highlights"
-# behaviour inside a fixed output budget.
+# Hard upper bound on chunk size. Sonnet's 200K context allows much bigger,
+# but very large chunks slow per-call response. 150K chars ~ 37K tokens, well
+# inside the window with room for the prompt and growing exclude list.
+CHUNK_HARD_MAX = 150_000
+
+# Fall-back char-window settings when there is no chapter structure to use.
 CHUNK_MAX_CHARS = 50_000
 CHUNK_MIN_CHARS = 20_000
+
+# Iterative extraction caps. After this many rounds, or once a round adds
+# fewer than this many new claims, we move on to the next chunk.
+ITERATION_MAX = 8
+ITERATION_MIN_NEW = 5
 
 
 def _find_split_point(text: str, lo: int, hi: int) -> int | None:
@@ -255,6 +268,122 @@ def _chunk_text(
     return chunks
 
 
+def _split_at_chapters(text: str) -> list[str] | None:
+    """Split on Anomalica record-format chapter markers.
+
+    The canonical chapter boundary in the record-format spec is
+    `<!-- chapter: N -->` (primarily on ebooks). Returns None if the document
+    has no chapter annotations, in which case the caller falls back to
+    char-window chunking. We trust the annotation - no minimum size check.
+    """
+    import re
+
+    parts = re.split(r"\n(?=<!-- chapter: )", text)
+    if len(parts) < 2:
+        return None
+    return parts
+
+
+def _build_chunks(text: str) -> list[str]:
+    """Top-level chunker.
+
+    1. If the document has `## ` headings sized like real chapters, use them.
+    2. If any chapter is bigger than the hard cap, sub-chunk it on char windows.
+    3. If no chapter structure, fall back to char-window chunking throughout.
+    """
+    chapters = _split_at_chapters(text)
+    if chapters is None:
+        return _chunk_text(text)
+    final: list[str] = []
+    for ch in chapters:
+        if len(ch) > CHUNK_HARD_MAX:
+            final.extend(_chunk_text(ch, max_chars=CHUNK_HARD_MAX, min_chars=50_000))
+        else:
+            final.append(ch)
+    return final
+
+
+def _format_exclude_list(claims: list[ExtractedClaim]) -> str:
+    """Compact numbered list of claim content - what the model has already extracted."""
+    return "\n".join(f"{i + 1}. {c.content}" for i, c in enumerate(claims))
+
+
+def _iterate_chunk(
+    chunk_text: str,
+    base_prompt: str,
+    schema: dict,
+    model: str,
+    use_api: bool,
+    directory: list[tuple[str, str]],
+    on_progress=None,
+) -> tuple[list[ExtractedNode], list[ExtractedClaim], ExtractionResult]:
+    """Iteratively extract from a single chunk until the model stops finding more.
+
+    Each round shows the model what has already been extracted and asks for
+    additional claims. Claude Code CLI auto-caches identical prompt prefixes
+    within the 5-minute TTL, so rounds 2..N cost roughly the new exclude-list
+    text plus the output - the chunk body is cached.
+
+    Returns (nodes, claims, first_round_result). The first-round result is
+    surfaced so the caller can read record-level metadata (title, date,
+    producer) from the very first response.
+    """
+    chunk_nodes: dict[str, ExtractedNode] = {}
+    chunk_claims: list[ExtractedClaim] = []
+    seen_content: set[str] = set()
+    first_result: ExtractionResult | None = None
+
+    for iteration in range(ITERATION_MAX):
+        prompt = base_prompt
+        if directory:
+            directory_lines = [
+                f"  - {name} ({node_type})" for name, node_type in directory
+            ]
+            prompt = (
+                NODE_DIRECTORY_HEADER.format(directory="\n".join(directory_lines))
+                + prompt
+            )
+        if chunk_claims:
+            prompt += (
+                "\n\nALREADY EXTRACTED CLAIMS - do NOT repeat any of these:\n"
+                + _format_exclude_list(chunk_claims)
+                + "\n\nExtract ADDITIONAL factual claims from the document that are NOT in the list above. Return an empty `claims` array if you cannot find any genuinely new claims."
+            )
+
+        if use_api:
+            raw = _call_api(prompt, chunk_text, model)
+        else:
+            raw = _call_cli(prompt, chunk_text, model, schema=schema)
+        result = _parse_response(raw)
+        if first_result is None:
+            first_result = result
+
+        new_in_round = 0
+        for claim in result.claims:
+            key = claim.content.strip().lower()
+            if key in seen_content:
+                continue
+            seen_content.add(key)
+            chunk_claims.append(claim)
+            new_in_round += 1
+
+        for node in result.nodes:
+            if node.name not in chunk_nodes:
+                chunk_nodes[node.name] = node
+                directory.append((node.name, node.node_type.value))
+
+        if on_progress:
+            on_progress(
+                f"    iter {iteration + 1}: +{new_in_round} claims "
+                f"(chunk total {len(chunk_claims)})"
+            )
+
+        if new_in_round < ITERATION_MIN_NEW:
+            break
+
+    return list(chunk_nodes.values()), chunk_claims, first_result
+
+
 NODE_DIRECTORY_HEADER = """EXISTING NODE DIRECTORY - use these EXACT names when referring to known items.
 Do NOT create new nodes for items already listed here. Include them in node_references using the exact name from this list.
 
@@ -278,11 +407,12 @@ def _extract_chunked(
 ) -> ExtractionResult:
     """Shared chunked-extraction implementation.
 
-    Long records are split into chunks; each chunk is sent to Claude with the
-    running node directory (so canonical names stay consistent across chunks),
-    and the results are merged - nodes deduped by name, claims concatenated.
+    Splits the record at chapter boundaries when available (falls back to char
+    windows). Within each chunk runs an iterative loop - re-asking the model
+    for "more claims not in this list" until output dries up. The running node
+    directory threads through subsequent chunks so canonical names persist.
     """
-    chunks = _chunk_text(text)
+    chunks = _build_chunks(text)
     directory: list[tuple[str, str]] = list(existing_nodes or [])
     merged_nodes: list[ExtractedNode] = []
     seen_names: set[str] = set()
@@ -296,35 +426,30 @@ def _extract_chunked(
         if on_progress and len(chunks) > 1:
             on_progress(f"  chunk {idx + 1}/{len(chunks)} ({len(chunk):,} chars)")
 
-        prompt = base_prompt
-        if directory:
-            directory_lines = [
-                f"  - {name} ({node_type})" for name, node_type in directory
-            ]
-            prompt = (
-                NODE_DIRECTORY_HEADER.format(directory="\n".join(directory_lines))
-                + prompt
-            )
+        chunk_nodes, chunk_claims, first_round = _iterate_chunk(
+            chunk_text=chunk,
+            base_prompt=base_prompt,
+            schema=schema,
+            model=model,
+            use_api=use_api,
+            directory=directory,
+            on_progress=on_progress,
+        )
 
-        if use_api:
-            raw = _call_api(prompt, chunk, model)
-        else:
-            raw = _call_cli(prompt, chunk, model, schema=schema)
+        # Record-level metadata is captured from the very first chunk's first
+        # round only - subsequent chunks describe the same record so their
+        # title/date/etc may be partial or wrong.
+        if idx == 0 and first_round is not None:
+            record_title = first_round.record_title
+            record_date = first_round.record_date
+            record_producer = first_round.record_producer
+            record_reference = first_round.record_reference
 
-        result = _parse_response(raw)
-
-        if idx == 0:
-            record_title = result.record_title
-            record_date = result.record_date
-            record_producer = result.record_producer
-            record_reference = result.record_reference
-
-        for node in result.nodes:
+        for node in chunk_nodes:
             if node.name not in seen_names:
                 seen_names.add(node.name)
                 merged_nodes.append(node)
-                directory.append((node.name, node.node_type.value))
-        merged_claims.extend(result.claims)
+        merged_claims.extend(chunk_claims)
 
     return ExtractionResult(
         record_title=record_title,
