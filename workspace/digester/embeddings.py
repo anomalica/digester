@@ -52,10 +52,12 @@ def embed_text(text: str) -> list[float]:
     return results[0].tolist()
 
 
-def embed_batch(texts: list[str]) -> list[list[float]]:
+def embed_batch(texts: list[str], batch_size: int = 32) -> list[list[float]]:
     if not texts:
         return []
-    return [embed_text(t) for t in texts]
+    embedder = _get_embedder()
+    results = list(embedder.embed(texts, batch_size=batch_size))
+    return [emb.tolist() for emb in results]
 
 
 def serialise_f32(vector: list[float]) -> bytes:
