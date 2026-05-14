@@ -368,9 +368,31 @@ OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
     help="Minimum embedding similarity to consider as candidate",
 )
 @click.option("--model", default="sonnet", help="Claude model for verification")
+@click.option(
+    "--rerank",
+    is_flag=True,
+    help="Apply cross-encoder pre-filter before Claude verification",
+)
+@click.option(
+    "--rerank-min",
+    default=0.3,
+    type=float,
+    help="Drop candidates whose reranker sigmoid score is below this value",
+)
 @click.pass_context
-def corroborate(ctx: click.Context, threshold: float, model: str) -> None:
-    """Find cross-record corroborations: embedding similarity then AI verification."""
+def corroborate(
+    ctx: click.Context,
+    threshold: float,
+    model: str,
+    rerank: bool,
+    rerank_min: float,
+) -> None:
+    """Find cross-record corroborations: embedding similarity then AI verification.
+
+    With --rerank, a cross-encoder pre-filter scores each candidate pair before
+    Claude is consulted. Pairs below --rerank-min are dropped, cutting the
+    number of Claude calls without losing genuine corroborations.
+    """
     from digester.database import insert_corroboration
     from digester.embeddings import deserialise_f32, search_similar_claims
     from digester.extract import _call_cli, _parse_json
@@ -406,6 +428,24 @@ def corroborate(ctx: click.Context, threshold: float, model: str) -> None:
                 candidates.append((claim_id, match_id, similarity))
 
     click.echo(f"Found {len(candidates)} candidate pairs above {threshold} similarity")
+
+    if rerank and candidates:
+        from digester.search import _sigmoid, rerank_pairs
+
+        pairs = [(claim_content[a], claim_content[b]) for a, b, _ in candidates]
+        click.echo(f"  Reranking {len(pairs)} pairs with cross-encoder...")
+        raw_scores = rerank_pairs(pairs)
+        ce_scores = [_sigmoid(s) for s in raw_scores]
+        filtered = [
+            (a, b, sim, ce)
+            for (a, b, sim), ce in zip(candidates, ce_scores)
+            if ce >= rerank_min
+        ]
+        click.echo(
+            f"  {len(filtered)}/{len(candidates)} pairs retained after rerank "
+            f"(min sigmoid {rerank_min})"
+        )
+        candidates = [(a, b, sim) for a, b, sim, _ in filtered]
 
     if not candidates:
         conn.close()
@@ -445,19 +485,40 @@ def corroborate(ctx: click.Context, threshold: float, model: str) -> None:
 @main.command()
 @click.argument("query")
 @click.option("--limit", default=5, help="Number of results")
+@click.option(
+    "--mode",
+    type=click.Choice(["hybrid", "semantic", "keyword"]),
+    default="hybrid",
+    help="Retrieval mode (default: hybrid embedding+keyword via RRF)",
+)
+@click.option(
+    "--rerank",
+    is_flag=True,
+    help="Apply cross-encoder rerank pass (requires sentence-transformers)",
+)
 @click.pass_context
-def search(ctx: click.Context, query: str, limit: int) -> None:
-    """Search claims by semantic similarity."""
+def search(ctx: click.Context, query: str, limit: int, mode: str, rerank: bool) -> None:
+    """Search claims by semantic similarity, keyword match, or hybrid (default)."""
     from digester.embeddings import search_similar_claims
+    from digester.search import hybrid_search_claims, keyword_search_claims
 
     conn = _connect(ctx.obj["db_path"])
     init_vec(conn)
 
-    query_embedding = embed_text(query)
-    results = search_similar_claims(conn, query_embedding, limit=limit)
+    if mode == "keyword":
+        results = keyword_search_claims(conn, query, limit=limit)
+        results = [(cid, 1.0 - score) for cid, score in results]
+    elif mode == "semantic":
+        query_embedding = embed_text(query)
+        results = search_similar_claims(conn, query_embedding, limit=limit)
+    else:
+        query_embedding = embed_text(query)
+        results = hybrid_search_claims(
+            conn, query, query_embedding, limit=limit, rerank=rerank
+        )
 
     if not results:
-        click.echo("No results. Run 'embed' first to generate embeddings.")
+        click.echo("No results. Run 'embed' first if you expected semantic matches.")
         conn.close()
         return
 
