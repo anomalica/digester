@@ -52,12 +52,14 @@ def embed_text(text: str) -> list[float]:
     return results[0].tolist()
 
 
-def embed_batch(texts: list[str], batch_size: int = 32) -> list[list[float]]:
+def embed_batch(texts: list[str]) -> list[list[float]]:
+    # Loop rather than passing a list to fastembed.embed - the custom Qwen3
+    # ONNX model registered via add_custom_model breaks fastembed's
+    # mean_pooling when batch_size > 1 (attention-mask shape mismatch). Per-
+    # item calls are slower but actually work.
     if not texts:
         return []
-    embedder = _get_embedder()
-    results = list(embedder.embed(texts, batch_size=batch_size))
-    return [emb.tolist() for emb in results]
+    return [embed_text(t) for t in texts]
 
 
 def serialise_f32(vector: list[float]) -> bytes:
