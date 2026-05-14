@@ -532,5 +532,33 @@ def search(ctx: click.Context, query: str, limit: int, mode: str, rerank: bool) 
     conn.close()
 
 
+@main.command(name="export-obsidian")
+@click.argument("output_dir", type=click.Path())
+@click.pass_context
+def export_obsidian_cmd(ctx: click.Context, output_dir: str) -> None:
+    """Export the knowledge graph as a navigable Obsidian markdown vault.
+
+    Creates Records/*.md (one per record, with all claims linking to [[Node]]s)
+    and Nodes/*.md (stubs - rely on Obsidian's backlinks panel to surface
+    incoming claim references). Open the output directory as a vault.
+    """
+    from digester.obsidian_export import export_to_obsidian
+
+    domain_conn = _connect(ctx.obj["db_path"])
+    infra_conn = _connect(ctx.obj["infra_db_path"])
+
+    out = Path(output_dir)
+    counts = export_to_obsidian(out, domain_conn, infra_conn)
+
+    domain_conn.close()
+    infra_conn.close()
+
+    click.echo(f"Exported to {out}:")
+    click.echo(f"  Records: {counts['records']}")
+    click.echo(f"  Nodes:   {counts['nodes']}")
+    click.echo(f"  Claims:  {counts['claims']}")
+    click.echo(f"\nOpen {out} as an Obsidian vault to navigate.")
+
+
 if __name__ == "__main__":
     main()
