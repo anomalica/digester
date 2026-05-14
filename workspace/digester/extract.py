@@ -84,6 +84,70 @@ VALID_NODE_TYPES = {
 VALID_CLAIM_TYPES = {t.value for t in ClaimType}
 VALID_ATTESTATION = {t.value for t in AttestationLevel}
 
+
+def _extraction_schema(node_types: list[str]) -> dict:
+    """Build a JSON schema for an extraction response.
+
+    Passed to `claude --json-schema` so the model cannot return malformed JSON;
+    this was the cause of every batch failure in the first-pass run (commas
+    dropped mid-generation in long responses).
+    """
+    return {
+        "type": "object",
+        "required": ["record_title", "nodes", "claims"],
+        "additionalProperties": True,
+        "properties": {
+            "record_title": {"type": "string"},
+            "record_date": {"type": ["string", "null"]},
+            "record_producer": {"type": ["string", "null"]},
+            "record_reference": {"type": ["string", "null"]},
+            "nodes": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": ["name", "node_type"],
+                    "properties": {
+                        "name": {"type": "string"},
+                        "node_type": {"type": "string", "enum": node_types},
+                        "metadata": {"type": ["object", "null"]},
+                    },
+                },
+            },
+            "claims": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": ["content", "claim_type", "attestation"],
+                    "properties": {
+                        "content": {"type": "string"},
+                        "original_excerpt": {"type": ["string", "null"]},
+                        "claim_type": {
+                            "type": "string",
+                            "enum": sorted(VALID_CLAIM_TYPES),
+                        },
+                        "attestation": {
+                            "type": "string",
+                            "enum": sorted(VALID_ATTESTATION),
+                        },
+                        "speaker": {"type": ["string", "null"]},
+                        "location_in_record": {"type": ["string", "null"]},
+                        "date": {"type": ["string", "null"]},
+                        "date_end": {"type": ["string", "null"]},
+                        "node_references": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                        },
+                        "confidence": {"type": "number"},
+                    },
+                },
+            },
+        },
+    }
+
+
+DOMAIN_SCHEMA = _extraction_schema(sorted(VALID_NODE_TYPES))
+INFRASTRUCTURE_SCHEMA = _extraction_schema(sorted(VALID_NODE_TYPES | {"record"}))
+
 INFRASTRUCTURE_PROMPT = """You are extracting INFRASTRUCTURE information from a document. This is NOT about the phenomena described in the document. It is about the information ecosystem: who produced this content, who interviews whom, what other sources or media are mentioned, career backgrounds, and opinions about other sources.
 
 The knowledge graph uses these node types:
@@ -174,7 +238,7 @@ def extract(
     if use_api:
         raw = _call_api(prompt, text, model)
     else:
-        raw = _call_cli(prompt, text, model)
+        raw = _call_cli(prompt, text, model, schema=DOMAIN_SCHEMA)
     return _parse_response(raw)
 
 
@@ -201,12 +265,23 @@ def extract_infrastructure(
     if use_api:
         raw = _call_api(prompt, text, model)
     else:
-        raw = _call_cli(prompt, text, model)
+        raw = _call_cli(prompt, text, model, schema=INFRASTRUCTURE_SCHEMA)
     return _parse_response(raw)
 
 
-def _call_cli(prompt: str, text: str, model: str) -> str:
-    """Call Claude via the CLI subprocess."""
+def _call_cli(prompt: str, text: str, model: str, schema: dict | None = None) -> str:
+    """Call Claude via the CLI subprocess.
+
+    Restricts Claude Code to the Read tool with --effort low to avoid the full
+    agentic stack (Bash, Edit, MCP servers, skills, auto-memory, etc.) that
+    is loaded by default. Without these flags a structured-extraction call
+    can take 8+ minutes because the model spends time choosing between tools.
+    With them, the same call completes in 10-30 seconds.
+
+    When `schema` is provided, it is passed via --json-schema so the model
+    cannot emit malformed JSON (the failure mode that cost us records in the
+    first batch run).
+    """
     env = {
         k: v
         for k, v in os.environ.items()
@@ -226,10 +301,38 @@ def _call_cli(prompt: str, text: str, model: str) -> str:
             model,
             "--no-session-persistence",
             "--dangerously-skip-permissions",
+            "--disable-slash-commands",
+            "--tools",
+            "Read",
+            "--effort",
+            "low",
         ]
+        if schema is not None:
+            # --json-schema makes Claude emit via a StructuredOutput tool call;
+            # the validated object lives in `structured_output` of the JSON
+            # wrapper, not in the text stream. We unwrap it here and re-encode
+            # so downstream _parse_json sees a normal JSON string.
+            cmd.extend(["--json-schema", json.dumps(schema)])
+            cmd.extend(["--output-format", "json"])
         proc = subprocess.run(cmd, capture_output=True, text=True, timeout=900, env=env)
         if proc.returncode != 0:
             raise RuntimeError(f"Claude CLI failed: {proc.stderr}")
+        if schema is not None:
+            try:
+                wrapper = json.loads(proc.stdout)
+            except json.JSONDecodeError as e:
+                raise RuntimeError(
+                    f"Claude CLI emitted non-JSON wrapper: {e}\n{proc.stdout[:500]}"
+                ) from e
+            structured = wrapper.get("structured_output")
+            if structured is None:
+                raise RuntimeError(
+                    f"Claude CLI returned no structured_output. "
+                    f"is_error={wrapper.get('is_error')} "
+                    f"api_error_status={wrapper.get('api_error_status')} "
+                    f"result_preview={str(wrapper.get('result'))[:200]}"
+                )
+            return json.dumps(structured)
         return proc.stdout.strip()
     finally:
         os.unlink(temp_path)
@@ -264,15 +367,15 @@ def _parse_json(raw: str) -> dict:
         lines = [line for line in lines if not line.strip().startswith("```")]
         cleaned = "\n".join(lines).strip()
     start = cleaned.find("{")
-    end = cleaned.rfind("}")
-    if start == -1 or end == -1:
+    if start == -1:
         raise ValueError(f"No JSON object found in response: {cleaned[:200]}")
-    cleaned = cleaned[start : end + 1]
+    decoder = json.JSONDecoder()
     try:
-        return json.loads(cleaned)
+        obj, _idx = decoder.raw_decode(cleaned[start:])
+        return obj
     except json.JSONDecodeError as e:
         raise ValueError(
-            f"Invalid JSON from Claude: {e}\nResponse: {cleaned[:500]}"
+            f"Invalid JSON from Claude: {e}\nResponse: {cleaned[start : start + 500]}"
         ) from e
 
 
