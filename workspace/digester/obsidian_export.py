@@ -1,25 +1,40 @@
 """Export the knowledge graph as an Obsidian-navigable markdown vault.
 
-One file per record (with all claims, each linking to referenced nodes via
-`[[wikilinks]]`) and one stub per node. Obsidian's backlinks panel surfaces
-the incoming claim references on each node without us having to enumerate
-them.
+Structure:
 
-Designed for manual inspection: open the output directory in Obsidian and
-click between records and nodes to verify the extraction.
+    People/<name>.md           one file per person
+    Organisations/<name>.md    one file per organisation
+    Places/<name>.md           one file per place
+    Events/<name>.md           one file per dated event
+    Matters/<name>.md          one file per ongoing situation
+    Objects/<name>.md          one file per specific physical thing
+    Records/<date - title>.md  one file per source document
+    README.md                  what is here, how to navigate
+
+Each entity file lists every claim that references it inline (with the source
+record and other entities linked via `[[wikilinks]]`). The backlinks panel in
+Obsidian is not required - the data is already on the page.
 """
 
 from __future__ import annotations
 
 import re
 import sqlite3
-from collections.abc import Iterable
 from pathlib import Path
 
-# Characters forbidden in Obsidian / Windows / macOS filenames
 _FORBIDDEN = re.compile(r'[<>:"/\\|?*\x00-\x1f]+')
-# Obsidian wikilinks break on these inner chars
 _WIKILINK_FORBIDDEN = re.compile(r"[\[\]|#^]")
+
+# Map raw node_type values to user-facing folder names (and singular labels).
+_TYPE_FOLDERS: dict[str, tuple[str, str]] = {
+    "person": ("People", "Person"),
+    "organisation": ("Organisations", "Organisation"),
+    "place": ("Places", "Place"),
+    "event": ("Events", "Event"),
+    "matter": ("Matters", "Matter"),
+    "object": ("Objects", "Object"),
+    "record": ("Media", "Media"),  # infra-pass record-node-type (mentioned media)
+}
 
 
 def _safe_filename(name: str) -> str:
@@ -31,60 +46,45 @@ def _safe_wikilink(name: str) -> str:
     return _WIKILINK_FORBIDDEN.sub("", name).strip()
 
 
-def _node_link(name: str | None) -> str:
+def _link(name: str | None) -> str:
     if not name:
         return "_"
     return f"[[{_safe_wikilink(name)}]]"
 
 
-def _gather_nodes(conn: sqlite3.Connection) -> dict[str, dict]:
-    """Return {node_id: {name, node_type, metadata, aliases}} for active nodes."""
+def _load_db(conn: sqlite3.Connection) -> dict:
+    """Pull everything we need from one database into a single in-memory dict."""
     nodes = {}
-    rows = conn.execute(
-        "SELECT id, node_type, name, metadata FROM nodes WHERE retired_at IS NULL"
-    ).fetchall()
-    for nid, ntype, name, _meta in rows:
-        nodes[nid] = {"name": name, "node_type": ntype, "aliases": []}
-    alias_rows = conn.execute("SELECT alias, node_id FROM aliases").fetchall()
-    for alias, nid in alias_rows:
+    for nid, ntype, name in conn.execute(
+        "SELECT id, node_type, name FROM nodes WHERE retired_at IS NULL"
+    ):
+        nodes[nid] = {"id": nid, "name": name, "node_type": ntype, "aliases": []}
+    for alias, nid in conn.execute("SELECT alias, node_id FROM aliases"):
         if nid in nodes and alias != nodes[nid]["name"]:
             nodes[nid]["aliases"].append(alias)
-    return nodes
 
-
-def _gather_records(conn: sqlite3.Connection) -> list[dict]:
-    rows = conn.execute(
+    records = {}
+    for rid, title, date, producer_id, reference in conn.execute(
         "SELECT id, title, date, producer_id, reference FROM records"
-    ).fetchall()
-    return [
-        {
+    ):
+        records[rid] = {
             "id": rid,
             "title": title,
             "date": date,
             "producer_id": producer_id,
             "reference": reference,
         }
-        for rid, title, date, producer_id, reference in rows
-    ]
 
-
-def _gather_claims_for_record(conn: sqlite3.Connection, record_id: str) -> list[dict]:
-    rows = conn.execute(
-        """
-        SELECT id, content, original_excerpt, claim_type, attestation, speaker_id,
-               location_in_record, date, date_end, confidence
-        FROM claims
-        WHERE record_id = ?
-        ORDER BY date IS NULL, date, location_in_record
-        """,
-        (record_id,),
-    ).fetchall()
     claims = []
-    for row in rows:
+    claim_refs: dict[str, list[str]] = {}
+    for row in conn.execute(
+        """
+        SELECT id, content, original_excerpt, claim_type, attestation,
+               record_id, speaker_id, location_in_record, date, date_end, confidence
+        FROM claims
+        """
+    ):
         cid = row[0]
-        ref_ids = conn.execute(
-            "SELECT node_id FROM claim_node_refs WHERE claim_id = ?", (cid,)
-        ).fetchall()
         claims.append(
             {
                 "id": cid,
@@ -92,99 +92,257 @@ def _gather_claims_for_record(conn: sqlite3.Connection, record_id: str) -> list[
                 "original_excerpt": row[2],
                 "claim_type": row[3],
                 "attestation": row[4],
-                "speaker_id": row[5],
-                "location_in_record": row[6],
-                "date": row[7],
-                "date_end": row[8],
-                "confidence": row[9],
-                "ref_ids": [r[0] for r in ref_ids],
+                "record_id": row[5],
+                "speaker_id": row[6],
+                "location_in_record": row[7],
+                "date": row[8],
+                "date_end": row[9],
+                "confidence": row[10],
             }
         )
-    return claims
+        claim_refs[cid] = []
+    for cid, nid in conn.execute("SELECT claim_id, node_id FROM claim_node_refs"):
+        if cid in claim_refs:
+            claim_refs[cid].append(nid)
+
+    return {
+        "nodes": nodes,
+        "records": records,
+        "claims": claims,
+        "claim_refs": claim_refs,
+    }
 
 
-def _format_claim(claim: dict, nodes: dict[str, dict]) -> str:
+def _merge_by_name(*dbs: dict) -> dict:
+    """Merge multi-DB load into a single (name, type)-keyed view.
+
+    Two nodes are merged across DBs only if their name AND node_type match -
+    so 'Apollo' the person and 'Apollo' the matter remain separate entries
+    (they will end up in different per-type folders).
+
+    Returns a dict with:
+      - nodes_by_key: {(name, node_type): {name, node_type, aliases, ids}}
+      - claims: [(db_idx, claim_dict)]
+      - records: [(db_idx, record_dict)]
+    """
+    nodes_by_key: dict[tuple[str, str], dict] = {}
+    id_to_name: dict[tuple[int, str], str] = {}
+    for idx, db in enumerate(dbs):
+        for nid, node in db["nodes"].items():
+            name = node["name"]
+            ntype = node["node_type"]
+            key = (name, ntype)
+            id_to_name[(idx, nid)] = name
+            if key not in nodes_by_key:
+                nodes_by_key[key] = {
+                    "name": name,
+                    "node_type": ntype,
+                    "aliases": set(node["aliases"]),
+                    "ids": [],
+                }
+            else:
+                nodes_by_key[key]["aliases"].update(node["aliases"])
+            nodes_by_key[key]["ids"].append((idx, nid))
+
+    claims = [(idx, claim) for idx, db in enumerate(dbs) for claim in db["claims"]]
+    records = [
+        (idx, rec) for idx, db in enumerate(dbs) for rec in db["records"].values()
+    ]
+
+    return {
+        "nodes_by_key": nodes_by_key,
+        "id_to_name": id_to_name,
+        "claims": claims,
+        "records": records,
+        "dbs": dbs,
+    }
+
+
+def _format_claim_block(
+    claim: dict,
+    db_idx: int,
+    merged: dict,
+    *,
+    show_speaker: bool = True,
+) -> str:
+    db = merged["dbs"][db_idx]
+    refs = [
+        merged["id_to_name"].get((db_idx, rid))
+        for rid in db["claim_refs"].get(claim["id"], [])
+    ]
+    refs = [r for r in refs if r]
     speaker = (
-        nodes.get(claim["speaker_id"], {}).get("name") if claim["speaker_id"] else None
+        merged["id_to_name"].get((db_idx, claim["speaker_id"]))
+        if claim["speaker_id"]
+        else None
     )
-    refs = [nodes[rid]["name"] for rid in claim["ref_ids"] if rid in nodes]
+    record = db["records"].get(claim["record_id"])
+    record_title = record["title"] if record else None
+    record_date = record["date"] if record else None
 
-    lines = [f"### `{claim['claim_type']}` / `{claim['attestation']}`"]
+    lines: list[str] = []
+    lines.append(f"### `{claim['claim_type']}` / `{claim['attestation']}`")
     lines.append("")
     lines.append(claim["content"])
     lines.append("")
-    meta_lines = []
-    if speaker:
-        meta_lines.append(f"- **Speaker:** {_node_link(speaker)}")
+
+    meta: list[str] = []
+    if show_speaker and speaker:
+        meta.append(f"- **Speaker:** {_link(speaker)}")
+    if record_title:
+        record_label = (
+            f"{record_date} - {record_title}" if record_date else record_title
+        )
+        meta.append(f"- **Source:** {_link(record_label)}")
     if claim["date"]:
         date_str = claim["date"]
         if claim["date_end"] and claim["date_end"] != claim["date"]:
             date_str += f" to {claim['date_end']}"
-        meta_lines.append(f"- **Date:** {date_str}")
+        meta.append(f"- **Date:** {date_str}")
     if claim["location_in_record"]:
-        meta_lines.append(f"- **Location:** {claim['location_in_record']}")
+        meta.append(f"- **Location:** {claim['location_in_record']}")
     if refs:
-        meta_lines.append(f"- **Refs:** {', '.join(_node_link(r) for r in refs)}")
+        meta.append(f"- **Refs:** {', '.join(_link(r) for r in refs)}")
     if claim["confidence"] < 1.0:
-        meta_lines.append(f"- **Confidence:** {claim['confidence']:.2f}")
-    if meta_lines:
-        lines.extend(meta_lines)
+        meta.append(f"- **Confidence:** {claim['confidence']:.2f}")
+    if meta:
+        lines.extend(meta)
         lines.append("")
     if claim["original_excerpt"]:
-        for excerpt_line in claim["original_excerpt"].splitlines() or [""]:
-            lines.append(f"> {excerpt_line}")
+        for line in claim["original_excerpt"].splitlines() or [""]:
+            lines.append(f"> {line}")
         lines.append("")
     lines.append("")
     return "\n".join(lines)
 
 
-def _format_record_file(
-    record: dict, claims: list[dict], nodes: dict[str, dict]
-) -> str:
-    producer = (
-        nodes.get(record["producer_id"], {}).get("name")
+def _format_node_file(node: dict, merged: dict) -> str:
+    folder_name, label = _TYPE_FOLDERS.get(
+        node["node_type"], ("Other", node["node_type"].title())
+    )
+
+    fm = ["---", f"type: {node['node_type']}"]
+    if node["aliases"]:
+        fm.append("aliases:")
+        for a in sorted(node["aliases"]):
+            fm.append(f"  - {a}")
+    fm.append("---")
+    fm.append("")
+    fm.append(f"# {node['name']}")
+    fm.append("")
+    fm.append(f"*{label}*")
+    fm.append("")
+    if node["aliases"]:
+        fm.append(f"Also known as: {', '.join(sorted(node['aliases']))}")
+        fm.append("")
+
+    # Find claims that reference this node (or have it as speaker) across all DBs.
+    own_ids = set(node["ids"])
+    relevant: list[tuple[int, dict]] = []
+    seen_content: set[tuple[str, str]] = set()
+    for db_idx, claim in merged["claims"]:
+        db = merged["dbs"][db_idx]
+        is_speaker = claim["speaker_id"] and (db_idx, claim["speaker_id"]) in own_ids
+        ref_match = any(
+            (db_idx, rid) in own_ids for rid in db["claim_refs"].get(claim["id"], [])
+        )
+        if not (is_speaker or ref_match):
+            continue
+        # Dedupe across the two DBs (a claim can appear in both with the same text).
+        key = (claim["record_id"], claim["content"])
+        if key in seen_content:
+            continue
+        seen_content.add(key)
+        relevant.append((db_idx, claim))
+
+    # Sort: dated first chronologically, then undated.
+    def _sort_key(item):
+        _, c = item
+        return (c["date"] is None, c["date"] or "", c["location_in_record"] or "")
+
+    relevant.sort(key=_sort_key)
+
+    fm.append(f"## Claims ({len(relevant)})")
+    fm.append("")
+    if not relevant:
+        fm.append("_No claims reference this entity yet._")
+        fm.append("")
+    for db_idx, claim in relevant:
+        fm.append(_format_claim_block(claim, db_idx, merged))
+    return "\n".join(fm)
+
+
+def _format_record_file(db_idx: int, record: dict, merged: dict) -> str:
+    db = merged["dbs"][db_idx]
+    producer_name = (
+        merged["id_to_name"].get((db_idx, record["producer_id"]))
         if record["producer_id"]
         else None
     )
+    claims_in_record = [c for c in db["claims"] if c["record_id"] == record["id"]]
+    claims_in_record.sort(
+        key=lambda c: (
+            c["date"] is None,
+            c["date"] or "",
+            c["location_in_record"] or "",
+        )
+    )
 
-    fm = ["---", "type: record", f"id: {record['id']}"]
+    fm = ["---", "type: record"]
     if record["date"]:
         fm.append(f"date: {record['date']}")
-    if producer:
-        fm.append(f"producer: {producer}")
+    if producer_name:
+        fm.append(f"producer: {producer_name}")
     if record["reference"]:
         fm.append(f"reference: {record['reference']}")
     fm.append("---")
     fm.append("")
     fm.append(f"# {record['title']}")
     fm.append("")
-    if producer:
-        fm.append(f"Producer: {_node_link(producer)}")
+    if producer_name:
+        fm.append(f"Producer: {_link(producer_name)}")
         fm.append("")
-    fm.append(f"## Claims ({len(claims)})")
+    fm.append(f"## Claims ({len(claims_in_record)})")
     fm.append("")
-    for c in claims:
-        fm.append(_format_claim(c, nodes))
+    for claim in claims_in_record:
+        fm.append(_format_claim_block(claim, db_idx, merged))
     return "\n".join(fm)
 
 
-def _format_node_file(node: dict, node_id: str) -> str:
-    lines = ["---", f"type: {node['node_type']}", f"id: {node_id}"]
-    if node["aliases"]:
-        lines.append("aliases:")
-        for a in sorted(set(node["aliases"])):
-            lines.append(f"  - {a}")
-    lines.append("---")
-    lines.append("")
-    lines.append(f"# {node['name']}")
-    lines.append("")
-    lines.append(f"`{node['node_type']}`")
-    lines.append("")
-    lines.append(
-        "> [!info] Backlinks below show every claim that references this node."
-    )
-    lines.append("")
-    return "\n".join(lines)
+_README = """\
+# Anomalica Generated Vault
+
+This vault is **auto-generated** from the digester knowledge graph. Do not edit
+by hand - run `just vault` from `anomalica-digester/` to regenerate.
+
+## What is here
+
+Each folder collects one kind of entity extracted from the source documents:
+
+- **People/** - named individuals (witnesses, journalists, officials)
+- **Organisations/** - government bodies, military units, companies, programmes
+- **Places/** - geographic locations
+- **Events/** - discrete things that happened at a specific time
+- **Matters/** - ongoing situations spanning a period of time
+- **Objects/** - specific named physical things (craft, materials, devices)
+- **Records/** - the source documents themselves (one per ingest)
+- **Media/** - external media (books, podcasts, articles) referenced from
+  inside a record but not themselves ingested
+
+## How a claim is stored
+
+Every assertion in a source document is broken into a **claim**. Each claim
+appears inline on:
+
+- the source **Record** file (with all other claims from that document)
+- the page of every **entity** the claim references
+- the page of the **speaker** if there is one
+
+Each claim shows its type (`observation`, `testimony`, `hearsay`, `opinion`,
+`measurement`, `administrative`), attestation level (`first_hand`,
+`second_hand`, `third_hand`), source record, date, location in record, the
+other entities it references, and the original wording from the document.
+"""
 
 
 def export_to_obsidian(
@@ -197,55 +355,48 @@ def export_to_obsidian(
     Returns counts: {records, nodes, claims}.
     """
     out_dir.mkdir(parents=True, exist_ok=True)
-    records_dir = out_dir / "Records"
-    nodes_dir = out_dir / "Nodes"
-    records_dir.mkdir(exist_ok=True)
-    nodes_dir.mkdir(exist_ok=True)
 
-    nodes = _gather_nodes(domain_conn)
+    dbs = [_load_db(domain_conn)]
     if infra_conn is not None:
-        # Merge infra nodes by name to avoid duplicate stubs for the same entity.
-        infra_nodes = _gather_nodes(infra_conn)
-        domain_names = {n["name"] for n in nodes.values()}
-        for nid, node in infra_nodes.items():
-            if node["name"] not in domain_names:
-                nodes[nid] = node
-                domain_names.add(node["name"])
+        dbs.append(_load_db(infra_conn))
+    merged = _merge_by_name(*dbs)
 
-    seen_node_files: set[str] = set()
-    for nid, node in nodes.items():
+    (out_dir / "README.md").write_text(_README)
+
+    # Entity files grouped by node_type folder.
+    used_filenames: dict[str, set[str]] = {}
+    for node in merged["nodes_by_key"].values():
+        folder, _label = _TYPE_FOLDERS.get(node["node_type"], ("Other", "Other"))
+        folder_path = out_dir / folder
+        folder_path.mkdir(exist_ok=True)
+        used = used_filenames.setdefault(folder, set())
         fname = _safe_filename(node["name"]) + ".md"
-        if fname in seen_node_files:
+        if fname in used:
             fname = f"{_safe_filename(node['name'])} ({node['node_type']}).md"
-        seen_node_files.add(fname)
-        (nodes_dir / fname).write_text(_format_node_file(node, nid))
+        used.add(fname)
+        (folder_path / fname).write_text(_format_node_file(node, merged))
 
+    # Record files.
+    records_dir = out_dir / "Records"
+    records_dir.mkdir(exist_ok=True)
+    seen_records: set[str] = set()
     record_count = 0
-    claim_count = 0
-    seen_record_files: set[str] = set()
-    for conn in [domain_conn] + ([infra_conn] if infra_conn else []):
-        for record in _gather_records(conn):
-            claims = _gather_claims_for_record(conn, record["id"])
-            claim_count += len(claims)
-            date_prefix = (record["date"] + " - ") if record["date"] else ""
-            fname = _safe_filename(date_prefix + record["title"]) + ".md"
-            if fname in seen_record_files:
-                fname = (
-                    _safe_filename(date_prefix + record["title"] + " (infrastructure)")
-                    + ".md"
-                )
-            seen_record_files.add(fname)
-            (records_dir / fname).write_text(_format_record_file(record, claims, nodes))
-            record_count += 1
+    for db_idx, record in merged["records"]:
+        date_prefix = (record["date"] + " - ") if record["date"] else ""
+        fname = _safe_filename(date_prefix + record["title"]) + ".md"
+        if fname in seen_records:
+            # Same record shows up in both DBs - the second copy gets a suffix
+            # so it survives as an "(infrastructure)" companion.
+            fname = (
+                _safe_filename(date_prefix + record["title"] + " (infrastructure)")
+                + ".md"
+            )
+        seen_records.add(fname)
+        (records_dir / fname).write_text(_format_record_file(db_idx, record, merged))
+        record_count += 1
 
     return {
         "records": record_count,
-        "nodes": len(nodes),
-        "claims": claim_count,
+        "nodes": len(merged["nodes_by_key"]),
+        "claims": sum(len(db["claims"]) for db in dbs),
     }
-
-
-def export_iter(records_dir: Path, nodes_dir: Path) -> Iterable[Path]:
-    """Yield every file written by an export (handy for tests)."""
-    yield from records_dir.glob("*.md")
-    yield from nodes_dir.glob("*.md")
