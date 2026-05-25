@@ -21,8 +21,8 @@ from digester.embeddings import (
 )
 from digester.extract import extract, extract_infrastructure
 from digester.import_markdown import import_extraction
-from digester.markdown_format import extraction_to_markdown, parse_extraction_markdown
 from digester.record_parser import parse_record
+from digester.yaml_format import extraction_to_yaml, parse_digest_yaml
 from digester.scoring import score_claim, tier_label
 
 DEFAULT_DB = Path.home() / ".local" / "share" / "digester" / "knowledge.db"
@@ -92,6 +92,51 @@ def extract_cmd(
     domain_conn.close()
     infra_conn.close()
 
+    # SOURCE RECORD framing - pins "the author"/first-person to the named
+    # author so the model never emits an unpinned (graph-contaminating) node.
+    from digester.extract import (
+        build_record_context,
+        extract_terminology,
+        format_terminology_context,
+    )
+
+    record_context = build_record_context(
+        title=parsed.title,
+        authors=parsed.authors,
+        date=parsed.date,
+        source_type=parsed.source_type,
+    )
+
+    # Terminology pre-pass: one Claude call reads the document and returns the
+    # main matter's canonical name, the principal codenames, and the acronym
+    # glossary. The result is injected into every chunk's prompt so claim
+    # extraction uses ONE canonical anchor verbatim and resolves codenames at
+    # write time.
+    terminology = extract_terminology(
+        parsed.body,
+        model=model,
+        use_api=api,
+        record_context=record_context,
+        on_progress=click.echo,
+    )
+    record_context = record_context + format_terminology_context(terminology)
+
+    # Inject the pre-pass's main matter and main event as PRE-EXISTING nodes
+    # in the directory the chunked extraction sees. The model treats existing
+    # nodes as "use the exact name from the directory" - this is the strongest
+    # mechanism we have to make it use the short canonical name verbatim
+    # instead of inventing a verbose alternative per chunk.
+    mm = terminology.get("main_matter") or {}
+    if mm.get("name"):
+        existing_nodes = (existing_nodes or []) + [
+            (mm["name"], mm.get("type") or "matter")
+        ]
+    me = terminology.get("main_event") or {}
+    if me.get("name"):
+        existing_nodes = (existing_nodes or []) + [
+            (me["name"], me.get("type") or "event")
+        ]
+
     # Domain extraction
     click.echo(f"Extracting domain knowledge from: {parsed.title or path.name}")
     domain_result = extract(
@@ -99,6 +144,7 @@ def extract_cmd(
         model=model,
         use_api=api,
         existing_nodes=existing_nodes or None,
+        record_context=record_context,
         on_progress=click.echo,
     )
     click.echo(
@@ -114,19 +160,26 @@ def extract_cmd(
             model=model,
             use_api=api,
             existing_nodes=existing_nodes or None,
+            record_context=record_context,
             on_progress=click.echo,
         )
         click.echo(f"  {len(infra_result.claims)} infrastructure claims")
 
-    # Write markdown
-    md = extraction_to_markdown(domain_result, infra_result=infra_result, model=model)
+    # Write YAML digest, including the terminology so the importer can
+    # enforce codename/acronym/date rules deterministically.
+    text = extraction_to_yaml(
+        domain_result,
+        infra_result=infra_result,
+        model=model,
+        terminology=terminology,
+    )
 
     if output:
         out_path = Path(output)
     else:
-        out_path = path.with_suffix(".extract.md")
+        out_path = path.with_suffix(".yaml")
 
-    out_path.write_text(md)
+    out_path.write_text(text)
     click.echo(f"\nWritten to: {out_path}")
 
 
@@ -137,12 +190,12 @@ def extract_cmd(
 @click.argument("file_path", type=click.Path(exists=True))
 @click.pass_context
 def import_cmd(ctx: click.Context, file_path: str) -> None:
-    """Import a reviewed extraction markdown into the database. No AI involved."""
+    """Import a reviewed digest YAML into the database. No AI involved."""
     path = Path(file_path)
     text = path.read_text()
 
-    click.echo(f"Parsing extraction: {path.name}")
-    parsed = parse_extraction_markdown(text)
+    click.echo(f"Parsing digest: {path.name}")
+    parsed = parse_digest_yaml(text)
 
     domain_conn = _connect(ctx.obj["db_path"])
     infra_conn = _connect(ctx.obj["infra_db_path"])
@@ -156,6 +209,7 @@ def import_cmd(ctx: click.Context, file_path: str) -> None:
             section="domain",
             lookup_conns=[infra_conn],
             on_progress=click.echo,
+            source_path=str(path),
         )
         click.echo(
             f"  Domain: {counts['nodes_created']} new nodes, "
@@ -172,6 +226,7 @@ def import_cmd(ctx: click.Context, file_path: str) -> None:
             section="infrastructure",
             lookup_conns=[domain_conn],
             on_progress=click.echo,
+            source_path=str(path),
         )
         click.echo(
             f"  Infrastructure: {counts['nodes_created']} new nodes, "
@@ -187,10 +242,10 @@ def import_cmd(ctx: click.Context, file_path: str) -> None:
 @click.argument("directory", type=click.Path(exists=True))
 @click.pass_context
 def rebuild(ctx: click.Context, directory: str) -> None:
-    """Rebuild the database from a directory of extraction markdown files.
+    """Rebuild the database from a directory of digest YAML files.
 
     Deletes and recreates both domain and infrastructure databases,
-    then imports all .extract.md files from the given directory.
+    then imports all .yaml digests from the given directory.
     """
     import os
 
@@ -203,14 +258,14 @@ def rebuild(ctx: click.Context, directory: str) -> None:
             os.remove(p)
             click.echo(f"Deleted {p}")
 
-    # Find all extraction files
+    # Find all digest files
     directory_path = Path(directory)
-    files = sorted(directory_path.glob("**/*.extract.md"))
+    files = sorted(directory_path.glob("**/*.yaml"))
     if not files:
-        click.echo(f"No .extract.md files found in {directory}")
+        click.echo(f"No .yaml digest files found in {directory}")
         return
 
-    click.echo(f"Found {len(files)} extraction files in {directory}")
+    click.echo(f"Found {len(files)} digest files in {directory}")
 
     # Import each file sequentially
     for i, f in enumerate(files, 1):
@@ -257,11 +312,11 @@ def digest(
         domain_only=domain_only,
     )
 
-    # Determine the markdown path
+    # Determine the digest path
     path = Path(file_path)
-    md_path = Path(output) if output else path.with_suffix(".extract.md")
+    yaml_path = Path(output) if output else path.with_suffix(".yaml")
 
-    ctx.invoke(import_cmd, file_path=str(md_path))
+    ctx.invoke(import_cmd, file_path=str(yaml_path))
 
 
 # --- Query commands ---
@@ -549,7 +604,7 @@ def reclassify_documents_cmd(extracts_dir: str) -> None:
     Article, Paper, Book, Brief, Slides, Video, Disclosure, Statement,
     Testimony, Affidavit - excluding nodes whose names also contain System,
     Programme, Program, Centre, Database, Network. Writes changes back to
-    each .extract.md file; rebuild the DB afterwards to pick them up.
+    each .yaml digest file; rebuild the DB afterwards to pick them up.
     """
     from digester.reclassify import reclassify_documents_in_dir
 
@@ -558,6 +613,73 @@ def reclassify_documents_cmd(extracts_dir: str) -> None:
     click.echo(
         f"Reclassified {total} nodes to type 'document' across {len(results)} files."
     )
+    for fname, count in sorted(results.items(), key=lambda x: -x[1]):
+        click.echo(f"  {count:4d}  {fname}")
+
+
+@main.command(name="normalise-names")
+@click.argument("extracts_dir", type=click.Path(exists=True))
+def normalise_names_cmd(extracts_dir: str) -> None:
+    """Rewrite person and place names in extracts to canonical formats.
+
+    Persons: "First Last" -> "Last, First" (strips rank prefixes like
+    "Commander", preserves Jr/Sr/II/III on surname).
+
+    Places: "City State" -> "Country, State, City" using a known list of
+    US states, Australian states, Canadian provinces, UK countries, NZ
+    regions. Other places left unchanged.
+
+    Rebuild the DB after to pick up renames.
+    """
+    from digester.reclassify import (
+        normalise_person_names_in_dir,
+        normalise_place_names_in_dir,
+    )
+
+    person_results = normalise_person_names_in_dir(Path(extracts_dir))
+    place_results = normalise_place_names_in_dir(Path(extracts_dir))
+    person_total = sum(person_results.values())
+    place_total = sum(place_results.values())
+    click.echo(
+        f"Normalised {person_total} person names across {len(person_results)} files."
+    )
+    click.echo(
+        f"Normalised {place_total} place names across {len(place_results)} files."
+    )
+
+
+@main.command(name="migrate-refs-delimiter")
+@click.argument("extracts_dir", type=click.Path(exists=True))
+def migrate_refs_delimiter_cmd(extracts_dir: str) -> None:
+    """Migrate refs lines from comma to semicolon delimiter.
+
+    Use this after person/place names have been renamed to include commas
+    (Last, First / Country, Region, ...). Builds a node-name dictionary from
+    all extract files and greedily disambiguates each refs line by matching
+    against the dictionary, so comma-containing names round-trip cleanly.
+    """
+    from digester.reclassify import migrate_refs_delimiter_in_dir
+
+    results = migrate_refs_delimiter_in_dir(Path(extracts_dir))
+    total = sum(results.values())
+    click.echo(f"Migrated {total} refs lines across {len(results)} files.")
+
+
+@main.command(name="rewire-refs")
+@click.argument("extracts_dir", type=click.Path(exists=True))
+def rewire_refs_cmd(extracts_dir: str) -> None:
+    """Recovery pass: update refs/speakers after a rename that missed them.
+
+    For each renamed person/place node ("Last, First" or "Country, Region, ..."),
+    compute the pre-rename form and rewrite any refs/speaker lines still
+    pointing at the old name. Use after a `normalise-names` run that pre-dates
+    the in-file ref rewiring.
+    """
+    from digester.reclassify import rewire_refs_in_dir
+
+    results = rewire_refs_in_dir(Path(extracts_dir))
+    total = sum(results.values())
+    click.echo(f"Rewired {total} references across {len(results)} files.")
     for fname, count in sorted(results.items(), key=lambda x: -x[1]):
         click.echo(f"  {count:4d}  {fname}")
 

@@ -2,13 +2,14 @@
 
 Structure:
 
-    People/<name>.md           one file per person
+    People/<Last, First>.md    one file per person
     Organisations/<name>.md    one file per organisation
-    Places/<name>.md           one file per place
+    Places/<Country, Region, City>.md  one file per place
     Events/<name>.md           one file per dated event
     Matters/<name>.md          one file per ongoing situation
     Objects/<name>.md          one file per specific physical thing
-    Records/<date - title>.md  one file per source document
+    Documents/<name>.md        one file per mentioned artefact (memo, report, ...)
+    Sources/<date - title>.md  one file per source we ingested
     README.md                  what is here, how to navigate
 
 Each entity file lists every claim that references it inline (with the source
@@ -26,6 +27,10 @@ _FORBIDDEN = re.compile(r'[<>:"/\\|?*\x00-\x1f]+')
 _WIKILINK_FORBIDDEN = re.compile(r"[\[\]|#^]")
 
 # Map raw node_type values to user-facing folder names (and singular labels).
+# Note `record` and `document` both go in Documents/ - they're both "artefacts
+# the world produced that get mentioned inside source material". The infra
+# pass calls them `record` and the domain pass calls them `document` for
+# historical reasons; we merge them in the vault.
 _TYPE_FOLDERS: dict[str, tuple[str, str]] = {
     "person": ("People", "Person"),
     "organisation": ("Organisations", "Organisation"),
@@ -34,7 +39,8 @@ _TYPE_FOLDERS: dict[str, tuple[str, str]] = {
     "matter": ("Matters", "Matter"),
     "object": ("Objects", "Object"),
     "document": ("Documents", "Document"),
-    "record": ("Media", "Media"),  # infra-pass record-node-type (mentioned media)
+    "concept": ("Concepts", "Concept"),
+    "record": ("Documents", "Document"),
 }
 
 
@@ -320,19 +326,22 @@ by hand - run `just vault` from `anomalica-digester/` to regenerate.
 
 Each folder collects one kind of entity extracted from the source documents:
 
-- **People/** - named individuals (witnesses, journalists, officials)
-- **Organisations/** - government bodies, military units, companies, programmes
-- **Places/** - geographic locations
-- **Events/** - discrete things that happened at a specific time
-- **Matters/** - ongoing situations spanning a period of time
-- **Objects/** - specific named physical things (craft, materials, devices, sensors)
-- **Documents/** - memos, reports, letters, articles, papers, books, video footage,
-  briefings, statements - i.e. written or recorded artefacts (distinct from physical
-  objects and from the source records themselves)
-- **Records/** - the source documents that were ingested into the digester (one
-  per ingest)
-- **Media/** - external media referenced from inside a record but not themselves
-  ingested
+- **People/** - named individuals (witnesses, journalists, officials). Filenames
+  are "Last, First" so the folder sorts alphabetically by surname.
+- **Organisations/** - government bodies, military units, companies, programmes,
+  panels, agencies.
+- **Places/** - geographic locations. Filenames are "Country, Region, Specific"
+  (e.g. "USA, Nevada, Area 51") so the folder groups places by country/region.
+- **Events/** - discrete things that happened at a specific time.
+- **Matters/** - ongoing situations, programmes, investigations, policy positions.
+- **Objects/** - specific named physical things (craft, sensors, devices, samples,
+  materials, weapons). NOT documents - those go in Documents.
+- **Documents/** - written or recorded artefacts that get mentioned inside source
+  material (memos, reports, letters, articles, papers, books, video footage,
+  podcasts, briefings, statements, affidavits). The artefact itself is the node;
+  claims about its content live on its page.
+- **Sources/** - the documents we ingested into the digester (one per ingest).
+  Each Source page lists every claim extracted from that document.
 
 ## How a claim is stored
 
@@ -381,8 +390,8 @@ def export_to_obsidian(
         used.add(fname)
         (folder_path / fname).write_text(_format_node_file(node, merged))
 
-    # Record files.
-    records_dir = out_dir / "Records"
+    # Source files (the records table - the documents we ingested).
+    records_dir = out_dir / "Sources"
     records_dir.mkdir(exist_ok=True)
     seen_records: set[str] = set()
     record_count = 0

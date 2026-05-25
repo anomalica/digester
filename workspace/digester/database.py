@@ -4,7 +4,7 @@ import json
 import sqlite3
 from datetime import datetime, timezone
 
-from digester.models import Claim, Node, Record
+from digester.models import Claim, ClaimRole, Node, Record
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS nodes (
@@ -22,9 +22,12 @@ CREATE TABLE IF NOT EXISTS records (
     reference TEXT,
     date TEXT,
     producer_id TEXT,
+    content_hash TEXT,
+    friendly_name TEXT,
     metadata TEXT,
     created_at TEXT NOT NULL
 );
+CREATE INDEX IF NOT EXISTS idx_records_content_hash ON records(content_hash);
 
 CREATE TABLE IF NOT EXISTS claims (
     id TEXT PRIMARY KEY,
@@ -39,7 +42,13 @@ CREATE TABLE IF NOT EXISTS claims (
     date_end TEXT,
     confidence REAL NOT NULL DEFAULT 1.0,
     metadata TEXT,
-    created_at TEXT NOT NULL
+    created_at TEXT NOT NULL,
+    claim_role TEXT CHECK (claim_role IN (
+        'official_explanation',
+        'witness_testimony',
+        'investigation_finding',
+        'cover_up_evidence'
+    ))
 );
 
 CREATE TABLE IF NOT EXISTS claim_node_refs (
@@ -65,6 +74,8 @@ CREATE INDEX IF NOT EXISTS idx_nodes_type ON nodes(node_type);
 CREATE INDEX IF NOT EXISTS idx_nodes_name ON nodes(name);
 CREATE INDEX IF NOT EXISTS idx_claims_record ON claims(record_id);
 CREATE INDEX IF NOT EXISTS idx_claims_speaker ON claims(speaker_id);
+-- idx_claims_role is created in init_db after the claim_role column is
+-- guaranteed to exist (it's added by ALTER TABLE on upgraded databases).
 CREATE INDEX IF NOT EXISTS idx_claim_refs_node ON claim_node_refs(node_id);
 CREATE INDEX IF NOT EXISTS idx_aliases_node ON aliases(node_id);
 CREATE INDEX IF NOT EXISTS idx_corr_a ON corroborations(claim_a);
@@ -78,7 +89,22 @@ def _now() -> str:
 
 def init_db(conn: sqlite3.Connection) -> None:
     conn.execute("PRAGMA foreign_keys = ON")
+    # ADR 0028 migration: add claim_role column to pre-existing databases
+    # BEFORE executescript runs, so the role index in SCHEMA can be created
+    # safely on both fresh and upgraded databases.
+    claims_exists = conn.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='claims'"
+    ).fetchone()
+    if claims_exists:
+        cols = {row[1] for row in conn.execute("PRAGMA table_info(claims)").fetchall()}
+        if "claim_role" not in cols:
+            conn.execute(
+                "ALTER TABLE claims ADD COLUMN claim_role TEXT CHECK ("
+                "claim_role IN ('official_explanation', 'witness_testimony', "
+                "'investigation_finding', 'cover_up_evidence'))"
+            )
     conn.executescript(SCHEMA)
+    conn.execute("CREATE INDEX IF NOT EXISTS idx_claims_role ON claims(claim_role)")
 
 
 def insert_node(conn: sqlite3.Connection, node: Node) -> Node:
@@ -151,14 +177,17 @@ def insert_record(conn: sqlite3.Connection, record: Record) -> Record:
     now = _now()
     metadata_json = json.dumps(record.metadata) if record.metadata else None
     conn.execute(
-        "INSERT INTO records (id, title, reference, date, producer_id, metadata, created_at) "
-        "VALUES (?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO records "
+        "(id, title, reference, date, producer_id, content_hash, friendly_name, metadata, created_at) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
         (
             record.id,
             record.title,
             record.reference,
             record.date,
             record.producer_id,
+            record.content_hash,
+            record.friendly_name,
             metadata_json,
             now,
         ),
@@ -185,8 +214,8 @@ def insert_claim(conn: sqlite3.Connection, claim: Claim) -> Claim:
     metadata_json = json.dumps(claim.metadata) if claim.metadata else None
     conn.execute(
         "INSERT INTO claims (id, content, original_excerpt, claim_type, attestation, record_id, speaker_id, "
-        "location_in_record, date, date_end, confidence, metadata, created_at) "
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "location_in_record, date, date_end, confidence, metadata, created_at, claim_role) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         (
             claim.id,
             claim.content,
@@ -201,6 +230,7 @@ def insert_claim(conn: sqlite3.Connection, claim: Claim) -> Claim:
             claim.confidence,
             metadata_json,
             now,
+            claim.claim_role.value if claim.claim_role else None,
         ),
     )
     for node_id in claim.node_references:
@@ -333,14 +363,18 @@ def _row_to_node(row: tuple) -> Node:
 
 
 def _row_to_record(row: tuple) -> Record:
+    # Column order: id, title, reference, date, producer_id, content_hash,
+    # friendly_name, metadata, created_at
     return Record(
         id=row[0],
         title=row[1],
         reference=row[2],
         date=row[3],
         producer_id=row[4],
-        metadata=json.loads(row[5]) if row[5] else None,
-        created_at=datetime.fromisoformat(row[6]),
+        content_hash=row[5],
+        friendly_name=row[6],
+        metadata=json.loads(row[7]) if row[7] else None,
+        created_at=datetime.fromisoformat(row[8]),
     )
 
 
@@ -359,4 +393,5 @@ def _row_to_claim(row: tuple) -> Claim:
         confidence=row[10],
         metadata=json.loads(row[11]) if row[11] else None,
         created_at=datetime.fromisoformat(row[12]),
+        claim_role=ClaimRole(row[13]) if len(row) > 13 and row[13] else None,
     )

@@ -71,7 +71,7 @@ def test_export_groups_entities_by_type(tmp_path: Path):
     assert (out / "Objects").is_dir()
     assert (out / "Places").is_dir()
     assert (out / "Organisations").is_dir()
-    assert (out / "Records").is_dir()
+    assert (out / "Sources").is_dir()
     assert (out / "README.md").exists()
     # Flat Nodes/ no longer exists
     assert not (out / "Nodes").exists()
@@ -165,4 +165,4 @@ def test_readme_explains_the_structure(tmp_path: Path):
     readme = (out / "README.md").read_text()
     assert "Anomalica Generated Vault" in readme
     assert "People/" in readme
-    assert "Records/" in readme
+    assert "Sources/" in readme

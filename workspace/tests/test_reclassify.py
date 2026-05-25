@@ -2,6 +2,10 @@ from pathlib import Path
 
 from digester.reclassify import (
     is_document_name,
+    normalise_person_name,
+    normalise_person_names_in_file,
+    normalise_place_name,
+    normalise_place_names_in_file,
     reclassify_documents_in_dir,
     reclassify_documents_in_file,
 )
@@ -104,6 +108,174 @@ def test_reclassify_file_no_changes_leaves_file_alone(tmp_path: Path):
     count = reclassify_documents_in_file(path)
     assert count == 0
     assert path.read_text() == original
+
+
+def test_normalise_person_name_basic():
+    assert normalise_person_name("David Fravor") == "Fravor, David"
+    assert normalise_person_name("Ross Coulthart") == "Coulthart, Ross"
+    assert normalise_person_name("Robert Bigelow") == "Bigelow, Robert"
+
+
+def test_normalise_person_name_three_part():
+    assert normalise_person_name("John David Smith") == "Smith, John David"
+
+
+def test_normalise_person_name_strips_rank_prefix():
+    assert normalise_person_name("Commander David Fravor") == "Fravor, David"
+    assert normalise_person_name("Lt Col Jane Doe") == "Doe, Jane"
+    assert normalise_person_name("Dr. Edgar Mitchell") == "Mitchell, Edgar"
+    assert normalise_person_name("Lieutenant Commander Moya") == "Moya"
+
+
+def test_normalise_person_name_suffix_attaches_to_surname():
+    assert normalise_person_name("Jesse Marcel Jr") == "Marcel Jr, Jesse"
+    assert normalise_person_name("Jesse Marcel Jr.") == "Marcel Jr., Jesse"
+
+
+def test_normalise_person_name_skips_single_word():
+    assert normalise_person_name("Madonna") is None
+    assert normalise_person_name("Sushi") is None
+
+
+def test_normalise_person_name_skips_already_comma():
+    assert normalise_person_name("Fravor, David") is None
+
+
+def test_normalise_person_name_skips_call_signs_with_digits():
+    assert normalise_person_name("Whiskey-99") is None
+    assert normalise_person_name("Pilot 41") is None
+
+
+def test_normalise_person_name_skips_parenthetical():
+    assert normalise_person_name("Edgar Mitchell (Apollo 14)") is None
+
+
+def test_normalise_place_name_us_state():
+    assert normalise_place_name("Aztec New Mexico") == "USA, New Mexico, Aztec"
+    assert normalise_place_name("Big Sur California") == "USA, California, Big Sur"
+    assert normalise_place_name("Roswell New Mexico") == "USA, New Mexico, Roswell"
+    assert normalise_place_name("Nevada") == "USA, Nevada"
+
+
+def test_normalise_place_name_australian_state():
+    assert normalise_place_name("Tully Queensland") == "Australia, Queensland, Tully"
+    assert (
+        normalise_place_name("Cloverly Station Queensland")
+        == "Australia, Queensland, Cloverly Station"
+    )
+
+
+def test_normalise_place_name_canadian_province():
+    assert (
+        normalise_place_name("Yukon Canada") is None
+    )  # has "Canada" not just province
+    assert normalise_place_name("Yukon") == "Canada, Yukon"
+
+
+def test_normalise_place_name_uk_country():
+    # "England, Blean" style only matches if name ends in England etc.
+    assert normalise_place_name("Blean England") == "United Kingdom, England, Blean"
+
+
+def test_normalise_place_name_skips_with_comma():
+    assert normalise_place_name("USA, Nevada, Area 51") is None
+
+
+def test_normalise_place_name_returns_none_for_unrecognised():
+    assert normalise_place_name("Pentagon") is None
+    assert normalise_place_name("Persian Gulf") is None
+    assert normalise_place_name("Random Place") is None
+
+
+def test_normalise_person_names_in_file(tmp_path: Path):
+    path = tmp_path / "a.extract.md"
+    path.write_text(
+        "### 11111111-1111-1111-1111-111111111111 person: David Fravor\n"
+        "### 22222222-2222-2222-2222-222222222222 person: Commander Alex Dietrich\n"
+        "### 33333333-3333-3333-3333-333333333333 person: Madonna\n"
+        "### 44444444-4444-4444-4444-444444444444 organisation: VFA-41\n"
+    )
+    count = normalise_person_names_in_file(path)
+    assert count == 2
+    out = path.read_text()
+    assert "person: Fravor, David" in out
+    assert "person: Dietrich, Alex" in out
+    assert "person: Madonna" in out  # single-name preserved
+    assert "organisation: VFA-41" in out
+
+
+def test_normalise_place_names_in_file(tmp_path: Path):
+    path = tmp_path / "a.extract.md"
+    path.write_text(
+        "### 11111111-1111-1111-1111-111111111111 place: Aztec New Mexico\n"
+        "### 22222222-2222-2222-2222-222222222222 place: Pentagon\n"
+        "### 33333333-3333-3333-3333-333333333333 person: David Fravor\n"
+    )
+    count = normalise_place_names_in_file(path)
+    assert count == 1
+    out = path.read_text()
+    assert "place: USA, New Mexico, Aztec" in out
+    assert "place: Pentagon" in out  # unrecognised, unchanged
+    assert "person: David Fravor" in out  # not a place line
+
+
+def test_disambiguate_refs_merges_comma_in_name():
+    from digester.reclassify import _disambiguate_refs
+
+    node_names = {"Fravor, David", "USS Princeton", "AAV"}
+    # The broken state: "David Fravor" got renamed to "Fravor, David" and
+    # joined with ", " - parser sees three tokens but only two refs.
+    result = _disambiguate_refs("Fravor, David, USS Princeton", node_names)
+    assert result == ["Fravor, David", "USS Princeton"]
+
+
+def test_disambiguate_refs_keeps_singletons_when_no_match():
+    from digester.reclassify import _disambiguate_refs
+
+    node_names = {"Foo", "Bar"}
+    result = _disambiguate_refs("Foo, Unknown Name, Bar", node_names)
+    # Unknown name kept as single token; Foo and Bar match
+    assert result == ["Foo", "Unknown Name", "Bar"]
+
+
+def test_disambiguate_refs_handles_two_comma_names():
+    from digester.reclassify import _disambiguate_refs
+
+    node_names = {"Fravor, David", "Coulthart, Ross"}
+    result = _disambiguate_refs("Fravor, David, Coulthart, Ross", node_names)
+    assert result == ["Fravor, David", "Coulthart, Ross"]
+
+
+def test_migrate_refs_delimiter_in_file(tmp_path: Path):
+    from digester.reclassify import migrate_refs_delimiter_in_file
+
+    path = tmp_path / "a.extract.md"
+    path.write_text(
+        "### 11111111-1111-1111-1111-111111111111 person: Fravor, David\n"
+        "### 22222222-2222-2222-2222-222222222222 object: USS Princeton\n"
+        "### claim000-0000-0000-0000-000000000000 [observation/first_hand]\n"
+        "refs: Fravor, David, USS Princeton\n"
+    )
+    node_names = {"Fravor, David", "USS Princeton"}
+    count = migrate_refs_delimiter_in_file(path, node_names)
+    assert count == 1
+    text = path.read_text()
+    assert "refs: Fravor, David; USS Princeton" in text
+
+
+def test_migrate_refs_delimiter_idempotent(tmp_path: Path):
+    from digester.reclassify import migrate_refs_delimiter_in_file
+
+    # File already has semicolons - should be unchanged.
+    path = tmp_path / "a.extract.md"
+    text = (
+        "### 11111111-1111-1111-1111-111111111111 person: Fravor, David\n"
+        "refs: Fravor, David; USS Princeton\n"
+    )
+    path.write_text(text)
+    count = migrate_refs_delimiter_in_file(path, {"Fravor, David", "USS Princeton"})
+    assert count == 0
+    assert path.read_text() == text
 
 
 def test_reclassify_dir_aggregates(tmp_path: Path):

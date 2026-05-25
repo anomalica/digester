@@ -1,3 +1,6 @@
 .cm-cache/
 __pycache__/
 *.db
+.claude/
+
+# Editor / OS noise

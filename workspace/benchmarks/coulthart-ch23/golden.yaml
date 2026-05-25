@@ -1,0 +1,376 @@
+# Golden set for In Plain Sight, Chapter 23 ("Dr Salvatore Pais's Puzzling Patents").
+#
+# Hand-curated from the frozen input.md by reading the chapter in full and
+# cross-checking against the union of four model runs (sonnet/opus x
+# combined/per_type). This is the MEASURING STICK - it must be trustworthy,
+# so it is conservative: an entity is only in the `must_find` list if it is
+# unambiguously asserted in the text.
+#
+# Scoring (see ../runner.py):
+#   recall    = (extracted that match a must_find) / (must_find count)
+#   precision = 1 - (extracted that match a deny entry) / (total extracted)
+# Names are matched alias-tolerant: an extraction matches a golden entity if
+# its name equals the canonical OR any alias (case-insensitive, punctuation-
+# and rank-stripped). This absorbs model phrasing variation.
+#
+# `review:` holds genuinely contested taxonomy calls (mostly spec ambiguities
+# we already know about). Mark adjudicates these; once decided they move into
+# the typed lists. They are NOT scored until adjudicated.
+
+source: "In Plain Sight - Chapter 23: Dr Salvatore Pais's Puzzling Patents"
+schema_note: >
+  Person canonical names follow decision 0023 (plain legal name, no titles). Place canonical names follow the Country-first
+  convention. Documents are individuated (rule 1: each named patent/paper is its own node). #magic___^_^___line
+must_find:
+
+  person:
+    - canonical: "Salvatore Pais"
+      aliases: ["Dr Salvatore Pais", "Dr Pais", "Pais", "Mr Pais"]
+    - canonical: "Albert Einstein"
+      aliases: ["Einstein"]
+    - canonical: "Isaac Newton"
+      aliases: ["Newton"]
+    - canonical: "Hal Puthoff"
+      aliases: ["Dr Hal Puthoff", "Harold Puthoff", "Puthoff"]
+    - canonical: "Steve Justice"
+      aliases: []
+    - canonical: "Christopher Mellon"
+      aliases: ["Mellon"]
+    - canonical: "James Sheehy"
+      aliases: ["Dr James Sheehy", "Sheehy"]
+    - canonical: "Nat Kobitz"
+      aliases: ["Kobitz"]
+    - canonical: "Brett Tingley"
+      aliases: []
+    - canonical: "Nick Cook"
+      aliases: ["Cook"]
+    - canonical: "George S. Trimble"
+      aliases: ["George Trimble", "Trimble"]
+    - canonical: "Ravi Kopparapu"
+      aliases: []
+    - canonical: "Jacob Haqq-Misra"
+      aliases: []
+    - canonical: "Ralph Blumenthal"
+      aliases: ["Blumenthal"]
+    - canonical: "Leslie Kean"
+      aliases: ["Kean"]
+    - canonical: "Donald Trump"
+      aliases: ["President Donald Trump", "Trump", "President Trump"]
+    - canonical: "Don Trump Jr"
+      aliases: ["Don junior", "Don Jr.", "Don Jr"]
+    - canonical: "Ross Coulthart"
+      aliases: ["Coulthart", "the author"]
+
+  organisation:
+    - canonical: "US Navy"
+      aliases: ["United States Navy", "the navy", "Navy"]
+    - canonical: "Naval Air Warfare Center Aircraft Division"
+      aliases: ["Naval Air Warfare Centre Aircraft Division", "NAWCAD"]
+    - canonical: "US Patent Office"
+      aliases: ["United States Patent Office", "Patent Office"]
+    - canonical: "To The Stars Academy"
+      aliases: ["TTSA", "To The Stars Academy (TTSA)"]
+    - canonical: "Skunk Works"
+      aliases: ["Lockheed Skunk Works"]
+    - canonical: "Lockheed Martin"
+      aliases: ["Lockheed Martin Corporation", "Lockheed"]
+    - canonical: "Glenn L. Martin Company"
+      aliases: []
+    - canonical: "Naval Aviation Enterprise"
+      aliases: ["US Naval Aviation Enterprise"]
+    - canonical: "Navy Air Systems Command"
+      aliases: []
+    - canonical: "Department of Navy"
+      aliases: ["Department of the Navy"]
+    - canonical: "The New York Times"
+      aliases: ["New York Times", "the Times", "NYT"]
+    - canonical: "Scientific American"
+      aliases: []
+    - canonical: "Project Unity"
+      aliases: []
+    - canonical: "US Defence Department"
+      aliases: ["Defence Department", "DoD", "Defense Department", "US Defense Department"]
+    - canonical: "Senate Appropriations Committee"
+      aliases: ["Chairman of the Senate Appropriations Committee"]
+    - canonical: "US Air Force"
+      aliases: ["USAF"]
+    - canonical: "Jane's Defence Weekly"
+      aliases: ["Jane's Defense Weekly"]
+      # Mark: the publication title is an organisation; a specific ISSUE
+      # (e.g. "Jane's Defence Weekly, issue 25") would be a document.
+
+  # PLACE RULE (Mark, 2026-05-19): a place is a named location specific and
+  # durable enough that a person could go to it and still find it decades
+  # later - a base, installation, ranch, named site, town or city. NOT
+  # countries, states, oceans, operating areas, or the generic geographic
+  # feature a facility is named after. When the text discusses a named
+  # installation, the installation is the place (and may also be an
+  # organisation if it acts) - do not degrade it to the river/hill/desert
+  # in its name. Country-first naming is kept only for places that qualify.
+  #
+  # Dropped vs the first draft (failed the rule): USA, Louisiana, Washington,
+  # Maryland (countries/states); Patuxent River (the river - wrong referent,
+  # the base is the place); China, Russia (countries); London, Sydney
+  # (incidental scene-setting, not what the text is about).
+  place:
+    - canonical: "USA, California, China Lake"
+      aliases: ["China Lake", "China Lake Naval Weapons Station"]
+    - canonical: "USA, Nevada, Area 51"
+      aliases: ["Area 51"]
+    - canonical: "USA, New Mexico, Roswell"
+      aliases: ["Roswell", "Roswell, New Mexico"]
+    - canonical: "USA, Maryland, Naval Air Station Patuxent River"
+      aliases: ["NAS Patuxent River", "Pax River", "Patuxent River naval base"]
+      # REVIEW: the base IS the place; NAWCAD (org) is the separate actor node.
+      # Text says "...on the Patuxent River in Maryland" - names the river, not
+      # the base explicitly. Keep as the installation, flagged for Mark.
+
+  event:
+    - canonical: "Gravitational wave first detection (14 September 2015)"
+      aliases: ["first detection of gravitational waves", "LIGO first detection"]
+    - canonical: "Einstein predicts gravitational waves (1916)"
+      aliases: []
+    - canonical: "Gravitational wave discovery announcement (February 2016)"
+      aliases: []
+    - canonical: "Nobel Prize for gravitational waves (2017)"
+      aliases: []
+    - canonical: "Pais files first patent application (April 2016)"
+      aliases: []
+    - canonical: "Hybrid craft patent approved (2018)"
+      aliases: []
+    - canonical: "Pais presents Room Temperature Superconducting System paper (January 2019)"
+      aliases: []
+    - canonical: "Plasma Compression Fusion Device filed (March 2018)"
+      aliases: []
+    - canonical: "Plasma Compression Fusion Device published (September 2019)"
+      aliases: []
+    - canonical: "Patent examiner interview on Electromagnetic Field Generator (July 2018)"
+      aliases: []
+    - canonical: "TTSA public launch (October 2017)"
+      aliases: ["To The Stars Academy launch"]
+    - canonical: "New York Times Tic Tac disclosure (2017)"
+      aliases: ["2017 NYT AATIP story"]
+    - canonical: "New York Times alien materials story (24 July 2020)"
+      aliases: ["NYT 24 July 2020 story"]
+    - canonical: "USS Nimitz Tic Tac encounter (2004)"
+      aliases: ["Nimitz Tic Tac encounter"]
+    - canonical: "Roswell UFO crash (1947)"
+      aliases: ["1947 Roswell crash"]
+    - canonical: "Trump Roswell interview with Don Jr (June 2020)"
+      aliases: []
+    - canonical: "Black hole collision detected by LIGO (~1.3 billion years ago)"
+      aliases: ["cosmic black hole collision", "the two black holes colliding"]
+      # Mark: call it an event (dated discrete occurrence) though it's off-domain
+      # scene-setting. Kept per his decision.
+
+  object:
+    - canonical: "USS Nimitz"
+      aliases: []  # Mark: fine; text doesn't say "aircraft carrier" but that's ok, may not be known here
+    - canonical: "Tic Tac UAP"
+      aliases: ["Tic Tac", "the Tic Tac"]
+    - canonical: "TR3B"
+      aliases: ["TR-3B"]
+    - canonical: "Advanced Electromagnetic Vehicle"
+      aliases: ["TTSA Advanced Electromagnetic Vehicle"]
+      # the craft itself stays an object; the *project* to build it is a matter (below)
+    - canonical: "Pais hybrid craft"
+      aliases: ["hybrid craft", "Craft Using an Inertial Mass Reduction Device (the craft)", "inertial mass reduction craft",
+        "Pais's proposed triangular hybrid spacecraft"]
+      # KEPT: the text explicitly describes the proposed craft ("his proposed
+      # craft", "a craft that can function as a submersible", "Pais's proposed
+      # triangular hybrid spacecraft") - not pure inference. Distinct from the
+      # patent document of the same name.
+    - canonical: "LIGO receivers"
+      aliases: ["LIGO detectors", "gravitational wave receivers"]
+      # LIGO-the-observatory as a separate organisation node was unresolved;
+      # defaulting to receivers-as-object only. Revisit if it recurs.
+  # DROPPED (Mark): "1997 triangular craft" - not really an object, just a
+  # cited video with a year; "triangular" isn't enough to identify a thing.
+
+  # DOCUMENT NAMING (Mark): write the TYPE first (bibliography-style), then
+  # enough specifics to identify a *particular* document. Old phrasings are
+  # kept as aliases so matching still works.
+  document:
+    - canonical: "Patent: Pais - Room Temperature Superconductor"
+      aliases: ["Pais patent: Room Temperature Superconductor", "Room Temperature Superconductor patent"]
+    - canonical: "Patent: Pais - Electro-magnetic Forcefield Generator"
+      aliases: ["Pais patent: Electro-magnetic Forcefield Generator", "Electromagnetic Forcefield Generator patent", "High
+          Energy Electromagnetic Field Generator patent"]
+    - canonical: "Patent: Pais - High Frequency Gravitational Wave Generator"
+      aliases: ["Pais patent: High Frequency Gravitational Wave Generator", "High Frequency Gravitational Wave Generator patent"]
+    - canonical: "Patent: Pais - Craft Using an Inertial Mass Reduction Device"
+      aliases: ["Pais patent: Craft Using an Inertial Mass Reduction Device", "Inertial Mass Reduction Device patent", "hybrid
+          craft patent"]
+    - canonical: "Patent: Pais - Plasma Compression Fusion Device"
+      aliases: ["Pais patent: Plasma Compression Fusion Device", "Plasma Compression Fusion Device patent", "Compact Fusion
+          Reactor patent"]
+    - canonical: "Paper: Pais 2015 - superluminal craft propulsion"
+      aliases: ["Pais 2015 paper on superluminal craft propulsion", "Pais 2015 scientific paper"]
+    - canonical: "Paper: Pais Jan 2019 - Room Temperature Superconducting System for a Hybrid Aerospace Undersea Craft"
+      aliases: ["Pais paper: Room Temperature Superconducting System for a Hybrid Aerospace Undersea Craft (Jan 2019)", "Pais
+          January 2019 paper"]
+    - canonical: "Paper: Pais - Compact Fusion Reactor (journal publication)"
+      aliases: ["Pais Compact Fusion Reactor journal publication"]
+    - canonical: "Letter: Sheehy appeal to US Patent Office re Pais room-temp superconductor"
+      aliases: ["Sheehy appeal letter to the Patent Office", "Sheehy appeal letter"]
+    - canonical: "Book: The Hunt for Zero Point (Nick Cook)"
+      aliases: ["The Hunt for Zero Point", "Hunt for Zero Point"]
+    - canonical: "Article: Scientific American - Kopparapu & Haqq-Misra (July 2020)"
+      aliases: ["Scientific American article by Kopparapu and Haqq-Misra (July 2020)", "Scientific American article (Kopparapu
+          & Haqq-Misra)"]
+    - canonical: "Interview: Project Unity - Blumenthal and Kean"
+      aliases: ["Project Unity interview with Blumenthal and Kean", "Project Unity interview"]
+    - canonical: "Email: Mellon to private news group re TR3B / 1997 triangular-craft video"
+      aliases: ["Mellon email to private news group", "Mellon private news group email"]
+      # Mark: the bare "Mellon email" was too vague (hundreds of emails). Made
+      # it identify the particular one (the TR3B / 1997-video email).
+    - canonical: "Tweet: Mellon (July 2020) re Pais patents viability"
+      aliases: ["Mellon July 2020 tweet"]
+    - canonical: "Interview: Trump with Don Jr (June 2020) re Roswell"
+      aliases: ["Trump interview with Don Jr (June 2020)", "Trump/Don Jr. Roswell interview"]
+    - canonical: "Comment: Blumenthal reply in NYT online comments (24 July 2020 story)"
+      aliases: ["Blumenthal NYT online comment reply", "Blumenthal NYT comment reply"]
+    - canonical: "Legislation: US Invention Secrecy Act"
+      aliases: ["US Invention Secrecy Act", "Invention Secrecy Act"]
+
+  # Resolved from the old review block (Mark adjudicated): unnamed ongoing
+  # efforts = matter (spec: named programmes would be organisations; these
+  # have no name).
+  matter:
+    - canonical: "UAP reverse-engineering program"
+      aliases: ["UAP reverse-engineering programme", "alleged UAP reverse-engineering program", "the reverse-engineering program
+          Kobitz described"]
+    - canonical: "US anti-gravity research (secret, 1950s onward)"
+      aliases: ["US anti-gravity research", "secret US anti-gravity research", "ongoing US anti-gravity effort"]
+    - canonical: "UAP crash-retrieval program"
+      aliases: ["crash retrieval program", "crash retrievals", "UFO crash retrievals"]
+    - canonical: "TTSA Advanced Electromagnetic Vehicle project"
+      aliases: ["Advanced Electromagnetic Vehicle project", "the AEV project"]
+      # Mark: it's a *project* -> matter. The vehicle itself stays an object.
+
+  # Concept = first-class ingestion node type (decision 0025).
+  # CONCEPT must-find. Curated by Claude as critic from the 4-run union (107
+  # raw -> ~21 genuine). Test applied: a recognised named idea/theory/
+  # principle/phenomenon that exists independent of this document (you could
+  # look it up). NOT: touchable (object), time-bound (event/matter), a
+  # person/place/org, an effort people run (matter), patent-jargon, a claimed
+  # capability, or a document-local ad-hoc theory. "X" = concept,
+  # "X device/reactor/craft" = object. Synonyms merged to one node.
+  concept:
+    - canonical: "Pais Effect"
+      aliases: ["the Pais Effect", "Pais Effect controversy"]
+    - canonical: "gravitational waves"
+      aliases: ["gravity waves"]
+    - canonical: "theory of relativity"
+      aliases: ["relativity", "Einstein's theory of relativity", "general relativity"]
+    - canonical: "special relativity"
+      aliases: ["special relativity framework"]
+    - canonical: "speed of light as the cosmic speed limit"
+      aliases: ["cosmic speed limit", "light-speed limit", "Einstein's speed-of-light postulate"]
+    - canonical: "superluminal travel"
+      aliases: ["faster-than-light travel", "warp speed", "superluminal craft propulsion"]
+    - canonical: "anti-gravity propulsion"
+      aliases: ["anti-gravity", "antigravity"]
+    - canonical: "inertial mass reduction"
+      aliases: []  # the *device* is an object, not this
+    - canonical: "vacuum polarisation"
+      aliases: ["vacuum energy polarisation"]
+    - canonical: "quantum vacuum"
+      aliases: ["quantum field fluctuations in the vacuum", "quantum field fluctuations"]
+    - canonical: "zero-point energy"
+      aliases: ["zero point energy"]
+    - canonical: "superconductivity"
+      aliases: ["zero electrical resistance"]
+    - canonical: "room temperature superconductivity"
+      aliases: ["holy grail of modern physics"]  # the *superconductor* is an object
+    - canonical: "nuclear fusion"
+      aliases: ["fusion reaction", "magnetic confinement fusion"]
+    - canonical: "electromagnetic propulsion"
+      aliases: ["gravity wave propulsion"]
+    - canonical: "space-time metric alteration"
+      aliases: ["altering the space-time metric"]
+    - canonical: "Hypotheses non fingo"
+      aliases: ["I feign no hypotheses"]
+    - canonical: "non-human intelligence"
+      aliases: ["non-human intelligently manufactured technology", "non-human origin technology", "off-world technology"]
+    - canonical: "UAP disclosure"
+      aliases: ["disclosure"]  # kept per Mark's lean; the policy/theme as an idea
+    - canonical: "Special Access Program"
+      aliases: ["SAP", "special access programme"]  # the classification mechanism (concept); a specific SAP is a matter
+    - canonical: "black projects"
+      aliases: ["black world projects", "black world", "black world projects (classified, outside normal oversight)"]
+      # Claude's contested calls for Mark's async review (NOT blocking; vetoable):
+      #  - DROPPED as document-local ad-hoc theories (not recognised independent
+      #    ideas): "test flight theory", "Nazi anti-gravity origins", "new Cold
+      #    War technological deception". Defensible either way - flag if you want
+      #    them as concepts.
+      #  - "black projects" / "Special Access Program" kept as concepts to stay
+      #    consistent with the SAP ruling (the *mechanism/category* is a concept;
+      #    a *specific* programme is a matter).
+      #  - "disclosure" kept per Mark's earlier lean despite being thematic.
+      #  - "non-human intelligence" kept as the umbrella idea; the object-ish
+      #    variants (bonded metal, off-world *vehicles*) reclassified to object.
+
+# Things that appeared in model runs but are NOT graph entities - rhetorical
+# analogies / illustrative comparisons (prompt rule 3: subject, not illustration).
+# Any extraction matching one of these counts as a precision FALSE POSITIVE.
+deny:
+  object:
+    - "Three Gorges Dam"
+    - "black holes"
+    - "asteroid"
+    - "conventional batteries"
+    - "Anti-Ship Ballistic Missiles"
+    - "Radar Evading Cruise Missiles"
+    - "Main Battle Tanks"
+    - "superconducting wire"
+  matter:
+    - "Detection of gravitational waves by LIGO"  # that's the event, not a matter
+  concept:
+    # Patent-jargon mechanisms the models wrongly minted as concepts - not
+    # recognised independent ideas, just phrases lifted from Pais's patent text.
+    - "non-linear scattering of RF and sonar signals"
+    - "electromagnetic field-induced particle repulsion"
+    - "vacuum/plasma bubble sheath"
+    - "vacuum/plasma bubble propulsion"
+    - "g-force effects on occupants"
+    - "operability assertion"
+    # Claimed capabilities / consequences, not concepts:
+    - "asteroid deflection via electromagnetic forcefield"
+    - "electricity grid transmission revolution"
+    - "superconducting energy storage"
+    - "impenetrable defensive shield"
+    # Vague catch-alls:
+    - "the big secret"
+    - "the phenomenon"
+    - "US patent law liberal standards"
+
+# Contested calls - ALL ADJUDICATED BY MARK 2026-05-19. Recorded here as the
+# decision log (no longer scored as 'review'; resolutions folded into the
+# typed lists above or the deny/none notes below):
+#
+#   Jane's Defence Weekly       -> organisation (a specific magazine ISSUE
+#                                  would be a document; the title is an org)
+#   US patent law               -> NONE (not a node; insufficient to pin)
+#   UAP reverse-engineering pgm  -> matter  (no name)            [in matter]
+#   US anti-gravity research     -> matter  (cannot be an org)   [in matter]
+#   crash-retrieval program      -> matter  (no name)            [in matter]
+#   Pais Effect                  -> concept (decision 0025: a named claimed
+#                                  phenomenon is a first-class concept) [in concept]
+#   TTSA AEV "project"           -> matter  (ends in 'project');  [in matter]
+#                                  the vehicle stays object
+#   Coulthart's investigation    -> NONE (private one-person; else every
+#                                  researcher's own investigation becomes a
+#                                  matter - Mark's reasoning)
+#   cosmic black-hole collision  -> event   (Mark)               [in event]
+#   LIGO observatory-as-org      -> UNRESOLVED; defaulted to receivers-as-object
+#                                  only. Revisit only if it recurs.
+#
+# Jane's Defence Weekly added to organisation per the decision:
+
+# Tolerance bands - a run outside these flags a regression in history.jsonl.
+expected:
+  recall_min: 0.85  # should find >=85% of must_find (alias-tolerant)
+  precision_min: 0.90  # <=10% of extractions may be deny-list noise
+  cost_usd_max: 2.00  # one chapter, all passes; ceiling not a target
+  wall_seconds_max: 1200

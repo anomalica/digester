@@ -68,7 +68,9 @@ def _write_claims_section(
         if claim.original_excerpt:
             lines.append(f"> {claim.original_excerpt}")
         if claim.node_references:
-            lines.append(f"refs: {', '.join(claim.node_references)}")
+            # Use semicolon delimiter so person names in "Last, First" format
+            # round-trip without colliding with the list separator.
+            lines.append(f"refs: {'; '.join(claim.node_references)}")
         if claim.location_in_record:
             lines.append(f"location: {claim.location_in_record}")
         if claim.date:
@@ -252,8 +254,13 @@ def parse_extraction_markdown(text: str) -> dict:
                 if stripped.startswith("> "):
                     current_claim["original_excerpt"] = stripped[2:]
                 elif stripped.startswith("refs: "):
+                    raw = stripped[6:]
+                    # Semicolon is the current delimiter (so names containing
+                    # commas - e.g. "Fravor, David" - round-trip cleanly).
+                    # Fall back to comma for legacy files.
+                    delim = ";" if ";" in raw else ","
                     current_claim["node_references"] = [
-                        r.strip() for r in stripped[6:].split(",") if r.strip()
+                        r.strip() for r in raw.split(delim) if r.strip()
                     ]
                 elif stripped.startswith("location: "):
                     current_claim["location_in_record"] = stripped[10:]

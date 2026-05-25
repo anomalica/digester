@@ -68,12 +68,101 @@ def test_domain_schema_excludes_record_node_type():
     assert "person" in node_enum
 
 
+def test_concept_is_a_first_class_node_type():
+    # decision 0025: concept is an ingestion type, in both schemas
+    from digester.models import NodeType
+
+    assert NodeType.concept.value == "concept"
+    assert (
+        "concept"
+        in DOMAIN_SCHEMA["properties"]["nodes"]["items"]["properties"]["node_type"][
+            "enum"
+        ]
+    )
+    assert (
+        "concept"
+        in INFRASTRUCTURE_SCHEMA["properties"]["nodes"]["items"]["properties"][
+            "node_type"
+        ]["enum"]
+    )
+
+
 def test_infrastructure_schema_includes_record_node_type():
     node_enum = INFRASTRUCTURE_SCHEMA["properties"]["nodes"]["items"]["properties"][
         "node_type"
     ]["enum"]
     assert "record" in node_enum
     assert "person" in node_enum
+
+
+def test_build_record_context_pins_author():
+    from digester.extract import build_record_context
+
+    ctx = build_record_context(
+        title="In Plain Sight",
+        authors=["Ross Coulthart"],
+        date="2023",
+        source_type="ebook",
+    )
+    assert "In Plain Sight" in ctx
+    assert "ebook" in ctx
+    assert "Ross Coulthart" in ctx
+    assert "the author" in ctx.lower()
+    assert "never emit" in ctx.lower()
+    assert ctx.endswith("\n\n")
+
+
+def test_build_record_context_no_authors_omits_pin():
+    from digester.extract import build_record_context
+
+    ctx = build_record_context(
+        title="FOIA Release 18-F-0324",
+        authors=[],
+        date=None,
+        source_type="pdf",
+    )
+    assert "FOIA Release 18-F-0324" in ctx
+    # No author -> no first-person pinning instruction
+    assert "first person" not in ctx.lower()
+    assert "SOURCE RECORD:" in ctx
+
+
+def test_build_record_context_multiple_authors():
+    from digester.extract import build_record_context
+
+    ctx = build_record_context(
+        title="Some Article",
+        authors=["Helene Cooper", "Ralph Blumenthal", "Leslie Kean"],
+        date="2017-12-16",
+        source_type="web",
+    )
+    assert "Helene Cooper, Ralph Blumenthal, Leslie Kean" in ctx
+
+
+def test_parse_response_surfaces_extraction_complete():
+    from digester.extract import _parse_response
+
+    raw_done = (
+        '{"record_title": "T", "nodes": [], "claims": [], "extraction_complete": true}'
+    )
+    assert _parse_response(raw_done).extraction_complete is True
+
+    raw_not = '{"record_title": "T", "nodes": [], "claims": []}'
+    # Absent field defaults to False (assume more to extract)
+    assert _parse_response(raw_not).extraction_complete is False
+
+    raw_false = (
+        '{"record_title": "T", "nodes": [], "claims": [], "extraction_complete": false}'
+    )
+    assert _parse_response(raw_false).extraction_complete is False
+
+
+def test_extraction_schema_allows_extraction_complete():
+    schema = _extraction_schema(["person"])
+    assert "extraction_complete" in schema["properties"]
+    assert schema["properties"]["extraction_complete"]["type"] == "boolean"
+    # It is optional - not in the required list (a model that omits it = not done)
+    assert "extraction_complete" not in schema["required"]
 
 
 def test_claim_type_and_attestation_enums_are_constrained():

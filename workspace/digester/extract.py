@@ -28,9 +28,10 @@ The knowledge graph uses these node types:
 - "organisation": a named group (government bodies, military units, companies, programmes)
 - "place": a named geographic location. Use "Country, Region, City" or "Country, Feature" format - largest geographic unit first (e.g. "USA, Nevada, Area 51" not "Area 51"; "Australia, Queensland, Tully" not "Tully Queensland"; "Mexico, Gulf of Mexico" not "Gulf of Mexico"). For features that span countries (Persian Gulf, Bermuda Triangle), use the region: "Middle East, Persian Gulf".
 - "event": a discrete thing that happened at a specific time (must have a date)
-- "matter": an ongoing situation spanning a period of time (programmes, investigations, policy positions)
-- "object": a specific named physical thing (craft, materials, devices, samples, sensors, weapons). NOT documents.
-- "document": a written or recorded artefact (memo, report, letter, article, paper, book, briefing, video footage, slides, statement, testimony, affidavit, FOIA release). Always use this for textual or recorded artefacts, never "object".
+- "matter": an ongoing situation spanning a period of time (programmes, investigations, policy positions). MATTER vs CONCEPT test: a matter is something people DO over time (research, an investigation, a cover-up, a programme); a concept is an IDEA/theory/phenomenon that can be referred to independent of anyone acting on it. "US anti-gravity research" = matter (people are doing research). "Anti-gravity propulsion" = concept (the idea itself). Both can exist as separate nodes about one subject.
+- "object": a specific named PHYSICAL thing you could literally touch or point at. The touch test - if you cannot imagine reaching out and putting your hand on it, it is NOT an object. Craft, materials, devices, samples, sensors, weapons, named buildings (only as objects when the physical structure is the subject), ships, aircraft, vehicles all pass. Phenomena, disturbances, events, effects, hypotheses, observations, video footage all FAIL the touch test - "water disturbance" is not an object (you can't touch a disturbance, only the water during it), "a flash of light" is not an object, "the radar return" is not an object, "the glow" is not an object. If the candidate is the physical effect, ripple, signature, or appearance of something rather than the thing itself, do not emit it as an object at all. Documents are also NOT objects (use document type).
+- "document": a written or recorded artefact (memo, report, letter, article, paper, book, briefing, video footage, slides, statement, testimony, affidavit, Freedom of Information Act release). Always use this for textual or recorded artefacts, never "object".
+- "concept": a RECOGNISED named idea, theory, principle, or phenomenon that exists independent of this document - something a reader could look up and find defined elsewhere (general relativity, special relativity, gravitational waves, superconductivity, zero-point energy, anti-gravity propulsion, nuclear fusion, the Pais Effect, vacuum polarisation). A concept may be referenced without being asserted (general relativity is referenced, never argued) and is still extracted. STRICT EXCLUSIONS - do NOT emit a concept for: (a) anything touchable - that is an object ("room temperature superconductor" = object; "room temperature superconductivity" = concept; rule: "X device/reactor/craft" is an object, "X" the principle is the concept); (b) anything tied to a specific time - that is an event or matter; (c) a person, place, or organisation; (d) an effort people run over time (research, a programme, an investigation) - that is a matter; (e) a vague catch-all where almost anything could carry the label ("the big secret", "the phenomenon", "disclosure of the truth"); (f) jargon or a mechanism lifted from quoted technical/patent text that is not a recognised standalone idea ("non-linear scattering of RF and sonar signals", "vacuum/plasma bubble sheath"); (g) a claimed capability or consequence ("asteroid deflection", "electricity grid revolution"); (h) an ad-hoc theory named only within this document and not recognised outside it ("the test-flight theory"). Merge synonyms to ONE concept (superluminal travel = faster-than-light travel = warp speed: one node, the rest aliases).
 
 And these claim types:
 - "observation": the speaker directly perceived something
@@ -51,15 +52,196 @@ EXHAUSTIVE EXTRACTION: Do not summarise or curate. Capture every factual stateme
 
 RULES:
 1. Claims must be atomic - one assertion per claim. Split compound statements.
+
+   Specifically: do NOT bundle "who this person is" with "what they did". If a sentence introduces a person's affiliation/role AND describes an action they took, that is TWO claims. The introduction is its own administrative claim about the person's role; the action is a separate claim with its own claim_type and attestation.
+
+   Bad (compound - introduces Knapp AND describes his action in one claim):
+   "George Knapp, a journalist from KLAS-TV in Las Vegas, Nevada, published a new version of a previously leaked Harry Reid memorandum the week following The Intercept article, revealing that the names of Luis Elizondo and Harold Puthoff had previously been redacted."
+
+   Good (split into atomic claims):
+   - Claim 1 (administrative, infrastructure pass): "George Knapp is a journalist at KLAS-TV in Las Vegas, Nevada."
+   - Claim 2 (administrative/hearsay, domain pass): "In June 2019, George Knapp published a new version of the Harry Reid 2009 SAP Memo, revealing that the names of Luis Elizondo and Harold Puthoff had previously been redacted."
+
+   Same rule applies to "X, who is the Y of Z, did A" - split into "X is the Y of Z" + "X did A". And to "X arrived at place B, where they met Y" - split into "X arrived at place B" + "X met Y at place B". One verb, one assertion per claim.
 2. Every claim needs a claim_type and attestation level.
 3. node_references in claims should list the names of nodes the claim mentions.
-4. Use canonical short names for nodes (e.g. "David Fravor" not "Commander David Fravor, US Navy (Ret.)").
-5. Events MUST have a date. If you cannot determine at least a year, use "matter" instead.
-6. Normalise all text to English regardless of source language.
-7. speaker is the person making the assertion (may differ from the document's author).
-8. location_in_record is where in the document the claim appears (page, timestamp, paragraph).
-9. UNIT NORMALISATION: Convert all measurements in "content" to metric units using full unit names. Write "10 metres" not "10m", "24,000 metres" not "24km", "1,200 kilometres per hour" not "1200 km/h". Use the exact format: number + space + full unit name (metres, kilometres, kilograms, degrees Celsius, etc.). IMPORTANT: Preserve the original level of precision. If the source says "about 80,000 feet", convert to "approximately 24,000 metres" (rounded), NOT "24,384 metres" (over-precise). Round to the same number of significant figures as the original.
-10. original_excerpt: Preserve the EXACT original wording from the source document, including original units, language, and phrasing. This is for attribution and provenance. If the source says "about 30 to 40 feet", the original_excerpt must say exactly that.
+4. PORTABILITY (the card test): every node name must be identifiable on its own, out of context. If you wrote the name on a card and handed it to a stranger who had never seen this document, they should be able to tell what it refers to. Names that fail the card test: "the hearing", "the testimony", "this document", "the meeting", "the briefing", "the report" - these only make sense in the surrounding text. ALWAYS include enough specificity (date, parties, subject) that the name stands alone. "Luis Elizondo's written testimony to the House Oversight Subcommittee on UAP, 13 November 2024" beats "the testimony". "House Oversight Subcommittee UAP hearing of 26 July 2023" beats "the hearing". "2024 AARO Historical Record Report" beats "the report". This rule applies to ALL node types - persons, organisations, places, events, matters, objects, documents, concepts.
+
+4a. REDACTED AND ANONYMOUS PEOPLE - DO NOT EXTRACT AS PERSON NODES. If the source identifies an actor only by job title plus "(redacted)" or "(name redacted)" or similar, that actor has NO extractable identity and MUST NOT become a person node. The Nimitz Carrier Strike Group AAV Incident Report is the canonical case: "the USS Louisville Submarine Officer (redacted) reported X" must NOT produce a person node named "USS Louisville Submarine Officer (redacted)". Instead, attribute the claim to USS Louisville (the ship - emit as an object node or organisation as appropriate) and describe the role in the claim text: "a USS Louisville submarine officer reported X". Same for "3rd Fleet N2 (redacted)" - attribute to "3rd Fleet Intelligence" as an organisation, role in text. The presence of "(redacted)" or "(name redacted)" in a candidate person name is an absolute disqualification. Do NOT create such nodes even if it makes attribution harder.
+
+4b. ACRONYM EXPANSION IN NODE NAMES: write acronyms as "Full Name (ACRONYM)". This is MANDATORY for every domain-specific abbreviation. NEVER emit a bare acronym as a node name when you can expand it.
+
+   Navy squadron and unit designators (the leading letters identify the type):
+   - VFA-N -> "Strike Fighter Squadron N (VFA-N)" (e.g. VFA-41 -> "Strike Fighter Squadron 41 (VFA-41)")
+   - VMFA-N -> "Marine Fighter Attack Squadron N (VMFA-N)"
+   - VAQ-N -> "Electronic Attack Squadron N (VAQ-N)"
+   - VAW-N -> "Carrier Airborne Early Warning Squadron N (VAW-N)"
+   - HS-N -> "Helicopter Anti-Submarine Squadron N (HS-N)"
+   - VRC-N -> "Fleet Logistics Support Squadron N (VRC-N)"
+   - CSG-N -> "Carrier Strike Group N (CSG-N)" (CSG-11 -> "Carrier Strike Group 11 (CSG-11)")
+   - CVW-N -> "Carrier Air Wing N (CVW-N)"
+
+   Programmes and agencies: AATIP -> "Advanced Aerospace Threat Identification Program (AATIP)"; AAWSAP -> "Advanced Aerospace Weapon System Applications Program (AAWSAP)"; AARO -> "All-Domain Anomaly Resolution Office (AARO)"; DIA -> "Defense Intelligence Agency (DIA)"; DARPA -> "Defense Advanced Research Projects Agency (DARPA)"; OSD -> "Office of the Secretary of Defense (OSD)"; CVIC -> "Carrier Intelligence Center (CVIC)".
+
+   Domain abbreviations: UAP -> "Unidentified Anomalous Phenomena (UAP)" only when the node is the concept itself; AAV -> "Anomalous Aerial Vehicle (AAV)"; FLIR -> "forward-looking infrared (FLIR)"; WSO -> "weapons systems officer (WSO)"; SCIF -> "Sensitive Compartmented Information Facility (SCIF)".
+
+   Aircraft type designators are proper names and DO NOT need expansion: "F/A-18F Super Hornet" (not "Fighter Attack 18F"), "E-2C Hawkeye", "AV-8B Harrier".
+
+   Critically: NEVER put the node type in parens. Wrong: "USS Princeton Senior Master of Arms (person)", "AARO HR2 Volume I (document)", "AAV (object)". The parens are RESERVED for the acronym only.
+
+   WITHIN-DIGEST DEDUPLICATION (MANDATORY PRE-EMIT PROCEDURE): each real-world entity is ONE node. Multiple nodes for the same entity is the single largest source of graph noise.
+
+   PROCEDURE - run this against your nodes list BEFORE emitting it, every time:
+
+   1. Sort your candidate nodes alphabetically by name.
+   2. Walk the sorted list. For each adjacent pair, ask the IDENTITY TEST: "If I told a knowledgeable reader of this document that node A and node B refer to the same body / event / place / object, would they agree?" If yes, MERGE.
+   3. After adjacent merging, do a second pass on the alphabetised list. Anywhere you see acronyms or country-prefixes, look at OTHER positions in the list for a paired form. Examples:
+      - "DoD", "US DoD", "Department of Defense (DoD)", "United States Department of Defense" - ONE node, pick the longest expanded form.
+      - "Navy", "US Navy", "United States Navy" - ONE node, pick "United States Navy".
+      - "AATIP", "Advanced Aerospace Threat Identification Program (AATIP)" - ONE node, pick the expanded form.
+   4. For events about the same occurrence at different date granularities ("DoD UAP Video Release, 2020" + "DoD UAP Video Release, 2020-04-27"), ONE node, pick the more precise date.
+   5. After merging, every node_references field across every claim must use the SURVIVING canonical name. Rewrite references that pointed to a now-merged variant.
+
+   ENFORCEMENT: if your final nodes list contains TWO entries whose names differ only by (a) acronym present/absent, (b) acronym expanded/bare inside the name, (c) country prefix present/absent or US vs United States, (d) date precision, or (e) word ordering, that is a BUG. Re-merge before emitting.
+
+   Worked example - candidate list with duplicates:
+     - Department of Defense (DoD)            <- (a) and (c) variants of:
+     - United States Department of Defense    <-
+     - US Navy                                 <- (c) variant of:
+     - United States Navy                      <-
+     - DoD UAP Video Release, 2020             <- (d) variant of:
+     - DoD UAP Video Release, 2020-04-27       <-
+
+   After mandatory dedup:
+     - United States Department of Defense (DoD)    <- one canonical form
+     - United States Navy                            <- one canonical form
+     - DoD UAP Video Release, 2020-04-27             <- more precise date wins
+
+4c. ACRONYM EXPANSION IN CLAIM TEXT: inside the prose of claim "content", expand each acronym on its first appearance with the acronym in parentheses: "forward-looking infrared (FLIR) pod", "Anomalous Aerial Vehicle (AAV)", "weapons systems officer (WSO)". Subsequent uses within the same claim may use the acronym alone. The original_excerpt preserves the source's exact wording (which may use the acronym alone); the normalised content always introduces acronyms in full. A reader of one claim in isolation must not have to look up a domain-specific abbreviation.
+
+   EXCEPTION - the SAFE ACRONYMS list. Some acronyms are universally recognisable to any educated reader and do NOT need expansion: UFO, UAP, CIA, FBI, NSA, NASA, DOD, DoD, FAA, NATO, UN, EU, US, USA, UK, USSR, GPS, TV, CPU, GPU, USB, URL, API. These are used BARE in claim text and node names - never write "Unidentified Flying Object (UFO)", just "UFO". Never write "Central Intelligence Agency (CIA)", just "CIA". The same applies to node names: an organisation node named "Central Intelligence Agency" stays as "Central Intelligence Agency" without appending "(CIA)" since the agency is recognised by either name. If a name is JUST the acronym (e.g. "CIA"), leave it bare.
+5. PERSON CLASSIFICATION: the road-trip test. A person node is a single, named, individual HUMAN BEING. Before classifying something as a person, ask: "could a human plausibly go on a road trip with this entity? Share a meal with them? Meet them at a coffee shop?" If no, it is NOT a person. A school, agency, programme, ship, squadron, or office is not a person regardless of how its name happens to be phrased. Names ending in "School", "University", "College", "Agency", "Department", "Bureau", "Office", "Centre", "Center", "Institute", "Service", "Foundation", "Corporation", "Inc", "Ltd", "LLC", "Group", "Programme", "Program", "Squadron", "Fleet", "Wing", "Command" are ALWAYS organisations, never persons. "Harvard Medical School" is an organisation, never a person; the Last-First normaliser must not fire on it.
+
+   PERSON NAME FORMAT (once you have confirmed it IS a person): use "Last, First Middle" order with NO titles, ranks, honourifics, or suffixes (decision 0023 + decision 0026). "Commander David Fravor, US Navy (Ret.)" -> "Fravor, David". "Dr Salvatore Pais" -> "Pais, Salvatore". "Senator Marco Rubio" -> "Rubio, Marco". Single-name historical figures or pseudonyms stay as-is ("Madonna", "Whiskey-99"). If only a surname plus a rank is known ("Lieutenant Commander Moya"), use just the surname ("Moya"). Informal/short forms ("Lue Elizondo", "Dave Grusch") are aliases, not the canonical name. Do NOT encode relationships in person names; "Janise Elizondo (mother)" should be "Elizondo, Janise" with the relationship in claim text.
+6. PERSON REFERENCES INSIDE CLAIM TEXT use the full natural-order name ("Luis Elizondo", "David Fravor"), NOT a surname-only shortcut. Each claim is read on its own in the graph, so "Elizondo asserts X" or "Fravor describes Y" is ambiguous out of context. Write "Luis Elizondo asserts X" and "David Fravor describes Y". The node_references field still uses the canonical "Last, First" form - the rule applies only to prose inside claim "content" and "speaker" labels in narration. Single-name historical figures or pseudonyms are an exception.
+
+6a. ANCHORING - USE AN ANCHOR ONLY WHEN THE CLAIM IS ABOUT THE MAIN MATTER OR EVENT.
+
+   The metadata associated with every claim already names the source document (its title, date, and id). Repeating the document name as a prefix on every claim text is NOT real portability - it duplicates information the metadata carries and the workbench already displays as the record header. Real portability means the claim text is intelligible standing alone WHEN MIXED WITH CLAIMS FROM OTHER DOCUMENTS.
+
+   STEP 1 - identify the main matter and any main event the document covers (see Step 1/2 conventions below).
+
+   STEP 2 - for EACH claim, decide: is this claim specifically about the main matter (or main event), OR is it about something else (a person's background, a peripheral fact, a quoted statement someone made, an unrelated topic the document touches on)?
+
+   - IF the claim is about the main matter/event: anchor it with the canonical name, verbatim. Example for the Nimitz incident report (which IS centrally about the Nimitz incident, so most claims are):
+     "During the Nimitz UAP Incident, 2004, Chad Underwood's F/A-18F radar showed initial Anomalous Aerial Vehicle (AAV) tracks at approximately 56 to 74 kilometres south of the aircraft."
+
+   - IF the claim is NOT about the main matter/event: write it naturally with no forced anchor prefix. The metadata gives the source. Example from a Grusch news article (which is a journalism piece reporting various statements):
+     Bad (redundant document-name prefix - the metadata already says where this came from):
+     "Grusch UAP Whistleblower Disclosure, 2023: Jonathan Gray stated, 'non-human intelligence phenomenon is real.'"
+     Good (no prefix - the metadata names the source; the claim reads naturally):
+     "Jonathan Gray stated, 'non-human intelligence phenomenon is real.'"
+
+   The test: if the document IS the event being described (incident report, formal testimony, official statement, single-event interview), most claims anchor to the main matter. If the document is JOURNALISM, a book, a podcast, or a feature ranging over multiple topics, few or no claims need a forced anchor - write each one naturally.
+
+   FORBIDDEN STILL: when you DO use an anchor, only main_matter.name and main_event.name are valid. Never invent your own sub-event ("Underwood Flight FLIR Contact 2004-11-14" is forbidden as an anchor). Sub-narratives go in the claim body as noun phrases.
+
+   STEP 3 conventions for the main matter / main event names (when you emit them as nodes):
+   - The universally-known identifier (Nimitz Carrier Strike Group, AATIP, House Oversight Subcommittee) - NOT internal codenames or callsigns
+   - The subject in full, expanding any acronym inline
+   - ISO date format (YYYY or YYYY-MM or YYYY-MM-DD or YYYY-MM-DD to YYYY-MM-DD)
+   - Wikipedia-article-title register: short, recognisable, max ~8 words
+
+   The sub-narrative ("Chad Underwood's F/A-18F FLIR contact") becomes part of the prose. The anchor stays the main_matter. Do this for EVERY claim about Underwood, every claim about the FASTEAGLE flight, every claim about the CVIC debrief, every claim about any sub-narrative. The anchor is always main_matter or main_event - nothing else.
+
+   STEP 4 - every claim text begins with (or otherwise explicitly embeds) the verbatim canonical name of its anchor. Verbatim. No paraphrasing.
+
+   The anchor positions the claim in CONTEXT (the time, place, or framing event), not as quoted speech. Use it as a temporal / contextual scene-setter. The form is "During X, [claim]" or "In X, [claim]" or "At X, [claim]" - not "X says that [claim]" or "X states that [claim]" or "X testified that [claim]".
+
+   This matters: the document's metadata already names the source. Writing "The DoD Navy UAP Videos Release Statement, 2020-04-27 states that..." in front of every claim turns each claim into a quotation OF the document, which duplicates the metadata's job and makes every claim sound like reported speech. The claim should BE the assertion, with the anchor positioning it in time/place.
+
+   STRICTLY FORBIDDEN ANCHOR VERBS at the head of a claim:
+   - "X states that..."
+   - "X says that..."
+   - "X said that..."
+   - "X declared that..."
+   - "X announced that..."
+   - "X testified that..."
+   - "X reported that..."
+
+   These verbal forms turn the anchor into a hedge ("according to X, ..."), which is precisely what the metadata already does. Replace with a positional preposition.
+
+   Concrete corrections:
+
+   Bad (over-anchored, every claim quotes the document):
+     "The DoD Navy UAP Videos Release Statement, 2020-04-27 states that the United States Department of Defense authorised the release of three unclassified Navy videos."
+     "The DoD Navy UAP Videos Release Statement, 2020-04-27 states that one of the three Navy videos was taken in 2004-11."
+
+   Good (anchor positions; claim asserts):
+     "In the DoD Navy UAP Videos Release Statement, 2020-04-27, the United States Department of Defense authorised the release of three unclassified Navy videos."
+     "Of the three Navy videos released on 2020-04-27, one was filmed in 2004-11."
+
+   Bad (verbal "testified that" wraps every claim about the testimony):
+     "During the Elizondo House UAP Testimony, 2024-11-13, Luis Elizondo testified that UAP are real."
+
+   Good (the speaker is named once, the rest is direct assertion):
+     "In his House Oversight Subcommittee testimony on 2024-11-13, Luis Elizondo asserted that UAP are real."
+     - or, if the speaker is implicit from the document: "UAP are real."
+     - the rule of thumb: if the document IS the speaker's testimony, you do not need to say "the speaker testified" for every claim. That fact is the metadata. State the assertion.
+
+   Reported quotations are different from anchored claims. When the source contains a literal direct quote that you want to preserve verbatim, the form is "X said: 'quote'" inside the body of the claim, and the anchor (if any) is the surrounding event. The "X said" form is permitted INSIDE a claim for verbatim quotation; it is not permitted as the ANCHOR PREFIX of every claim about the document.
+
+   STEP 5 - WITHIN ONE CLAIM, expand each acronym on FIRST USE ONLY. Subsequent uses in the same claim stay BARE (or use "the" + bare). Do NOT write "Anomalous Aerial Vehicle (AAV)" twice in one claim - that is a bug. After "Anomalous Aerial Vehicle (AAV)" appears once, every later mention in that claim is just "AAV" or "the AAV".
+
+   FORBIDDEN IN ANCHORS:
+   - Codenames or callsigns (FASTEAGLE, Tic Tac, Fast Walker) - these are operational shorthand, meaningless to outsiders, never portable. Codenames may appear inside the BODY of a claim once the subject is identified, but never as part of the anchor that makes the claim portable.
+   - Bare acronyms (AAV, FLIR, NDA, WSO) - all must be expanded inline within the anchor itself ("Anomalous Aerial Vehicle (AAV)") because the anchor IS the first use within each claim.
+   - Spelled-out months ("November 2004") - always ISO ("2004-11").
+   - Vague references ("the incident", "the encounter") that depend on knowing which document the claim came from.
+
+   Bad anchor (uses codename, unexpanded acronym, spelled month, missing identifier):
+   "During the FASTEAGLE Flight AAV Intercept 14 November 2004, Chad Underwood was not asked to sign any NDA."
+
+   Good anchor (universally-known identifier, expanded acronym, ISO date, broad matter):
+   "During the Nimitz Carrier Strike Group Anomalous Aerial Vehicle (AAV) Detection Matter (2004-11-10 to 2004-11-16), F/A-18F pilot Chad Underwood was not asked to sign any non-disclosure agreement (NDA) and was uncertain how far up the chain the reporting went past his commanding officer."
+
+   Yes the anchor is long. Long is fine - it carries the whole context. Long is the cost of portability. Do not shorten it.
+
+6b. ISO DATE FORMAT MANDATORY EVERYWHERE - claim text AND node names. NO spelled-out months ANYWHERE in the normalised output. "2004-11-14" not "14 November 2004"; "2004-11" not "November 2004"; "2024-08-19" not "19 August 2024"; "1947" not "the year 1947". Event node names use ISO dates: "Nimitz F/A-18F Intercept of Anomalous Aerial Vehicle, 2004-11-14", not "...14 November 2004". The original_excerpt preserves source phrasing (which often uses English month names); the normalised content and all node names are always ISO. If you find yourself writing a month name in prose, STOP and convert.
+
+6c. CODENAMES ARE NOT NODES. Callsigns (FASTEAGLE 01, FASTEAGLE 02), military codenames (Tic Tac, Fast Walker), and internal nicknames are operational shorthand that resolves to one or more actual persons/objects on a specific mission. Do not emit a codename as a person, object, event, or matter node. When the source uses a codename, in claim text refer to the underlying entity by its real identifier ("F/A-18F flown by David Fravor" or simply "David Fravor's flight") and mention the codename in passing if useful ("...callsign FASTEAGLE 01"). The codename is never the canonical identifier.
+7. PLACES vs ORGANISATIONS - the building vs institution distinction. A place is somewhere a human can physically go and find. A named building is a PLACE: the Pentagon, the Capitol Building, the White House, Buckingham Palace. The institution housed inside a building is a different node - an ORGANISATION. The Pentagon (the building, in Arlington, Virginia) is a place; the Department of Defense (the institution that occupies it) is an organisation. When the source says "the Pentagon announced X", that is colloquial reference to the Department of Defense (organisation), not the building - attribute the claim to the Department of Defense, and only emit a "Pentagon" place node if the source talks about the building itself (people going there, events happening there).
+
+   A place is named, specific, and durable enough that someone could go to it and still find it decades later: a military base, installation, research facility, ranch, named site, airport, town or city, named building. Do NOT extract as places: countries ("USA"), states or provinces ("Maryland"), oceans or operating areas ("the Nimitz operating area"), or broad regions - you cannot meet someone "in America". When the text discusses a named installation named after a geographic feature ("Naval Air Warfare Center on the Patuxent River"), the PLACE is the installation ("Naval Air Station Patuxent River"), NOT the feature.
+
+   Name qualifying places "Country, Region, Specific" largest-unit-first ("USA, Nevada, Area 51", "Australia, Queensland, Tully", "USA, New Mexico, Roswell"). The country/state prefix is for disambiguation and sorting; it does NOT mean the country or state is itself a separate place node.
+
+7a. PROGRAMME vs INVESTIGATION (organisation vs matter): a named programme is an ORGANISATION - it has a name, a budget, staff, an authority. The work the programme performs over time is a MATTER. "Advanced Aerospace Threat Identification Program (AATIP)" is an organisation. "AATIP's investigation of UAP encounters" is a matter referencing AATIP. NEVER emit a programme-named node twice (once as organisation and once as matter). The programme name is the organisation; the work is described in claims attached to the organisation. If the source talks about ongoing inquiries with no fixed institutional name, that may be a matter ("the post-9/11 push for UAP disclosure"), but a NAMED programme is always an organisation.
+8. Events MUST have a date. If you cannot determine at least a year, use "matter" instead.
+9. Normalise all text to English regardless of source language.
+10. speaker is the person making the assertion (may differ from the document's author).
+11. location_in_record is where in the document the claim appears (page, timestamp, paragraph).
+12. UNIT NORMALISATION: Convert all measurements in "content" to metric units using full unit names. Write "10 metres" not "10m", "24,000 metres" not "24km", "1,200 kilometres per hour" not "1200 km/h". Use the exact format: number + space + full unit name (metres, kilometres, kilograms, degrees Celsius, etc.). IMPORTANT: Preserve the original level of precision. If the source says "about 80,000 feet", convert to "approximately 24,000 metres" (rounded), NOT "24,384 metres" (over-precise). Round to the same number of significant figures as the original.
+13. original_excerpt: Preserve the EXACT original wording from the source document, including original units, language, and phrasing. This is for attribution and provenance. If the source says "about 30 to 40 feet", the original_excerpt must say exactly that.
+
+================================================================
+FINAL CHECK - DO THIS BEFORE EMITTING YOUR JSON RESPONSE
+================================================================
+
+Sort your nodes list alphabetically by name. Walk it. For every pair where
+the two names differ only by ONE OR MORE of the following, MERGE them into
+ONE node (pick the longer / more-precise canonical form, drop the other,
+and replace all references to the dropped form in claim node_references):
+
+  - acronym suffix present vs absent ("DoD" vs "Department of Defense (DoD)")
+  - country / nation prefix present vs absent in any form ("Navy" vs "US Navy" vs "United States Navy")
+  - acronym expanded mid-name vs not ("IC Inspector General" vs "Intelligence Community (IC) Inspector General")
+  - same event, different date precision ("Release, 2020" vs "Release, 2020-04-27")
+  - same body, same words, different ordering or rephrasing
+
+If your nodes list still contains two entries that refer to the same
+real-world entity after that pass, the output is wrong. Re-merge before
+emitting. This check is not optional.
 
 OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
 
@@ -67,7 +249,7 @@ OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
 "record_date": "YYYY-MM-DD or YYYY-MM or YYYY if known",
 "record_producer": "person or organisation that produced this document",
 "nodes": [
-    {{"name": "canonical short name", "node_type": "person|organisation|place|event|matter|object|document", "metadata": {{"date_start": "...", "date_end": "..."}}}}
+    {{"name": "canonical short name", "node_type": "person|organisation|place|event|matter|object|document|concept", "metadata": {{"date_start": "...", "date_end": "..."}}}}
 ],
 "claims": [
     {{"content": "normalised assertion with metric units",
@@ -104,6 +286,7 @@ def _extraction_schema(node_types: list[str]) -> dict:
             "record_date": {"type": ["string", "null"]},
             "record_producer": {"type": ["string", "null"]},
             "record_reference": {"type": ["string", "null"]},
+            "extraction_complete": {"type": "boolean"},
             "nodes": {
                 "type": "array",
                 "items": {
@@ -187,6 +370,15 @@ Do NOT extract:
 - Testimony about what witnesses saw or experienced
 - Evidence, sensor data, or investigation findings
 
+NAMING RULES (apply to every node and every claim text):
+- PORTABILITY (the card test): every node name must be identifiable on its own, out of context. If you wrote the name on a card and handed it to a stranger who had never seen this document, they should tell what it refers to. Names that fail the card test: "the hearing", "the testimony", "this document", "the interview", "the meeting". ALWAYS include enough specificity (date, parties, subject) that the name stands alone.
+- REDACTED OR ANONYMOUS PEOPLE: do not extract a person node when the source identifies the actor only by role with a redacted/unknown name ("USS Louisville Commander (redacted)", "3rd Fleet N2 (redacted)"). There is no person to extract. Attribute the claim to the relevant organisation and describe the role in claim text.
+- ACRONYM EXPANSION IN NODE NAMES: write acronyms in node names as "Full Name (ACRONYM)". "VFA-41" -> "Strike Fighter Squadron 41 (VFA-41)". "CSG-11" -> "Carrier Strike Group 11 (CSG-11)". Applies to organisations, documents, events, objects, concepts.
+- ACRONYM EXPANSION IN CLAIM TEXT: inside claim "content", expand acronyms on first use with the acronym in parentheses ("Anomalous Aerial Vehicle (AAV)", "forward-looking infrared (FLIR)"). The original_excerpt preserves the source's exact phrasing.
+- SAFE ACRONYMS - do NOT expand: UFO, UAP, CIA, FBI, NSA, NASA, DOD, DoD, FAA, NATO, UN, EU, US, USA, UK, USSR, GPS, TV, CPU, GPU, USB, URL, API. These are universally known; use them bare in claim text and node names.
+- Person nodes use "Last, First Middle" order with NO titles/ranks/honourifics (decision 0023 + 0026). "Commander David Fravor" becomes "Fravor, David".
+- Inside the prose of claim "content" and "speaker" narration, refer to people by their full natural-order name ("Luis Elizondo", not "Elizondo") so each claim is intelligible in isolation. The node_references field still uses the canonical "Last, First" form.
+
 OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
 
 {{"record_title": "short title for this document",
@@ -209,6 +401,307 @@ OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
 
 DEFAULT_MODEL = "sonnet"
 
+
+# Acronyms universally recognisable to any educated reader. The model is told
+# not to expand these in claim text or node names, and the terminology pre-pass
+# is told not to include them in the document's acronym map. Keep this list
+# tight - bias toward expanding anything domain-specific (AATIP, AAWSAP, FLIR
+# etc.) and only mark something safe when a stranger reading a single claim
+# would clearly know what it means.
+SAFE_ACRONYMS = (
+    "UFO",  # Unidentified Flying Object - domain-universal
+    "UAP",  # Unidentified Anomalous Phenomena - domain-universal
+    "CIA",  # Central Intelligence Agency
+    "FBI",  # Federal Bureau of Investigation
+    "NSA",  # National Security Agency
+    "NASA",  # National Aeronautics and Space Administration
+    "DOD",  # Department of Defense (also DoD)
+    "DoD",
+    "FAA",  # Federal Aviation Administration
+    "NATO",  # North Atlantic Treaty Organization
+    "UN",  # United Nations
+    "EU",  # European Union
+    "US",  # United States
+    "USA",
+    "UK",  # United Kingdom
+    "USSR",  # Soviet Union (historical)
+    "GPS",  # Global Positioning System
+    "TV",  # Television
+)
+
+
+def _safe_acronym_prompt_block() -> str:
+    """Standard prompt block telling the model not to expand universal acronyms."""
+    listed = ", ".join(SAFE_ACRONYMS)
+    return (
+        f"SAFE ACRONYMS (always use bare, never expand): {listed}. "
+        f"These are universally recognisable; expanding them adds noise. "
+        f"Do not write 'Unidentified Flying Object (UFO)' - write 'UFO'. "
+        f"Do not write 'Central Intelligence Agency (CIA)' - write 'CIA'. "
+        f"This applies to claim text AND node names AND the terminology "
+        f"pre-pass output - none of these acronyms should appear in the "
+        f"document's acronyms map.\n\n"
+    )
+
+
+# ----------------------------------------------------------------------------
+# Terminology pre-pass: one Claude call per record that reads the document
+# top-to-bottom and returns the document's central matter (and any key event)
+# with a canonical portable name, plus a map of codenames and acronyms found
+# in the source. The result is injected as context into every claim-extraction
+# chunk so the claims anchor to a single canonical name and resolve codenames
+# at write time rather than emitting "FASTEAGLE 01" as a node.
+# ----------------------------------------------------------------------------
+
+TERMINOLOGY_PROMPT = """You are doing a TERMINOLOGY EXTRACTION pre-pass on a document. You are NOT extracting claims yet. Your only task is to read the document and identify:
+
+1. THE MAIN MATTER - the broad ongoing subject the whole document covers. This is what a knowledgeable reader would say the document is "about" in one sentence. For a Nimitz incident report it is the week-long detection-and-intercept period off the western coast, not a single flight. For a book it is the book itself. For congressional testimony it is the testimony as an event.
+
+2. THE MAIN EVENT (only if applicable) - a single dated occurrence that is the document's principal subject, distinct from the broader matter. For the Nimitz incident report this is the 14 November F/A-18F intercept; for a testimony document there is usually no separate "main event" because the testimony IS the document.
+
+3. CODENAMES - operational shorthand the document uses that resolves to an underlying entity. Callsigns (FASTEAGLE 01, FASTEAGLE 02), military codenames (Tic Tac, Fast Walker), internal nicknames. For each codename, identify what it actually refers to: which person, which aircraft, which object. Use real identifiers in the resolution, not other codenames.
+
+4. ACRONYMS - any abbreviation the document uses for which the full form matters: agency acronyms (AATIP, AARO, DIA), domain shorthand (AAV, FLIR, WSO, NDA, MISREP, CAP, CVIC, SCIF), squadron designators (VFA-41, CSG-11) etc.
+
+   EXCLUDE the universally-recognised SAFE ACRONYMS: UFO, UAP, CIA, FBI, NSA, NASA, DOD, DoD, FAA, NATO, UN, EU, US, USA, UK, USSR, GPS, TV, CPU, GPU, USB, URL, API. These do NOT need expansion - do not include them in the acronyms list you return. Their full forms are universally known.
+
+NAMING RULES for the canonical names you produce - aim for the Wikipedia article-title register: short, memorable, recognisable. The Nimitz UFO incident's Wikipedia article is titled "USS Nimitz UFO incident" - four words and a stranger can look it up. Aim for that.
+
+- MAX 8 WORDS. If your candidate name is longer, you are over-engineering it.
+- Include the universally-recognised identifier (Nimitz, AATIP, Elizondo, Fravor, Roswell). NEVER put a codename or callsign (FASTEAGLE, Tic Tac as a codename) in the canonical name. "Tic Tac" can appear if the source uses it as a shape description, but as a codename for the object it is not the canonical identifier.
+- Do NOT repeat the node type in the name. The "type" field says matter/event/etc.; the name does not need to end with "Matter" or "Event" or "Detection Matter". "Nimitz UAP Incident" is the name; the type is matter. Not "Nimitz UAP Detection Matter".
+- Date: use the SHORTEST ISO form that distinguishes it. Prefer year ("2004"), use year-month ("2004-11") when needed to disambiguate, use full date ("2004-11-14") only for specific dated events. Do NOT pack a full date range into the name - the matter node carries its date range as separate metadata. "Nimitz UAP Incident, 2004" beats "Nimitz Anomalous Aerial Vehicle Incident, 2004-11-10 to 2004-11-16".
+- Acronyms: only expand bare ones that are opaque. "UAP" is universal in this domain - leave it. "AAV" is opaque - either expand it ("Anomalous Aerial Vehicle Incident") or use the more universal substitute ("UAP Incident"). Prefer the most universal short form.
+- ISO month names only: never "14 November 2004". If you need a date in the name at all, it is "2004-11-14".
+- NO "the" in the name - it implies a known referent. "Nimitz UAP Incident, 2004", not "The Nimitz UAP Incident".
+
+GOOD canonical name examples (the register to aim for):
+- "Nimitz UAP Incident, 2004" (matter, ~4 words)
+- "Nimitz F/A-18F UAP Intercept, 2004-11-14" (event, specific date)
+- "Elizondo Senate UAP Testimony, 2024-11" (event)
+- "Imminent (Elizondo book, 2024)" (matter)
+- "Lex Fridman Podcast 122: Fravor, 2020-09" (event)
+- "Coulthart In Plain Sight (2023 book)" (matter)
+- "Roswell Crash, 1947" (event)
+
+BAD canonical name examples (do not produce these):
+- "Nimitz Carrier Strike Group (CSG-11) Anomalous Aerial Vehicle (AAV) Detection Matter, 2004-11-10 to 2004-11-16" - way too long, repeats node type in name, full date range crammed in
+- "FASTEAGLE Flight AAV Intercept 14 November 2004" - codename in name, bare acronym, spelled month
+- "AAV Detection Period" - missing identifier, bare acronym
+- "Nimitz CSG-11 AAV Detection Matter" - reads like a database key, has "Matter" suffix repeating the node type
+- "AAV Detection Matter" - bare acronym, has "Matter" suffix
+
+EMPHATIC: never put "Matter", "Event", "Concept", "Document", "Organisation" etc. as a suffix in a canonical name. The node TYPE is a separate field; the name does not repeat it.
+
+OUTPUT FORMAT - respond with ONLY valid JSON, no markdown fencing:
+
+{{
+  "main_matter": {{
+    "name": "canonical portable name following the rules above",
+    "type": "matter or event",
+    "date": "YYYY-MM-DD or YYYY-MM or YYYY or YYYY-MM-DD to YYYY-MM-DD"
+  }},
+  "main_event": {{
+    "name": "canonical portable name, or null if no distinct main event",
+    "type": "event",
+    "date": "YYYY-MM-DD"
+  }} or null,
+  "codenames": [
+    {{"codename": "FASTEAGLE 01", "refers_to": "F/A-18F flown by David Fravor during the 2004-11-14 intercept"}},
+    {{"codename": "FASTEAGLE 02", "refers_to": "F/A-18F flown by Alex Dietrich during the 2004-11-14 intercept"}}
+  ],
+  "acronyms": [
+    {{"acronym": "AAV", "expansion": "Anomalous Aerial Vehicle"}},
+    {{"acronym": "FLIR", "expansion": "forward-looking infrared"}},
+    {{"acronym": "CSG-11", "expansion": "Carrier Strike Group 11"}}
+  ]
+}}
+
+DOCUMENT TEXT:
+"""
+
+
+TERMINOLOGY_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "main_matter": {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string"},
+                "type": {"type": "string", "enum": ["matter", "event"]},
+                "date": {"type": "string"},
+            },
+            "required": ["name", "type"],
+        },
+        "main_event": {
+            "type": ["object", "null"],
+            "properties": {
+                "name": {"type": "string"},
+                "type": {"type": "string", "enum": ["event"]},
+                "date": {"type": "string"},
+            },
+        },
+        "codenames": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "codename": {"type": "string"},
+                    "refers_to": {"type": "string"},
+                },
+                "required": ["codename", "refers_to"],
+            },
+        },
+        "acronyms": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "acronym": {"type": "string"},
+                    "expansion": {"type": "string"},
+                },
+                "required": ["acronym", "expansion"],
+            },
+        },
+    },
+    "required": ["main_matter", "codenames", "acronyms"],
+}
+
+# Cap how much of the body the terminology pre-pass sees. Most documents fit
+# comfortably; books get the first 80K chars which is enough to identify
+# main matter, principal codenames, and the recurring acronyms.
+TERMINOLOGY_SAMPLE_CHARS = 80_000
+
+
+def extract_terminology(
+    text: str,
+    model: str = DEFAULT_MODEL,
+    use_api: bool = False,
+    record_context: str = "",
+    on_progress=None,
+) -> dict:
+    """Run the terminology pre-pass. Returns a dict matching TERMINOLOGY_SCHEMA.
+
+    On any failure (parse error, malformed response) returns a minimal stub so
+    the claim-extraction pipeline can continue. The pre-pass is a help, not a
+    hard requirement: missing terminology degrades quality but the pipeline
+    still produces output.
+    """
+    log = on_progress or (lambda _: None)
+    sample = text[:TERMINOLOGY_SAMPLE_CHARS]
+    if len(text) > TERMINOLOGY_SAMPLE_CHARS:
+        sample += "\n\n[document continues - terminology pre-pass sees only the first "
+        sample += f"{TERMINOLOGY_SAMPLE_CHARS} characters]"
+    log("Running terminology pre-pass...")
+    prompt = record_context + TERMINOLOGY_PROMPT
+    try:
+        if use_api:
+            raw = _call_api(prompt, sample, model)
+        else:
+            raw = _call_cli(prompt, sample, model, schema=TERMINOLOGY_SCHEMA)
+        # Strip any wrapping if the CLI returned a structured_output envelope
+        parsed = _parse_terminology_response(raw)
+    except Exception as exc:  # noqa: BLE001 - keep extraction running on failure
+        log(f"  terminology pre-pass FAILED: {exc}")
+        return _stub_terminology()
+
+    mm = parsed.get("main_matter") or {}
+    mm_name = mm.get("name") or "(unknown main matter)"
+    log(f"  main matter: {mm_name}")
+    if parsed.get("main_event"):
+        log(f"  main event:  {parsed['main_event'].get('name', '')}")
+    log(
+        f"  {len(parsed.get('codenames') or [])} codenames, "
+        f"{len(parsed.get('acronyms') or [])} acronyms"
+    )
+    return parsed
+
+
+def _parse_terminology_response(raw: str) -> dict:
+    """Pull the first JSON object out of the model's response."""
+    raw = raw.strip()
+    # Some CLI wrappers return {"structured_output": {...}} or wrap in fences.
+    if raw.startswith("```"):
+        raw = raw.split("```", 2)[1]
+        if raw.startswith("json"):
+            raw = raw[4:]
+    decoder = json.JSONDecoder()
+    obj, _ = decoder.raw_decode(raw.lstrip())
+    if isinstance(obj, dict) and "structured_output" in obj:
+        obj = obj["structured_output"]
+    return obj
+
+
+def _stub_terminology() -> dict:
+    return {
+        "main_matter": {"name": "", "type": "matter"},
+        "main_event": None,
+        "codenames": [],
+        "acronyms": [],
+    }
+
+
+def format_terminology_context(terminology: dict) -> str:
+    """Format the terminology pre-pass result as a prelude block for the
+    claim-extraction prompt. The model is told to use the main matter name
+    verbatim as the anchor in every claim, and to resolve codenames at write
+    time instead of emitting them as nodes."""
+    mm = terminology.get("main_matter") or {}
+    mm_name = mm.get("name") or ""
+    me = terminology.get("main_event")
+    codenames = terminology.get("codenames") or []
+    acronyms = terminology.get("acronyms") or []
+
+    lines: list[str] = ["DOCUMENT TERMINOLOGY (resolved before claims):", ""]
+    if mm_name:
+        mm_type = mm.get("type") or "matter"
+        lines.append(
+            f"THE MAIN {mm_type.upper()} NODE FOR THIS DOCUMENT ALREADY EXISTS: "
+            f'name="{mm_name}", type={mm_type}.'
+        )
+        lines.append(
+            "  DO NOT emit a different node for the same subject with a "
+            "different name. Use this EXACT name verbatim if you reference "
+            "the main subject as a node. Use this EXACT name as the anchor "
+            "at the start of every claim that does not uniquely belong to a "
+            "specific sub-event. Do not paraphrase, do not shorten, do not "
+            "extend with extra descriptors. Copy the string."
+        )
+    if me and me.get("name"):
+        me_type = me.get("type") or "event"
+        lines.append("")
+        lines.append(
+            f"THE MAIN {me_type.upper()} NODE ALREADY EXISTS: "
+            f'name="{me["name"]}", type={me_type}.'
+        )
+        lines.append(
+            "  Use this EXACT name as the anchor only for claims uniquely "
+            "about this specific dated sub-event. For all other claims use "
+            "the main matter name above."
+        )
+    if codenames:
+        lines.append("")
+        lines.append(
+            "CODENAMES the document uses - these are aliases for real entities. "
+            "Do NOT emit a codename as a node. Resolve it to its referent and "
+            "mention the codename only in passing inside claim text if useful:"
+        )
+        for c in codenames:
+            lines.append(f'  - "{c.get("codename", "")}" = {c.get("refers_to", "")}')
+    if acronyms:
+        lines.append("")
+        lines.append(
+            "ACRONYMS - always write in full with the acronym in parens "
+            '"Full Form (ACRONYM)" on every appearance in a node name, and on '
+            "the first appearance within each claim text:"
+        )
+        for a in acronyms:
+            lines.append(f"  - {a.get('acronym', '')} = {a.get('expansion', '')}")
+
+    lines.append("")
+    return "\n".join(lines) + "\n"
+
+
 # Hard upper bound on chunk size. Sonnet's 200K context allows much bigger,
 # but very large chunks slow per-call response. 150K chars ~ 37K tokens, well
 # inside the window with room for the prompt and growing exclude list.
@@ -218,10 +711,13 @@ CHUNK_HARD_MAX = 150_000
 CHUNK_MAX_CHARS = 50_000
 CHUNK_MIN_CHARS = 20_000
 
-# Iterative extraction caps. After this many rounds, or once a round adds
-# fewer than this many new claims, we move on to the next chunk.
-ITERATION_MAX = 8
-ITERATION_MIN_NEW = 5
+# Iterative extraction stopping rule. The loop stops when a round adds fewer
+# than ITERATION_MIN_NEW genuinely-new claims (dedup means repeats don't count,
+# so this converges on its own). ITERATION_MAX is a runaway safety ceiling
+# ONLY - not the normal exit. Previously ITERATION_MAX=8 was the de-facto
+# stopping mechanism and was cutting off chunks that still had claims to give.
+ITERATION_MAX = 40
+ITERATION_MIN_NEW = 2
 
 
 def _find_split_point(text: str, lo: int, hi: int) -> int | None:
@@ -316,6 +812,7 @@ def _iterate_chunk(
     model: str,
     use_api: bool,
     directory: list[tuple[str, str]],
+    record_context: str = "",
     on_progress=None,
 ) -> tuple[list[ExtractedNode], list[ExtractedClaim], ExtractionResult]:
     """Iteratively extract from a single chunk until the model stops finding more.
@@ -335,7 +832,7 @@ def _iterate_chunk(
     first_result: ExtractionResult | None = None
 
     for iteration in range(ITERATION_MAX):
-        prompt = base_prompt
+        prompt = (record_context + base_prompt) if record_context else base_prompt
         if directory:
             directory_lines = [
                 f"  - {name} ({node_type})" for name, node_type in directory
@@ -348,7 +845,11 @@ def _iterate_chunk(
             prompt += (
                 "\n\nALREADY EXTRACTED CLAIMS - do NOT repeat any of these:\n"
                 + _format_exclude_list(chunk_claims)
-                + "\n\nExtract ADDITIONAL factual claims from the document that are NOT in the list above. Return an empty `claims` array if you cannot find any genuinely new claims."
+                + "\n\nExtract ADDITIONAL factual claims from the document that"
+                " are NOT in the list above. If the only claims remaining would"
+                " be trivial, redundant, or low-confidence, do NOT pad - return"
+                " an empty `claims` array and set `extraction_complete` to true."
+                " Stopping cleanly is better than producing marginal claims."
             )
 
         if use_api:
@@ -374,11 +875,17 @@ def _iterate_chunk(
                 directory.append((node.name, node.node_type.value))
 
         if on_progress:
+            done_flag = " [model: complete]" if result.extraction_complete else ""
             on_progress(
                 f"    iter {iteration + 1}: +{new_in_round} claims "
-                f"(chunk total {len(chunk_claims)})"
+                f"(chunk total {len(chunk_claims)}){done_flag}"
             )
 
+        # Primary stop: the model says it is done. Backstop: the count floor
+        # (only fires if the model never admits completion). The ITERATION_MAX
+        # range() is the runaway ceiling.
+        if result.extraction_complete:
+            break
         if new_in_round < ITERATION_MIN_NEW:
             break
 
@@ -404,6 +911,7 @@ def _extract_chunked(
     model: str,
     use_api: bool,
     existing_nodes: list[tuple[str, str]] | None,
+    record_context: str = "",
     on_progress=None,
 ) -> ExtractionResult:
     """Shared chunked-extraction implementation.
@@ -434,6 +942,7 @@ def _extract_chunked(
             model=model,
             use_api=use_api,
             directory=directory,
+            record_context=record_context,
             on_progress=on_progress,
         )
 
@@ -462,17 +971,51 @@ def _extract_chunked(
     )
 
 
+def build_record_context(
+    title: str,
+    authors: list[str] | None,
+    date: str | None,
+    source_type: str | None,
+) -> str:
+    """Build the SOURCE RECORD framing prepended to every extraction prompt.
+
+    Pins first-person / "the author" references to the named author so the
+    model never emits an unpinned "the author" node. Unpinned nodes are
+    graph-wide contaminants because nodes are global (shared across records),
+    so a vague node would wrongly merge across every first-person source.
+    """
+    author_str = ", ".join(authors) if authors else None
+    bits = [f'"{title}"' if title else "an untitled record"]
+    if source_type:
+        bits.append(f"({source_type})")
+    if author_str:
+        bits.append(f"by {author_str}")
+    if date:
+        bits.append(f"dated {date}")
+    line = "SOURCE RECORD: " + " ".join(bits) + ".\n"
+    if author_str:
+        line += (
+            f'When the text uses "the author", "I", "me", "my", or first '
+            f"person, that refers to {author_str}. Resolve such references to "
+            f'the named person; never emit "the author" or a vague '
+            f"first-person entity as a node.\n"
+        )
+    return line + "\n"
+
+
 def extract(
     text: str,
     model: str = DEFAULT_MODEL,
     use_api: bool = False,
     existing_nodes: list[tuple[str, str]] | None = None,
+    record_context: str = "",
     on_progress=None,
 ) -> ExtractionResult:
     """Extract nodes and claims from record text.
 
     Args:
         existing_nodes: list of (name, node_type) tuples for the node directory.
+        record_context: SOURCE RECORD framing (see build_record_context).
         on_progress: optional callback receiving status strings (for chunked runs).
     """
     return _extract_chunked(
@@ -482,6 +1025,7 @@ def extract(
         model=model,
         use_api=use_api,
         existing_nodes=existing_nodes,
+        record_context=record_context,
         on_progress=on_progress,
     )
 
@@ -491,6 +1035,7 @@ def extract_infrastructure(
     model: str = DEFAULT_MODEL,
     use_api: bool = False,
     existing_nodes: list[tuple[str, str]] | None = None,
+    record_context: str = "",
     on_progress=None,
 ) -> ExtractionResult:
     """Extract infrastructure information from record text.
@@ -505,6 +1050,7 @@ def extract_infrastructure(
         model=model,
         use_api=use_api,
         existing_nodes=existing_nodes,
+        record_context=record_context,
         on_progress=on_progress,
     )
 
@@ -671,4 +1217,5 @@ def _parse_response(raw: str) -> ExtractionResult:
         record_producer=data.get("record_producer"),
         nodes=nodes,
         claims=claims,
+        extraction_complete=bool(data.get("extraction_complete", False)),
     )

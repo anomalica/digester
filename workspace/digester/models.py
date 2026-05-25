@@ -16,11 +16,16 @@ class NodeType(str, Enum):
     organisation = "organisation"
     place = "place"
     event = "event"
-    matter = "matter"
+    matter = "matter"  # ADR 0028 deprecates; kept for the 157 unmigrated matters
     object = "object"
     document = "document"
+    concept = "concept"
     record = "record"
     claim = "claim"
+    # ADR 0028 additions: split out from matter / organisation
+    programme = "programme"
+    investigation = "investigation"
+    pattern = "pattern"
 
 
 class ClaimType(str, Enum):
@@ -30,6 +35,19 @@ class ClaimType(str, Enum):
     opinion = "opinion"
     measurement = "measurement"
     administrative = "administrative"
+
+
+class ClaimRole(str, Enum):
+    """Narrative function a claim plays in an article (ADR 0028).
+
+    Orthogonal to ClaimType, which captures epistemic quality. Optional -
+    most claims play no narrative role and leave the field null.
+    """
+
+    official_explanation = "official_explanation"
+    witness_testimony = "witness_testimony"
+    investigation_finding = "investigation_finding"
+    cover_up_evidence = "cover_up_evidence"
 
 
 class AttestationLevel(str, Enum):
@@ -60,6 +78,8 @@ class Record(BaseModel):
     reference: str | None = None
     date: str | None = None
     producer_id: str | None = None
+    content_hash: str | None = None
+    friendly_name: str | None = None
     metadata: dict | None = None
     created_at: datetime | None = None
 
@@ -71,6 +91,7 @@ class Claim(BaseModel):
     content: str
     original_excerpt: str | None = None
     claim_type: ClaimType
+    claim_role: ClaimRole | None = None
     attestation: AttestationLevel
     record_id: str
     speaker_id: str | None = None
@@ -100,6 +121,7 @@ class ExtractedClaim(BaseModel):
     content: str
     original_excerpt: str | None = None
     claim_type: ClaimType
+    claim_role: ClaimRole | None = None
     attestation: AttestationLevel
     speaker: str | None = None
     location_in_record: str | None = None
@@ -118,3 +140,7 @@ class ExtractionResult(BaseModel):
     record_producer: str | None = None
     nodes: list[ExtractedNode] = Field(default_factory=list)
     claims: list[ExtractedClaim] = Field(default_factory=list)
+    # Set by the model when it judges that further extraction from this chunk
+    # would only yield trivial/marginal/duplicate items. The iterative loop
+    # uses this as the primary stopping signal; the count floor is a backstop.
+    extraction_complete: bool = False

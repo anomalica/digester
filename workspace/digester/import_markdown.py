@@ -6,6 +6,8 @@ markdown is the source of truth; the database is derived from it.
 
 from __future__ import annotations
 
+import os
+import re
 import sqlite3
 
 from digester.database import (
@@ -16,8 +18,245 @@ from digester.database import (
     insert_node,
     insert_record,
 )
-from digester.matching import match_node
+from digester.matching import match_node, normalise_node_name
 from digester.models import Claim, Node, Record
+
+
+# Patterns that mark a node name as unusable:
+# - "(redacted)" / "(REDACTED)" anywhere in the name (no person to extract)
+# - trailing "(person)" / "(organisation)" / "(document)" / "(matter)" / etc.
+#   (type-in-parens artefact - the model misread the acronym-parens rule)
+_REDACTED_RE = re.compile(r"\([Rr][Ee][Dd][Aa][Cc][Tt][Ee][Dd]\)")
+_TYPE_SUFFIX_RE = re.compile(
+    r"\s*\((person|organisation|place|event|matter|object|document|concept|record)\)\s*$",
+    re.IGNORECASE,
+)
+
+# Month-name -> 2-digit ISO month, used to rewrite "14 November 2004" forms in
+# node names to "2004-11-14" deterministically when the model leaves them as
+# prose despite the rule.
+_MONTH_NAMES = {
+    "january": "01",
+    "february": "02",
+    "march": "03",
+    "april": "04",
+    "may": "05",
+    "june": "06",
+    "july": "07",
+    "august": "08",
+    "september": "09",
+    "october": "10",
+    "november": "11",
+    "december": "12",
+}
+_SPELLED_DATE_DAY_FIRST_RE = re.compile(
+    r"\b(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\b",
+    re.IGNORECASE,
+)
+_SPELLED_DATE_MONTH_YEAR_RE = re.compile(
+    r"\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\b",
+    re.IGNORECASE,
+)
+
+
+def _node_name_is_unusable(name: str) -> str | None:
+    """Return a short reason string if the name should be rejected, else None."""
+    if _REDACTED_RE.search(name):
+        return "contains '(redacted)'"
+    if _TYPE_SUFFIX_RE.search(name):
+        return "ends with parens-type suffix like '(person)'"
+    return None
+
+
+def _normalise_spelled_dates(name: str) -> str:
+    """Rewrite '14 November 2004' -> '2004-11-14' and 'November 2004' -> '2004-11'."""
+
+    def _sub_day(m: "re.Match[str]") -> str:
+        day = int(m.group(1))
+        month = _MONTH_NAMES[m.group(2).lower()]
+        year = m.group(3)
+        return f"{year}-{month}-{day:02d}"
+
+    def _sub_my(m: "re.Match[str]") -> str:
+        month = _MONTH_NAMES[m.group(1).lower()]
+        year = m.group(2)
+        return f"{year}-{month}"
+
+    out = _SPELLED_DATE_DAY_FIRST_RE.sub(_sub_day, name)
+    out = _SPELLED_DATE_MONTH_YEAR_RE.sub(_sub_my, out)
+    return out
+
+
+def _codename_roots(codenames: set[str]) -> set[str]:
+    """Extract the distinguishing prefix word of each codename.
+
+    The pre-pass tends to return codenames in numbered form ("FASTEAGLE 01",
+    "FASTEAGLE 02"); rejecting a node named "FASTEAGLE Flight" needs the
+    root token "FASTEAGLE". For a single-token codename ("Poison") the root
+    is the codename itself. Codenames with a leading non-alphabetic token
+    are skipped.
+    """
+    roots = set()
+    for cn in codenames:
+        if not cn:
+            continue
+        tokens = cn.strip().split()
+        first = tokens[0] if tokens else ""
+        # Only treat distinctive uppercase / proper-noun tokens as roots, to
+        # avoid spurious matches on common words.
+        if first and (first.isupper() or first[0].isupper()) and len(first) >= 4:
+            roots.add(first)
+        # Always include the full codename string too (covers "Tic Tac" cases
+        # where the multi-token form is the distinguishing identifier).
+        roots.add(cn)
+    return roots
+
+
+def _build_terminology_enforcers(terminology: dict | None):
+    """Build per-document enforcers from the terminology pre-pass result.
+
+    Returns (codename_roots_set, acronym_expansions, _normalise_spelled_dates).
+    - codename_roots_set: distinctive root words extracted from codenames so
+      "FASTEAGLE 01" codename also rejects "FASTEAGLE Flight" nodes.
+    - acronym_expansions: dict of ACRONYM -> "Full Form (ACRONYM)" filtered
+      to only safe-to-substitute acronyms (no parens in expansion - those
+      look descriptive, not lexical, e.g. "SSN-724 -> USS Louisville (nuclear
+      fast attack submarine hull number)").
+    """
+    if not terminology:
+        return set(), {}, _normalise_spelled_dates
+    raw_codenames = {
+        (c.get("codename") or "").strip()
+        for c in (terminology.get("codenames") or [])
+        if c.get("codename")
+    }
+    codename_roots = _codename_roots(raw_codenames)
+    expansions = {}
+    for a in terminology.get("acronyms") or []:
+        acro = (a.get("acronym") or "").strip()
+        full = (a.get("expansion") or "").strip()
+        if not (acro and full):
+            continue
+        # Skip entries that aren't real acronym expansions:
+        # - "SSN-724 -> USS Louisville (nuclear fast attack submarine hull number)"
+        #   the parens indicate descriptive text; blind substitution duplicates
+        #   ship names. Anything matching "Full Name (descriptive)" pattern is
+        #   not a simple acronym expansion - skip.
+        if "(" in full:
+            continue
+        # Skip designator-style keys (CSG-11, VFA-41); these are handled by
+        # the global squadron normaliser. Keeping them here just produces
+        # overlap with the bare-acronym entries (CSG vs CSG-11).
+        if re.search(r"-\d", acro):
+            continue
+        expansions[acro] = f"{full} ({acro})"
+    return codename_roots, expansions, _normalise_spelled_dates
+
+
+def _apply_doc_terminology(
+    name: str, codenames: set[str], expansions: dict[str, str]
+) -> tuple[str, str | None]:
+    """Apply per-document terminology to a node name.
+
+    Returns (rewritten_name, reject_reason). reject_reason is non-None if the
+    name should be rejected (e.g. matches a codename).
+    """
+    if not name:
+        return name, None
+
+    # Reject if the name contains a codename as a whole token. Codenames
+    # may appear inside descriptive prose claim text but never as the
+    # canonical identifier of a node.
+    for cn in codenames:
+        if not cn:
+            continue
+        if re.search(rf"\b{re.escape(cn)}\b", name):
+            return name, f"contains codename '{cn}'"
+
+    # Expand per-document acronyms in the name. Apply longer acronyms first
+    # so "CSG-11" wins over bare "CSG". Use a negative lookahead so the bare
+    # acronym never matches inside a hyphen-numbered designator like
+    # "CSG-11" or "VFA-41" - those are handled by the global squadron
+    # normaliser, and matching "CSG" inside "(CSG-11)" creates nested-parens
+    # nonsense.
+    out = name
+    for acro in sorted(expansions, key=len, reverse=True):
+        full_form = expansions[acro]
+        if full_form in out:
+            continue  # already expanded
+        out = re.sub(rf"\b{re.escape(acro)}\b(?!-\d)", full_form, out, count=1)
+
+    # Normalise spelled-out months to ISO.
+    out = _normalise_spelled_dates(out)
+    return out, None
+
+
+# Path to anomalica-ingests, used to look up content_hash from the friendly
+# filename of a digest YAML. Override via env var when running outside the
+# container.
+_INGESTS_DIR = os.environ.get(
+    "ANOMALICA_INGESTS_DIR",
+    "/home/nonroot/ingests",
+)
+
+
+def _lookup_ingest_metadata(
+    record_title: str, source_path: object
+) -> tuple[str | None, str | None]:
+    """Given an extraction's metadata, find the matching ingest's
+    content_hash and friendly filename stem.
+
+    The digest YAML filename equals the ingest's friendly name (mounted via
+    anomalica-ingests/records/<friendly>.md as a symlink into store/{hash}.md).
+    We resolve by exact filename match first, then by record_title scan as a
+    fallback.
+    """
+    from pathlib import Path as _P
+
+    records_dir = _P(_INGESTS_DIR) / "records"
+    if not records_dir.exists():
+        return None, None
+
+    candidate_stem: str | None = None
+    if source_path:
+        sp = _P(str(source_path))
+        # digest YAMLs are named "<stem>.yaml"; ingest symlinks are
+        # "<stem>.md". Same stem.
+        candidate_stem = sp.stem
+
+    if candidate_stem:
+        ingest = records_dir / f"{candidate_stem}.md"
+        if ingest.is_symlink() or ingest.exists():
+            try:
+                target = ingest.resolve()
+                with open(target) as f:
+                    frontmatter_text = f.read().split("---", 2)[1]
+                import yaml as _y
+
+                fm = _y.safe_load(frontmatter_text) or {}
+                ch = fm.get("content_hash")
+                return ch, candidate_stem
+            except (OSError, IndexError):
+                pass
+
+    # Fallback: scan every ingest record/symlink for a frontmatter title
+    # match. Slow on a big corpus but unambiguous.
+    import yaml as _y
+
+    for ingest in records_dir.glob("*.md"):
+        try:
+            target = ingest.resolve() if ingest.is_symlink() else ingest
+            with open(target) as f:
+                head = f.read(8192)
+            if "title:" not in head:
+                continue
+            frontmatter_text = head.split("---", 2)[1] if "---" in head else ""
+            fm = _y.safe_load(frontmatter_text) or {}
+            if fm.get("title") == record_title:
+                return fm.get("content_hash"), ingest.stem
+        except (OSError, IndexError):
+            continue
+    return None, None
 
 
 def import_extraction(
@@ -25,6 +264,7 @@ def import_extraction(
     parsed: dict,
     section: str = "domain",
     lookup_conns: list[sqlite3.Connection] | None = None,
+    source_path: str | None = None,
     on_progress: callable = None,
 ) -> dict:
     """Import a parsed extraction markdown into the database.
@@ -46,9 +286,72 @@ def import_extraction(
     counts = {
         "nodes_created": 0,
         "nodes_matched": 0,
+        "nodes_rejected": 0,
         "claims_created": 0,
+        "claims_rejected": 0,
         "record_id": None,
     }
+
+    # Drop unusable nodes (redacted / type-in-parens) before any matching.
+    # Track their ids so claims referencing them can be dropped too.
+    # Also normalise known unexpanded acronyms (VFA-41 -> Strike Fighter
+    # Squadron 41 (VFA-41)) deterministically, since the extraction model
+    # ignores rule 4b for these. Then apply the per-document terminology
+    # from the pre-pass: reject codename-named nodes, expand per-doc
+    # acronyms, normalise spelled-out months in node names.
+    codenames, doc_acronyms, _ = _build_terminology_enforcers(parsed.get("terminology"))
+
+    rejected_md_ids: set[str] = set()
+    name_rewrites: dict[str, str] = {}
+    usable_nodes = []
+    for node_def in parsed["nodes"]:
+        reason = _node_name_is_unusable(node_def["name"])
+        if reason:
+            log(f"  Rejected node: {node_def['name']} ({reason})")
+            rejected_md_ids.add(node_def["id"])
+            counts["nodes_rejected"] += 1
+            continue
+        original_name = node_def["name"]
+        # First the global expansions (squadron designators etc.).
+        normalised = normalise_node_name(original_name)
+        # Then the per-document codename/acronym/date enforcement.
+        normalised, doc_reason = _apply_doc_terminology(
+            normalised, codenames, doc_acronyms
+        )
+        if doc_reason:
+            log(f"  Rejected node: {original_name} ({doc_reason})")
+            rejected_md_ids.add(node_def["id"])
+            counts["nodes_rejected"] += 1
+            continue
+        if normalised != original_name:
+            log(f"  Normalised: {original_name} -> {normalised}")
+            node_def = {**node_def, "name": normalised}
+            name_rewrites[original_name] = normalised
+        usable_nodes.append(node_def)
+    parsed = {**parsed, "nodes": usable_nodes}
+
+    # Apply the same rewrites to refs and speaker fields inside claims so
+    # they still resolve against the (now-normalised) node names.
+    def _apply_rewrites(claims):
+        rewritten = []
+        for c in claims:
+            c = dict(c)
+            if c.get("speaker") in name_rewrites:
+                c["speaker"] = name_rewrites[c["speaker"]]
+            c["node_references"] = [
+                name_rewrites.get(r, r) for r in c.get("node_references", [])
+            ]
+            rewritten.append(c)
+        return rewritten
+
+    if name_rewrites:
+        parsed = {
+            **parsed,
+            "domain_claims": _apply_rewrites(parsed.get("domain_claims", [])),
+            "infrastructure_claims": _apply_rewrites(
+                parsed.get("infrastructure_claims", [])
+            ),
+        }
 
     # Create or find record
     record_title = fm.get("record_title", "Untitled")
@@ -57,6 +360,18 @@ def import_extraction(
         record = existing_record
         log(f"  Existing record: {record.title} [{record.id[:8]}]")
     else:
+        # Resolve the ingest content_hash and friendly_name for this record
+        # so downstream consumers (assembler, workbench) can link claim ->
+        # source-record verifiably. The digest YAML may carry content_hash
+        # directly (newer emissions) or we look it up via the friendly
+        # filename match against anomalica-ingests/records/ (the deterministic
+        # backfill for older YAMLs).
+        content_hash = fm.get("content_hash")
+        friendly_name = fm.get("friendly_name")
+        if not content_hash:
+            content_hash, friendly_name = _lookup_ingest_metadata(
+                fm.get("record_title", ""), source_path
+            )
         record = insert_record(
             conn,
             Record(
@@ -64,6 +379,8 @@ def import_extraction(
                 title=record_title,
                 reference=fm.get("record_reference"),
                 date=str(fm["record_date"]) if fm.get("record_date") else None,
+                content_hash=content_hash,
+                friendly_name=friendly_name,
             ),
         )
         log(f"  Record: {record.title} [{record.id[:8]}]")
@@ -104,9 +421,11 @@ def import_extraction(
                 existing_name = lookup_conn.execute(
                     "SELECT name FROM nodes WHERE id = ?", (node_id,)
                 ).fetchone()[0]
-                if m[1] == "fuzzy" and name != existing_name:
+                if m[1] in ("fuzzy", "acronym") and name != existing_name:
                     insert_alias(conn, name, node_id)
-                    log(f"  Matched: {name} -> {existing_name} [{node_id[:8]}]")
+                    log(
+                        f"  Matched ({m[1]}): {name} -> {existing_name} [{node_id[:8]}]"
+                    )
                 else:
                     log(f"  Existing node: {name} ({node_type}) [{node_id[:8]}]")
 

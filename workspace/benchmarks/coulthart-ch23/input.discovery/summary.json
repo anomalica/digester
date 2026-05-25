@@ -1,0 +1,3004 @@
+[
+  {
+    "strategy": "combined",
+    "model": "sonnet",
+    "rounds": [
+      {
+        "new": 119,
+        "elapsed_s": 102.21455502510071,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 27614,
+        "cache_creation_input_tokens": 16666,
+        "output_tokens": 5212,
+        "cost_usd": 0.15041870000000002,
+        "round": 1,
+        "model_complete": true
+      }
+    ],
+    "total_calls": 1,
+    "total_elapsed_s": 102.21455502510071,
+    "total_input_tokens": 5,
+    "total_output_tokens": 5212,
+    "total_cache_read_input_tokens": 27614,
+    "total_cache_creation_input_tokens": 16666,
+    "total_cost_usd": 0.15041870000000002,
+    "found": {
+      "people": [
+        {
+          "name": "Pais, Salvatore",
+          "role": "US Navy aerospace engineer who filed exotic patents including for a craft using inertial mass reduction"
+        },
+        {
+          "name": "Einstein, Albert",
+          "role": "Physicist who predicted gravitational waves in 1916 as part of his Theory of Relativity"
+        },
+        {
+          "name": "Newton, Isaac",
+          "role": "Physicist who first described gravity in 1687 but could not explain its mechanism"
+        },
+        {
+          "name": "Kobitz, Nat",
+          "role": "Late former Director of Science and Technology Development for the US Navy; told Coulthart about a UAP reverse-engineering programme"
+        },
+        {
+          "name": "Puthoff, Harold",
+          "role": "Physicist cited by Pais regarding vacuum polarisation; associated with TTSA"
+        },
+        {
+          "name": "Justice, Steve",
+          "role": "Then Skunk Works Lockheed Martin Program Director for Advanced Systems; announced TTSA's Advanced Electromagnetic Vehicle project"
+        },
+        {
+          "name": "Mellon, Christopher",
+          "role": "Former Defence Department insider who expressed scepticism about Pais's patents and US-origin UAPs"
+        },
+        {
+          "name": "Sheehy, James",
+          "role": "Chief Technology Officer of the US Naval Aviation Enterprise who vouched for Pais's patents as operable"
+        },
+        {
+          "name": "Cook, Nick",
+          "role": "Aerospace journalist and aviation editor of Jane's Defence Weekly; author of The Hunt for Zero Point; mentored Coulthart"
+        },
+        {
+          "name": "Trimble, George S.",
+          "role": "Former vice president of the Glenn L. Martin Company who predicted anti-gravity breakthroughs in 1957"
+        },
+        {
+          "name": "Kopparapu, Ravi",
+          "role": "Scientist who co-authored a Scientific American piece calling for scientific investigation of UAPs"
+        },
+        {
+          "name": "Haqq-Misra, Jacob",
+          "role": "Scientist who co-authored a Scientific American piece calling for scientific investigation of UAPs"
+        },
+        {
+          "name": "Blumenthal, Ralph",
+          "role": "New York Times reporter who covered UAP stories including alien materials allegations"
+        },
+        {
+          "name": "Kean, Leslie",
+          "role": "New York Times journalist who reported on UAPs and crash retrievals"
+        },
+        {
+          "name": "Trump, Donald",
+          "role": "US President who made cryptic comments about Roswell in 2020"
+        },
+        {
+          "name": "Trump, Donald Jr.",
+          "role": "Son of President Trump who asked him about Roswell on camera"
+        },
+        {
+          "name": "Bender, Bryan",
+          "role": "Politico journalist who noted UFOs are now on the agenda"
+        },
+        {
+          "name": "Davis, Eric",
+          "role": "Defence and intelligence insider who told Congress that UAPs are off-world vehicles not made on earth"
+        },
+        {
+          "name": "Elizondo, Luis",
+          "role": "Intelligence insider who made categorical statements about the US recovering non-human technology"
+        },
+        {
+          "name": "Reid, Harry",
+          "role": "Former US Senator who made qualified assertions about US recovery of non-human technology"
+        },
+        {
+          "name": "DeLonge, Tom",
+          "role": "Punk rock musician and TTSA founder whose claims were corroborated by leaked DNC emails"
+        },
+        {
+          "name": "Podesta, John",
+          "role": "Confidant of Presidents Clinton and Obama; exchanged emails with Tom DeLonge about UAP disclosure"
+        },
+        {
+          "name": "Clinton, Hillary",
+          "role": "Presidential candidate whose campaign planned meetings on UAP disclosure"
+        },
+        {
+          "name": "Tingley, Brett",
+          "role": "Journalist who quoted an expert criticising Pais's patents as nonsense"
+        },
+        {
+          "name": "Coulthart, Ross",
+          "role": "Author and investigative journalist researching UAPs and Pais's patents"
+        }
+      ],
+      "organisations": [
+        {
+          "name": "US Navy",
+          "role": "Assignee of Pais's patents and institutional backer of his operability claims"
+        },
+        {
+          "name": "Naval Air Warfare Centre Aircraft Division",
+          "role": "US Navy division where Dr Pais worked, located on the Patuxent River"
+        },
+        {
+          "name": "Naval Aviation Enterprise",
+          "role": "US Navy organisation whose Chief Technology Officer vouched for Pais's patents"
+        },
+        {
+          "name": "US Patent Office",
+          "role": "Body that reviewed and ruled on Pais's patent applications"
+        },
+        {
+          "name": "To The Stars Academy",
+          "role": "Organisation co-founded by Tom DeLonge campaigning for UAP disclosure; announced Advanced Electromagnetic Vehicle project"
+        },
+        {
+          "name": "Lockheed Martin",
+          "role": "Aerospace corporation linked to Skunk Works and UAP/anti-gravity research"
+        },
+        {
+          "name": "Skunk Works",
+          "role": "Lockheed Martin's advanced development division referenced in context of secret craft development"
+        },
+        {
+          "name": "Glenn L. Martin Company",
+          "role": "Aerospace company where George Trimble was vice president; later merged into Lockheed Martin"
+        },
+        {
+          "name": "Laser Interferometer Gravitational-Wave Observatory",
+          "role": "Scientific facility with receivers in Louisiana and Washington that detected gravitational waves"
+        },
+        {
+          "name": "Senate Intelligence Committee",
+          "role": "US Senate body that demanded a report on UAP data from intelligence agencies in late 2020"
+        },
+        {
+          "name": "New York Times",
+          "role": "Newspaper that published stories on UAPs, Tic Tac, and alleged alien materials retrieval"
+        },
+        {
+          "name": "Scientific American",
+          "role": "Scientific publication that published an article calling for investigation of UAPs in July 2020"
+        },
+        {
+          "name": "Politico",
+          "role": "News outlet whose reporter Bryan Bender commented on UAPs being on the agenda"
+        },
+        {
+          "name": "Project Unity",
+          "role": "Media outlet that interviewed Blumenthal and Kean about their UAP reporting"
+        },
+        {
+          "name": "Jane's Defence Weekly",
+          "role": "Leading international defence journal where Nick Cook served as aviation editor"
+        },
+        {
+          "name": "Democratic National Committee",
+          "role": "Organisation whose leaked emails corroborated Tom DeLonge's claims about UAP disclosure meetings"
+        },
+        {
+          "name": "US Air Force",
+          "role": "Referenced for its Roswell explanation and alleged deception of Defence Department oversight"
+        },
+        {
+          "name": "Department of Navy",
+          "role": "Parent department of Naval Air Systems Command, cited in Sheehy's credentials"
+        },
+        {
+          "name": "Naval Air Systems Command",
+          "role": "Navy command for which Sheehy served as technical authority for research and transition"
+        }
+      ],
+      "places": [
+        {
+          "name": "USA, Louisiana, LIGO detector site",
+          "role": "Location of one of the LIGO gravitational wave receivers"
+        },
+        {
+          "name": "USA, Washington, LIGO detector site",
+          "role": "Location of one of the LIGO gravitational wave receivers"
+        },
+        {
+          "name": "USA, Maryland, Naval Air Station Patuxent River",
+          "role": "Location of the Naval Air Warfare Centre Aircraft Division where Pais worked"
+        },
+        {
+          "name": "USA, Nevada, Area 51",
+          "role": "Secret military installation referenced in context of black world projects and UAP testing"
+        },
+        {
+          "name": "USA, California, China Lake",
+          "role": "Naval test facility referenced as an example of how secret technology is kept hidden"
+        },
+        {
+          "name": "USA, New Mexico, Roswell",
+          "role": "Site of the mythical 1947 UFO crash referenced in Trump's comments"
+        },
+        {
+          "name": "China, Hubei, Three Gorges Dam",
+          "role": "World's largest power station, referenced to contextualise the scale of Pais's fusion reactor claims"
+        }
+      ],
+      "events": [
+        {
+          "name": "Gravitational wave cosmic collision (approx. 1.3 billion years ago)",
+          "role": "Collision of two black holes that produced the gravitational waves later detected by LIGO"
+        },
+        {
+          "name": "Newton describes gravity (1687)",
+          "role": "Isaac Newton's first formal observation of gravity, unable to explain its mechanism"
+        },
+        {
+          "name": "Einstein predicts gravitational waves (1916)",
+          "role": "Einstein's prediction of gravity waves as part of his Theory of Relativity"
+        },
+        {
+          "name": "LIGO gravitational wave detection (14 September 2015)",
+          "role": "First ever detection of gravitational waves from a cosmic collision"
+        },
+        {
+          "name": "LIGO discovery announcement (February 2016)",
+          "role": "Scientific announcement of the first gravitational wave detection"
+        },
+        {
+          "name": "Nobel Prize for gravitational wave discovery (2017)",
+          "role": "Nobel Prize awarded for the LIGO gravitational wave detection"
+        },
+        {
+          "name": "Pais spacecraft patent application (April 2016)",
+          "role": "Dr Pais filed patent application for a craft using inertial mass reduction driven by gravity waves"
+        },
+        {
+          "name": "TTSA launch (October 2017)",
+          "role": "To The Stars Academy public launch at which Steve Justice announced the Advanced Electromagnetic Vehicle project"
+        },
+        {
+          "name": "Hybrid craft patent approval (2018)",
+          "role": "US Patent Office approved Pais's hybrid aerospace-undersea craft patent"
+        },
+        {
+          "name": "Pais patent examiner interview (July 2018)",
+          "role": "Interview in which Pais and a navy attorney asserted operability of the High Energy Electromagnetic Field Generator"
+        },
+        {
+          "name": "Pais Plasma Compression Fusion Device patent filed (March 2018)",
+          "role": "Pais filed patent application for a compact fusion reactor"
+        },
+        {
+          "name": "Pais Plasma Compression Fusion Device patent published (September 2019)",
+          "role": "Publication of Pais's compact fusion reactor patent application"
+        },
+        {
+          "name": "Pais paper presented (January 2019)",
+          "role": "Pais presented paper on Room Temperature Superconducting System for a Hybrid Aerospace Undersea Craft"
+        },
+        {
+          "name": "Roswell UFO crash (1947)",
+          "role": "Alleged UFO crash in New Mexico referenced in Trump's comments"
+        },
+        {
+          "name": "Trump Roswell comment (June 2020)",
+          "role": "President Trump made cryptic comments about Roswell in interview with his son"
+        },
+        {
+          "name": "Mellon tweet on Pais patents (July 2020)",
+          "role": "Christopher Mellon tweeted scepticism about Pais's patents and denied UAPs are US craft"
+        },
+        {
+          "name": "Scientific American UAP article (July 2020)",
+          "role": "Kopparapu and Haqq-Misra called for scientific investigation of UAPs in Scientific American"
+        },
+        {
+          "name": "New York Times UAP story (24 July 2020)",
+          "role": "NYT story featuring allegations the US had retrieved alien materials"
+        },
+        {
+          "name": "Senate Intelligence Committee UAP report demand (late 2020)",
+          "role": "Senate Intelligence Committee demanded intelligence agencies compile a report on UAP data"
+        }
+      ],
+      "matters": [
+        {
+          "name": "Pais patent series (2016\u20132019)",
+          "role": "Ongoing series of exotic patent applications by Dr Pais assigned to the US Navy"
+        },
+        {
+          "name": "US anti-gravity research programme",
+          "role": "Long-running secret US research into anti-gravity, alleged to have continued since the 1960s"
+        },
+        {
+          "name": "UAP reverse-engineering programme",
+          "role": "Alleged US programme to reverse-engineer recovered non-human craft, as described by Kobitz"
+        },
+        {
+          "name": "USS Nimitz Tic Tac UAP encounter",
+          "role": "US Navy pilots' tracking and videoing of a Tic Tac UAP off the west coast, approx. 2004"
+        },
+        {
+          "name": "UAP disclosure effort",
+          "role": "Ongoing campaign by TTSA and insiders to pressure US government to disclose UAP information"
+        },
+        {
+          "name": "Crash retrieval programme",
+          "role": "Alleged classified US programme involving recovery of non-human craft or materials"
+        },
+        {
+          "name": "Nazi anti-gravity research origins",
+          "role": "Alleged origins of US anti-gravity research in discoveries made by Nazi scientists during WWII"
+        },
+        {
+          "name": "Coulthart UAP investigation",
+          "role": "Ross Coulthart's multi-year investigative research into UAPs and related government secrecy"
+        },
+        {
+          "name": "UAP Senate report (due June 2021)",
+          "role": "Report demanded by Senate Intelligence Committee on UAP data, expected to be delayed and redacted"
+        }
+      ],
+      "objects": [
+        {
+          "name": "Tic Tac UAP",
+          "role": "Unidentified craft tracked and videoed by USS Nimitz pilots; shape resembles Pais's hybrid craft schematic"
+        },
+        {
+          "name": "Pais hybrid aerospace-undersea craft",
+          "role": "Proposed triangular craft using inertial mass reduction device described in Pais's patent"
+        },
+        {
+          "name": "Room temperature superconductor (Pais)",
+          "role": "Pais's patented device claimed to achieve superconductivity at room temperature"
+        },
+        {
+          "name": "Electro-magnetic Forcefield Generator (Pais)",
+          "role": "Pais's patented device claimed to generate an impenetrable defensive shield"
+        },
+        {
+          "name": "High Frequency Gravitational Wave Generator (Pais)",
+          "role": "Pais's patented device claimed to generate high frequency gravitational waves"
+        },
+        {
+          "name": "Plasma Compression Fusion Device (Pais)",
+          "role": "Pais's patented compact fusion reactor claimed to produce gigawatt-to-terawatt output"
+        },
+        {
+          "name": "TR3B",
+          "role": "Rumoured super-hypersonic US stealthy anti-gravity craft said to produce plasma for anti-gravity"
+        },
+        {
+          "name": "Advanced Electromagnetic Vehicle (TTSA)",
+          "role": "Revolutionary vehicle announced by TTSA at its 2017 launch, said to alter the space-time metric"
+        },
+        {
+          "name": "Go Fast UAP",
+          "role": "Named UAP cited by Davis as an off-world vehicle not made on earth"
+        },
+        {
+          "name": "Gimbal UAP",
+          "role": "Named UAP cited by Davis as an off-world vehicle not made on earth"
+        },
+        {
+          "name": "Bonded metal technology (crash retrieval)",
+          "role": "Crafted metal material beyond known human technology reportedly shown to Kobitz in a crash retrieval programme"
+        }
+      ],
+      "documents": [
+        {
+          "name": "Pais spacecraft patent application (April 2016)",
+          "role": "Patent application for a craft using an inertial mass reduction device, filed by Pais with the US Navy as assignee"
+        },
+        {
+          "name": "Pais Room Temperature Superconductor patent",
+          "role": "Patent application for a room temperature superconductor, first in Pais's series"
+        },
+        {
+          "name": "Pais Electro-magnetic Forcefield Generator patent",
+          "role": "Patent application for an electromagnetic forcefield generator, second in Pais's series"
+        },
+        {
+          "name": "Pais High Frequency Gravitational Wave Generator patent",
+          "role": "Patent application for a high frequency gravitational wave generator, third in Pais's series"
+        },
+        {
+          "name": "Pais Plasma Compression Fusion Device patent (filed March 2018, published September 2019)",
+          "role": "Patent application for a compact fusion reactor"
+        },
+        {
+          "name": "Sheehy appeal letter (room temperature superconductor)",
+          "role": "Letter from Naval Aviation Enterprise CTO James Sheehy vouching that Pais's room temperature superconductor is operable"
+        },
+        {
+          "name": "Pais 2015 scientific paper on superluminal propulsion",
+          "role": "Paper referenced in Pais's spacecraft patent suggesting theoretical possibility of faster-than-light craft in a Special Relativity framework"
+        },
+        {
+          "name": "Pais paper on Room Temperature Superconducting System (January 2019)",
+          "role": "Paper presented by Pais making claims about a room temperature superconducting system for a hybrid aerospace undersea craft"
+        },
+        {
+          "name": "The Hunt for Zero Point (book by Nick Cook)",
+          "role": "Book by Nick Cook detailing his ten-year investigation into the science of anti-gravity"
+        },
+        {
+          "name": "In Plain Sight (book by Ross Coulthart)",
+          "role": "Book by Ross Coulthart investigating UAPs and government secrecy, of which this is Chapter 23"
+        },
+        {
+          "name": "Leaked Democratic National Committee emails",
+          "role": "Leaked emails corroborating Tom DeLonge's claims about meetings with senior officials on UAP disclosure"
+        },
+        {
+          "name": "New York Times UAP story (24 July 2020)",
+          "role": "NYT article featuring allegations the US retrieved alien materials, with Blumenthal's online comments"
+        },
+        {
+          "name": "Scientific American UAP article (July 2020)",
+          "role": "Article by Kopparapu and Haqq-Misra calling for scientific investigation of UAPs"
+        },
+        {
+          "name": "Mellon email to private news group",
+          "role": "Email in which Christopher Mellon addressed speculation about the TR3B and denied it was made by Lockheed"
+        },
+        {
+          "name": "Project Unity interview with Blumenthal and Kean",
+          "role": "Interview in which the two NYT journalists discussed their UAP reporting including crash retrievals"
+        },
+        {
+          "name": "US Invention Secrecy Act",
+          "role": "US law under which the navy could have classified Pais's patents but chose not to"
+        },
+        {
+          "name": "Compact Fusion Reactor journal publication",
+          "role": "Prestigious journal article in which Pais's compact fusion reactor design was accepted for publication"
+        }
+      ],
+      "concepts": [
+        {
+          "name": "Gravitational waves",
+          "role": "Ripples in space-time predicted by Einstein in 1916 and first detected in 2015; central to Pais's patent claims"
+        },
+        {
+          "name": "Theory of Relativity",
+          "role": "Einstein's framework predicting gravitational waves and setting the speed of light as the cosmic speed limit"
+        },
+        {
+          "name": "Special Relativity",
+          "role": "Einstein's framework cited by Pais in his paper on superluminal craft propulsion"
+        },
+        {
+          "name": "Superconductivity",
+          "role": "Phenomenon of zero electrical resistance in materials; Pais claimed room-temperature superconductivity"
+        },
+        {
+          "name": "Room temperature superconductivity",
+          "role": "As-yet unachieved phenomenon of superconductivity at ambient temperature, claimed by Pais"
+        },
+        {
+          "name": "Inertial mass reduction",
+          "role": "Proposed mechanism in Pais's craft patent for reducing a craft's mass via electromagnetic fields"
+        },
+        {
+          "name": "Vacuum polarisation",
+          "role": "Quantum phenomenon cited by Pais (referencing Puthoff) as enabling removal of energy-mass from a system"
+        },
+        {
+          "name": "Zero-point energy",
+          "role": "Implicit in references to quantum field fluctuations in the vacuum exploited by Pais's proposed system"
+        },
+        {
+          "name": "Anti-gravity propulsion",
+          "role": "Concept of craft propulsion by countering or manipulating gravity; central theme of the chapter"
+        },
+        {
+          "name": "Nuclear fusion",
+          "role": "Process underlying Pais's claimed compact fusion reactor patent"
+        },
+        {
+          "name": "Superluminal propulsion",
+          "role": "Faster-than-light travel proposed by Pais in his 2015 paper and spacecraft patent"
+        },
+        {
+          "name": "Pais Effect",
+          "role": "Phenomenon claimed by Pais: controlled motion of electrically charged matter under accelerated vibration or spin"
+        }
+      ]
+    },
+    "totals_per_type": {
+      "people": 25,
+      "organisations": 19,
+      "places": 7,
+      "events": 19,
+      "matters": 9,
+      "objects": 11,
+      "documents": 17,
+      "concepts": 12
+    }
+  },
+  {
+    "strategy": "per_type",
+    "model": "sonnet",
+    "rounds": [
+      {
+        "new": 25,
+        "elapsed_s": 28.33993887901306,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 25143,
+        "cache_creation_input_tokens": 12320,
+        "output_tokens": 1030,
+        "cost_usd": 0.06995589999999999,
+        "type": "person",
+        "round": 1,
+        "model_complete": false
+      },
+      {
+        "new": 0,
+        "elapsed_s": 18.311838626861572,
+        "input_tokens": 6,
+        "cache_read_input_tokens": 40561,
+        "cache_creation_input_tokens": 11931,
+        "output_tokens": 374,
+        "cost_usd": 0.06353255,
+        "type": "person",
+        "round": 2,
+        "model_complete": true
+      },
+      {
+        "new": 20,
+        "elapsed_s": 24.85696315765381,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 25115,
+        "cache_creation_input_tokens": 12090,
+        "output_tokens": 808,
+        "cost_usd": 0.065731,
+        "type": "organisation",
+        "round": 1,
+        "model_complete": false
+      },
+      {
+        "new": 5,
+        "elapsed_s": 15.583425283432007,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 25516,
+        "cache_creation_input_tokens": 11815,
+        "output_tokens": 319,
+        "cost_usd": 0.057679049999999996,
+        "type": "organisation",
+        "round": 2,
+        "model_complete": true
+      },
+      {
+        "new": 10,
+        "elapsed_s": 20.732437133789062,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 25350,
+        "cache_creation_input_tokens": 11985,
+        "output_tokens": 579,
+        "cost_usd": 0.06209774999999999,
+        "type": "place",
+        "round": 1,
+        "model_complete": false
+      },
+      {
+        "new": 0,
+        "elapsed_s": 16.01234269142151,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 25722,
+        "cache_creation_input_tokens": 11846,
+        "output_tokens": 262,
+        "cost_usd": 0.05712009999999999,
+        "type": "place",
+        "round": 2,
+        "model_complete": true
+      },
+      {
+        "new": 25,
+        "elapsed_s": 40.398906230926514,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 25119,
+        "cache_creation_input_tokens": 12780,
+        "output_tokens": 2168,
+        "cost_usd": 0.0887317,
+        "type": "event",
+        "round": 1,
+        "model_complete": false
+      },
+      {
+        "new": 1,
+        "elapsed_s": 28.548214435577393,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 26164,
+        "cache_creation_input_tokens": 12576,
+        "output_tokens": 798,
+        "cost_usd": 0.0682612,
+        "type": "event",
+        "round": 2,
+        "model_complete": true
+      },
+      {
+        "new": 25,
+        "elapsed_s": 35.20415997505188,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 25147,
+        "cache_creation_input_tokens": 12724,
+        "output_tokens": 1431,
+        "cost_usd": 0.0774841,
+        "type": "matter",
+        "round": 1,
+        "model_complete": false
+      },
+      {
+        "new": 5,
+        "elapsed_s": 41.488353967666626,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 25959,
+        "cache_creation_input_tokens": 13300,
+        "output_tokens": 1893,
+        "cost_usd": 0.08722569999999999,
+        "type": "matter",
+        "round": 2,
+        "model_complete": true
+      },
+      {
+        "new": 15,
+        "elapsed_s": 23.554415225982666,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 25101,
+        "cache_creation_input_tokens": 12020,
+        "output_tokens": 740,
+        "cost_usd": 0.06445229999999999,
+        "type": "object",
+        "round": 1,
+        "model_complete": false
+      },
+      {
+        "new": 3,
+        "elapsed_s": 19.64082622528076,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 25532,
+        "cache_creation_input_tokens": 11817,
+        "output_tokens": 458,
+        "cost_usd": 0.05979935,
+        "type": "object",
+        "round": 2,
+        "model_complete": true
+      },
+      {
+        "new": 23,
+        "elapsed_s": 33.913400173187256,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 25145,
+        "cache_creation_input_tokens": 12531,
+        "output_tokens": 1238,
+        "cost_usd": 0.07389375,
+        "type": "document",
+        "round": 1,
+        "model_complete": false
+      },
+      {
+        "new": 2,
+        "elapsed_s": 29.3767569065094,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 26102,
+        "cache_creation_input_tokens": 12432,
+        "output_tokens": 825,
+        "cost_usd": 0.06806659999999999,
+        "type": "document",
+        "round": 2,
+        "model_complete": false
+      },
+      {
+        "new": 4,
+        "elapsed_s": 16.302737712860107,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 21284,
+        "cache_creation_input_tokens": 17053,
+        "output_tokens": 386,
+        "cost_usd": 0.07739495,
+        "type": "document",
+        "round": 3,
+        "model_complete": true
+      },
+      {
+        "new": 45,
+        "elapsed_s": 35.86962080001831,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 25576,
+        "cache_creation_input_tokens": 12989,
+        "output_tokens": 1502,
+        "cost_usd": 0.07989055,
+        "type": "concept",
+        "round": 1,
+        "model_complete": false
+      },
+      {
+        "new": 4,
+        "elapsed_s": 37.624449253082275,
+        "input_tokens": 5,
+        "cache_read_input_tokens": 26200,
+        "cache_creation_input_tokens": 13063,
+        "output_tokens": 1436,
+        "cost_usd": 0.07967625,
+        "type": "concept",
+        "round": 2,
+        "model_complete": true
+      }
+    ],
+    "total_calls": 17,
+    "total_elapsed_s": 465.7587866783142,
+    "total_input_tokens": 86,
+    "total_output_tokens": 16247,
+    "total_cache_read_input_tokens": 444736,
+    "total_cache_creation_input_tokens": 215272,
+    "total_cost_usd": 1.2009927999999999,
+    "found": {
+      "people": [
+        {
+          "name": "Einstein, Albert",
+          "role": "Physicist who predicted gravitational waves in 1916 as part of his Theory of Relativity"
+        },
+        {
+          "name": "Newton, Isaac",
+          "role": "Physicist who first observed gravity in 1687"
+        },
+        {
+          "name": "Pais, Salvatore",
+          "role": "US Navy aerospace engineer who filed patents for exotic propulsion technologies"
+        },
+        {
+          "name": "Kobitz, Nat",
+          "role": "Former Director of Science and Technology Development for the US Navy; told Coulthart about a UAP reverse-engineering program"
+        },
+        {
+          "name": "Puthoff, Harold",
+          "role": "Physicist (Dr Hal Puthoff) referenced in Pais's patent regarding vacuum polarisation; associated with TTSA"
+        },
+        {
+          "name": "Justice, Steve",
+          "role": "Former Skunk Works Lockheed Martin Program Director for Advanced Systems; spoke at TTSA's October 2017 launch"
+        },
+        {
+          "name": "Mellon, Christopher",
+          "role": "Former Defence Department insider and intelligence official who publicly commented on Pais's patents and UAP sightings"
+        },
+        {
+          "name": "Sheehy, James",
+          "role": "Chief Technology Officer of the US Naval Aviation Enterprise who vouched for Pais's patents"
+        },
+        {
+          "name": "Tingley, Brett",
+          "role": "Journalist who quoted an expert criticising Pais's patent claims"
+        },
+        {
+          "name": "Cook, Nick",
+          "role": "Aerospace journalist and former aviation editor of Jane's Defence Weekly; author of The Hunt for Zero Point; mentored Coulthart"
+        },
+        {
+          "name": "Trimble, George S.",
+          "role": "Former vice president of the Glenn L. Martin Company who predicted an anti-gravity breakthrough in the 1950s"
+        },
+        {
+          "name": "Kopparapu, Ravi",
+          "role": "Scientist who co-authored a Scientific American piece calling for scientific investigation of UAPs"
+        },
+        {
+          "name": "Haqq-Misra, Jacob",
+          "role": "Scientist who co-authored a Scientific American piece calling for scientific investigation of UAPs"
+        },
+        {
+          "name": "Blumenthal, Ralph",
+          "role": "New York Times reporter who covered UAP stories and commented on crash retrieval allegations"
+        },
+        {
+          "name": "Kean, Leslie",
+          "role": "New York Times journalist who reported on UAPs and discussed crash retrievals in an interview"
+        },
+        {
+          "name": "Trump, Donald",
+          "role": "US President who made a cryptic comment about the Roswell UFO incident"
+        },
+        {
+          "name": "Trump, Donald Jr.",
+          "role": "Son of President Trump who interviewed his father about the Roswell incident"
+        },
+        {
+          "name": "Bender, Bryan",
+          "role": "Politico reporter who commented on UAPs being on the political agenda"
+        },
+        {
+          "name": "Davis, Eric",
+          "role": "Defence and intelligence insider who stated UAP craft are 'off-world vehicles not made on this earth'"
+        },
+        {
+          "name": "Elizondo, Luis",
+          "role": "Intelligence insider associated with UAP disclosure efforts"
+        },
+        {
+          "name": "Reid, Harry",
+          "role": "Former US Senator who made qualified assertions about US recovery of non-human technology"
+        },
+        {
+          "name": "DeLonge, Tom",
+          "role": "Musician and co-founder of To The Stars Academy (TTSA) who corresponded with senior military and government officials about UAP disclosure"
+        },
+        {
+          "name": "Podesta, John",
+          "role": "Confidant of Presidents Clinton and Obama; corresponded with Tom DeLonge about UAP disclosure"
+        },
+        {
+          "name": "Clinton, Hillary",
+          "role": "Presidential candidate whose campaign was planning meetings to discuss UAP disclosure"
+        },
+        {
+          "name": "Coulthart, Ross",
+          "role": "Author and investigative journalist researching UAPs; narrator of this chapter"
+        }
+      ],
+      "organisations": [
+        {
+          "name": "US Navy",
+          "role": "Military branch; assignee of Dr Pais's patents and employer of Dr Pais"
+        },
+        {
+          "name": "Naval Air Warfare Centre Aircraft Division",
+          "role": "US Navy division where Dr Pais worked, located on Patuxent River, Maryland"
+        },
+        {
+          "name": "US Patent Office",
+          "role": "Government agency that reviewed and ruled on Dr Pais's patent applications"
+        },
+        {
+          "name": "To The Stars Academy (TTSA)",
+          "role": "Organisation co-founded by Tom DeLonge to advocate for UAP disclosure and develop advanced aerospace technology"
+        },
+        {
+          "name": "Lockheed Martin",
+          "role": "Giant aerospace and defence corporation; mentioned in connection with Skunk Works and anti-gravity research"
+        },
+        {
+          "name": "Skunk Works",
+          "role": "Lockheed Martin's advanced development programmes division; referenced regarding TR3B and advanced craft"
+        },
+        {
+          "name": "Glenn L. Martin Company",
+          "role": "Former aerospace company, predecessor that eventually merged into Lockheed Martin"
+        },
+        {
+          "name": "Laser Interferometer Gravitational-Wave Observatory (LIGO)",
+          "role": "Scientific observatory with receivers in Louisiana and Washington that detects gravitational waves"
+        },
+        {
+          "name": "US Senate Intelligence Committee",
+          "role": "Powerful congressional committee that demanded a UAP intelligence report in late 2020"
+        },
+        {
+          "name": "US Air Force",
+          "role": "Military branch referenced regarding TR3B, Roswell explanation, and alleged meetings with Tom DeLonge"
+        },
+        {
+          "name": "US Defence Department",
+          "role": "Federal department tasked with compiling UAP report; holds black world projects"
+        },
+        {
+          "name": "Naval Aviation Enterprise",
+          "role": "US Navy body whose Chief Technology Officer vouched for Dr Pais's patent applications"
+        },
+        {
+          "name": "Navy Air Systems Command",
+          "role": "US Navy command organisation referenced in Dr Sheehy's credentials"
+        },
+        {
+          "name": "The New York Times",
+          "role": "Major US newspaper that published UAP disclosures and crash retrieval allegations"
+        },
+        {
+          "name": "Scientific American",
+          "role": "Prestigious scientific publication that published an article advocating scientific investigation of UAPs"
+        },
+        {
+          "name": "Jane's Defence Weekly",
+          "role": "Leading international defence journal for which Nick Cook was aviation editor"
+        },
+        {
+          "name": "Politico",
+          "role": "News outlet whose reporter Bryan Bender commented on UAPs being on the political agenda"
+        },
+        {
+          "name": "Project Unity",
+          "role": "Media outlet/podcast that interviewed New York Times journalists Leslie Kean and Ralph Blumenthal"
+        },
+        {
+          "name": "Democratic National Committee",
+          "role": "US political organisation whose leaked emails corroborated Tom DeLonge's claims about UAP disclosure discussions"
+        },
+        {
+          "name": "Hillary Clinton presidential campaign",
+          "role": "Political campaign during which meetings to discuss UAP disclosure were reportedly being planned"
+        },
+        {
+          "name": "Naval Air Warfare Center Aircraft Division Human Systems",
+          "role": "Division of the US Navy where Dr James Sheehy served as Chief Scientist"
+        },
+        {
+          "name": "Office of the Secretary of Defense",
+          "role": "US Defence Department office referenced in relation to SAP oversight"
+        },
+        {
+          "name": "Senate Appropriations Committee",
+          "role": "US Senate committee referenced in relation to oversight of classified programmes"
+        },
+        {
+          "name": "Congress",
+          "role": "US legislative body briefed privately by Dr Eric Davis on UAP-related matters"
+        },
+        {
+          "name": "Department of Navy",
+          "role": "US government department overseeing the US Navy and its patent filings"
+        }
+      ],
+      "places": [
+        {
+          "name": "USA, Louisiana, LIGO Detector (Livingston Observatory)",
+          "role": "Laser Interferometer Gravitational-Wave Observatory receiver that first detected gravitational waves in September 2015"
+        },
+        {
+          "name": "USA, Washington, LIGO Detector (Hanford Observatory)",
+          "role": "Laser Interferometer Gravitational-Wave Observatory receiver that first detected gravitational waves in September 2015"
+        },
+        {
+          "name": "USA, Maryland, Naval Air Warfare Centre Aircraft Division (Patuxent River)",
+          "role": "US Navy facility where Dr Salvatore Pais worked and developed his exotic patents"
+        },
+        {
+          "name": "USA, Nevada, China Lake",
+          "role": "Classified US military test/research installation cited as an example of keeping secret technology 'in the black'"
+        },
+        {
+          "name": "USA, Nevada, Area 51",
+          "role": "Classified US military installation cited in context of secret technology testing; visited by Christopher Mellon who found no evidence of TR3B craft"
+        },
+        {
+          "name": "China, Hubei, Three Gorges Dam",
+          "role": "World's largest power station, cited as a power-output reference point for Dr Pais's claimed compact fusion reactor"
+        },
+        {
+          "name": "UK, England, London",
+          "role": "Location where Nick Cook was based during Skype mentoring conversations with Ross Coulthart"
+        },
+        {
+          "name": "Australia, New South Wales, Sydney",
+          "role": "Location where Ross Coulthart was based during Skype conversations with Nick Cook"
+        },
+        {
+          "name": "USA, New Mexico, Roswell",
+          "role": "Site of the mythical 1947 UFO crash referenced in Donald Trump's comment to his son"
+        },
+        {
+          "name": "USA, California, San Francisco",
+          "role": "Location of a New York Times reader who posed a question to journalist Ralph Blumenthal in online comments"
+        }
+      ],
+      "events": [
+        {
+          "name": "Gravitational waves released by black hole collision ~1.3 billion years ago",
+          "role": "Two black holes collided ~1.3 billion years ago, releasing gravitational waves"
+        },
+        {
+          "name": "Albert Einstein predicts gravitational waves (1916)",
+          "role": "Einstein predicted gravity waves must exist as part of his Theory of Relativity in 1916"
+        },
+        {
+          "name": "Isaac Newton first observed gravity (1687)",
+          "role": "Newton observed gravity in 1687 but could not explain how it operated over vast distances"
+        },
+        {
+          "name": "Gravitational waves detected by LIGO receivers (14 September 2015)",
+          "role": "Gravitational waves from the ancient black hole collision were detected for the first time by receivers in Louisiana and Washington, USA"
+        },
+        {
+          "name": "Scientists announced gravitational wave discovery (February 2016)",
+          "role": "Scientists publicly announced the detection of gravitational waves, acknowledged as one of the most momentous scientific discoveries of the 21st century"
+        },
+        {
+          "name": "Gravitational wave discovery wins Nobel Prize (2017)",
+          "role": "The detection of gravitational waves was awarded the Nobel Prize in 2017"
+        },
+        {
+          "name": "Dr Salvatore Pais files patent application for spacecraft driven by gravity waves (April 2016)",
+          "role": "Pais filed a patent application for a revolutionary spacecraft using gravity wave propulsion, just eight weeks after the gravitational wave discovery announcement"
+        },
+        {
+          "name": "Pais writes scientific paper on superluminal craft propulsion (2015)",
+          "role": "Pais authored a paper suggesting theoretical possibility for superluminal craft propulsion in a Special Relativity framework"
+        },
+        {
+          "name": "TTSA launch event where Steve Justice makes statement (October 2017)",
+          "role": "At TTSA's October 2017 launch, Skunk Works Lockheed Martin Program Director Steve Justice stated TTSA was working on an Advanced Electromagnetic Vehicle mimicking UAP capabilities"
+        },
+        {
+          "name": "Patent for hybrid craft approved (2018)",
+          "role": "The patent for Pais's hybrid aerospace-undersea craft was approved in 2018"
+        },
+        {
+          "name": "Pais presents paper on Room Temperature Superconducting System (January 2019)",
+          "role": "Pais presented a paper in January 2019 making claims about his Room Temperature Superconducting System for Use on a Hybrid Aerospace Undersea Craft"
+        },
+        {
+          "name": "Pais and navy attorney interview with Patent Office examiner (July 2018)",
+          "role": "Pais and a navy attorney presented information to the patent examiner asserting operability of the High Energy Electromagnetic Field Generator"
+        },
+        {
+          "name": "Pais files patent application for Plasma Compression Fusion Device (March 2018)",
+          "role": "Pais filed a patent application for a Compact Fusion Reactor (Plasma Compression Fusion Device)"
+        },
+        {
+          "name": "Plasma Compression Fusion Device patent application published (September 2019)",
+          "role": "Pais's Plasma Compression Fusion Device patent application was published"
+        },
+        {
+          "name": "George S. Trimble predicts anti-gravity breakthrough (1957)",
+          "role": "Trimble aggressively predicted a golden age of anti-gravity sweeping through the aerospace industry starting in the 1960s"
+        },
+        {
+          "name": "Spate of anti-gravity articles appear (1950s and early 1960s)",
+          "role": "Articles appeared suggesting an anti-gravity breakthrough was imminent, after which US anti-gravity research went dark"
+        },
+        {
+          "name": "US anti-gravity research goes dark (1960s)",
+          "role": "US anti-gravity research ceased public visibility in the 1960s, though it reportedly continued in secret"
+        },
+        {
+          "name": "USS Nimitz pilots track and video Tic Tac UAP (2004)",
+          "role": "USS Nimitz and its pilots tracked and videoed the Tic Tac UAP off the west coast, 12 years before Pais's patent application"
+        },
+        {
+          "name": "Christopher Mellon tweets about Pais's patents (July 2020)",
+          "role": "Mellon tweeted that he found disputes about the viability of the physics in Pais's patents and no indication of testing or prototypes"
+        },
+        {
+          "name": "Scientific American article on UAPs by Kopparapu and Haqq-Misra (July 2020)",
+          "role": "Scientists Ravi Kopparapu and Jacob Haqq-Misra published in Scientific American arguing UAPs are a scientifically interesting problem worthy of investigation"
+        },
+        {
+          "name": "New York Times story featuring allegations of retrieved alien materials (24 July 2020)",
+          "role": "The New York Times published a story featuring allegations the US had retrieved alien materials, with reporter Ralph Blumenthal commenting cryptically in the online section"
+        },
+        {
+          "name": "President Trump's comment about Roswell in interview with Don Jr. (June 2020)",
+          "role": "Trump made an intriguing comment about the 1947 Roswell UFO crash, saying 'I won't talk to you about what I know about it, but it's very interesting'"
+        },
+        {
+          "name": "Senate Intelligence Committee demands UAP report (late 2020)",
+          "role": "The US Senate Intelligence Committee demanded US intelligence agencies and the Defence Department compile a report on all UAP data collected, including navy pilot sightings"
+        },
+        {
+          "name": "UAP report due date (June 2021)",
+          "role": "The Senate-mandated UAP report was due in June 2021 but was likely to be delayed"
+        },
+        {
+          "name": "Roswell UFO crash (1947)",
+          "role": "The mythical UFO crash occurred in Roswell, New Mexico in 1947, referenced in Trump's interview comment"
+        },
+        {
+          "name": "Nick Cook publishes 'The Hunt for Zero Point' (~2001)",
+          "role": "Aerospace journalist Nick Cook published his book on ten years of anti-gravity research, approximately twenty years before the chapter was written"
+        }
+      ],
+      "matters": [
+        {
+          "name": "Dr Salvatore Pais's Patent Programme",
+          "role": "Ongoing series of exotic technology patent applications filed by Dr Pais for the US Navy, covering anti-gravity, superconductors, electromagnetic force fields, and compact fusion"
+        },
+        {
+          "name": "US Navy UAP Reverse-Engineering Programme",
+          "role": "Alleged secret programme to reverse-engineer recovered non-human craft, as described by Nat Kobitz to Ross Coulthart"
+        },
+        {
+          "name": "US Anti-Gravity Research",
+          "role": "Long-running secret US research effort into anti-gravity propulsion, reportedly going dark publicly in the 1960s but continuing covertly"
+        },
+        {
+          "name": "AATIP (Advanced Aerospace Threat Identification Program)",
+          "role": "US government programme to investigate UAP threats, referenced in the broader disclosure context"
+        },
+        {
+          "name": "To The Stars Academy (TTSA) Advanced Electromagnetic Vehicle Project",
+          "role": "TTSA initiative to develop a revolutionary vehicle that mimics UAP capabilities by altering the space-time metric, led in part by Steve Justice"
+        },
+        {
+          "name": "US Senate Intelligence Committee UAP Report Mandate",
+          "role": "Congressional demand that US intelligence agencies and the Defence Department compile a comprehensive report on all UAP data, due June 2021"
+        },
+        {
+          "name": "US Government UAP Secrecy / Cover-Up",
+          "role": "Decades-long policy of suppressing and classifying information about recovered non-human craft and UAP encounters"
+        },
+        {
+          "name": "UAP Crash Retrieval Programme",
+          "role": "Alleged classified US government programme involving recovery and study of downed non-human craft, referenced as a classified subject by New York Times journalists and insiders"
+        },
+        {
+          "name": "Laser Interferometer Gravitational-Wave Observatory (LIGO) Operations",
+          "role": "Ongoing scientific programme operating ultra-sensitive gravitational wave detectors in Louisiana and Washington"
+        },
+        {
+          "name": "Room Temperature Superconductor Patent (Pais)",
+          "role": "Patent application by Dr Pais claiming an operable room temperature superconductor; vouched for by the US Navy but ultimately abandoned after Patent Office rejection"
+        },
+        {
+          "name": "High Frequency Gravitational Wave Generator Patent (Pais)",
+          "role": "Patent application by Dr Pais for a device generating high-frequency gravitational waves, claimed operable by the US Navy"
+        },
+        {
+          "name": "Electro-Magnetic Forcefield Generator Patent (Pais)",
+          "role": "Patent application by Dr Pais for a defensive forcefield generator; US Navy secured the patent after asserting operability"
+        },
+        {
+          "name": "Craft Using an Inertial Mass Reduction Device Patent (Pais)",
+          "role": "Patent for a hybrid aerospace-undersea craft using electromagnetic propulsion; approved in 2018 after US Navy appeal"
+        },
+        {
+          "name": "Plasma Compression Fusion Device Patent (Pais)",
+          "role": "Patent application by Dr Pais for a compact fusion reactor capable of gigawatt-to-terawatt output, filed March 2018"
+        },
+        {
+          "name": "Nick Cook's Anti-Gravity Investigation",
+          "role": "Ten-year investigation by aerospace journalist Nick Cook into the science of anti-gravity, resulting in the book The Hunt for Zero Point"
+        },
+        {
+          "name": "US Government Roswell Incident Secrecy",
+          "role": "Ongoing withholding of information about the 1947 Roswell, New Mexico, UFO crash, with hints of undisclosed knowledge"
+        },
+        {
+          "name": "Hillary Clinton Campaign UAP Disclosure Planning",
+          "role": "Meetings and planning within the Hillary Clinton presidential campaign to find ways to disclose UAP secrets to the American public, corroborated by leaked DNC emails"
+        },
+        {
+          "name": "New York Times UAP Reporting",
+          "role": "Ongoing investigative journalism by the New York Times into UAP phenomena, crash retrievals, and US government secrecy, led by reporters Ralph Blumenthal and Leslie Kean"
+        },
+        {
+          "name": "Tom DeLonge / TTSA Engagement with US Military and Government",
+          "role": "Ongoing collaboration and communications between Tom DeLonge and senior US Air Force generals, Lockheed Martin Skunk Works executives, and John Podesta regarding UAP disclosure"
+        },
+        {
+          "name": "Russia and China UAP / Crash Retrieval Programmes",
+          "role": "Alleged programmes by Russia and China to recover and study non-human technology, parallel to the US effort"
+        },
+        {
+          "name": "US Patent Office Review of Pais Patents",
+          "role": "Ongoing examination and adjudication process by the US Patent and Trademark Office of Dr Pais's exotic technology applications"
+        },
+        {
+          "name": "Scientific American UAP Scientific Investigation Campaign",
+          "role": "Effort by scientists Ravi Kopparapu and Jacob Haqq-Misra, published in Scientific American, advocating for rigorous scientific investigation of UAPs"
+        },
+        {
+          "name": "Nazi-Origin Anti-Gravity Research (alleged)",
+          "role": "Theory and investigation into whether US anti-gravity research had its origins in discoveries made by Nazi scientists during World War Two and continued secretly thereafter"
+        },
+        {
+          "name": "TR-3B Programme (rumoured)",
+          "role": "Rumoured classified US super-hypersonic anti-gravity craft programme producing plasma to create an anti-gravity field, persistently denied by Lockheed Martin insiders"
+        },
+        {
+          "name": "Congressional Private Briefings on UAP by Dr Eric Davis",
+          "role": "Ongoing private briefings given by Dr Eric Davis to the US Congress asserting that recovered UAPs are off-world vehicles not made on Earth"
+        },
+        {
+          "name": "George S. Trimble / Glenn L. Martin Company 1950s Anti-Gravity Programme",
+          "role": "Identified historical US aerospace anti-gravity R&D initiative that was publicly discussed in the mid-1950s before abruptly going dark, investigated by Nick Cook"
+        },
+        {
+          "name": "US Government Internal UAP Public Disclosure Deliberations",
+          "role": "Ongoing internal US government process of wrestling with how and when to disclose non-human technology recovery to the public, after decades of denial"
+        },
+        {
+          "name": "Senator Harry Reid UAP Advocacy",
+          "role": "Former US Senate Majority Leader Harry Reid's ongoing qualified public and private assertions supporting the reality of recovered non-human technology"
+        },
+        {
+          "name": "Luis Elizondo UAP Whistleblowing",
+          "role": "Former AATIP director Luis Elizondo's ongoing public campaign asserting the US has recovered non-human intelligently manufactured technology"
+        },
+        {
+          "name": "New York Times UAP Crash Retrieval Reporting",
+          "role": "Ongoing investigative reporting by NYT journalists Ralph Blumenthal and Leslie Kean specifically on US government recovery of alien materials, treated as a classified subject"
+        }
+      ],
+      "objects": [
+        {
+          "name": "Tic Tac UAP",
+          "role": "Unidentified aerial phenomenon tracked and videoed by USS Nimitz pilots off the US west coast"
+        },
+        {
+          "name": "USS Nimitz",
+          "role": "US Navy aircraft carrier whose pilots tracked the Tic Tac UAP"
+        },
+        {
+          "name": "Inertial Mass Reduction Device",
+          "role": "Dr Pais's patented propulsion device claimed to generate high-frequency gravitational waves"
+        },
+        {
+          "name": "Room Temperature Superconductor",
+          "role": "Dr Pais's patented material claimed to exhibit zero electrical resistance at room temperature"
+        },
+        {
+          "name": "Electro-magnetic Forcefield Generator (High Energy Electromagnetic Field Generator)",
+          "role": "Dr Pais's patented device claimed to generate an impenetrable defensive shield against missiles and other threats"
+        },
+        {
+          "name": "High Frequency Gravitational Wave Generator",
+          "role": "Dr Pais's patented device for generating gravitational waves, schematic resembling a Tic Tac"
+        },
+        {
+          "name": "Craft Using an Inertial Mass Reduction Device (hybrid aerospace-undersea craft)",
+          "role": "Dr Pais's patented triangular spacecraft capable of operating in air, sea, and space via electromagnetic propulsion"
+        },
+        {
+          "name": "Plasma Compression Fusion Device (Compact Fusion Reactor)",
+          "role": "Dr Pais's patented compact fusion reactor claimed to produce gigawatt-to-terawatt power output"
+        },
+        {
+          "name": "LIGO receivers",
+          "role": "Super-sensitive Laser Interferometer Gravitational-Wave Observatory sensors in Louisiana and Washington used to detect gravitational waves"
+        },
+        {
+          "name": "Advanced Electromagnetic Vehicle",
+          "role": "Revolutionary vehicle concept announced by TTSA/Steve Justice claimed to alter the space-time metric"
+        },
+        {
+          "name": "TR3B",
+          "role": "Rumoured super-hypersonic US stealthy anti-gravity craft purportedly producing plasma to create an anti-gravity field"
+        },
+        {
+          "name": "Go Fast UAP",
+          "role": "Unidentified aerial phenomenon observed and named by US Navy pilots"
+        },
+        {
+          "name": "Gimbal UAP",
+          "role": "Unidentified aerial phenomenon observed and named by US Navy pilots"
+        },
+        {
+          "name": "crafted bonded metal technology",
+          "role": "Recovered non-human material shown to Nat Kobitz during a crash retrieval program briefing"
+        },
+        {
+          "name": "alien spacecraft",
+          "role": "Non-human craft alleged to have been recovered by the US, Russia, and China"
+        },
+        {
+          "name": "Compact Fusion Reactor (Plasma Compression Fusion Device)",
+          "role": "Car-sized fusion reactor patent by Dr Pais, claimed capable of gigawatt-to-terawatt output, under two metres in diameter"
+        },
+        {
+          "name": "Room Temperature Superconducting System",
+          "role": "Superconductor system specifically designed for use on a hybrid aerospace-undersea craft, described in a 2019 Pais paper"
+        },
+        {
+          "name": "Three Gorges Dam",
+          "role": "World's largest power station, cited as a benchmark for power output comparison with Pais's fusion device"
+        }
+      ],
+      "documents": [
+        {
+          "name": "Room Temperature Superconductor patent (Salvatore Pais)",
+          "role": "US Navy patent application by Dr Pais for a room temperature superconductor device"
+        },
+        {
+          "name": "Electro-magnetic Forcefield Generator patent (Salvatore Pais)",
+          "role": "US Navy patent application by Dr Pais for an electromagnetic forcefield generator"
+        },
+        {
+          "name": "High Frequency Gravitational Wave Generator patent (Salvatore Pais)",
+          "role": "US Navy patent application by Dr Pais for a high frequency gravitational wave generator"
+        },
+        {
+          "name": "Craft Using an Inertial Mass Reduction Device patent (Salvatore Pais)",
+          "role": "US Navy patent application by Dr Pais for an anti-gravity hybrid craft, approved 2018"
+        },
+        {
+          "name": "Plasma Compression Fusion Device patent (Salvatore Pais)",
+          "role": "US Navy patent application by Dr Pais for a compact fusion reactor, filed March 2018, published September 2019"
+        },
+        {
+          "name": "Salvatore Pais 2015 scientific paper on superluminal craft propulsion",
+          "role": "Paper by Pais suggesting theoretical possibility for superluminal craft propulsion in a Special Relativity framework"
+        },
+        {
+          "name": "Room Temperature Superconducting System for Use on a Hybrid Aerospace Undersea Craft (Pais paper, January 2019)",
+          "role": "Paper presented by Pais at a conference making claims about room temperature superconductivity for hybrid craft"
+        },
+        {
+          "name": "Dr James Sheehy appeal letter to US Patent Office (room temperature superconductor)",
+          "role": "Letter from Naval Aviation Enterprise Chief Technology Officer vouching that Pais's room temperature superconductor is operable"
+        },
+        {
+          "name": "Dr James Sheehy appeal letter to US Patent Office (hybrid craft)",
+          "role": "Letter from Naval Aviation Enterprise CTO vouching for Pais's hybrid craft patent, stating 'This will become a reality'"
+        },
+        {
+          "name": "US Patent Office rejection of Room Temperature Superconductor patent",
+          "role": "Patent Office document rejecting Pais's room temperature superconductor application as inoperative"
+        },
+        {
+          "name": "Patent Office documents on Pais operability interview (July 2018)",
+          "role": "Patent Office record of interview with Pais and a navy attorney asserting operability of the High Energy Electromagnetic Field Generator"
+        },
+        {
+          "name": "The Hunt for Zero Point (book by Nick Cook)",
+          "role": "Book by Nick Cook detailing his ten-year investigation into the science of anti-gravity research"
+        },
+        {
+          "name": "Scientific American article by Ravi Kopparapu and Jacob Haqq-Misra (July 2020)",
+          "role": "Article in Scientific American calling for scientific investigation of UAPs"
+        },
+        {
+          "name": "The New York Times story, 24 July 2020",
+          "role": "New York Times article featuring allegations the US had retrieved alien materials"
+        },
+        {
+          "name": "Project Unity interview with Ralph Blumenthal and Leslie Kean",
+          "role": "Video interview in which New York Times journalists discuss UAP crash retrievals and classified information"
+        },
+        {
+          "name": "Democratic National Committee leaked emails",
+          "role": "Leaked DNC emails corroborating Tom DeLonge's claims of contact with senior officials about UAP disclosure"
+        },
+        {
+          "name": "US Senate Intelligence Committee report demand on UAPs (late 2020)",
+          "role": "Senate Intelligence Committee directive requiring US intelligence agencies and DoD to compile a report on UAP data, due June 2021"
+        },
+        {
+          "name": "Politico article by Bryan Bender",
+          "role": "Politico piece noting that UFOs are now on the official agenda"
+        },
+        {
+          "name": "Christopher Mellon email to private news group (re: triangular craft video)",
+          "role": "Email from Christopher Mellon addressing speculation about a 1997 triangular craft video and the TR3B rumour"
+        },
+        {
+          "name": "Christopher Mellon tweet (July 2020)",
+          "role": "Tweet by Christopher Mellon stating he found disputes about the viability of Pais's patents and no indication of testing or prototypes"
+        },
+        {
+          "name": "Donald Trump interview with Don Trump Jr. (June 2020)",
+          "role": "Informal interview in which President Trump made a cryptic comment about the Roswell incident"
+        },
+        {
+          "name": "Compact Fusion Reactor paper by Pais (prestigious journal publication)",
+          "role": "Peer-reviewed journal article by Pais on the design of a compact fusion reactor, cited by Pais in defence of his work"
+        },
+        {
+          "name": "Jane's Defence Weekly",
+          "role": "Leading international defence journal for which Nick Cook served as aviation editor"
+        },
+        {
+          "name": "Steve Justice statement at TTSA October 2017 launch",
+          "role": "Public statement by Lockheed Martin Skunk Works Program Director describing TTSA's Advanced Electromagnetic Vehicle project and its space-time metric drive system"
+        },
+        {
+          "name": "Brett Tingley article on Salvatore Pais patents",
+          "role": "Journalism piece quoting an expert who dismissed Pais's work as nonsensical, citing 'invented jargon' and absent theoretical basis"
+        },
+        {
+          "name": "US Invention Secrecy Act",
+          "role": "US law cited as a mechanism by which the navy could have kept Pais's patents secret"
+        },
+        {
+          "name": "Ralph Blumenthal online comment (New York Times, July 2020)",
+          "role": "Comment by NYT reporter Blumenthal in the online comments section of the 24 July 2020 Times story, responding to a reader's question about government suppression of alien visitation evidence"
+        },
+        {
+          "name": "Leslie Kean interview quote (Project Unity)",
+          "role": "Statement by Leslie Kean about the difficulty of getting crash retrieval reporting into The New York Times"
+        },
+        {
+          "name": "Ralph Blumenthal interview quote (Project Unity)",
+          "role": "Statement by Blumenthal that 'crash retrievals is a classified subject'"
+        }
+      ],
+      "concepts": [
+        {
+          "name": "gravitational waves",
+          "role": "Ripples in the fabric of spacetime predicted by Einstein and first detected in 2015"
+        },
+        {
+          "name": "theory of relativity",
+          "role": "Einstein's framework describing gravity, space, and time"
+        },
+        {
+          "name": "special relativity",
+          "role": "Einstein's theory establishing the speed of light as a cosmic limit for matter"
+        },
+        {
+          "name": "gravity",
+          "role": "Fundamental force of attraction between masses, mechanism still not fully understood"
+        },
+        {
+          "name": "inertial mass reduction",
+          "role": "Theoretical concept of reducing a body's inertial mass to enable extreme propulsion"
+        },
+        {
+          "name": "anti-gravity propulsion",
+          "role": "Hypothetical propulsion method that counteracts or negates gravitational force"
+        },
+        {
+          "name": "room temperature superconductivity",
+          "role": "The theorised ability of a material to exhibit zero electrical resistance at ambient temperatures"
+        },
+        {
+          "name": "superconductivity",
+          "role": "Physical phenomenon of zero electrical resistance in certain materials, typically at very low temperatures"
+        },
+        {
+          "name": "zero electrical resistance",
+          "role": "Property of superconductors in which electrical current flows without energy loss"
+        },
+        {
+          "name": "electromagnetic propulsion",
+          "role": "Propulsion method using electromagnetic fields rather than conventional thrust"
+        },
+        {
+          "name": "vacuum polarisation",
+          "role": "Quantum electrodynamic effect involving modification of the quantum vacuum by electromagnetic fields"
+        },
+        {
+          "name": "zero-point energy",
+          "role": "Lowest possible energy of a quantum mechanical system, referenced as vacuum energy"
+        },
+        {
+          "name": "quantum field fluctuations",
+          "role": "Random fluctuations of quantum fields in the vacuum that carry energy"
+        },
+        {
+          "name": "quantum vacuum",
+          "role": "The lowest energy state of a quantum field, not empty but filled with fluctuating energy"
+        },
+        {
+          "name": "superluminal propulsion",
+          "role": "Theoretical travel or propulsion exceeding the speed of light"
+        },
+        {
+          "name": "faster-than-light travel",
+          "role": "Hypothetical movement at velocities exceeding the speed of light"
+        },
+        {
+          "name": "spacetime metric",
+          "role": "Mathematical description of the geometry of spacetime used in general relativity"
+        },
+        {
+          "name": "plasma",
+          "role": "Ionised state of matter used in fusion reactions and proposed propulsion concepts"
+        },
+        {
+          "name": "nuclear fusion",
+          "role": "Process of combining atomic nuclei to release large amounts of energy"
+        },
+        {
+          "name": "compact fusion",
+          "role": "Concept of achieving nuclear fusion in a small-scale device"
+        },
+        {
+          "name": "magnetic confinement",
+          "role": "Use of magnetic fields to contain the high-temperature plasma needed for fusion reactions"
+        },
+        {
+          "name": "high-frequency gravitational wave generation",
+          "role": "Theoretical production of gravitational waves at high frequencies by an engineered device"
+        },
+        {
+          "name": "electromagnetic field generation",
+          "role": "Production of intense electromagnetic fields, proposed for propulsion and shielding"
+        },
+        {
+          "name": "warp drive",
+          "role": "Science-fiction-derived concept of propulsion by distorting spacetime"
+        },
+        {
+          "name": "hydrodynamic forces",
+          "role": "Forces exerted on a body moving through fluid, relevant to craft experiencing extreme accelerations"
+        },
+        {
+          "name": "aerodynamic forces",
+          "role": "Forces exerted on a body moving through air, relevant to high-speed craft"
+        },
+        {
+          "name": "g-forces",
+          "role": "Inertial forces experienced by occupants of a rapidly accelerating craft"
+        },
+        {
+          "name": "stealth technology",
+          "role": "Methods of reducing a craft's detectability by radar, sonar, or other sensors"
+        },
+        {
+          "name": "RF signal scattering",
+          "role": "Non-linear scattering of radio-frequency signals used for radar evasion"
+        },
+        {
+          "name": "sonar",
+          "role": "Sound-based detection method used underwater, referenced in context of craft stealth"
+        },
+        {
+          "name": "plasma bubble",
+          "role": "Theoretical sheath of plasma surrounding a craft to reduce friction and radar signature"
+        },
+        {
+          "name": "vacuum energy polarisation",
+          "role": "Proposed manipulation of vacuum energy to repel matter and reduce mass"
+        },
+        {
+          "name": "anti-gravity",
+          "role": "Concept of negating or reversing gravitational attraction"
+        },
+        {
+          "name": "disinformation",
+          "role": "Deliberately false information spread to mislead, discussed in context of UAP disclosure"
+        },
+        {
+          "name": "reverse engineering",
+          "role": "Process of deconstructing technology to understand and replicate it, discussed for alleged alien craft"
+        },
+        {
+          "name": "crash retrieval",
+          "role": "Alleged recovery of crashed non-human craft or materials by governments"
+        },
+        {
+          "name": "black world projects",
+          "role": "Deeply classified government programmes hidden from public and congressional oversight"
+        },
+        {
+          "name": "patent law",
+          "role": "Legal framework governing the granting of patents, including standards for utility and operability"
+        },
+        {
+          "name": "Nobel Prize",
+          "role": "Prestigious international scientific award, referenced for gravitational wave detection"
+        },
+        {
+          "name": "peer review",
+          "role": "Scientific process of independent expert evaluation of research before publication"
+        },
+        {
+          "name": "Pais Effect",
+          "role": "Claimed phenomenon involving accelerated vibration/spin of electrically charged matter to generate high-energy fields"
+        },
+        {
+          "name": "nuclear fusion reactor",
+          "role": "Device designed to sustain and harness nuclear fusion as an energy source"
+        },
+        {
+          "name": "gigawatt power generation",
+          "role": "Production of electrical power at the gigawatt scale, cited as a claimed output of Pais's fusion device"
+        },
+        {
+          "name": "speed of light",
+          "role": "Physical constant representing the maximum speed at which matter or information can travel, per special relativity"
+        },
+        {
+          "name": "disclosure",
+          "role": "The concept of governments publicly revealing classified information about UAPs and non-human intelligence"
+        },
+        {
+          "name": "black holes",
+          "role": "Regions of spacetime with extreme gravitational pull, remnants of collapsed stars, referenced as sources of gravitational waves"
+        },
+        {
+          "name": "massless particles",
+          "role": "Particles with no rest mass, the only entities capable of travelling at the speed of light under special relativity"
+        },
+        {
+          "name": "plasma compression fusion",
+          "role": "Fusion approach using compressed plasma to achieve the temperatures and pressures needed to sustain a fusion reaction, as described in Pais's reactor patent"
+        },
+        {
+          "name": "electricity transmission",
+          "role": "Transfer of electrical energy over distances; superconductivity is noted as potentially revolutionising grid transmission by eliminating resistive losses"
+        }
+      ]
+    },
+    "totals_per_type": {
+      "people": 25,
+      "organisations": 25,
+      "places": 10,
+      "events": 26,
+      "matters": 30,
+      "objects": 18,
+      "documents": 29,
+      "concepts": 49
+    }
+  },
+  {
+    "strategy": "combined",
+    "model": "opus",
+    "rounds": [
+      {
+        "new": 110,
+        "elapsed_s": 59.1685585975647,
+        "input_tokens": 6,
+        "cache_read_input_tokens": 20084,
+        "cache_creation_input_tokens": 20045,
+        "output_tokens": 5008,
+        "cost_usd": 0.26199525,
+        "round": 1,
+        "model_complete": true
+      }
+    ],
+    "total_calls": 1,
+    "total_elapsed_s": 59.1685585975647,
+    "total_input_tokens": 6,
+    "total_output_tokens": 5008,
+    "total_cache_read_input_tokens": 20084,
+    "total_cache_creation_input_tokens": 20045,
+    "total_cost_usd": 0.26199525,
+    "found": {
+      "people": [
+        {
+          "name": "Pais, Salvatore",
+          "role": "US Navy aerospace engineer who filed the exotic patents central to the chapter"
+        },
+        {
+          "name": "Coulthart, Ross",
+          "role": "Author/narrator investigating UAPs and the Pais patents"
+        },
+        {
+          "name": "Einstein, Albert",
+          "role": "Physicist who predicted gravitational waves via the Theory of Relativity"
+        },
+        {
+          "name": "Newton, Isaac",
+          "role": "Physicist who first observed gravity in 1687"
+        },
+        {
+          "name": "Puthoff, Harold",
+          "role": "Physicist (Hal Puthoff) cited by Pais re vacuum polarisation; TTSA figure"
+        },
+        {
+          "name": "Justice, Steve",
+          "role": "Former Skunk Works Lockheed Martin Program Director, TTSA Advanced Systems lead"
+        },
+        {
+          "name": "Kobitz, Nat",
+          "role": "Late former Director of Science and Technology Development for the US Navy; key source"
+        },
+        {
+          "name": "Mellon, Christopher",
+          "role": "Former Defence Department insider sceptical of TR3B/Pais test-flight theory"
+        },
+        {
+          "name": "Sheehy, James",
+          "role": "Chief technology officer of US Naval Aviation Enterprise who vouched for Pais's patents"
+        },
+        {
+          "name": "Tingley, Brett",
+          "role": "Journalist who quoted experts rebutting Pais's fusion claims"
+        },
+        {
+          "name": "Cook, Nick",
+          "role": "Aerospace journalist, author of The Hunt for Zero Point; mentored the author"
+        },
+        {
+          "name": "Trimble, George S.",
+          "role": "Former Glenn L. Martin Company VP who promoted anti-gravity in 1957"
+        },
+        {
+          "name": "Kopparapu, Ravi",
+          "role": "Scientist who co-wrote Scientific American piece urging UAP study"
+        },
+        {
+          "name": "Haqq-Misra, Jacob",
+          "role": "Scientist who co-wrote Scientific American piece urging UAP study"
+        },
+        {
+          "name": "Blumenthal, Ralph",
+          "role": "New York Times reporter on UAP/alien materials stories"
+        },
+        {
+          "name": "Kean, Leslie",
+          "role": "New York Times journalist who reported on crash retrievals"
+        },
+        {
+          "name": "Trump, Donald",
+          "role": "US President who made cryptic 2020 comment about Roswell"
+        },
+        {
+          "name": "Trump, Donald Jr.",
+          "role": "Trump's son who interviewed him about Roswell"
+        },
+        {
+          "name": "Bender, Bryan",
+          "role": "Politico reporter who said UFOs are now on the agenda"
+        },
+        {
+          "name": "Davis, Eric",
+          "role": "Defence/intelligence scientist asserting recovered off-world vehicles"
+        },
+        {
+          "name": "Elizondo, Luis",
+          "role": "Intelligence insider asserting recovery of non-human technology"
+        },
+        {
+          "name": "Reid, Harry",
+          "role": "Former US Senator making qualified assertions on recovered technology"
+        },
+        {
+          "name": "DeLonge, Tom",
+          "role": "Punk rock star, TTSA founder, exchanged disclosure emails"
+        },
+        {
+          "name": "Podesta, John",
+          "role": "Confidant of Presidents Clinton and Obama; emailed by DeLonge"
+        },
+        {
+          "name": "Clinton, Hillary",
+          "role": "Presidential candidate whose campaign planned disclosure discussions"
+        },
+        {
+          "name": "Clinton, Bill",
+          "role": "Former US President referenced as Podesta confidant"
+        },
+        {
+          "name": "Obama, Barack",
+          "role": "Former US President referenced as Podesta confidant"
+        }
+      ],
+      "organisations": [
+        {
+          "name": "US Navy",
+          "role": "Assignee of Pais's patents; tracked Tic Tac UAP"
+        },
+        {
+          "name": "Naval Air Warfare Center Aircraft Division",
+          "role": "Navy division where Pais worked at Patuxent River"
+        },
+        {
+          "name": "Laser Interferometer Gravitational-Wave Observatory (LIGO)",
+          "role": "Detector that first observed gravitational waves"
+        },
+        {
+          "name": "To The Stars Academy (TTSA)",
+          "role": "Organisation campaigning for UAP disclosure; advanced vehicle project"
+        },
+        {
+          "name": "Lockheed Martin Corporation",
+          "role": "Aerospace giant; Skunk Works division discussed re TR3B"
+        },
+        {
+          "name": "Skunk Works",
+          "role": "Lockheed Martin advanced projects division"
+        },
+        {
+          "name": "US Patent Office",
+          "role": "Body that examined and partly rejected Pais's patents"
+        },
+        {
+          "name": "US Naval Aviation Enterprise",
+          "role": "Navy body where Sheehy was chief technology officer"
+        },
+        {
+          "name": "Naval Air Systems Command",
+          "role": "Department of Navy command Sheehy served as technical authority"
+        },
+        {
+          "name": "The New York Times",
+          "role": "Newspaper that disclosed Tic Tac and alien materials stories"
+        },
+        {
+          "name": "Jane's Defence Weekly",
+          "role": "Defence journal where Nick Cook was aviation editor"
+        },
+        {
+          "name": "Glenn L. Martin Company",
+          "role": "Aerospace firm (later part of Lockheed Martin) where Trimble was VP"
+        },
+        {
+          "name": "Scientific American",
+          "role": "Publication that called for scientific investigation of UAPs"
+        },
+        {
+          "name": "Project Unity",
+          "role": "Interview show featuring Blumenthal and Kean"
+        },
+        {
+          "name": "Senate Intelligence Committee",
+          "role": "Committee demanding a UAP report from intelligence agencies"
+        },
+        {
+          "name": "US Department of Defense",
+          "role": "Defence Department checking UAPs weren't US craft"
+        },
+        {
+          "name": "US Air Force",
+          "role": "Provided official Roswell explanation; generals emailed DeLonge"
+        },
+        {
+          "name": "Politico",
+          "role": "News outlet whose reporter commented UFOs are on the agenda"
+        },
+        {
+          "name": "Democratic National Committee",
+          "role": "Org whose leaked emails corroborated DeLonge claims"
+        },
+        {
+          "name": "Senate Appropriations Committee",
+          "role": "Committee referenced re SAP oversight by Mellon"
+        },
+        {
+          "name": "Nobel Prize",
+          "role": "Award given for gravitational wave discovery in 2017"
+        }
+      ],
+      "places": [
+        {
+          "name": "USA, Maryland, Naval Air Warfare Center Aircraft Division (Patuxent River)",
+          "role": "Navy facility on the Patuxent River where Pais worked"
+        },
+        {
+          "name": "USA, Nevada, Area 51",
+          "role": "Secret US test site cited re classified craft"
+        },
+        {
+          "name": "USA, California, China Lake",
+          "role": "Secret US weapons test facility"
+        },
+        {
+          "name": "USA, New Mexico, Roswell",
+          "role": "Site of mythical 1947 UFO crash"
+        }
+      ],
+      "events": [
+        {
+          "name": "First detection of gravitational waves",
+          "role": "14 September 2015 detection by LIGO receivers"
+        },
+        {
+          "name": "Announcement of gravitational wave discovery",
+          "role": "February 2016 scientific announcement"
+        },
+        {
+          "name": "Pais inertial mass reduction device patent application",
+          "role": "April 2016 patent filing for gravity-wave spacecraft"
+        },
+        {
+          "name": "TTSA October 2017 launch",
+          "role": "Launch event where Justice announced the Advanced Electromagnetic Vehicle"
+        },
+        {
+          "name": "Approval of Pais hybrid craft patent",
+          "role": "2018 patent approval"
+        },
+        {
+          "name": "Pais paper presentation January 2019",
+          "role": "Pais presented room temperature superconducting system paper"
+        },
+        {
+          "name": "Examiner interview July 2018",
+          "role": "Interview where Pais asserted operability of forcefield generator"
+        },
+        {
+          "name": "Plasma Compression Fusion Device patent filing",
+          "role": "March 2018 filing, published September 2019"
+        },
+        {
+          "name": "USS Nimitz Tic Tac encounter 2004",
+          "role": "Navy tracking/videoing of Tic Tac UAP, 12 years before patent"
+        },
+        {
+          "name": "Nobel Prize 2017",
+          "role": "Award for gravitational wave discovery"
+        },
+        {
+          "name": "New York Times 24 July 2020 story",
+          "role": "Story alleging US retrieved alien materials"
+        },
+        {
+          "name": "Trump Roswell interview June 2020",
+          "role": "Trump's cryptic Roswell comment with Don Jr."
+        },
+        {
+          "name": "Mellon July 2020 tweet",
+          "role": "Mellon's online statement disputing Pais patent viability"
+        },
+        {
+          "name": "Roswell UFO crash 1947",
+          "role": "Mythical New Mexico UFO crash"
+        },
+        {
+          "name": "Triangular craft video recorded 1997",
+          "role": "1997 footage of triangular craft discussed by Mellon"
+        }
+      ],
+      "matters": [
+        {
+          "name": "Pais patents controversy",
+          "role": "Ongoing dispute over the credibility of Pais's exotic patents"
+        },
+        {
+          "name": "UAP reverse-engineering program",
+          "role": "Alleged US program to replicate alien craft per Kobitz"
+        },
+        {
+          "name": "US anti-gravity research",
+          "role": "Secret ongoing research that went dark in the 1960s but continued"
+        },
+        {
+          "name": "Crash retrieval program",
+          "role": "Classified program of recovering non-human craft"
+        },
+        {
+          "name": "UAP disclosure push",
+          "role": "Ongoing movement toward US government disclosure on UAPs"
+        },
+        {
+          "name": "Senate-mandated UAP report",
+          "role": "Report on UAP data due June 2021"
+        }
+      ],
+      "objects": [
+        {
+          "name": "Craft Using an Inertial Mass Reduction Device",
+          "role": "Pais's proposed hybrid triangular spacecraft"
+        },
+        {
+          "name": "Room Temperature Superconductor",
+          "role": "Pais's claimed superconducting device/material"
+        },
+        {
+          "name": "High Energy Electromagnetic Field Generator",
+          "role": "Pais's claimed forcefield generator device"
+        },
+        {
+          "name": "High Frequency Gravitational Wave Generator",
+          "role": "Pais's claimed gravity wave generator device"
+        },
+        {
+          "name": "Plasma Compression Fusion Device",
+          "role": "Pais's claimed compact fusion reactor"
+        },
+        {
+          "name": "Tic Tac UAP",
+          "role": "Mysterious craft tracked by USS Nimitz"
+        },
+        {
+          "name": "TR3B",
+          "role": "Rumoured super-hypersonic US anti-gravity craft"
+        },
+        {
+          "name": "Advanced Electromagnetic Vehicle",
+          "role": "TTSA's revolutionary space-time-altering vehicle project"
+        },
+        {
+          "name": "USS Nimitz",
+          "role": "US Navy carrier whose pilots tracked the Tic Tac"
+        },
+        {
+          "name": "Go Fast UAP",
+          "role": "UAP described as off-world vehicle by Davis"
+        },
+        {
+          "name": "Gimbal UAP",
+          "role": "UAP described as off-world vehicle by Davis"
+        },
+        {
+          "name": "Crafted bonded metal technology",
+          "role": "Recovered material Kobitz said he was shown"
+        }
+      ],
+      "documents": [
+        {
+          "name": "Pais 2015 scientific paper",
+          "role": "Paper suggesting superluminal craft propulsion in Special Relativity"
+        },
+        {
+          "name": "Sheehy appeal letter",
+          "role": "Navy letter vouching room temperature superconductor is operable"
+        },
+        {
+          "name": "Pais Compact Fusion Reactor paper",
+          "role": "Journal-published paper Pais cited to defend his work"
+        },
+        {
+          "name": "The Hunt for Zero Point",
+          "role": "Nick Cook's book on anti-gravity investigation"
+        },
+        {
+          "name": "Patent Office documents",
+          "role": "Records showing rejection of superconductor patent"
+        },
+        {
+          "name": "Mellon private news group email",
+          "role": "Email responding to TR3B speculation"
+        },
+        {
+          "name": "Mellon July 2020 tweet",
+          "role": "Tweet disputing Pais patent viability and US-origin claims"
+        },
+        {
+          "name": "Scientific American UAP article",
+          "role": "July 2020 article by Kopparapu and Haqq-Misra"
+        },
+        {
+          "name": "Leaked Democratic National Committee emails",
+          "role": "Emails corroborating DeLonge's claims"
+        },
+        {
+          "name": "Pais interview",
+          "role": "Interview where Pais defended his fusion science"
+        },
+        {
+          "name": "Brett Tingley article",
+          "role": "Article quoting expert rebuttal of Pais's claims"
+        },
+        {
+          "name": "Senate UAP report",
+          "role": "Report on UAP data ordered by Senate Intelligence Committee"
+        }
+      ],
+      "concepts": [
+        {
+          "name": "Gravitational waves",
+          "role": "Ripples in spacetime predicted by Einstein, central to Pais's claims"
+        },
+        {
+          "name": "Theory of Relativity",
+          "role": "Einstein's theory predicting gravity waves"
+        },
+        {
+          "name": "Special Relativity",
+          "role": "Framework Pais invoked for superluminal propulsion"
+        },
+        {
+          "name": "Hypotheses non fingo",
+          "role": "Newton's principle of not feigning hypotheses"
+        },
+        {
+          "name": "Room temperature superconductivity",
+          "role": "Holy-grail physics phenomenon Pais claimed to achieve"
+        },
+        {
+          "name": "Superconductivity",
+          "role": "Zero electrical resistance phenomenon"
+        },
+        {
+          "name": "Vacuum polarisation",
+          "role": "Quantum effect cited by Puthoff/Pais to reduce inertial mass"
+        },
+        {
+          "name": "Anti-gravity propulsion",
+          "role": "Propulsion concept central to the chapter's investigation"
+        },
+        {
+          "name": "Nuclear fusion",
+          "role": "Reaction Pais's compact fusion device claims to harness"
+        },
+        {
+          "name": "Zero-point energy",
+          "role": "Vacuum energy concept underlying anti-gravity research"
+        },
+        {
+          "name": "Pais Effect",
+          "role": "Pais's claimed phenomenon of controlled charged-matter motion"
+        },
+        {
+          "name": "Superluminal travel",
+          "role": "Faster-than-light travel concept invoked by Pais"
+        },
+        {
+          "name": "The Phenomenon",
+          "role": "Catch-all term for the UAP mystery"
+        }
+      ]
+    },
+    "totals_per_type": {
+      "people": 27,
+      "organisations": 21,
+      "places": 4,
+      "events": 15,
+      "matters": 6,
+      "objects": 12,
+      "documents": 12,
+      "concepts": 13
+    }
+  },
+  {
+    "strategy": "per_type",
+    "model": "opus",
+    "rounds": [
+      {
+        "new": 27,
+        "elapsed_s": 25.891600131988525,
+        "input_tokens": 6,
+        "cache_read_input_tokens": 7020,
+        "cache_creation_input_tokens": 25143,
+        "output_tokens": 1389,
+        "cost_usd": 0.19615675,
+        "type": "person",
+        "round": 1,
+        "model_complete": true
+      },
+      {
+        "new": 26,
+        "elapsed_s": 30.437147617340088,
+        "input_tokens": 6,
+        "cache_read_input_tokens": 17182,
+        "cache_creation_input_tokens": 14916,
+        "output_tokens": 1596,
+        "cost_usd": 0.14248,
+        "type": "organisation",
+        "round": 1,
+        "model_complete": true
+      },
+      {
+        "new": 10,
+        "elapsed_s": 25.98637819290161,
+        "input_tokens": 6,
+        "cache_read_input_tokens": 17494,
+        "cache_creation_input_tokens": 14913,
+        "output_tokens": 1174,
+        "cost_usd": 0.13219224999999998,
+        "type": "place",
+        "round": 1,
+        "model_complete": true
+      },
+      {
+        "new": 27,
+        "elapsed_s": 30.85080337524414,
+        "input_tokens": 6,
+        "cache_read_input_tokens": 17164,
+        "cache_creation_input_tokens": 15437,
+        "output_tokens": 1879,
+        "cost_usd": 0.15282924999999997,
+        "type": "event",
+        "round": 1,
+        "model_complete": true
+      },
+      {
+        "new": 19,
+        "elapsed_s": 34.919851541519165,
+        "input_tokens": 6,
+        "cache_read_input_tokens": 17214,
+        "cache_creation_input_tokens": 15175,
+        "output_tokens": 1666,
+        "cost_usd": 0.14588075,
+        "type": "matter",
+        "round": 1,
+        "model_complete": true
+      },
+      {
+        "new": 26,
+        "elapsed_s": 27.10751724243164,
+        "input_tokens": 6,
+        "cache_read_input_tokens": 17154,
+        "cache_creation_input_tokens": 15112,
+        "output_tokens": 1516,
+        "cost_usd": 0.141679,
+        "type": "object",
+        "round": 1,
+        "model_complete": true
+      },
+      {
+        "new": 31,
+        "elapsed_s": 37.07221078872681,
+        "input_tokens": 6,
+        "cache_read_input_tokens": 17206,
+        "cache_creation_input_tokens": 15705,
+        "output_tokens": 2152,
+        "cost_usd": 0.16134325,
+        "type": "document",
+        "round": 1,
+        "model_complete": true
+      },
+      {
+        "new": 22,
+        "elapsed_s": 37.59410095214844,
+        "input_tokens": 6,
+        "cache_read_input_tokens": 17844,
+        "cache_creation_input_tokens": 16057,
+        "output_tokens": 2212,
+        "cost_usd": 0.16557225,
+        "type": "concept",
+        "round": 1,
+        "model_complete": true
+      }
+    ],
+    "total_calls": 8,
+    "total_elapsed_s": 249.85960984230042,
+    "total_input_tokens": 48,
+    "total_output_tokens": 13584,
+    "total_cache_read_input_tokens": 128278,
+    "total_cache_creation_input_tokens": 132458,
+    "total_cost_usd": 1.2381335,
+    "found": {
+      "people": [
+        {
+          "name": "Coulthart, Ross",
+          "role": "Author and journalist; narrator of the book"
+        },
+        {
+          "name": "Einstein, Albert",
+          "role": "Physicist who predicted gravitational waves via the Theory of Relativity"
+        },
+        {
+          "name": "Newton, Isaac",
+          "role": "Scientist who first observed gravity in 1687"
+        },
+        {
+          "name": "Pais, Salvatore",
+          "role": "US Navy aerospace engineer who filed the exotic patents"
+        },
+        {
+          "name": "Kobitz, Nat",
+          "role": "Late former Director of Science and Technology Development for the US Navy; source"
+        },
+        {
+          "name": "Puthoff, Harold",
+          "role": "Physicist (Dr Hal Puthoff) cited by Pais; TTSA figure"
+        },
+        {
+          "name": "Justice, Steve",
+          "role": "Former Skunk Works Lockheed Martin Program Director for Advanced Systems; TTSA"
+        },
+        {
+          "name": "Mellon, Christopher",
+          "role": "Former Defence Department official and insider"
+        },
+        {
+          "name": "Sheehy, James",
+          "role": "Chief technology officer / Chief Scientist of US Naval Aviation Enterprise; Pais's boss"
+        },
+        {
+          "name": "Tingley, Brett",
+          "role": "Journalist who reported on Pais's patents"
+        },
+        {
+          "name": "Cook, Nick",
+          "role": "Aerospace journalist, former aviation editor of Jane's Defence Weekly; author of The Hunt for Zero Point"
+        },
+        {
+          "name": "Trimble, George S.",
+          "role": "Former vice president with the Glenn L. Martin Company; promoted anti-gravity"
+        },
+        {
+          "name": "Kopparapu, Ravi",
+          "role": "Scientist who co-wrote Scientific American piece on UAPs"
+        },
+        {
+          "name": "Haqq-Misra, Jacob",
+          "role": "Scientist who co-wrote Scientific American piece on UAPs"
+        },
+        {
+          "name": "Blumenthal, Ralph",
+          "role": "New York Times reporter covering UFO stories"
+        },
+        {
+          "name": "Kean, Leslie",
+          "role": "New York Times journalist covering UAP/crash retrieval reporting"
+        },
+        {
+          "name": "Trump, Donald",
+          "role": "US President who commented on the Roswell incident"
+        },
+        {
+          "name": "Trump, Donald Jr.",
+          "role": "Son of Donald Trump; interviewed his father about Roswell"
+        },
+        {
+          "name": "Bender, Bryan",
+          "role": "Politico journalist who commented on UFOs"
+        },
+        {
+          "name": "Davis, Eric",
+          "role": "Defence/intelligence insider scientist who briefed Congress on off-world vehicles"
+        },
+        {
+          "name": "Elizondo, Luis",
+          "role": "Defence/intelligence insider"
+        },
+        {
+          "name": "Reid, Harry",
+          "role": "Former US Senator who made qualified assertions about recovered technology"
+        },
+        {
+          "name": "DeLonge, Tom",
+          "role": "Punk rock star and co-founder of To The Stars Academy (TTSA)"
+        },
+        {
+          "name": "Clinton, Hillary",
+          "role": "Presidential campaign candidate whose campaign planned UAP disclosure discussions"
+        },
+        {
+          "name": "Podesta, John",
+          "role": "Confidant of Presidents Clinton and Obama; corresponded with DeLonge"
+        },
+        {
+          "name": "Clinton, Bill",
+          "role": "Former US President referenced as one Podesta advised"
+        },
+        {
+          "name": "Obama, Barack",
+          "role": "Former US President referenced as one Podesta advised"
+        }
+      ],
+      "organisations": [
+        {
+          "name": "US Navy",
+          "role": "US naval military service; assignee of Dr Pais's patents"
+        },
+        {
+          "name": "Naval Air Warfare Center Aircraft Division",
+          "role": "US Navy facility on the Patuxent River, Maryland, where Dr Pais worked"
+        },
+        {
+          "name": "Laser Interferometer Gravitational-Wave Observatory (LIGO)",
+          "role": "Gravitational-wave detection observatory with receivers in Louisiana and Washington"
+        },
+        {
+          "name": "To The Stars Academy (TTSA)",
+          "role": "Organisation campaigning for US government UAP disclosure"
+        },
+        {
+          "name": "Skunk Works",
+          "role": "Lockheed Martin advanced aircraft development division"
+        },
+        {
+          "name": "Lockheed Martin",
+          "role": "Major US aerospace and defence corporation"
+        },
+        {
+          "name": "US Patent Office",
+          "role": "US government body that examined and ruled on Pais's patent applications"
+        },
+        {
+          "name": "US Naval Aviation Enterprise",
+          "role": "US Navy organisation; Dr James Sheehy was its chief technology officer"
+        },
+        {
+          "name": "Naval Air Systems Command",
+          "role": "US Navy command for research and acquisition, part of the Department of the Navy"
+        },
+        {
+          "name": "Department of the Navy",
+          "role": "US government department overseeing the Navy"
+        },
+        {
+          "name": "Senate Appropriations Committee",
+          "role": "US Senate committee referenced re congressional oversight"
+        },
+        {
+          "name": "Office of the Secretary of Defense",
+          "role": "US Defense Department office referenced re oversight"
+        },
+        {
+          "name": "US Air Force",
+          "role": "US military air service; gave the official Roswell explanation"
+        },
+        {
+          "name": "US Defence Department",
+          "role": "US Department of Defense; tasked with compiling UAP report"
+        },
+        {
+          "name": "The New York Times",
+          "role": "US newspaper that broke disclosures about the Tic Tac and UAPs"
+        },
+        {
+          "name": "Jane's Defence Weekly",
+          "role": "Leading international defence journal; Nick Cook was its aviation editor"
+        },
+        {
+          "name": "Glenn L. Martin Company",
+          "role": "Aerospace company where George S. Trimble was vice president; merged into Lockheed Martin"
+        },
+        {
+          "name": "Lockheed Martin Corporation",
+          "role": "Giant aerospace corporation formed from mergers including the Glenn L. Martin Company"
+        },
+        {
+          "name": "Scientific American",
+          "role": "Esteemed scientific publication that called for UAP investigation"
+        },
+        {
+          "name": "Project Unity",
+          "role": "Outlet/podcast that interviewed Blumenthal and Kean"
+        },
+        {
+          "name": "Senate Intelligence Committee",
+          "role": "US Senate committee that demanded a UAP report from intelligence agencies"
+        },
+        {
+          "name": "Politico",
+          "role": "News outlet; Bryan Bender commented on UFOs being on the agenda"
+        },
+        {
+          "name": "Congress",
+          "role": "US legislature given private briefings by Dr Eric Davis"
+        },
+        {
+          "name": "Democratic National Committee",
+          "role": "US political body whose leaked emails corroborated TTSA claims"
+        },
+        {
+          "name": "Nobel Prize",
+          "role": "Prestigious scientific award referenced for the gravitational-wave discovery"
+        },
+        {
+          "name": "Hillary Clinton presidential campaign",
+          "role": "Campaign planning meetings to discuss UAP disclosure"
+        }
+      ],
+      "places": [
+        {
+          "name": "USA, Maryland, Naval Air Warfare Center Aircraft Division (Patuxent River)",
+          "role": "US Navy facility where Dr Salvatore Pais worked filing his patents"
+        },
+        {
+          "name": "Laser Interferometer Gravitational-Wave Observatory (LIGO)",
+          "role": "Gravitational-wave detection observatory with receivers in Louisiana and Washington"
+        },
+        {
+          "name": "USA, California, China Lake",
+          "role": "Cited as a secret US military test site for classified technology"
+        },
+        {
+          "name": "USA, Nevada, Area 51",
+          "role": "Secret US facility cited for keeping technology classified; visited by Christopher Mellon"
+        },
+        {
+          "name": "USA, Skunk Works (Lockheed Martin)",
+          "role": "Lockheed Martin advanced development facility referenced re TR3B speculation"
+        },
+        {
+          "name": "China, Three Gorges Dam",
+          "role": "World's largest power station, cited for comparison to Pais's fusion reactor claims"
+        },
+        {
+          "name": "USA, New Mexico, Roswell",
+          "role": "Site of the mythical 1947 UFO crash referenced by Donald Trump"
+        },
+        {
+          "name": "UK, London",
+          "role": "Where Nick Cook was based during Skype mentoring conversations"
+        },
+        {
+          "name": "Australia, Sydney",
+          "role": "Where Ross Coulthart was based during his research conversations"
+        },
+        {
+          "name": "USA, California, San Francisco",
+          "role": "Home city of a reader who questioned NYT reporter Ralph Blumenthal"
+        }
+      ],
+      "events": [
+        {
+          "name": "Black hole collision producing detected gravitational waves",
+          "role": "~1.3 billion years ago, two black holes collided releasing gravitational waves later detected on Earth"
+        },
+        {
+          "name": "Einstein predicts gravitational waves",
+          "role": "In 1916, Albert Einstein predicted gravity waves exist as part of his Theory of Relativity"
+        },
+        {
+          "name": "First detection of gravitational waves",
+          "role": "On 14 September 2015, gravitational waves detected for the first time by LIGO receivers in Louisiana and Washington"
+        },
+        {
+          "name": "Announcement of gravitational wave discovery",
+          "role": "In February 2016, scientists announced the gravitational wave discovery"
+        },
+        {
+          "name": "Nobel Prize for gravitational waves",
+          "role": "Gravitational wave discovery won the Nobel Prize in 2017"
+        },
+        {
+          "name": "Newton observes gravity",
+          "role": "In 1687, Isaac Newton first observed gravity and could not explain its operation over space"
+        },
+        {
+          "name": "Pais files inertial mass reduction craft patent application",
+          "role": "In April 2016, Dr Salvatore Pais filed a patent application for a gravity-wave-driven spacecraft"
+        },
+        {
+          "name": "USS Nimitz Tic Tac UAP encounter",
+          "role": "In 2004 (12 years before the April 2016 patent), USS Nimitz and pilots tracked and videoed the Tic Tac UAP off the west coast"
+        },
+        {
+          "name": "Pais's 2015 scientific paper",
+          "role": "In 2015, Pais wrote a paper suggesting theoretical possibility of superluminal craft propulsion in Special Relativity"
+        },
+        {
+          "name": "TTSA launch",
+          "role": "At To The Stars Academy's October 2017 launch, Steve Justice described an Advanced Electromagnetic Vehicle"
+        },
+        {
+          "name": "Approval of Pais's hybrid craft patent",
+          "role": "The hybrid craft patent was approved in 2018"
+        },
+        {
+          "name": "Pais presents room temperature superconductor paper",
+          "role": "In January 2019 (the January following 2018 approval), Pais presented a paper on his Room Temperature Superconducting System"
+        },
+        {
+          "name": "Triangular craft video recorded",
+          "role": "A triangular craft was recorded on video in 1997, later cited in Mellon's email re the TR3B"
+        },
+        {
+          "name": "Examiner interview on electromagnetic field generator",
+          "role": "In July 2018, attorney and Pais presented operability information to the patent examiner for the High Energy Electromagnetic Field Generator"
+        },
+        {
+          "name": "Pais files Plasma Compression Fusion Device patent",
+          "role": "Filed in March 2018, the Compact Fusion Reactor patent application"
+        },
+        {
+          "name": "Publication of Plasma Compression Fusion Device application",
+          "role": "Pais's Plasma Compression Fusion Device application was published in September 2019"
+        },
+        {
+          "name": "Trimble promotes anti-gravity age",
+          "role": "In 1957, George S. Trimble aggressively promoted a golden age of anti-gravity predicted to start in the 1960s"
+        },
+        {
+          "name": "Spate of anti-gravity articles",
+          "role": "In the 1950s and early 1960s, articles appeared suggesting an anti-gravity breakthrough was imminent"
+        },
+        {
+          "name": "Nick Cook publishes The Hunt for Zero Point",
+          "role": "About twenty years before writing, Nick Cook wrote his book detailing a ten-year anti-gravity investigation"
+        },
+        {
+          "name": "US anti-gravity research goes dark",
+          "role": "In the 1960s, US anti-gravity research went dark but never stopped"
+        },
+        {
+          "name": "Mellon tweets about Pais's patents",
+          "role": "In July 2020, Christopher Mellon tweeted that there is no indication of testing or prototypes of Pais's patents"
+        },
+        {
+          "name": "Scientific American op-ed on UAPs",
+          "role": "In July 2020, Kopparapu and Haqq-Misra argued in Scientific American for scientific investigation of UAPs"
+        },
+        {
+          "name": "New York Times alien materials story",
+          "role": "The Times' 24 July 2020 story featured allegations the US had retrieved alien materials; Blumenthal commented to a reader"
+        },
+        {
+          "name": "Trump's Roswell comment",
+          "role": "In June 2020, President Trump made an intriguing comment about the 1947 Roswell crash in an interview with Don Jr."
+        },
+        {
+          "name": "Roswell UFO crash",
+          "role": "The mythical 1947 Roswell, New Mexico UFO crash"
+        },
+        {
+          "name": "Senate Intelligence Committee demands UAP report",
+          "role": "In late 2020, the Senate Intelligence Committee demanded a report on UAP data, due June 2021"
+        },
+        {
+          "name": "WWII Nazi scientist discoveries",
+          "role": "During World War Two, Nazi scientists allegedly made discoveries that Cook suggested were the origins of US anti-gravity research"
+        }
+      ],
+      "matters": [
+        {
+          "name": "Dr Salvatore Pais's series of US Navy patent applications (2016\u20132019)",
+          "role": "Three-year programme of exotic patents (room temperature superconductor, EM forcefield generator, gravitational wave generator, inertial mass reduction craft, fusion reactor) filed with US Navy as assignee"
+        },
+        {
+          "name": "US Navy's claimed development of an anti-gravity / inertial mass reduction craft",
+          "role": "Navy's official claim, via patents, to be developing a triangular gravity-wave-propelled hybrid aerospace-undersea craft"
+        },
+        {
+          "name": "US Navy's vouching for the operability of Pais's patents",
+          "role": "Ongoing policy of the Naval Aviation Enterprise formally asserting Pais's inventions are operable in Patent Office appeals"
+        },
+        {
+          "name": "Detection of gravitational waves at LIGO",
+          "role": "Decades-long scientific effort culminating in 2015 first detection and 2016 announcement of gravitational waves"
+        },
+        {
+          "name": "US patent law's liberal standards for patentability",
+          "role": "Policy position allowing patents for revolutionary, scientifically unproven inventions"
+        },
+        {
+          "name": "To The Stars Academy (TTSA) campaign for UAP disclosure",
+          "role": "Organisation-led campaign pressing the US government to disclose what it knows about UAPs and developing an Advanced Electromagnetic Vehicle"
+        },
+        {
+          "name": "Alleged US UAP reverse-engineering / crash retrieval program",
+          "role": "Claimed ongoing secret program to recover and replicate non-human craft, per Nat Kobitz and others"
+        },
+        {
+          "name": "US secret anti-gravity research since the 1960s",
+          "role": "Ongoing covert research effort that went dark in the 1960s but reportedly never stopped"
+        },
+        {
+          "name": "Nick Cook's investigation into anti-gravity science",
+          "role": "Ten-year journalistic investigation documented in The Hunt for Zero Point into suppressed anti-gravity research and Nazi-origin theories"
+        },
+        {
+          "name": "Ross Coulthart's investigation into UAPs and exotic propulsion",
+          "role": "The author's multi-year research effort into The Phenomenon, mentored by Nick Cook"
+        },
+        {
+          "name": "US Patent Office's rejection/abandonment of the room temperature superconductor patent",
+          "role": "Ongoing examination dispute in which the application was rejected as inoperative and ultimately abandoned"
+        },
+        {
+          "name": "Speculation that the navy patents are a strategic bluff against China and Russia",
+          "role": "Theory that the Navy filed unclassified patents to deter rivals from claiming royalties on future technology"
+        },
+        {
+          "name": "US government secrecy and suppression around The Phenomenon",
+          "role": "Decades-long alleged effort to hide and classify evidence of UAPs and crash retrievals"
+        },
+        {
+          "name": "Senate Intelligence Committee\u2013mandated UAP report",
+          "role": "Late-2020 demand for intelligence agencies and DoD to compile a report on all UAP data, due June 2021"
+        },
+        {
+          "name": "The New York Times' reporting on UAPs and alien material retrievals",
+          "role": "Ongoing coverage by Blumenthal and Kean treating crash retrievals as a classified subject"
+        },
+        {
+          "name": "Mainstream science's shift toward serious UAP investigation",
+          "role": "Turning point in 2020 (Scientific American) toward scientific legitimacy of studying UAPs"
+        },
+        {
+          "name": "Hillary Clinton presidential campaign planning of UAP disclosure",
+          "role": "Planned meetings, revealed in leaked DNC emails, to disclose The Big Secret to the public"
+        },
+        {
+          "name": "China's investment in advanced propulsion / superconductor technology",
+          "role": "Cited by Dr Sheehy as a competitive rationale for the US holding Pais's patents"
+        },
+        {
+          "name": "Quest for room temperature superconductivity",
+          "role": "Unachieved holy grail of modern physics that Pais's patent claims to have cracked"
+        }
+      ],
+      "objects": [
+        {
+          "name": "Gravitational waves (from black hole collision)",
+          "role": "Ripples in spacetime detected in 2015 from a cosmic black hole collision"
+        },
+        {
+          "name": "LIGO receivers (Louisiana and Washington)",
+          "role": "Laser Interferometer Gravitational-Wave Observatory detectors used to detect gravitational waves"
+        },
+        {
+          "name": "Gravitational wave receivers (Louisiana and Washington)",
+          "role": "Receivers that first detected gravitational waves on 14 September 2015"
+        },
+        {
+          "name": "Inertial Mass Reduction Device",
+          "role": "Pais's claimed propulsion device generating gravity waves"
+        },
+        {
+          "name": "Craft Using an Inertial Mass Reduction Device",
+          "role": "Pais's patented triangular hybrid aerospace/undersea spacecraft"
+        },
+        {
+          "name": "Room Temperature Superconductor",
+          "role": "Pais patent for a superconducting material with zero electrical resistance at room temperature"
+        },
+        {
+          "name": "Electro-magnetic Forcefield Generator / High Energy Electromagnetic Field Generator",
+          "role": "Pais patent for a device generating a defensive electromagnetic shield"
+        },
+        {
+          "name": "High Frequency Gravitational Wave Generator",
+          "role": "Pais patent device for generating high frequency gravitational waves"
+        },
+        {
+          "name": "Plasma Compression Fusion Device / Compact Fusion Reactor",
+          "role": "Pais patent for a car-sized fusion reactor producing gigawatt-terawatt output"
+        },
+        {
+          "name": "Tic Tac UAP",
+          "role": "Triangular/oblong unidentified craft tracked and videoed by USS Nimitz pilots"
+        },
+        {
+          "name": "USS Nimitz",
+          "role": "US Navy aircraft carrier whose pilots tracked the Tic Tac UAP"
+        },
+        {
+          "name": "Underwater object (Tic Tac saga)",
+          "role": "Submerged object reported travelling at hundreds of knots"
+        },
+        {
+          "name": "Advanced Electromagnetic Vehicle",
+          "role": "TTSA's revolutionary craft project altering the space-time metric"
+        },
+        {
+          "name": "TR3B",
+          "role": "Rumoured super-hypersonic US stealthy anti-gravity triangular craft producing plasma"
+        },
+        {
+          "name": "Triangular craft (1997 video)",
+          "role": "Triangular craft recorded on video in 1997, speculated to be the TR3B"
+        },
+        {
+          "name": "Superconducting wire",
+          "role": "Wire that could store massive electrical energy without losing charge"
+        },
+        {
+          "name": "Conventional batteries",
+          "role": "Power storage devices that slowly lose their charge, contrasted with superconductors"
+        },
+        {
+          "name": "Anti-Ship Ballistic Missiles",
+          "role": "Weapon threat the forcefield generator could allegedly defend against"
+        },
+        {
+          "name": "Radar Evading Cruise Missiles",
+          "role": "Weapon threat the forcefield generator could allegedly defend against"
+        },
+        {
+          "name": "Asteroid",
+          "role": "Object the forcefield generator allegedly could deflect"
+        },
+        {
+          "name": "Three Gorges Dam",
+          "role": "World's largest power station, generating 22,500 megawatts, used for comparison"
+        },
+        {
+          "name": "Vacuum/plasma bubble/sheath",
+          "role": "Plasma envelope enclosing Pais's hybrid craft for movement through air/space/water"
+        },
+        {
+          "name": "Go Fast UAP",
+          "role": "Unidentified craft described by Eric Davis as an off-world vehicle"
+        },
+        {
+          "name": "Gimbal UAP",
+          "role": "Unidentified craft described by Eric Davis as an off-world vehicle"
+        },
+        {
+          "name": "Crafted bonded metal technology",
+          "role": "Recovered material from a crash retrieval program shown to Nat Kobitz"
+        },
+        {
+          "name": "Recovered alien spacecraft",
+          "role": "Non-human manufactured craft allegedly retrieved by the US, Russia and China"
+        }
+      ],
+      "documents": [
+        {
+          "name": "'Room Temperature Superconductor' patent (US Navy, Dr Salvatore Pais)",
+          "role": "First exotic patent applied for by Pais, US Navy as assignee; later rejected/abandoned"
+        },
+        {
+          "name": "'Electro-magnetic Forcefield Generator' patent (Dr Salvatore Pais)",
+          "role": "Second Pais patent; High Energy Electromagnetic Field Generator, secured by US Navy"
+        },
+        {
+          "name": "'High Frequency Gravitational Wave Generator' patent (Dr Salvatore Pais)",
+          "role": "Third Pais patent for a gravitational wave generator"
+        },
+        {
+          "name": "'Craft Using an Inertial Mass Reduction Device' patent (Dr Salvatore Pais)",
+          "role": "Fourth Pais patent for the hybrid aerospace/undersea craft, approved 2018"
+        },
+        {
+          "name": "Dr Salvatore Pais's 2015 scientific paper on superluminal craft propulsion",
+          "role": "Paper referenced in Pais's spacecraft patent suggesting superluminal propulsion in a Special Relativity framework"
+        },
+        {
+          "name": "Pais paper 'Room Temperature Superconducting System for Use on a Hybrid Aerospace Undersea Craft'",
+          "role": "Paper presented by Pais in January 2019 making superconductivity claims"
+        },
+        {
+          "name": "'Plasma Compression Fusion Device' patent application (Dr Salvatore Pais)",
+          "role": "Pais's Compact Fusion Reactor patent, filed March 2018, published September 2019"
+        },
+        {
+          "name": "Dr James Sheehy's appeal letter to the US Patent Office",
+          "role": "Letter vouching that Pais's room temperature superconductor is operable and enabled"
+        },
+        {
+          "name": "US Patent Office documents on the room temperature superconductor patent",
+          "role": "Examiner records stating the invention was 'inoperative and therefore lacks utility'"
+        },
+        {
+          "name": "Patent examiner interview record, July 2018 (Electromagnetic Field Generator)",
+          "role": "Record of interview where Pais and a navy attorney asserted operability of the forcefield generator"
+        },
+        {
+          "name": "US patent law",
+          "role": "Body of law cited for its liberal standards on patentability"
+        },
+        {
+          "name": "US Invention Secrecy Act",
+          "role": "Law the navy could have used to keep Pais's patents secret but did not"
+        },
+        {
+          "name": "Pais's published Compact Fusion Reactor journal article",
+          "role": "Work on Compact Fusion Reactor accepted in a prestigious peer-reviewed journal"
+        },
+        {
+          "name": "The Hunt for Zero Point",
+          "role": "Book by Nick Cook detailing a ten-year investigation into anti-gravity science"
+        },
+        {
+          "name": "Jane's Defence Weekly",
+          "role": "Leading international defence journal of which Nick Cook was aviation editor"
+        },
+        {
+          "name": "TTSA October 2017 launch statement by Steve Justice",
+          "role": "Public statement describing TTSA's Advanced Electromagnetic Vehicle"
+        },
+        {
+          "name": "Christopher Mellon email to a private news group",
+          "role": "Email responding to a posted TR3B video, expressing skepticism about a US anti-gravity craft"
+        },
+        {
+          "name": "Video of a triangular craft recorded in 1997",
+          "role": "Posted footage of a triangular craft, speculated to be the TR3B"
+        },
+        {
+          "name": "Christopher Mellon July 2020 tweet",
+          "role": "Tweet stating Pais's patents' physics is disputed and the craft are not secret US tech"
+        },
+        {
+          "name": "Scientific American article by Ravi Kopparapu and Jacob Haqq-Misra",
+          "role": "July 2020 article arguing UAPs are a scientifically interesting problem"
+        },
+        {
+          "name": "The New York Times 24 July 2020 story on retrieved alien materials",
+          "role": "Article alleging the US had retrieved alien materials, with reader comment exchange"
+        },
+        {
+          "name": "Ralph Blumenthal's online comment reply",
+          "role": "Cryptic NYT comment-section response to a reader about decades-long suppression"
+        },
+        {
+          "name": "Project Unity interview with Blumenthal and Leslie Kean",
+          "role": "Interview in which both journalists discuss crash retrievals as a classified subject"
+        },
+        {
+          "name": "Senate Intelligence Committee mandated UAP report",
+          "role": "Report demanded of US intelligence/Defence agencies, due June 2021"
+        },
+        {
+          "name": "Politico commentary by Bryan Bender",
+          "role": "Commentary noting 'UFOs are now on the agenda'"
+        },
+        {
+          "name": "Donald Trump interview with Donald Trump Jr.",
+          "role": "June 2020 interview where Trump made an intriguing comment about Roswell"
+        },
+        {
+          "name": "US Air Force explanation for Roswell",
+          "role": "Official prosaic US Air Force explanation for the 1947 Roswell incident"
+        },
+        {
+          "name": "Leaked Democratic National Committee emails",
+          "role": "Leaked emails corroborating Tom DeLonge's claims and disclosure planning"
+        },
+        {
+          "name": "Dr Eric Davis's private congressional briefings",
+          "role": "Briefings to Congress stating Tic Tac/Go Fast/Gimbal UAPs are off-world vehicles"
+        },
+        {
+          "name": "Isaac Newton's statement on gravity ('Hypotheses non fingo')",
+          "role": "Newton's recorded remark that he could not discover the cause of gravity"
+        },
+        {
+          "name": "The New York Times disclosures about the Tic Tac",
+          "role": "NYT reporting on the Tic Tac and mysterious craft seen by the US Navy"
+        }
+      ],
+      "concepts": [
+        {
+          "name": "Gravitational waves",
+          "role": "Ripples in spacetime predicted by Einstein, first detected 2015"
+        },
+        {
+          "name": "Theory of Relativity",
+          "role": "Einstein's theory of gravity and spacetime that predicted gravity waves"
+        },
+        {
+          "name": "Special relativity",
+          "role": "Framework cited for theoretical superluminal craft propulsion"
+        },
+        {
+          "name": "Gravity",
+          "role": "Attractive force Newton observed but could not explain over cosmic distances"
+        },
+        {
+          "name": "Hypotheses non fingo",
+          "role": "Newton's stated refusal to feign hypotheses about gravity's cause"
+        },
+        {
+          "name": "Inertial mass reduction",
+          "role": "Claimed reduction of inertial/gravitational mass for propulsion"
+        },
+        {
+          "name": "Superluminal (faster-than-light) travel",
+          "role": "Travel exceeding the speed of light, claimed feasible by Pais"
+        },
+        {
+          "name": "Speed of light as cosmic speed limit",
+          "role": "Relativistic postulate that no matter can exceed light speed"
+        },
+        {
+          "name": "Vacuum polarisation",
+          "role": "Manipulation of quantum vacuum invoked to diminish mass"
+        },
+        {
+          "name": "Quantum vacuum",
+          "role": "Polarised energy field said to surround the craft and reduce mass"
+        },
+        {
+          "name": "Zero-point energy",
+          "role": "Vacuum energy concept central to anti-gravity research (Cook's book)"
+        },
+        {
+          "name": "Room temperature superconductivity",
+          "role": "Unachieved holy grail of physics\u2014conduction without cooling"
+        },
+        {
+          "name": "Superconductivity",
+          "role": "State of zero electrical resistance in certain cooled materials"
+        },
+        {
+          "name": "Anti-gravity propulsion",
+          "role": "Sought technology to counteract gravity for craft propulsion"
+        },
+        {
+          "name": "Pais Effect",
+          "role": "Pais's claimed phenomenon of controlled motion of charged matter via accelerated spin/vibration"
+        },
+        {
+          "name": "Nuclear fusion",
+          "role": "Energy-releasing reaction Pais claims to harness in a compact reactor"
+        },
+        {
+          "name": "Magnetic confinement fusion",
+          "role": "Use of magnetic fields to contain plasma temperatures for fusion"
+        },
+        {
+          "name": "Plasma",
+          "role": "Ionised state of matter forming the craft's vacuum/plasma sheath"
+        },
+        {
+          "name": "Electromagnetic propulsion",
+          "role": "EM-field drive said to generate gravitational waves for the craft"
+        },
+        {
+          "name": "Warp drive",
+          "role": "Sci-fi propulsion altering the space-time metric, mimicked by TTSA vehicle concept"
+        },
+        {
+          "name": "Unidentified Aerial Phenomena",
+          "role": "Unexplained craft observed by navy pilots and worldwide"
+        },
+        {
+          "name": "Black holes",
+          "role": "Collapsed-star gravity fields whose collision produced detected gravity waves"
+        }
+      ]
+    },
+    "totals_per_type": {
+      "people": 27,
+      "organisations": 26,
+      "places": 10,
+      "events": 27,
+      "matters": 19,
+      "objects": 26,
+      "documents": 31,
+      "concepts": 22
+    }
+  }
+]
