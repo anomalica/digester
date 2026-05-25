@@ -23,15 +23,30 @@ from digester.models import (
 
 EXTRACTION_PROMPT = """You are extracting structured knowledge from a document for a knowledge graph.
 
-The knowledge graph uses these node types:
-- "person": a named human individual
-- "organisation": a named group (government bodies, military units, companies, programmes)
+The knowledge graph uses these node types (eight total - "matter" is no longer one of them; see below for where the old "matter" content goes):
+
+- "person": a named human individual.
+
+- "organisation": a named acting entity - government bodies, military units, companies, research groups, agencies, publications, news outlets, committees, programmes, investigations, foundations, advocacy groups. Includes both ongoing standing bodies (the US Department of Defense, the New York Times) AND named time-bounded operational efforts (AATIP, Project Blue Book, the Condon Committee). For the latter, set the optional `metadata.kind` field to one of: `programme` (a funded operational structure with named scope and staff, e.g. AATIP, Stargate, Project Apollo), `investigation` (a probe with a defined question and concluding output, e.g. Project Blue Book, the Condon Committee, an Inspector General review), `agency` (standing government body), `unit` (named military or operational unit), `committee` (named oversight/investigation committee), `publication` (named newspaper, journal, podcast, book series), or another short kebab-case descriptor if none of those fit. When unsure, omit `kind` and just emit the bare organisation.
+
 - "place": a named geographic location. Use "Country, Region, City" or "Country, Feature" format - largest geographic unit first (e.g. "USA, Nevada, Area 51" not "Area 51"; "Australia, Queensland, Tully" not "Tully Queensland"; "Mexico, Gulf of Mexico" not "Gulf of Mexico"). For features that span countries (Persian Gulf, Bermuda Triangle), use the region: "Middle East, Persian Gulf".
-- "event": a discrete thing that happened at a specific time (must have a date)
-- "matter": an ongoing situation spanning a period of time (programmes, investigations, policy positions). MATTER vs CONCEPT test: a matter is something people DO over time (research, an investigation, a cover-up, a programme); a concept is an IDEA/theory/phenomenon that can be referred to independent of anyone acting on it. "US anti-gravity research" = matter (people are doing research). "Anti-gravity propulsion" = concept (the idea itself). Both can exist as separate nodes about one subject.
-- "object": a specific named PHYSICAL thing you could literally touch or point at. The touch test - if you cannot imagine reaching out and putting your hand on it, it is NOT an object. Craft, materials, devices, samples, sensors, weapons, named buildings (only as objects when the physical structure is the subject), ships, aircraft, vehicles all pass. Phenomena, disturbances, events, effects, hypotheses, observations, video footage all FAIL the touch test - "water disturbance" is not an object (you can't touch a disturbance, only the water during it), "a flash of light" is not an object, "the radar return" is not an object, "the glow" is not an object. If the candidate is the physical effect, ripple, signature, or appearance of something rather than the thing itself, do not emit it as an object at all. Documents are also NOT objects (use document type).
+
+- "event": a discrete or bounded-in-time thing that happened. MUST have a start date (ISO format, at least a year). Events can be instantaneous OR span a period of hours, days, weeks, months, or years - use `metadata.date_start` (mandatory) and optionally `metadata.date_end` for bounded periods. The Nimitz UAP encounter (2004-11-10 to 2004-11-16) is ONE event spanning seven days. AATIP's operational period (2007 to 2012) is ONE event if you want to refer to the programme's lifespan as a temporal subject (though the programme itself is an `organisation` node with `kind: programme`). The Watergate inquiry (1972 to 1974) is one event-as-period. Use event when you want to refer to "the thing that happened across this stretch of time"; use organisation when you want to refer to "the body that did things during that time". Both can coexist for the same real-world activity (the AATIP programme = organisation; the AATIP operational period = event).
+
+- "object": a specific named PHYSICAL thing you could literally touch or point at. The touch test - if you cannot imagine reaching out and putting your hand on it, it is NOT an object. Craft, materials, devices, samples, sensors, weapons, named buildings (only as objects when the physical structure is the subject), ships, aircraft, vehicles all pass. Phenomena, disturbances, events, effects, hypotheses, observations, video footage all FAIL the touch test - "water disturbance" is not an object (you can't touch a disturbance, only the water during it), "a flash of light" is not an object, "the radar return" is not an object, "the glow" is not an object. Documents are also NOT objects (use document type).
+
 - "document": a written or recorded artefact (memo, report, letter, article, paper, book, briefing, video footage, slides, statement, testimony, affidavit, Freedom of Information Act release). Always use this for textual or recorded artefacts, never "object".
-- "concept": a RECOGNISED named idea, theory, principle, or phenomenon that exists independent of this document - something a reader could look up and find defined elsewhere (general relativity, special relativity, gravitational waves, superconductivity, zero-point energy, anti-gravity propulsion, nuclear fusion, the Pais Effect, vacuum polarisation). A concept may be referenced without being asserted (general relativity is referenced, never argued) and is still extracted. STRICT EXCLUSIONS - do NOT emit a concept for: (a) anything touchable - that is an object ("room temperature superconductor" = object; "room temperature superconductivity" = concept; rule: "X device/reactor/craft" is an object, "X" the principle is the concept); (b) anything tied to a specific time - that is an event or matter; (c) a person, place, or organisation; (d) an effort people run over time (research, a programme, an investigation) - that is a matter; (e) a vague catch-all where almost anything could carry the label ("the big secret", "the phenomenon", "disclosure of the truth"); (f) jargon or a mechanism lifted from quoted technical/patent text that is not a recognised standalone idea ("non-linear scattering of RF and sonar signals", "vacuum/plasma bubble sheath"); (g) a claimed capability or consequence ("asteroid deflection", "electricity grid revolution"); (h) an ad-hoc theory named only within this document and not recognised outside it ("the test-flight theory"). Merge synonyms to ONE concept (superluminal travel = faster-than-light travel = warp speed: one node, the rest aliases).
+
+- "concept": a RECOGNISED named idea, theory, principle, or phenomenon that exists independent of this document - something a reader could look up and find defined elsewhere (general relativity, special relativity, gravitational waves, superconductivity, zero-point energy, anti-gravity propulsion, nuclear fusion, the Pais Effect, vacuum polarisation). A concept may be referenced without being asserted (general relativity is referenced, never argued) and is still extracted. STRICT EXCLUSIONS - do NOT emit a concept for: (a) anything touchable - that is an object ("room temperature superconductor" = object; "room temperature superconductivity" = concept; rule: "X device/reactor/craft" is an object, "X" the principle is the concept); (b) anything tied to a specific time - that is an event or organisation; (c) a person, place, or organisation; (d) an effort people run over time (research, a programme, an investigation) - that is an organisation with `kind: programme` or `kind: investigation`; (e) a vague catch-all where almost anything could carry the label ("the big secret", "the phenomenon", "disclosure of the truth"); (f) jargon or a mechanism lifted from quoted technical/patent text that is not a recognised standalone idea ("non-linear scattering of RF and sonar signals", "vacuum/plasma bubble sheath"); (g) a claimed capability or consequence ("asteroid deflection", "electricity grid revolution"); (h) an ad-hoc theory named only within this document and not recognised outside it ("the test-flight theory"). Merge synonyms to ONE concept (superluminal travel = faster-than-light travel = warp speed: one node, the rest aliases).
+
+- "pattern": a recurring shape observed across cases - either across multiple cases within this document, OR across multiple documents in the corpus. Examples: shifting official accounts of anomalous events, UAP observed near nuclear facilities, witness intimidation after sightings, biological effects on witnesses, document destruction after sensitive events. A pattern is the SHAPE, not any single instance: "Roswell secrecy" is an event; "the recurring shape of denial-then-partial-acknowledgement across UAP cases" is a pattern. There is NO minimum-case rule - a pattern can be emitted from a single document if the document itself names the recurring shape (e.g. an analytical book chapter that observes "X has happened repeatedly"). What makes something a pattern rather than an event: the focus is on the recurring shape itself, abstracted from any one instance. Pattern node names should describe the shape in a sentence-like form ("UAP observed in proximity to nuclear facilities") not a single case ("the Malmstrom incident").
+
+WHERE THE OLD "matter" TYPE GOES - if you would previously have emitted a node of type matter, classify it instead as:
+  - bounded-time activity (e.g. "the Nimitz operation 2004-11-10 to 2004-11-16") -> EVENT with metadata.date_end
+  - ongoing operational structure (e.g. "AATIP programme", "Project Blue Book") -> ORGANISATION with metadata.kind = programme / investigation / etc
+  - recognised research subject or theory (e.g. "US anti-gravity research", "Pais Effect") -> CONCEPT
+  - cross-case recurring phenomenon (e.g. "shifting official accounts", "UAP near nuclear facilities") -> PATTERN
+  - If none of the above fit, the candidate is probably not a node at all - it may be a claim about an existing node, or context that does not need its own node.
 
 And these claim types:
 - "observation": the speaker directly perceived something
@@ -65,7 +80,7 @@ RULES:
    Same rule applies to "X, who is the Y of Z, did A" - split into "X is the Y of Z" + "X did A". And to "X arrived at place B, where they met Y" - split into "X arrived at place B" + "X met Y at place B". One verb, one assertion per claim.
 2. Every claim needs a claim_type and attestation level.
 3. node_references in claims should list the names of nodes the claim mentions.
-4. PORTABILITY (the card test): every node name must be identifiable on its own, out of context. If you wrote the name on a card and handed it to a stranger who had never seen this document, they should be able to tell what it refers to. Names that fail the card test: "the hearing", "the testimony", "this document", "the meeting", "the briefing", "the report" - these only make sense in the surrounding text. ALWAYS include enough specificity (date, parties, subject) that the name stands alone. "Luis Elizondo's written testimony to the House Oversight Subcommittee on UAP, 13 November 2024" beats "the testimony". "House Oversight Subcommittee UAP hearing of 26 July 2023" beats "the hearing". "2024 AARO Historical Record Report" beats "the report". This rule applies to ALL node types - persons, organisations, places, events, matters, objects, documents, concepts.
+4. PORTABILITY (the card test): every node name must be identifiable on its own, out of context. If you wrote the name on a card and handed it to a stranger who had never seen this document, they should be able to tell what it refers to. Names that fail the card test: "the hearing", "the testimony", "this document", "the meeting", "the briefing", "the report" - these only make sense in the surrounding text. ALWAYS include enough specificity (date, parties, subject) that the name stands alone. "Luis Elizondo's written testimony to the House Oversight Subcommittee on UAP, 13 November 2024" beats "the testimony". "House Oversight Subcommittee UAP hearing of 26 July 2023" beats "the hearing". "2024 AARO Historical Record Report" beats "the report". This rule applies to ALL node types - persons, organisations, places, events, objects, documents, concepts, patterns.
 
 4a. REDACTED AND ANONYMOUS PEOPLE - DO NOT EXTRACT AS PERSON NODES. If the source identifies an actor only by job title plus "(redacted)" or "(name redacted)" or similar, that actor has NO extractable identity and MUST NOT become a person node. The Nimitz Carrier Strike Group AAV Incident Report is the canonical case: "the USS Louisville Submarine Officer (redacted) reported X" must NOT produce a person node named "USS Louisville Submarine Officer (redacted)". Instead, attribute the claim to USS Louisville (the ship - emit as an object node or organisation as appropriate) and describe the role in the claim text: "a USS Louisville submarine officer reported X". Same for "3rd Fleet N2 (redacted)" - attribute to "3rd Fleet Intelligence" as an organisation, role in text. The presence of "(redacted)" or "(name redacted)" in a candidate person name is an absolute disqualification. Do NOT create such nodes even if it makes attribution harder.
 
@@ -128,6 +143,8 @@ RULES:
 6a. ANCHORING - USE AN ANCHOR ONLY WHEN THE CLAIM IS ABOUT THE MAIN MATTER OR EVENT.
 
    The metadata associated with every claim already names the source document (its title, date, and id). Repeating the document name as a prefix on every claim text is NOT real portability - it duplicates information the metadata carries and the workbench already displays as the record header. Real portability means the claim text is intelligible standing alone WHEN MIXED WITH CLAIMS FROM OTHER DOCUMENTS.
+
+   TERMINOLOGY NOTE: in this section "main matter" means the principal SUBJECT of the document - the field is still called `main_matter` for code stability, but the value's `type` is now one of `event`, `organisation`, or `pattern` (since "matter" is no longer a valid node type per the taxonomy above).
 
    STEP 1 - identify the main matter and any main event the document covers (see Step 1/2 conventions below).
 
@@ -216,8 +233,9 @@ RULES:
 
    Name qualifying places "Country, Region, Specific" largest-unit-first ("USA, Nevada, Area 51", "Australia, Queensland, Tully", "USA, New Mexico, Roswell"). The country/state prefix is for disambiguation and sorting; it does NOT mean the country or state is itself a separate place node.
 
-7a. PROGRAMME vs INVESTIGATION (organisation vs matter): a named programme is an ORGANISATION - it has a name, a budget, staff, an authority. The work the programme performs over time is a MATTER. "Advanced Aerospace Threat Identification Program (AATIP)" is an organisation. "AATIP's investigation of UAP encounters" is a matter referencing AATIP. NEVER emit a programme-named node twice (once as organisation and once as matter). The programme name is the organisation; the work is described in claims attached to the organisation. If the source talks about ongoing inquiries with no fixed institutional name, that may be a matter ("the post-9/11 push for UAP disclosure"), but a NAMED programme is always an organisation.
-8. Events MUST have a date. If you cannot determine at least a year, use "matter" instead.
+7a. PROGRAMME / INVESTIGATION as ORGANISATION SUB-KIND: a named programme or investigation is an ORGANISATION with optional `metadata.kind` set to `programme` or `investigation`. "Advanced Aerospace Threat Identification Program (AATIP)" = organisation, `kind: programme`. "Project Blue Book" = organisation, `kind: investigation`. Do NOT emit a separate event-or-other-typed node for the work the programme performs over time - that work is described in claims attached to the organisation. If you ALSO want to refer to the temporal period during which the programme operated as a distinct subject (e.g. "the 2007-2012 AATIP era" treated as a thing that happened), emit an event with date_start/date_end alongside the organisation. The DEFAULT for a named programme/investigation is: emit only the organisation; only add an event-as-period if the document treats the operational period itself as a discrete subject.
+
+8. Events MUST have at least a year for date_start. If a candidate "event" has no date at all, it is not actually an event - reconsider what type it is. Bounded events use both date_start and date_end (e.g. Nimitz UAP encounter date_start: 2004-11-10, date_end: 2004-11-16; Watergate investigation date_start: 1972, date_end: 1974).
 9. Normalise all text to English regardless of source language.
 10. speaker is the person making the assertion (may differ from the document's author).
 11. location_in_record is where in the document the claim appears (page, timestamp, paragraph).
@@ -249,7 +267,7 @@ OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
 "record_date": "YYYY-MM-DD or YYYY-MM or YYYY if known",
 "record_producer": "person or organisation that produced this document",
 "nodes": [
-    {{"name": "canonical short name", "node_type": "person|organisation|place|event|matter|object|document|concept", "metadata": {{"date_start": "...", "date_end": "..."}}}}
+    {{"name": "canonical short name", "node_type": "person|organisation|place|event|object|document|concept|pattern", "metadata": {{"date_start": "...", "date_end": "...", "kind": "programme|investigation|agency|... (organisations only, optional)"}}}}
 ],
 "claims": [
     {{"content": "normalised assertion with metric units",
@@ -264,7 +282,9 @@ OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
 ]}}"""
 
 VALID_NODE_TYPES = {
-    t.value for t in NodeType if t not in (NodeType.record, NodeType.claim)
+    t.value
+    for t in NodeType
+    if t not in (NodeType.record, NodeType.claim, NodeType.matter)
 }
 VALID_CLAIM_TYPES = {t.value for t in ClaimType}
 VALID_ATTESTATION = {t.value for t in AttestationLevel}
@@ -338,12 +358,13 @@ INFRASTRUCTURE_PROMPT = """You are extracting INFRASTRUCTURE information from a 
 
 The knowledge graph uses these node types:
 - "person": a named human individual
-- "organisation": a named entity distinct from any single person (includes podcasts, news outlets, publications, agencies, companies)
+- "organisation": a named entity distinct from any single person (includes podcasts, news outlets, publications, agencies, companies; programmes and investigations are organisations with optional metadata.kind)
 - "place": a named geographic location
-- "event": a discrete thing that happened at a specific time (must have a date)
-- "matter": an ongoing situation spanning a period of time
+- "event": a discrete or bounded-in-time thing that happened (must have at least a start year; can also have date_end for periods)
 - "object": a specific named physical thing
-- "record": a specific piece of content (a book, a podcast episode, a documentary, an article)
+- "document": a specific piece of content (a book, a podcast episode, a documentary, an article, a memo)
+- "concept": a recognised named idea or principle
+- "pattern": a recurring shape observed across cases
 
 Claim types:
 - "observation": the speaker directly perceived something
@@ -385,7 +406,7 @@ OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
 "record_date": "YYYY-MM-DD or YYYY-MM or YYYY if known",
 "record_producer": "person or organisation that produced this document",
 "nodes": [
-    {{"name": "canonical short name", "node_type": "person|organisation|place|event|matter|object|record", "metadata": {{"sentiment": "positive|negative|neutral"}}}}
+    {{"name": "canonical short name", "node_type": "person|organisation|place|event|object|document|concept|pattern", "metadata": {{"sentiment": "positive|negative|neutral"}}}}
 ],
 "claims": [
     {{"content": "infrastructure assertion",
@@ -498,7 +519,7 @@ OUTPUT FORMAT - respond with ONLY valid JSON, no markdown fencing:
 {{
   "main_matter": {{
     "name": "canonical portable name following the rules above",
-    "type": "matter or event",
+    "type": "event or organisation or pattern (use 'event' for a dated subject the document is about; 'organisation' for a named body/programme the document covers; 'pattern' for a cross-case shape the document analyses; 'matter' is no longer a valid type)",
     "date": "YYYY-MM-DD or YYYY-MM or YYYY or YYYY-MM-DD to YYYY-MM-DD"
   }},
   "main_event": {{
@@ -528,7 +549,10 @@ TERMINOLOGY_SCHEMA = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "type": {"type": "string", "enum": ["matter", "event"]},
+                "type": {
+                    "type": "string",
+                    "enum": ["event", "organisation", "pattern"],
+                },
                 "date": {"type": "string"},
             },
             "required": ["name", "type"],
@@ -634,7 +658,7 @@ def _parse_terminology_response(raw: str) -> dict:
 
 def _stub_terminology() -> dict:
     return {
-        "main_matter": {"name": "", "type": "matter"},
+        "main_matter": {"name": "", "type": "event"},
         "main_event": None,
         "codenames": [],
         "acronyms": [],
@@ -654,7 +678,7 @@ def format_terminology_context(terminology: dict) -> str:
 
     lines: list[str] = ["DOCUMENT TERMINOLOGY (resolved before claims):", ""]
     if mm_name:
-        mm_type = mm.get("type") or "matter"
+        mm_type = mm.get("type") or "event"
         lines.append(
             f"THE MAIN {mm_type.upper()} NODE FOR THIS DOCUMENT ALREADY EXISTS: "
             f'name="{mm_name}", type={mm_type}.'
