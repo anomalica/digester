@@ -16,16 +16,21 @@ class NodeType(str, Enum):
     organisation = "organisation"
     place = "place"
     event = "event"
-    matter = "matter"  # ADR 0028 deprecates; kept for the 157 unmigrated matters
+    matter = "matter"  # deprecated; kept for back-compat with older DB state
     object = "object"
     document = "document"
-    concept = "concept"
+    concept = "concept"  # deprecated by 2026-05-25 taxonomy revision in favour of `principle` (renamed to avoid "concept aircraft" misclassification)
     record = "record"
     claim = "claim"
-    # ADR 0028 additions: split out from matter / organisation
+    # ADR 0028 additions, kept for back-compat with older DB state
     programme = "programme"
     investigation = "investigation"
     pattern = "pattern"
+    # 2026-05-25 taxonomy revision: project collapses programme+investigation;
+    # principle is the renamed concept (display label remains "topic" on the
+    # public site for navigation friendliness, code uses principle).
+    project = "project"
+    principle = "principle"
 
 
 class ClaimType(str, Enum):
@@ -35,6 +40,15 @@ class ClaimType(str, Enum):
     opinion = "opinion"
     measurement = "measurement"
     administrative = "administrative"
+
+
+class ClaimCategory(str, Enum):
+    """Whether a claim is domain content (publishable to the public site) or
+    infrastructure (source-graph cross-references, citations, recommendations,
+    interview chains - kept for content discovery but not published)."""
+
+    domain = "domain"
+    infrastructure = "infrastructure"
 
 
 class ClaimRole(str, Enum):
@@ -92,6 +106,7 @@ class Claim(BaseModel):
     original_excerpt: str | None = None
     claim_type: ClaimType
     claim_role: ClaimRole | None = None
+    category: ClaimCategory = ClaimCategory.domain
     attestation: AttestationLevel
     record_id: str
     speaker_id: str | None = None
@@ -122,6 +137,7 @@ class ExtractedClaim(BaseModel):
     original_excerpt: str | None = None
     claim_type: ClaimType
     claim_role: ClaimRole | None = None
+    category: ClaimCategory = ClaimCategory.domain
     attestation: AttestationLevel
     speaker: str | None = None
     location_in_record: str | None = None

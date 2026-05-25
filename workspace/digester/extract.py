@@ -1079,6 +1079,568 @@ def extract_infrastructure(
     )
 
 
+# ============================================================================
+# TWO-PASS ARCHITECTURE (2026-05-25 onward)
+#
+# Replaces the old terminology-then-extract-then-infrastructure flow. The
+# two-pass split solved the within-output node-duplication problem (single
+# inference can't reliably dedup ~200-item output) by giving each pass a
+# tighter focus and smaller output:
+#
+#   Pass A (nodes only): identify every named entity with canonical form.
+#       Also returns main_subject + codenames_to_resolve + acronym glossary
+#       (folded in from the deprecated terminology pre-pass). Iterates per
+#       chunk until convergence; threads the running directory across chunks.
+#
+#   Pass B (claims only): extract claims, constrained to using only Pass A's
+#       node names in node_references (enforced by JSON schema enum on the
+#       items of node_references). Each claim carries category: domain |
+#       infrastructure - infrastructure claims are the source-graph cross-
+#       references (X cites Y, X interviews Z, X recommends Y) that the
+#       public site filters out but we retain for content discovery.
+#
+# Node taxonomy is the 8-type set: person, organisation, project, place,
+# event (with optional date_end), object, document, principle. The old
+# matter / programme / investigation / pattern / concept types stay in the
+# NodeType enum for back-compat but are not in the extraction enum.
+# ============================================================================
+
+NODE_TYPES_V2 = [
+    "person",
+    "organisation",
+    "project",
+    "place",
+    "event",
+    "object",
+    "document",
+    "principle",
+]
+
+CATEGORIES_V2 = ["domain", "infrastructure"]
+
+
+NODES_PROMPT_V2 = """You are extracting the COMPLETE NODE DIRECTORY for a knowledge graph from a single document chunk.
+
+Your ONLY job in this call is to identify every distinct named entity in the chunk and return ONE canonical record per real-world thing. Claims are a separate pass.
+
+================================================================
+NODE TYPES (eight - choose one per node)
+================================================================
+
+- "person": a named human individual. Format "Last, First Middle". No titles/ranks/honourifics. Pseudonyms and single-name historical figures stay as-is. Do NOT create person nodes for redacted/anonymous actors ("USS Louisville Officer (redacted)") - attribute to the relevant organisation instead.
+
+- "organisation": a named acting BODY - government agencies, military units, companies, research institutes, publications, news outlets, committees, standing offices, foundations. Distinguished from project: an organisation is the BODY; a project is the WORK it runs.
+
+- "project": a NAMED time-bounded or initiative-bounded effort - programmes, investigations, operations, research projects, official inquiries. AATIP, Project Apollo, Project Blue Book, AAWSAP, the Condon Committee inquiry, the AARO Historical Record review, the Manhattan Project, OXCART, Stargate. The US Air Force is an organisation; Project Blue Book is a project the Air Force ran.
+
+- "place": a named geographic location. Format "Country, Region, Specific" largest-unit-first. "USA, Nevada, Area 51". Do NOT extract countries/states/regions as places.
+
+- "event": a discrete or bounded-in-time occurrence. Has at least a start year. Can span hours, days, months, years - use metadata.date_start (required) and optionally metadata.date_end. The Nimitz UAP encounter 2004-11-10 to 2004-11-16 is ONE event.
+
+- "object": a specific named PHYSICAL thing - craft, vessel, vehicle, sample, device, named building, recovered material. Must pass the touch test - you could imagine reaching out and touching it. Phenomena, effects, video footage all FAIL the touch test.
+
+- "document": a written or recorded artefact - book, report, paper, FOIA release, video footage, podcast episode, article, memo, testimony, affidavit, patent application.
+
+- "principle": a RECOGNISED named idea, theory, framework, or phenomenon that exists independent of this document (general relativity, the Pais Effect, anti-gravity propulsion, zero-point energy, vacuum polarisation). NOT a specific named alleged craft (TR-3B is NOT a principle - it is an alleged craft, classify as object or document). NOT generic touchable nouns (gravity, plasma). NOT mechanisms lifted from patent jargon. NOT vague catch-alls. NOT ad-hoc theories named only within this document.
+
+NOTE: there is no "matter", "concept", or "pattern" type for extraction in this pass. Things that previously would have been matters now classify as event (bounded time), organisation (standing body), project (named effort), or principle (recognised idea). Cross-case patterns are curator-created, not extractor-emitted.
+
+================================================================
+PORTABILITY - the card test
+================================================================
+
+Every node name must be identifiable on its own, out of context. "the testimony", "the hearing", "the report" all FAIL - include enough specificity (date, parties, subject) that the name stands alone.
+
+================================================================
+ACRONYM EXPANSION in node names
+================================================================
+
+Write acronyms as "Full Name (ACRONYM)":
+  - AATIP -> "Advanced Aerospace Threat Identification Program (AATIP)"
+  - AARO -> "All-Domain Anomaly Resolution Office (AARO)"
+  - DIA -> "Defense Intelligence Agency (DIA)"
+  - VFA-41 -> "Strike Fighter Squadron 41 (VFA-41)"
+  - CSG-11 -> "Carrier Strike Group 11 (CSG-11)"
+  - NAVAIR -> "Naval Air Systems Command (NAVAIR)"
+  - LIGO -> "Laser Interferometer Gravitational-Wave Observatory (LIGO)"
+
+SAFE ACRONYMS (use bare, never expand): UFO, UAP, CIA, FBI, NSA, NASA, DoD, FAA, NATO, UN, EU, US, USA, UK, USSR, GPS, TV, CPU, GPU, USB, URL, API.
+
+================================================================
+DEDUPLICATION - mandatory
+================================================================
+
+Each real-world entity appears as ONE node only. Before emitting, check for these duplicate variants and merge:
+
+  (a) Acronym suffix present vs absent: "Defense Intelligence Agency" + "Defense Intelligence Agency (DIA)" - emit ONCE with acronym.
+  (b) Country prefix variants: "Navy" + "US Navy" + "United States Navy" - emit ONCE.
+  (c) DoD variants: "DoD" + "Department of Defense" + "United States Department of Defense" + "Department of Defense (DoD)" - emit ONCE.
+  (d) US/UK spelling: "Naval Air Warfare Center" + "Naval Air Warfare Centre" - emit ONCE.
+  (e) Long-form vs short-form: "House Oversight Subcommittee" + "the subcommittee" - emit ONCE with the long portable form.
+  (f) Descriptor parentheses: "Project Unity" + "Project Unity (podcast)" - emit ONCE.
+
+If a candidate appears in the EXISTING NODE DIRECTORY below (from prior chunks), use the EXACT name from the directory - do NOT create a variant.
+
+================================================================
+ALSO RETURN with the nodes list
+================================================================
+
+  - main_subject: the canonical NAME of the one node from your list (or the existing directory) that is this document's principal subject. Used by downstream claim extraction to anchor claims. If this is a chunk of a larger document, the main subject is the same across all chunks; just emit it.
+
+  - codenames_to_resolve: callsigns and military codenames (FASTEAGLE 01, Tic Tac, Fast Walker) that should NEVER become person/object nodes. For each, name the real entity it refers to.
+
+  - acronyms: every domain-specific acronym, with its expansion. Helps the claims pass expand on first use.
+
+================================================================
+OUTPUT FORMAT - valid JSON only, no markdown fencing
+================================================================
+
+{{
+  "main_subject": "canonical name",
+  "nodes": [
+    {{
+      "name": "canonical portable name",
+      "node_type": "person|organisation|project|place|event|object|document|principle",
+      "metadata": {{"date_start": "...", "date_end": "..." (events only, optional)}}
+    }}
+  ],
+  "codenames_to_resolve": [{{"codename": "X", "refers_to": "canonical name"}}],
+  "acronyms": [{{"acronym": "AAV", "expansion": "Anomalous Aerial Vehicle"}}],
+  "extraction_complete": true
+}}
+
+If the model has emitted everything it can from this chunk in this round (no more nodes to add), set extraction_complete=true. The iterative loop reads this and stops asking for more.
+"""
+
+
+NODES_SCHEMA_V2 = {
+    "type": "object",
+    "required": ["nodes", "main_subject", "extraction_complete"],
+    "properties": {
+        "main_subject": {"type": "string"},
+        "nodes": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["name", "node_type"],
+                "properties": {
+                    "name": {"type": "string"},
+                    "node_type": {"type": "string", "enum": NODE_TYPES_V2},
+                    "metadata": {"type": "object", "additionalProperties": True},
+                },
+            },
+        },
+        "codenames_to_resolve": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["codename", "refers_to"],
+                "properties": {
+                    "codename": {"type": "string"},
+                    "refers_to": {"type": "string"},
+                },
+            },
+        },
+        "acronyms": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["acronym", "expansion"],
+                "properties": {
+                    "acronym": {"type": "string"},
+                    "expansion": {"type": "string"},
+                },
+            },
+        },
+        "extraction_complete": {"type": "boolean"},
+    },
+}
+
+
+CLAIMS_PROMPT_V2_TEMPLATE = """You are extracting EVERY factual claim from a document chunk for a knowledge graph. A previous pass has identified all named entities (the NODE DIRECTORY below). Each claim must reference ONLY those existing nodes by their exact canonical names.
+
+================================================================
+NODE DIRECTORY - use ONLY these names in node_references
+================================================================
+
+{directory}
+
+MAIN SUBJECT of this document: {main_subject}
+  Use this name verbatim as the anchor for claims that are specifically about the main subject (see anchoring rules below).
+
+{codenames_block}
+
+{acronyms_block}
+
+================================================================
+CLAIM CATEGORIES - every claim is tagged with one
+================================================================
+
+- "domain" (most claims): facts about UAP, witnesses, encounters, investigations, careers, programmes, organisations, biographical facts, observations, measurements, official statements, findings. Anything that establishes a fact about the world.
+
+- "infrastructure" (the source-graph): claims whose purpose is to point at OTHER content - X cites Y, X recommends Z, X interviewed Y, X appeared on Z's podcast, X mentions Y's book. "Coulthart cites Vallée's Passport to Magonia" = infrastructure. "Mellon appeared on Fox & Friends" = infrastructure. "Bender wrote in Politico that..." (where the substance is "X reported Y elsewhere"): infrastructure if the focus is the report, domain if the focus is the substantive fact Y. NOT publication facts about the document itself - those are still infrastructure but be sparing.
+
+The rule of thumb: if the claim's purpose is "look at this other content" or "X is recommending/citing Y", it is infrastructure. If the claim establishes a substantive fact (even when sourced from another publication), it is domain.
+
+================================================================
+ATOMIC CLAIMS - one assertion per claim, split compound statements
+================================================================
+
+Do NOT bundle "who this person is" with "what they did". "George Knapp, a journalist at KLAS-TV, published the memo in June 2019" splits into:
+  Claim 1: "George Knapp is a journalist at KLAS-TV in Las Vegas." (administrative, infrastructure if it's only about source attribution; domain if it's substantive)
+  Claim 2: "In June 2019, George Knapp published the Harry Reid 2009 SAP Memo." (administrative, domain)
+
+================================================================
+ANCHORING
+================================================================
+
+If a claim is specifically ABOUT the main subject, anchor with the subject's exact name as a temporal/contextual scene-setter ("During X, ..." / "In X, ..." / "At X, ..."). DO NOT use "X states that..." / "X says that..." / "X testified that..." as anchors - that turns claims into reported speech and duplicates the metadata. The claim should BE the assertion.
+
+If the claim is NOT about the main subject, write naturally with no anchor prefix.
+
+Forbidden anchor verbs at the head of a claim: "X states that", "X says that", "X testified that", "X declared that", "X announced that", "X reported that". Use a positional preposition or no anchor instead.
+
+================================================================
+PERSON REFERENCES IN CLAIM TEXT
+================================================================
+
+Use the full natural-order name inside claim text ("Luis Elizondo", "David Fravor") - NOT a surname-only shortcut. node_references uses the canonical "Last, First" form from the directory.
+
+================================================================
+UNIT NORMALISATION
+================================================================
+
+Convert measurements in "content" to metric: "10 metres" not "10m", "24,000 metres" not "24km". Preserve precision - "about 80,000 feet" -> "approximately 24,000 metres" (rounded), NOT "24,384 metres".
+
+original_excerpt preserves source phrasing verbatim.
+
+================================================================
+ISO DATES MANDATORY EVERYWHERE
+================================================================
+
+Claim text uses ISO: "2004-11-14" not "14 November 2004". original_excerpt preserves source phrasing.
+
+================================================================
+ACRONYM EXPANSION IN CLAIM TEXT
+================================================================
+
+Expand each acronym on first use in a claim: "Anomalous Aerial Vehicle (AAV)", "forward-looking infrared (FLIR)". Subsequent uses in the same claim are bare. SAFE acronyms (UFO, UAP, CIA, DoD, etc) are always bare.
+
+================================================================
+EXHAUSTIVE EXTRACTION - do not summarise
+================================================================
+
+Capture every factual statement, however incidental - dates, names, places, quoted figures, asides, parenthetical remarks. Coverage matters more than highlighting "important" points.
+
+If a claim references an entity that does NOT appear in the node directory above, do NOT make up a name for it - either find it in the directory under a different surface form, OR skip that claim. Adding new node names breaks the locked-directory guarantee.
+
+================================================================
+OUTPUT FORMAT - valid JSON only, no markdown fencing
+================================================================
+
+{{
+  "claims": [
+    {{
+      "content": "normalised assertion with metric units",
+      "original_excerpt": "exact original wording from source",
+      "category": "domain|infrastructure",
+      "claim_type": "observation|testimony|hearsay|opinion|measurement|administrative",
+      "attestation": "first_hand|second_hand|third_hand",
+      "speaker": "person name from directory, or null",
+      "location_in_record": "page, paragraph, or timestamp",
+      "date": "YYYY-MM-DD if applicable",
+      "node_references": ["Node A from directory", "Node B from directory"],
+      "confidence": 1.0
+    }}
+  ],
+  "extraction_complete": true
+}}
+
+Set extraction_complete=true when you have nothing further to extract from this chunk. The iterative loop stops asking when this is true.
+"""
+
+
+def build_claims_schema_v2(node_names: list[str]) -> dict:
+    """JSON Schema for the claims pass. node_references items are restricted
+    to the exact node names from Pass A - this is what physically prevents
+    the model from introducing surface-form variants in claims.
+    """
+    return {
+        "type": "object",
+        "required": ["claims", "extraction_complete"],
+        "properties": {
+            "claims": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": ["content", "category", "claim_type", "attestation"],
+                    "properties": {
+                        "content": {"type": "string"},
+                        "original_excerpt": {"type": "string"},
+                        "category": {"type": "string", "enum": CATEGORIES_V2},
+                        "claim_type": {
+                            "type": "string",
+                            "enum": list(VALID_CLAIM_TYPES),
+                        },
+                        "attestation": {
+                            "type": "string",
+                            "enum": list(VALID_ATTESTATION),
+                        },
+                        "speaker": {"type": ["string", "null"]},
+                        "location_in_record": {"type": "string"},
+                        "date": {"type": "string"},
+                        "node_references": {
+                            "type": "array",
+                            "items": (
+                                {"type": "string", "enum": node_names}
+                                if node_names
+                                else {"type": "string"}
+                            ),
+                        },
+                        "confidence": {
+                            "type": "number",
+                            "minimum": 0.0,
+                            "maximum": 1.0,
+                        },
+                    },
+                },
+            },
+            "extraction_complete": {"type": "boolean"},
+        },
+    }
+
+
+def _format_directory_v2(nodes: list[dict]) -> str:
+    """Format the locked node directory for the claims-pass prompt."""
+    lines = []
+    for n in nodes:
+        md = n.get("metadata") or {}
+        extras = []
+        if md.get("date_start"):
+            extras.append(f"date_start={md['date_start']}")
+        if md.get("date_end"):
+            extras.append(f"date_end={md['date_end']}")
+        extra_str = f" [{', '.join(extras)}]" if extras else ""
+        node_type = n.get("node_type") or n.get("type", "?")
+        lines.append(f"  - ({node_type:13}) {n['name']}{extra_str}")
+    return "\n".join(lines)
+
+
+def extract_nodes_v2(
+    text: str,
+    model: str = DEFAULT_MODEL,
+    record_context: str = "",
+    on_progress=None,
+) -> dict:
+    """Pass A of the v2 architecture: extract all nodes (no claims).
+
+    Chunks the document, iterates per-chunk, threads a running directory
+    across chunks. Returns a dict with keys:
+        nodes: list[dict]            (deduplicated across chunks)
+        main_subject: str
+        codenames_to_resolve: list[dict]
+        acronyms: list[dict]
+    """
+    chunks = _build_chunks(text)
+    merged_nodes: dict[str, dict] = {}  # name -> node dict
+    main_subject = ""
+    codenames: dict[str, str] = {}
+    acronyms: dict[str, str] = {}
+
+    for ci, chunk in enumerate(chunks):
+        if on_progress and len(chunks) > 1:
+            on_progress(f"  nodes chunk {ci + 1}/{len(chunks)} ({len(chunk):,} chars)")
+
+        seen_names_in_chunk: set[str] = set()
+        for it in range(ITERATION_MAX):
+            directory_lines = [
+                f"  - ({n['node_type']}) {name}" for name, n in merged_nodes.items()
+            ]
+            prompt = record_context + NODES_PROMPT_V2
+            if directory_lines:
+                prompt = (
+                    "EXISTING NODE DIRECTORY from previous chunks/rounds - "
+                    "use these EXACT names where they apply; do NOT emit variants:\n"
+                    + "\n".join(directory_lines)
+                    + "\n\n"
+                    + prompt
+                )
+            raw = _call_cli(prompt, chunk, model, schema=NODES_SCHEMA_V2)
+            result = json.loads(raw) if isinstance(raw, str) else raw
+
+            new_in_round = 0
+            for n in result.get("nodes", []):
+                if n["name"] in merged_nodes:
+                    continue
+                merged_nodes[n["name"]] = n
+                seen_names_in_chunk.add(n["name"])
+                new_in_round += 1
+
+            if result.get("main_subject") and not main_subject:
+                main_subject = result["main_subject"]
+            for c in result.get("codenames_to_resolve", []):
+                codenames.setdefault(c["codename"], c["refers_to"])
+            for a in result.get("acronyms", []):
+                acronyms.setdefault(a["acronym"], a["expansion"])
+
+            if on_progress:
+                done = " [model: complete]" if result.get("extraction_complete") else ""
+                on_progress(
+                    f"    nodes iter {it + 1}: +{new_in_round} nodes "
+                    f"(total {len(merged_nodes)}){done}"
+                )
+            if result.get("extraction_complete"):
+                break
+            if new_in_round < ITERATION_MIN_NEW:
+                break
+
+    return {
+        "nodes": list(merged_nodes.values()),
+        "main_subject": main_subject,
+        "codenames_to_resolve": [
+            {"codename": k, "refers_to": v} for k, v in codenames.items()
+        ],
+        "acronyms": [{"acronym": k, "expansion": v} for k, v in acronyms.items()],
+    }
+
+
+def extract_claims_v2(
+    text: str,
+    nodes_pass_result: dict,
+    model: str = DEFAULT_MODEL,
+    record_context: str = "",
+    on_progress=None,
+) -> list[dict]:
+    """Pass B of the v2 architecture: extract claims, constrained to using
+    only the node names from nodes_pass_result. Chunks the document and
+    iterates per chunk. Returns a flat list of claim dicts (each with
+    category=domain|infrastructure).
+    """
+    nodes = nodes_pass_result.get("nodes", [])
+    node_names = [n["name"] for n in nodes]
+    main_subject = nodes_pass_result.get("main_subject") or "(unspecified)"
+    codenames = nodes_pass_result.get("codenames_to_resolve") or []
+    acronyms = nodes_pass_result.get("acronyms") or []
+
+    codenames_block = ""
+    if codenames:
+        codenames_block = (
+            "CODENAMES TO RESOLVE (do not emit as nodes; resolve in claim text):\n"
+        )
+        for c in codenames:
+            codenames_block += f"  - {c['codename']} -> {c['refers_to']}\n"
+    acronyms_block = ""
+    if acronyms:
+        acronyms_block = "ACRONYM GLOSSARY (expand on first use in claim text):\n"
+        for a in acronyms:
+            acronyms_block += f"  - {a['acronym']} = {a['expansion']}\n"
+
+    schema = build_claims_schema_v2(node_names)
+    directory = _format_directory_v2(nodes)
+
+    chunks = _build_chunks(text)
+    merged_claims: list[dict] = []
+    seen_content: set[str] = set()
+
+    for ci, chunk in enumerate(chunks):
+        if on_progress and len(chunks) > 1:
+            on_progress(f"  claims chunk {ci + 1}/{len(chunks)} ({len(chunk):,} chars)")
+
+        chunk_claims: list[dict] = []
+        for it in range(ITERATION_MAX):
+            prompt = record_context + CLAIMS_PROMPT_V2_TEMPLATE.format(
+                directory=directory,
+                main_subject=main_subject,
+                codenames_block=codenames_block,
+                acronyms_block=acronyms_block,
+            )
+            if chunk_claims:
+                exclude = "\n".join(
+                    f"{i + 1}. {c['content']}" for i, c in enumerate(chunk_claims)
+                )
+                prompt += (
+                    "\n\nALREADY EXTRACTED CLAIMS - do NOT repeat any of these:\n"
+                    + exclude
+                    + "\n\nExtract ADDITIONAL factual claims from this chunk that are not in the list above. "
+                    "If only trivial or redundant claims would remain, return an empty claims array "
+                    "and set extraction_complete=true."
+                )
+
+            raw = _call_cli(prompt, chunk, model, schema=schema)
+            result = json.loads(raw) if isinstance(raw, str) else raw
+
+            new_in_round = 0
+            for c in result.get("claims", []):
+                key = c["content"].strip().lower()
+                if key in seen_content:
+                    continue
+                seen_content.add(key)
+                chunk_claims.append(c)
+                merged_claims.append(c)
+                new_in_round += 1
+
+            if on_progress:
+                done = " [model: complete]" if result.get("extraction_complete") else ""
+                on_progress(
+                    f"    claims iter {it + 1}: +{new_in_round} claims "
+                    f"(chunk total {len(chunk_claims)}, doc total {len(merged_claims)}){done}"
+                )
+            if result.get("extraction_complete"):
+                break
+            if new_in_round < ITERATION_MIN_NEW:
+                break
+
+    return merged_claims
+
+
+def extract_two_pass(
+    text: str,
+    model: str = DEFAULT_MODEL,
+    record_context: str = "",
+    on_progress=None,
+) -> dict:
+    """Top-level v2 entry point. Runs nodes pass then claims pass. Returns
+    a dict with keys: nodes, claims, main_subject, codenames_to_resolve,
+    acronyms. cli.py consumes this and writes the YAML digest.
+    """
+    if on_progress:
+        on_progress("Pass A: nodes (with iteration + chunking)")
+    nodes_result = extract_nodes_v2(
+        text, model=model, record_context=record_context, on_progress=on_progress
+    )
+    if on_progress:
+        on_progress(
+            f"  {len(nodes_result['nodes'])} nodes, {len(nodes_result['acronyms'])} acronyms, "
+            f"main_subject={nodes_result['main_subject']!r}"
+        )
+
+    if on_progress:
+        on_progress(
+            "Pass B: claims (constrained to locked nodes, with iteration + chunking)"
+        )
+    claims = extract_claims_v2(
+        text,
+        nodes_result,
+        model=model,
+        record_context=record_context,
+        on_progress=on_progress,
+    )
+    if on_progress:
+        n_dom = sum(1 for c in claims if c.get("category") == "domain")
+        n_inf = sum(1 for c in claims if c.get("category") == "infrastructure")
+        on_progress(
+            f"  {len(claims)} claims total: {n_dom} domain, {n_inf} infrastructure"
+        )
+
+    return {
+        "nodes": nodes_result["nodes"],
+        "main_subject": nodes_result["main_subject"],
+        "codenames_to_resolve": nodes_result["codenames_to_resolve"],
+        "acronyms": nodes_result["acronyms"],
+        "claims": claims,
+    }
+
+
 def _call_cli(prompt: str, text: str, model: str, schema: dict | None = None) -> str:
     """Call Claude via the CLI subprocess.
 

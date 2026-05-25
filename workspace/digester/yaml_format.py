@@ -135,6 +135,101 @@ def extraction_to_yaml(
     return _yaml_dump(doc)
 
 
+def two_pass_result_to_yaml(
+    result: dict,
+    record_title: str | None = None,
+    record_producer: str | None = None,
+    record_date: str | None = None,
+    record_reference: str | None = None,
+    record_id: str | None = None,
+    model: str = "unknown",
+) -> str:
+    """Convert the dict returned by extract.extract_two_pass into a YAML
+    digest. Splits claims into domain_claims and infrastructure_claims based
+    on the per-claim category field so the output schema stays compatible
+    with the existing assembler.
+    """
+    if record_id is None:
+        record_id = str(uuid.uuid4())
+
+    name_to_id: dict[str, str] = {}
+    nodes_out: list[dict] = []
+    for n in result.get("nodes", []):
+        nid = str(uuid.uuid4())
+        name_to_id[n["name"]] = nid
+        item = _omit_empty(
+            {
+                "id": nid,
+                "type": n.get("node_type") or n.get("type"),
+                "name": n["name"],
+                "metadata": n.get("metadata"),
+            }
+        )
+        nodes_out.append(item)
+
+    def _ref(name: str) -> dict:
+        rid = name_to_id.get(name)
+        return {"id": rid, "name": name} if rid else {"name": name}
+
+    def _emit_claim(c: dict) -> dict:
+        item: dict = {
+            "id": str(uuid.uuid4()),
+            "type": c["claim_type"],
+            "attestation": c["attestation"],
+        }
+        if c.get("speaker"):
+            item["speaker"] = _ref(c["speaker"])
+        if c.get("location_in_record"):
+            item["location"] = c["location_in_record"]
+        if c.get("date"):
+            item["date"] = c["date"]
+        if c.get("node_references"):
+            item["refs"] = [_ref(r) for r in c["node_references"]]
+        if c.get("original_excerpt"):
+            item["quote"] = c["original_excerpt"]
+        if c.get("content"):
+            item["text"] = c["content"]
+        return item
+
+    domain_claims = []
+    infra_claims = []
+    for c in result.get("claims", []):
+        emitted = _emit_claim(c)
+        if c.get("category") == "infrastructure":
+            infra_claims.append(emitted)
+        else:
+            domain_claims.append(emitted)
+
+    terminology = {
+        "main_subject": result.get("main_subject"),
+        "codenames": result.get("codenames_to_resolve") or [],
+        "acronyms": result.get("acronyms") or [],
+    }
+    terminology = _omit_empty(terminology) or None
+
+    doc = _omit_empty(
+        {
+            "schema": SCHEMA_VERSION,
+            "extracted_at": datetime.now(timezone.utc).isoformat(),
+            "model": model,
+            "record": _omit_empty(
+                {
+                    "id": record_id,
+                    "title": record_title,
+                    "producer": record_producer,
+                    "date": record_date,
+                    "reference": record_reference,
+                }
+            ),
+            "terminology": terminology,
+            "nodes": nodes_out,
+            "domain_claims": domain_claims,
+            "infrastructure_claims": infra_claims,
+        }
+    )
+    return _yaml_dump(doc)
+
+
 def parsed_dict_to_digest_yaml(parsed: dict) -> str:
     """Emit the locked YAML shape from a parsed-dict representation.
 

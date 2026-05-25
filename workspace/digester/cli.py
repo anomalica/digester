@@ -19,10 +19,9 @@ from digester.embeddings import (
     store_claim_embedding,
     store_node_embedding,
 )
-from digester.extract import extract, extract_infrastructure
 from digester.import_markdown import import_extraction
 from digester.record_parser import parse_record
-from digester.yaml_format import extraction_to_yaml, parse_digest_yaml
+from digester.yaml_format import parse_digest_yaml
 from digester.scoring import score_claim, tier_label
 
 DEFAULT_DB = Path.home() / ".local" / "share" / "digester" / "knowledge.db"
@@ -83,22 +82,14 @@ def extract_cmd(
     click.echo(f"Parsing record: {path.name}")
     parsed = parse_record(text)
 
-    # Build node directory from existing databases
-    domain_conn = _connect(ctx.obj["db_path"])
-    infra_conn = _connect(ctx.obj["infra_db_path"])
-    existing_nodes = _build_node_directory(domain_conn, infra_conn)
-    if existing_nodes:
-        click.echo(f"  Node directory: {len(existing_nodes)} existing nodes")
-    domain_conn.close()
-    infra_conn.close()
-
-    # SOURCE RECORD framing - pins "the author"/first-person to the named
-    # author so the model never emits an unpinned (graph-contaminating) node.
-    from digester.extract import (
-        build_record_context,
-        extract_terminology,
-        format_terminology_context,
-    )
+    # 2026-05-25 architecture: two-pass extract. Pass A nodes-only (with
+    # chunking + iteration + cross-chunk directory threading + main_subject /
+    # codenames / acronyms folded in from the deprecated terminology pre-pass).
+    # Pass B claims-only, constrained to using only Pass A's node names via
+    # JSON schema enum on node_references items. Each claim carries
+    # category=domain|infrastructure for the assembler to filter on.
+    from digester.extract import build_record_context, extract_two_pass
+    from digester.yaml_format import two_pass_result_to_yaml
 
     record_context = build_record_context(
         title=parsed.title,
@@ -107,71 +98,20 @@ def extract_cmd(
         source_type=parsed.source_type,
     )
 
-    # Terminology pre-pass: one Claude call reads the document and returns the
-    # main matter's canonical name, the principal codenames, and the acronym
-    # glossary. The result is injected into every chunk's prompt so claim
-    # extraction uses ONE canonical anchor verbatim and resolves codenames at
-    # write time.
-    terminology = extract_terminology(
+    click.echo(f"Extracting (two-pass) from: {parsed.title or path.name}")
+    result = extract_two_pass(
         parsed.body,
         model=model,
-        use_api=api,
         record_context=record_context,
         on_progress=click.echo,
     )
-    record_context = record_context + format_terminology_context(terminology)
 
-    # Inject the pre-pass's main matter and main event as PRE-EXISTING nodes
-    # in the directory the chunked extraction sees. The model treats existing
-    # nodes as "use the exact name from the directory" - this is the strongest
-    # mechanism we have to make it use the short canonical name verbatim
-    # instead of inventing a verbose alternative per chunk.
-    mm = terminology.get("main_matter") or {}
-    if mm.get("name"):
-        existing_nodes = (existing_nodes or []) + [
-            (mm["name"], mm.get("type") or "matter")
-        ]
-    me = terminology.get("main_event") or {}
-    if me.get("name"):
-        existing_nodes = (existing_nodes or []) + [
-            (me["name"], me.get("type") or "event")
-        ]
-
-    # Domain extraction
-    click.echo(f"Extracting domain knowledge from: {parsed.title or path.name}")
-    domain_result = extract(
-        parsed.body,
+    text = two_pass_result_to_yaml(
+        result,
+        record_title=parsed.title,
+        record_producer=(parsed.authors[0] if parsed.authors else None),
+        record_date=parsed.date,
         model=model,
-        use_api=api,
-        existing_nodes=existing_nodes or None,
-        record_context=record_context,
-        on_progress=click.echo,
-    )
-    click.echo(
-        f"  {len(domain_result.nodes)} nodes, {len(domain_result.claims)} domain claims"
-    )
-
-    # Infrastructure extraction
-    infra_result = None
-    if not domain_only:
-        click.echo("Extracting infrastructure...")
-        infra_result = extract_infrastructure(
-            parsed.body,
-            model=model,
-            use_api=api,
-            existing_nodes=existing_nodes or None,
-            record_context=record_context,
-            on_progress=click.echo,
-        )
-        click.echo(f"  {len(infra_result.claims)} infrastructure claims")
-
-    # Write YAML digest, including the terminology so the importer can
-    # enforce codename/acronym/date rules deterministically.
-    text = extraction_to_yaml(
-        domain_result,
-        infra_result=infra_result,
-        model=model,
-        terminology=terminology,
     )
 
     if output:
