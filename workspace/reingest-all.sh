@@ -59,13 +59,38 @@ extract_with_retry() {
 	return 1
 }
 
-# Sort records by ingest body size, smallest first. Records are symlinks into
-# store/; resolve them so `ls -S` sees the actual content sizes.
-mapfile -t files < <(
-	find -L "$INGESTS_DIR/records" -maxdepth 1 -name '*.md' -printf '%s %p\n' |
-		sort -n |
-		awk '{print $2}'
-)
+# Record selection:
+#   - Default: every *.md in records/, smallest input first.
+#   - Scoped: set RECORD_LIST to a file of record names (one per line, with or
+#     without the .md suffix). Only those records are processed. Used for the
+#     PURSUE batch so we digest just the new docs, not the existing
+#     UAP-disclosure records that share the records/ dir.
+# Records are symlinks into store/; resolve (-L) so sizes are the real content.
+if [ -n "${RECORD_LIST:-}" ]; then
+	[ -f "$RECORD_LIST" ] || {
+		echo "RECORD_LIST file not found: $RECORD_LIST" >&2
+		exit 1
+	}
+	mapfile -t files < <(
+		while IFS= read -r rname; do
+			rname=${rname%.md}
+			[ -z "$rname" ] && continue
+			f="$INGESTS_DIR/records/${rname}.md"
+			if [ -e "$f" ]; then
+				printf '%s %s\n' "$(stat -L -c%s "$f" 2>/dev/null || echo 0)" "$f"
+			else
+				echo "WARNING: listed record not found, skipping: $rname" >&2
+			fi
+		done <"$RECORD_LIST" | sort -n | awk '{print $2}'
+	)
+	echo "scoped to RECORD_LIST: $RECORD_LIST"
+else
+	mapfile -t files < <(
+		find -L "$INGESTS_DIR/records" -maxdepth 1 -name '*.md' -printf '%s %p\n' |
+			sort -n |
+			awk '{print $2}'
+	)
+fi
 
 echo "queued ${#files[@]} records"
 failed=()
@@ -100,15 +125,44 @@ if [ ${#failed[@]} -gt 0 ]; then
 	printf '  %s\n' "${failed[@]}"
 fi
 
-# Rebuild the database from the new YAML corpus.
+# Load the new YAMLs into the database.
+#   - Default (full re-ingest): drop-and-rebuild the DB from the whole
+#     digests/records corpus.
+#   - Scoped (RECORD_LIST set): INCREMENTAL import of only the just-processed
+#     records, so we add the PURSUE nodes to the existing graph WITHOUT
+#     wiping the existing UAP-disclosure corpus.
 echo
-echo "rebuilding database from new YAML corpus..."
-docker run --rm \
-	-v "$WORKSPACE_DIR:/home/nonroot/workspace" \
-	-v "$DIGESTS_DIR:/home/nonroot/digests" \
-	-v /home/mark/.local/share/digester:/home/nonroot/.local/share/digester \
-	--user "$(id -u):$(id -g)" \
-	-e HOME=/home/nonroot \
-	-w /home/nonroot/workspace \
-	anomalica-digester:development \
-	bash -c 'python -m digester.cli rebuild /home/nonroot/digests/records 2>&1 | tail -4 && python -m digester.cli stats'
+if [ -n "${RECORD_LIST:-}" ]; then
+	echo "scoped run: incrementally importing ${#files[@]} record(s) (no DB rebuild)..."
+	for ingest in "${files[@]}"; do
+		name=$(basename "$ingest" .md)
+		yaml_container="/home/nonroot/digests/records/${name}.yaml"
+		[ -f "$DIGESTS_DIR/records/${name}.yaml" ] || continue
+		docker run --rm \
+			-v "$WORKSPACE_DIR:/home/nonroot/workspace" \
+			-v "$DIGESTS_DIR:/home/nonroot/digests" \
+			-v /home/mark/.local/share/digester:/home/nonroot/.local/share/digester \
+			--user "$(id -u):$(id -g)" \
+			-e HOME=/home/nonroot \
+			-w /home/nonroot/workspace \
+			anomalica-digester:development \
+			python -m digester.cli import "$yaml_container" 2>&1 | tail -3
+	done
+	docker run --rm \
+		-v "$WORKSPACE_DIR:/home/nonroot/workspace" \
+		-v /home/mark/.local/share/digester:/home/nonroot/.local/share/digester \
+		--user "$(id -u):$(id -g)" -e HOME=/home/nonroot -w /home/nonroot/workspace \
+		anomalica-digester:development \
+		python -m digester.cli stats
+else
+	echo "full re-ingest: rebuilding database from the whole YAML corpus..."
+	docker run --rm \
+		-v "$WORKSPACE_DIR:/home/nonroot/workspace" \
+		-v "$DIGESTS_DIR:/home/nonroot/digests" \
+		-v /home/mark/.local/share/digester:/home/nonroot/.local/share/digester \
+		--user "$(id -u):$(id -g)" \
+		-e HOME=/home/nonroot \
+		-w /home/nonroot/workspace \
+		anomalica-digester:development \
+		bash -c 'python -m digester.cli rebuild /home/nonroot/digests/records 2>&1 | tail -4 && python -m digester.cli stats'
+fi
