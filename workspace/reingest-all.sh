@@ -13,6 +13,52 @@ WORKSPACE_DIR=/home/mark/repos/anomalica/anomalica-digester/workspace
 
 cd "$WORKSPACE_DIR"
 
+# Max attempts per record. The Claude CLI subprocess has intermittent
+# empty-stderr failures (~1 in 5 on a multi-doc batch); they succeed on a
+# clean retry. This wraps each extract so a transient hiccup doesn't need a
+# human.
+MAX_ATTEMPTS=${MAX_ATTEMPTS:-3}
+
+# Run one extract with retry. Captures output to a temp file (so the pipe to
+# tail does NOT mask docker's real exit code - the previous version checked
+# tail's exit status, which is always 0, so failures went undetected).
+# Returns 0 on success, 1 if all attempts fail.
+extract_with_retry() {
+	local ingest_container="$1" output_container="$2" name="$3"
+	local attempt rc tmplog
+	tmplog=$(mktemp)
+	for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
+		[ "$attempt" -gt 1 ] && echo "    retry $attempt/$MAX_ATTEMPTS..."
+		docker run --rm \
+			--name "anomalica-reingest-${name:0:24}-${attempt}" \
+			-v "$WORKSPACE_DIR:/home/nonroot/workspace" \
+			-v "$INGESTS_DIR:/home/nonroot/ingests:ro" \
+			-v "$DIGESTS_DIR:/home/nonroot/digests" \
+			-v /home/mark/.local/share/digester:/home/nonroot/.local/share/digester \
+			-v /home/mark/.local/bin/claude:/usr/local/bin/claude:ro \
+			-v /home/mark/.claude:/home/nonroot/.claude \
+			-v /home/mark/.claude.json:/home/nonroot/.claude.json \
+			-v /tmp/digester-sandbox/empty-CLAUDE.md:/home/nonroot/.claude/CLAUDE.md:ro \
+			-v /tmp/digester-sandbox/empty-settings.json:/home/nonroot/.claude/settings.json:ro \
+			--user "$(id -u):$(id -g)" \
+			--network host \
+			-e HOME=/home/nonroot \
+			-w /home/nonroot/workspace \
+			anomalica-digester:development \
+			python -m digester.cli extract "$ingest_container" --output "$output_container" \
+			>"$tmplog" 2>&1
+		rc=$?
+		tail -8 "$tmplog"
+		if [ "$rc" -eq 0 ]; then
+			rm -f "$tmplog"
+			return 0
+		fi
+		echo "    attempt $attempt exited $rc"
+	done
+	rm -f "$tmplog"
+	return 1
+}
+
 # Sort records by ingest body size, smallest first. Records are symlinks into
 # store/; resolve them so `ls -S` sees the actual content sizes.
 mapfile -t files < <(
@@ -35,30 +81,13 @@ for ingest in "${files[@]}"; do
 	echo "===  [$((ok + ${#failed[@]} + 1))/${#files[@]}]  $name  ==="
 	started=$(date +%s)
 
-	if docker run --rm \
-		--name "anomalica-reingest-${name:0:30}" \
-		-v "$WORKSPACE_DIR:/home/nonroot/workspace" \
-		-v "$INGESTS_DIR:/home/nonroot/ingests:ro" \
-		-v "$DIGESTS_DIR:/home/nonroot/digests" \
-		-v /home/mark/.local/share/digester:/home/nonroot/.local/share/digester \
-		-v /home/mark/.local/bin/claude:/usr/local/bin/claude:ro \
-		-v /home/mark/.claude:/home/nonroot/.claude \
-		-v /home/mark/.claude.json:/home/nonroot/.claude.json \
-		-v /tmp/digester-sandbox/empty-CLAUDE.md:/home/nonroot/.claude/CLAUDE.md:ro \
-		-v /tmp/digester-sandbox/empty-settings.json:/home/nonroot/.claude/settings.json:ro \
-		--user "$(id -u):$(id -g)" \
-		--network host \
-		-e HOME=/home/nonroot \
-		-w /home/nonroot/workspace \
-		anomalica-digester:development \
-		python -m digester.cli extract "$ingest_container" --output "$output_container" 2>&1 |
-		tail -8; then
+	if extract_with_retry "$ingest_container" "$output_container" "$name"; then
 		elapsed=$(($(date +%s) - started))
 		size=$(stat -c%s "$output_host" 2>/dev/null || echo 0)
 		echo "  OK  ${elapsed}s  ${size} bytes"
 		ok=$((ok + 1))
 	else
-		echo "  FAILED"
+		echo "  FAILED after $MAX_ATTEMPTS attempts"
 		failed+=("$name")
 	fi
 done
