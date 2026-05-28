@@ -26,11 +26,15 @@ class NodeType(str, Enum):
     programme = "programme"
     investigation = "investigation"
     pattern = "pattern"
-    # 2026-05-25 taxonomy revision: project collapses programme+investigation;
-    # principle is the renamed concept (display label remains "topic" on the
-    # public site for navigation friendliness, code uses principle).
+    # 2026-05-25 taxonomy revision (ADR 0029): project collapses
+    # programme+investigation; topic replaces concept (the word "concept"
+    # misclassified specific named craft as "concept aircraft"). The empirical
+    # comparison showed the type-word doesn't change extraction behaviour, so
+    # topic is used for both code AND public URL section - no code/display
+    # divergence.
     project = "project"
-    principle = "principle"
+    topic = "topic"
+    principle = "principle"  # transient name from 2026-05-25; superseded by topic per ADR 0029, kept only for back-compat reads
 
 
 class ClaimType(str, Enum):

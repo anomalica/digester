@@ -1100,9 +1100,9 @@ def extract_infrastructure(
 #       public site filters out but we retain for content discovery.
 #
 # Node taxonomy is the 8-type set: person, organisation, project, place,
-# event (with optional date_end), object, document, principle. The old
-# matter / programme / investigation / pattern / concept types stay in the
-# NodeType enum for back-compat but are not in the extraction enum.
+# event (with optional date_end), object, document, topic. The old
+# matter / programme / investigation / pattern / concept / principle types
+# stay in the NodeType enum for back-compat but are not in the extraction enum.
 # ============================================================================
 
 NODE_TYPES_V2 = [
@@ -1113,7 +1113,7 @@ NODE_TYPES_V2 = [
     "event",
     "object",
     "document",
-    "principle",
+    "topic",
 ]
 
 CATEGORIES_V2 = ["domain", "infrastructure"]
@@ -1141,9 +1141,9 @@ NODE TYPES (eight - choose one per node)
 
 - "document": a written or recorded artefact - book, report, paper, FOIA release, video footage, podcast episode, article, memo, testimony, affidavit, patent application.
 
-- "principle": a RECOGNISED named idea, theory, framework, or phenomenon that exists independent of this document (general relativity, the Pais Effect, anti-gravity propulsion, zero-point energy, vacuum polarisation). NOT a specific named alleged craft (TR-3B is NOT a principle - it is an alleged craft, classify as object or document). NOT generic touchable nouns (gravity, plasma). NOT mechanisms lifted from patent jargon. NOT vague catch-alls. NOT ad-hoc theories named only within this document.
+- "topic": a RECOGNISED named idea, theory, framework, or phenomenon that exists independent of this document (general relativity, the Pais Effect, anti-gravity propulsion, zero-point energy, vacuum polarisation). NOT a specific named alleged craft (TR-3B is NOT a topic - it is an alleged craft, classify as object or document). NOT generic touchable nouns (gravity, plasma). NOT mechanisms lifted from patent jargon. NOT vague catch-alls. NOT ad-hoc theories named only within this document.
 
-NOTE: there is no "matter", "concept", or "pattern" type for extraction in this pass. Things that previously would have been matters now classify as event (bounded time), organisation (standing body), project (named effort), or principle (recognised idea). Cross-case patterns are curator-created, not extractor-emitted.
+NOTE: there is no "matter", "concept", or "pattern" type for extraction in this pass. Things that previously would have been matters now classify as event (bounded time), organisation (standing body), project (named effort), or topic (recognised idea). Cross-case patterns are curator-created, not extractor-emitted.
 
 ================================================================
 PORTABILITY - the card test
@@ -1200,7 +1200,7 @@ OUTPUT FORMAT - valid JSON only, no markdown fencing
   "nodes": [
     {{
       "name": "canonical portable name",
-      "node_type": "person|organisation|project|place|event|object|document|principle",
+      "node_type": "person|organisation|project|place|event|object|document|topic",
       "metadata": {{"date_start": "...", "date_end": "..." (events only, optional)}}
     }}
   ],
