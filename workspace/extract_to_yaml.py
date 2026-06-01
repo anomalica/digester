@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Convert legacy .extract.md files to the locked .yaml digest format.
 
-Reads from anomalica-digests/extracts/*.extract.md (the legacy markdown
-intermediate) and writes to anomalica-digests/records/<friendly>.yaml
+Reads from digests/extracts/*.extract.md (the legacy markdown
+intermediate) and writes to digests/records/<friendly>.yaml
 (the new YAML interchange format per decision 0027).
 
 Run inside the container:

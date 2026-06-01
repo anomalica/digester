@@ -9,8 +9,8 @@ every page produced under a given pipeline version, and diff against
 baselines (e.g. `baseline-2026-05-24`) to see how a page has changed.
 
 The wrapper watches two output repos:
-  - anomalica-content (assembler output: pages/)
-  - anomalica-digests (digester output: records/, store/)
+  - content (assembler output: pages/)
+  - digests (digester output: records/, store/)
 
 It snapshots `git status --porcelain` in both repos before running the
 command, then commits the new diff in any repo that changed, with a
@@ -19,8 +19,8 @@ structured message of this shape:
   regen: <inferred-target> via <stage>
 
   stage: digester-extract | digester-import | assembler-regen | other
-  assembler-sha: <git sha of anomalica-assembler HEAD>
-  digester-sha: <git sha of anomalica-digester HEAD>
+  assembler-sha: <git sha of assembler HEAD>
+  digester-sha: <git sha of digester HEAD>
   db-version: <contents of workspace/.db-version>
   files-touched: <count>
 
@@ -39,12 +39,12 @@ import sys
 from pathlib import Path
 
 REPOS = {
-    "anomalica-content": Path("/home/mark/repos/anomalica/anomalica-content"),
-    "anomalica-digests": Path("/home/mark/repos/anomalica/anomalica-digests"),
+    "content": Path("/home/mark/repos/anomalica/content"),
+    "digests": Path("/home/mark/repos/anomalica/digests"),
 }
 
-ASSEMBLER_REPO = Path("/home/mark/repos/anomalica/anomalica-assembler")
-DIGESTER_REPO = Path("/home/mark/repos/anomalica/anomalica-digester")
+ASSEMBLER_REPO = Path("/home/mark/repos/anomalica/assembler")
+DIGESTER_REPO = Path("/home/mark/repos/anomalica/digester")
 DB_VERSION_FILE = DIGESTER_REPO / "workspace" / ".db-version"
 
 

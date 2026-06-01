@@ -320,7 +320,7 @@ _README = """\
 # Anomalica Generated Vault
 
 This vault is **auto-generated** from the digester knowledge graph. Do not edit
-by hand - run `just vault` from `anomalica-digester/` to regenerate.
+by hand - run `just vault` from `digester/` to regenerate.
 
 ## What is here
 

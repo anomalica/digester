@@ -1,4 +1,4 @@
-VAULT_OUT := "/home/mark/repos/anomalica/anomalica-generated-vault"
+VAULT_OUT := "/home/mark/repos/anomalica/generated-vault"
 IMAGE := "anomalica-digester:development"
 
 # Regenerate the Obsidian-navigable vault from the current knowledge graph.

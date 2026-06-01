@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# Re-ingest every record in anomalica-ingests through the validated production
-# prompt into native YAML at anomalica-digests/records/<name>.yaml.
+# Re-ingest every record in ingests through the validated production
+# prompt into native YAML at digests/records/<name>.yaml.
 #
 # Runs sequentially, smallest input first so the books land last. Each record
 # overwrites its old YAML in place. If a record fails the loop continues to
 # the next; failures are reported at the end.
 set -u
 
-INGESTS_DIR=/home/mark/repos/anomalica/anomalica-ingests
-DIGESTS_DIR=/home/mark/repos/anomalica/anomalica-digests
-WORKSPACE_DIR=/home/mark/repos/anomalica/anomalica-digester/workspace
+INGESTS_DIR=/home/mark/repos/anomalica/ingests
+DIGESTS_DIR=/home/mark/repos/anomalica/digests
+WORKSPACE_DIR=/home/mark/repos/anomalica/digester/workspace
 
 cd "$WORKSPACE_DIR"
 

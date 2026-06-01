@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# First-pass batch digest: run every record under anomalica-ingests/records/
-# through `digester digest`, writing .extract.md files to anomalica-digests/extracts/
+# First-pass batch digest: run every record under ingests/records/
+# through `digester digest`, writing .extract.md files to digests/extracts/
 # and accumulating nodes/claims in the shared SQLite databases.
 #
 # Continues on per-record failures. Tracks succeeded/failed lists at the end.

@@ -191,7 +191,7 @@ def _apply_doc_terminology(
     return out, None
 
 
-# Path to anomalica-ingests, used to look up content_hash from the friendly
+# Path to ingests, used to look up content_hash from the friendly
 # filename of a digest YAML. Override via env var when running outside the
 # container.
 _INGESTS_DIR = os.environ.get(
@@ -207,7 +207,7 @@ def _lookup_ingest_metadata(
     content_hash and friendly filename stem.
 
     The digest YAML filename equals the ingest's friendly name (mounted via
-    anomalica-ingests/records/<friendly>.md as a symlink into store/{hash}.md).
+    ingests/records/<friendly>.md as a symlink into store/{hash}.md).
     We resolve by exact filename match first, then by record_title scan as a
     fallback.
     """
@@ -364,7 +364,7 @@ def import_extraction(
         # so downstream consumers (assembler, workbench) can link claim ->
         # source-record verifiably. The digest YAML may carry content_hash
         # directly (newer emissions) or we look it up via the friendly
-        # filename match against anomalica-ingests/records/ (the deterministic
+        # filename match against ingests/records/ (the deterministic
         # backfill for older YAMLs).
         content_hash = fm.get("content_hash")
         friendly_name = fm.get("friendly_name")

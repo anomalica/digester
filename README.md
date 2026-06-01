@@ -1,16 +1,16 @@
-# anomalica-digester
+# digester
 
 The digester is the knowledge graph extraction engine for [Anomalica](https://anomalica.is), an international reference platform for documenting anomalous phenomena.
 
 It sits in the middle of the Anomalica pipeline:
 
 ```
-anomalica-ingester -> anomalica-digester -> anomalica-assembler -> anomalica-content -> anomalica-site
+ingester -> digester -> assembler -> content -> site
 ```
 
 ## Purpose
 
-The digester consumes pre-ingested records produced by [anomalica-ingester](https://github.com/anomalica/anomalica-ingester) and decomposes them into atomic claims stored in a knowledge graph. It does not process raw source material (PDFs, audio, video, web pages) directly - the ingester converts those into the record interchange format (markdown with YAML frontmatter and annotation blocks) before the digester sees them.
+The digester consumes pre-ingested records produced by [ingester](https://github.com/anomalica/ingester) and decomposes them into atomic claims stored in a knowledge graph. It does not process raw source material (PDFs, audio, video, web pages) directly - the ingester converts those into the record interchange format (markdown with YAML frontmatter and annotation blocks) before the digester sees them.
 
 Its core responsibilities are:
 
