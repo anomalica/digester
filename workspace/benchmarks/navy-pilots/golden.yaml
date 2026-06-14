@@ -1,0 +1,76 @@
+# Golden node set for the Navy pilots 60 Minutes record (2021-05-17).
+# Hand-curated by reading the transcript in full. Measuring stick for the
+# NODES pass (recall/precision via ../runner.py). Person names follow ADR 0023
+# (plain "Last, First", no rank/title). Places follow Country-first and the
+# durable-installation rule (regions/operating-areas/bare countries are NOT
+# places). Types are the eight current types (ADR 0028/0029): person,
+# organisation, project, place, event, object, document, topic.
+source: "Navy pilots describe encounters with UFOs (60 Minutes, 2021-05-17)"
+
+must_find:
+  person:
+    - {canonical: "Whitaker, Bill", aliases: ["Bill Whitaker", "Whitaker"]}
+    - {canonical: "Elizondo, Luis", aliases: ["Luis Elizondo", "Lou Elizondo", "Lue Elizondo", "Elizondo"]}
+    - {canonical: "Graves, Ryan", aliases: ["Ryan Graves", "Lieutenant Ryan Graves", "Graves"]}
+    - {canonical: "Dietrich, Alex", aliases: ["Alex Dietrich", "Lieutenant Alex Dietrich", "Dietrich"]}
+    - {canonical: "Fravor, David", aliases: ["David Fravor", "Commander David Fravor", "Fravor"]}
+    - {canonical: "Mellon, Christopher", aliases: ["Christopher Mellon", "Chris Mellon", "Mellon"]}
+    - {canonical: "Rubio, Marco", aliases: ["Marco Rubio", "Senator Marco Rubio", "Rubio"]}
+    - {canonical: "Reid, Harry", aliases: ["Harry Reid", "Senator Harry Reid", "Reid"]}
+  organisation:
+    - {canonical: "60 Minutes", aliases: []}
+    - {canonical: "US Department of Defense", aliases: ["Department of Defense", "United States Department of Defense", "the
+          Pentagon", "Pentagon", "DoD", "US Defense Department", "Defense Department"]}
+    - {canonical: "US Senate Select Committee on Intelligence", aliases: ["Senate Intelligence Committee", "US Senate Intelligence
+          Committee", "United States Senate Intelligence Committee", "Senate Select Committee on Intelligence", "Intelligence
+          Committee"]}
+    - {canonical: "Office of the Director of National Intelligence", aliases: ["ODNI", "Director of National Intelligence",
+        "DNI"]}
+    - {canonical: "Top Gun Naval Flight School", aliases: ["Top Gun"]}
+    - {canonical: "The New York Times", aliases: ["New York Times", "NYT", "the Times"]}
+    - {canonical: "History Channel", aliases: ["the History Channel"]}
+    - {canonical: "United States Congress", aliases: ["Congress", "US Congress"]}
+    - {canonical: "United States Navy", aliases: ["US Navy", "Navy"]}
+  project:
+    - {canonical: "Advanced Aerospace Threat Identification Program (AATIP)", aliases: ["AATIP", "Advanced Aerospace Threat
+          Identification Program"]}
+    - {canonical: "UAP Task Force", aliases: ["Unidentified Aerial Phenomena Task Force", "the UAP Task Force"]}
+    - {canonical: "Project Blue Book", aliases: ["Blue Book"]}
+  object:
+    - {canonical: "USS Nimitz", aliases: ["USS Nimitz Carrier Strike Group", "Nimitz"]}
+    - {canonical: "USS Princeton", aliases: ["Princeton", "USS Princeton (CG-59)"]}
+    - {canonical: "F/A-18", aliases: ["F-18", "FA-18", "F/A-18 Hornet", "F-18 fighter jet"]}
+  place:
+    - {canonical: "USA, California, San Diego", aliases: ["San Diego"]}
+    - {canonical: "USA, Virginia, Virginia Beach", aliases: ["Virginia Beach"]}
+    - {canonical: "USA, Florida, Jacksonville", aliases: ["Jacksonville", "Jacksonville, Florida"]}
+  event:
+    - {canonical: "2004 USS Nimitz UAP encounter", aliases: ["Nimitz encounter", "2004 Nimitz encounter", "USS Nimitz Tic
+          Tac encounter", "2004 Tic Tac encounter", "Tic Tac encounter"]}
+    - {canonical: "2014-2015 East Coast UAP sightings", aliases: ["East Coast UAP sightings", "Virginia Beach UAP sightings"]}
+  topic:
+    - {canonical: "Unidentified Aerial Phenomena (UAP)", aliases: ["UAP", "Unidentified Aerial Phenomena", "UFO", "UFOs",
+        "unidentified flying objects"]}
+    - {canonical: "anomalous aerial vehicle (AAV)", aliases: ["anomalous aerial vehicles", "anomalous aerial vehicle", "AAV"],}
+
+# Not nodes. Bare countries/regions/operating-areas (geography lives in claim
+# text, Country-first place rule), and the object's shape-nickname (resolved in
+# text, not a node).
+deny:
+  place:
+    - "USA"
+    - "United States"
+    - "Russia"
+    - "China"
+    - "Southern California"
+    - "Atlantic coast"
+    - "US Atlantic coast"
+    - "Afghanistan"
+    - "Middle East"
+    - "Guantanamo"
+
+expected:
+  recall_min: 0.85
+  precision_min: 0.85
+  cost_usd_max: 0.50
+  wall_seconds_max: 600

@@ -1133,17 +1133,31 @@ NODE TYPES (eight - choose one per node)
 
 - "project": a NAMED time-bounded or initiative-bounded effort - programmes, investigations, operations, research projects, official inquiries. AATIP, Project Apollo, Project Blue Book, AAWSAP, the Condon Committee inquiry, the AARO Historical Record review, the Manhattan Project, OXCART, Stargate. The US Air Force is an organisation; Project Blue Book is a project the Air Force ran.
 
-- "place": a named geographic location. Format "Country, Region, Specific" largest-unit-first. "USA, Nevada, Area 51". Do NOT extract countries/states/regions as places.
+- "place": a named geographic location. Format "Country, Region, Specific" largest-unit-first. "USA, Nevada, Area 51", "USA, California, San Diego". Do NOT extract countries/states/regions/operating-areas on their own. The node name is the place ITSELF - never append a locational qualifier like "(vicinity)", "(offshore)", "(restricted airspace)" or "(area)"; that nuance belongs in the claim text, not the node name.
 
 - "event": a discrete or bounded-in-time occurrence. Has at least a start year. Can span hours, days, months, years - use metadata.date_start (required) and optionally metadata.date_end. The Nimitz UAP encounter 2004-11-10 to 2004-11-16 is ONE event.
 
-- "object": a specific named PHYSICAL thing - craft, vessel, vehicle, sample, device, named building, recovered material. Must pass the touch test - you could imagine reaching out and touching it. Phenomena, effects, video footage all FAIL the touch test.
+- "object": a specific named PHYSICAL thing - craft, vessel, named vehicle or aircraft TYPE, sample, device, named building, recovered material. Must pass the touch test. A named aircraft/vehicle model is an object ("F/A-18", "USS Nimitz", "USS Princeton"). Phenomena, effects, video footage all FAIL the touch test.
 
 - "document": a written or recorded artefact - book, report, paper, FOIA release, video footage, podcast episode, article, memo, testimony, affidavit, patent application.
 
 - "topic": a RECOGNISED named idea, theory, framework, or phenomenon that exists independent of this document (general relativity, the Pais Effect, anti-gravity propulsion, zero-point energy, vacuum polarisation). NOT a specific named alleged craft (TR-3B is NOT a topic - it is an alleged craft, classify as object or document). NOT generic touchable nouns (gravity, plasma). NOT mechanisms lifted from patent jargon. NOT vague catch-alls. NOT ad-hoc theories named only within this document.
 
 NOTE: there is no "matter", "concept", or "pattern" type for extraction in this pass. Things that previously would have been matters now classify as event (bounded time), organisation (standing body), project (named effort), or topic (recognised idea). Cross-case patterns are curator-created, not extractor-emitted.
+
+================================================================
+COMPLETENESS - sweep every type, do not stop at the obvious
+================================================================
+
+Be exhaustive. Under-extraction is the main failure. After listing the obvious people and programmes, deliberately sweep for the easily-missed:
+
+  - TOPICS: the central recognised phenomenon/idea IS a node. In a UAP document, emit "Unidentified Aerial Phenomena (UAP)" and "anomalous aerial vehicle (AAV)" as topic nodes even though they pervade the text. Other recognised ideas (a named theory, effect, propulsion concept) are topics too.
+  - ORGANISATIONS: include military branches ("United States Navy"), legislative bodies and their committees ("United States Congress", "US Senate Select Committee on Intelligence"), standing offices ("Office of the Director of National Intelligence (ODNI)"), schools/academies ("Top Gun Naval Flight School"), and news outlets - not just the headline agency.
+  - OBJECTS: named aircraft/vehicle/vessel types and models ("F/A-18", "USS Nimitz", "USS Princeton").
+  - EVENTS: the named incident(s) the document is about ("2004 USS Nimitz UAP encounter").
+  - PLACES: every named populated place or installation (Country-first), but not bare countries/regions.
+
+A central entity that appears in many claims (the phenomenon, the principal agency, the aircraft) is exactly the kind that gets forgotten because it feels like background - emit it.
 
 ================================================================
 PORTABILITY - the card test
@@ -1293,14 +1307,26 @@ Do NOT bundle "who this person is" with "what they did". "George Knapp, a journa
 A sentence listing SEVERAL distinct capabilities, measurements, or properties becomes SEVERAL claims - never one merged claim. "a technology that can do 600-700 G-forces, fly at 13,000 miles per hour, evade radar, fly through air and water, with no wings or propulsion, and defy gravity" splits into SEPARATE claims: one for the 600-700 G-force figure, one for the speed, one for evading radar, one for travelling through air and water, one for the absence of wings/propulsion, one for defying gravity. Each measurement or property is its own claim. Merging a list into a single narrative sentence is WRONG - extract the individual facts.
 
 ================================================================
-ANCHORING
+ASSERTION, NOT REPORTED SPEECH (critical - most common error)
 ================================================================
 
-If a claim is specifically ABOUT the main subject, anchor with the subject's exact name as a temporal/contextual scene-setter ("During X, ..." / "In X, ..." / "At X, ..."). DO NOT use "X states that..." / "X says that..." / "X testified that..." as anchors - that turns claims into reported speech and duplicates the metadata. The claim should BE the assertion.
+The claim text IS the fact. NEVER wrap it in a reporting verb naming the speaker - the speaker is already captured in the structured speaker field, so "X stated/said/noted/claimed/testified/confirmed that ..." is DUPLICATION and is FORBIDDEN. Two correct rewrites depending on who the fact is about:
 
-If the claim is NOT about the main subject, write naturally with no anchor prefix.
+(a) The speaker is just RELAYING a fact about something else -> drop the name entirely, state the bare fact:
+   WRONG: "Luis Elizondo stated that the US government has confirmed UAP are real."
+   RIGHT: "The US government has officially confirmed for the record that UAP are real."  (speaker=Elizondo lives in the speaker field)
+   WRONG: "Ryan Graves stated that the dual radar-and-infrared detection is hard to spoof."
+   RIGHT: "The dual radar-and-infrared detection of UAP is hard to spoof."
 
-Forbidden anchor verbs at the head of a claim: "X states that", "X says that", "X testified that", "X declared that", "X announced that", "X reported that". Use a positional preposition or no anchor instead.
+(b) The speaker IS the actor/observer/opinion-holder of the fact -> name them as the SUBJECT with a substantive verb (observed, saw, considers, believes, is worried, encountered), never "stated that":
+   WRONG: "Ryan Graves stated that he observed no exhaust plume."
+   RIGHT: "Ryan Graves observed no exhaust plume on the UAP off the Atlantic coast."
+   WRONG: "Ryan Graves stated that Russian or Chinese technology is a possible explanation."
+   RIGHT: "Ryan Graves considers Russian or Chinese technology a possible explanation for the observed UAP."
+
+Forbidden at the head of a claim: "X states/stated that", "X says/said that", "X testified that", "X declared that", "X announced that", "X reported that", "X noted that", "X claimed that", "X confirmed that", "X explained that". If you have written one, rewrite it as (a) or (b).
+
+When a claim IS specifically about the main subject, you may anchor with the subject's exact name as a temporal/contextual scene-setter ("During X, ..." / "In X, ..." / "At X, ..."), never as reported speech. If the claim is NOT about the main subject, write it naturally with no anchor prefix.
 
 ================================================================
 PERSON REFERENCES IN CLAIM TEXT
@@ -1312,9 +1338,9 @@ Use the full natural-order name inside claim text ("Luis Elizondo", "David Fravo
 UNIT NORMALISATION - metric only, never leave imperial
 ================================================================
 
-ALWAYS convert imperial/US units in "content" to metric. NEVER leave a bare imperial value in a claim. miles per hour -> km/h, miles -> kilometres, feet -> metres, pounds -> kilograms, Fahrenheit -> Celsius. "13,000 miles per hour" becomes "approximately 21,000 km/h"; "about 80,000 feet" becomes "approximately 24,000 metres". Preserve precision and the original's hedge ("about", "approximately") - round, do NOT give false precision ("24,384 metres"). Knots (aviation/nautical standard) may be kept but add the km/h equivalent: "120 knots (approximately 220 km/h)".
+The "content"/"text" field uses METRIC SI units with the unit's FULL NAME spelled out - "kilometres per hour" not "km/h", "metres" not "m", "kilometres" not "km". Convert every imperial/US/nautical unit: miles per hour and knots -> kilometres per hour, miles -> kilometres, feet -> metres, pounds -> kilograms, Fahrenheit -> Celsius. "13,000 miles an hour" becomes "approximately 21,000 kilometres per hour"; "about 80,000 feet" becomes "approximately 24,000 metres"; "120 knots" becomes "approximately 220 kilometres per hour". Preserve the source's precision and hedges ("about", "approximately") - round, never give false precision ("24,384 metres").
 
-original_excerpt preserves source phrasing verbatim (keep the imperial units there).
+NEVER put the original imperial value in the content, not even in parentheses. The content is SI-only. The original units survive ONLY in original_excerpt (the verbatim quote). If a reader wants the original unit they read the quote.
 
 ================================================================
 BRITISH ENGLISH - mandatory in all claim text and node names
@@ -1346,6 +1372,12 @@ ISO DATES MANDATORY EVERYWHERE
 Claim text uses ISO: "2004-11-14" not "14 November 2004". original_excerpt preserves source phrasing.
 
 ================================================================
+LOCATION_IN_RECORD - most precise span the source allows
+================================================================
+
+This document is timestamped (each source line begins with HH:MM:SS.D). Set location_in_record to the timestamp RANGE the claim is drawn from: "HH:MM:SS.D-HH:MM:SS.D" (start of the relevant span to its end), using a plain ASCII hyphen "-" (never an en-dash). A range, not a single point - an assertion spans seconds, and a Q&A claim spans the question and the answer. For a single short line a single timestamp is acceptable.
+
+================================================================
 ACRONYM EXPANSION IN CLAIM TEXT
 ================================================================
 
@@ -1357,7 +1389,11 @@ EXHAUSTIVE EXTRACTION - do not summarise
 
 Capture every factual statement, however incidental - dates, names, places, quoted figures, asides, parenthetical remarks. Coverage matters more than highlighting "important" points.
 
-OPINIONS AND INTERVIEW EXCHANGES: an opinion, assessment, or judgement - especially from an interviewee or expert - is a claim (claim_type "opinion"). When a person gives a short answer, confirmation, or reaction to a question or a stated proposition ("Pretty hard to spoof that", "Every day", "I don't see why not"), it IS a claim: expand it into a standalone assertion by resolving it against the question or statement it responds to, and attribute it to the person who answered. Do NOT drop a conversational turn just because it is brief or depends on the previous line for its meaning.
+OPINIONS AND INTERVIEW EXCHANGES: an opinion, assessment, or judgement - especially from an interviewee or expert - is a claim (claim_type "opinion"). When a person gives a short answer, confirmation, or reaction to a question or a stated proposition ("Pretty hard to spoof that", "Every day", "I don't see why not"), it IS a claim: resolve it into a standalone assertion and attribute it to the person who ANSWERED. Do NOT drop a conversational turn because it is brief or depends on the previous line.
+
+  - The speaker is the ANSWERER, not the interviewer. A leading question that contains the fact ("Could it be Russian or Chinese technology?") does NOT make the interviewer the source - the claim and its speaker are the answerer's.
+  - For a claim built from a question-and-answer exchange, original_excerpt MUST contain BOTH turns verbatim, each turn prefixed with the speaker's name, so the quote alone proves the claim. Example: original_excerpt = "Bill Whitaker: Could it be Russian or Chinese technology? Ryan Graves: I don't see why not." and content = "Ryan Graves considers Russian or Chinese technology a possible explanation for the observed UAP." (note: content states the assertion with the actor named as SUBJECT - never with a reporting verb like "stated that").
+  - location_in_record then spans both turns (start of the question to end of the answer).
 
 If a claim references an entity that does NOT appear in the node directory above, do NOT make up a name for it - either find it in the directory under a different surface form, OR skip that claim. Adding new node names breaks the locked-directory guarantee.
 
@@ -1779,7 +1815,7 @@ API_MODEL_MAP = {
     "haiku": "claude-haiku-4-5-20251001",
 }
 
-_API_MAX_TOKENS = 16384
+_API_MAX_TOKENS = 32000
 
 
 def _call_api(prompt: str, text: str, model: str, schema: dict | None = None) -> str:
@@ -1812,7 +1848,10 @@ def _call_api(prompt: str, text: str, model: str, schema: dict | None = None) ->
         ]
         kwargs["tool_choice"] = {"type": "tool", "name": "emit_extraction"}
 
-    message = client.messages.create(**kwargs)
+    # Stream: a high max_tokens can exceed the SDK's 10-minute non-streaming
+    # guard, and exhaustive claim sets are large. Streaming removes the ceiling.
+    with client.messages.stream(**kwargs) as stream:
+        message = stream.get_final_message()
 
     if message.stop_reason == "max_tokens":
         raise RuntimeError(

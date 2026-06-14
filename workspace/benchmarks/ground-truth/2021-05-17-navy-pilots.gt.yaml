@@ -1,0 +1,182 @@
+# Human-built ground truth for the Navy pilots 60 Minutes record.
+# Built by reading the transcript directly. The target extraction should
+# recover these nodes and these atomic facts. Naming follows project
+# conventions (people: "Last, First"; entities pass the card/portability test).
+# This is a living target - refine adversarially against model output.
+#
+# source: 2021-05-17-video-navy-pilots-describe-encounters-with-ufos
+# hash: 1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44
+
+nodes:
+  people:
+    - Whitaker, Bill  # 60 Minutes correspondent / narrator
+    - Elizondo, Luis  # former AATIP director
+    - Graves, Ryan  # former Navy F/A-18 pilot, Lieutenant
+    - Dietrich, Alex  # Navy pilot, flew Fravor's wing in 2004
+    - Fravor, David  # Top Gun graduate, F-18 squadron commander, USS Nimitz
+    - Mellon, Christopher  # former Deputy Assistant Secretary of Defense for Intelligence
+    - Rubio, Marco  # US Senator, then head of Senate Intelligence Committee
+    - Reid, Harry  # then Senate Majority Leader (mentioned)
+    # Clinton / George W. Bush mentioned only as a time anchor for Mellon's tenure
+  organisations_programmes:
+    - 60 Minutes
+    - US Department of Defense (the Pentagon)
+    - Advanced Aerospace Threat Identification Program (AATIP)
+    - UAP Task Force  # AATIP's 2021 successor
+    - US Senate Select Committee on Intelligence
+    - Office of the Director of National Intelligence (ODNI)
+    - Project Blue Book  # closed 1969
+    - Top Gun Naval Flight School
+    - The New York Times
+    - History Channel
+    - United States Congress
+    - United States Navy
+  vessels:
+    - USS Nimitz
+    - USS Princeton
+  craft_types:
+    - F/A-18 (F-18)
+  places:
+    - "USA, California, San Diego"
+    - "USA, Virginia, Virginia Beach"
+    - "USA, Florida, Jacksonville"
+    - US Atlantic coast
+    - Southern California
+  events:
+    - 2004 USS Nimitz UAP encounter  # 2004-11-14, off Southern California
+    - 2014-2015 East Coast UAP sightings  # Graves' squadron, Virginia Beach / Jacksonville
+    - Project Blue Book closure (1969)
+  concepts:
+    - Unidentified Aerial Phenomena (UAP)
+    - anomalous aerial vehicle (AAV)
+
+# Atomic claims the extraction must recover. Each is ONE fact.
+# Units: SI only in the fact; original imperial belongs only in the quote.
+# Q&A: where a fact comes from a question+answer, the quote must carry BOTH turns.
+# must=true means an article would be poorer without it.
+claims:
+  - {id: ack, fact: "The Pentagon now admits there is something unidentified in US airspace, after decades of public denial.",
+    loc: "00:00:14.9", must: true}
+  - {id: senate_report, fact: "The US Senate Intelligence Committee ordered the Director of National Intelligence and the
+      Secretary of Defense to deliver a report on the sightings by June 2021.", loc: "00:00:14.9", must: true}
+  - {id: govt_real, fact: "The US government has officially stated for the record that UAP are real.", speaker: "Elizondo,
+      Luis", attest: first_hand, loc: "00:00:56.3", must: true}
+  - {id: eliz_career, fact: "Luis Elizondo spent 20 years running military intelligence operations in Afghanistan, the Middle
+      East, and Guantanamo.", loc: "00:01:02.4", must: false}
+  - {id: eliz_join, fact: "Luis Elizondo was asked to join AATIP at the Pentagon in 2008.", loc: "00:01:15.6", must: true}
+  - {id: aatip_mission, fact: "AATIP's mission was to collect and analyse information on anomalous aerial vehicles (UAP).",
+    speaker: "Elizondo, Luis", attest: first_hand, loc: "00:01:24.1", must: true}
+  - {id: aatip_funding, fact: "AATIP was part of a $22 million program sponsored by then Senate Majority Leader Harry Reid
+      to investigate UFOs.", loc: "00:01:50.3", must: true}
+  - {id: eliz_took_over, fact: "Luis Elizondo took over AATIP in 2010 and focused on the national security implications of
+      UAP.", loc: "00:02:01.6", must: false}
+  # The capability list (00:02:12.6) MUST split into atomic claims:
+  - {id: cap_g, fact: "Observed UAP could perform manoeuvres of 600 to 700 G-forces.", speaker: "Elizondo, Luis", attest: first_hand,
+    loc: "00:02:12.6", must: true}
+  - {id: cap_speed, fact: "Observed UAP could fly at approximately 21,000 kilometres per hour.", speaker: "Elizondo, Luis",
+    attest: first_hand, loc: "00:02:12.6", must: true}
+  - {id: cap_radar, fact: "Observed UAP could evade radar.", speaker: "Elizondo, Luis", attest: first_hand, loc: "00:02:12.6",
+    must: true}
+  - {id: cap_medium, fact: "Observed UAP could travel through air and water and possibly space.", speaker: "Elizondo, Luis",
+    attest: first_hand, loc: "00:02:12.6", must: true}
+  - {id: cap_propulsion, fact: "Observed UAP had no obvious propulsion, no wings, and no control surfaces.", speaker: "Elizondo,
+      Luis", attest: first_hand, loc: "00:02:12.6", must: true}
+  - {id: cap_gravity, fact: "Observed UAP could defy the natural effects of Earth's gravity.", speaker: "Elizondo, Luis",
+    attest: first_hand, loc: "00:02:12.6", must: true}
+  - {id: aatip_team, fact: "AATIP was a loose-knit mix of scientists, electro-optical engineers, avionics and intelligence
+      experts, often working part-time.", loc: "00:02:37.0", must: false}
+  - {id: atlantic_2015, fact: "In 2015 a US Navy aircrew struggled to lock onto a fast-moving object off the US Atlantic coast.",
+    loc: "00:02:57.7", must: true}
+  - {id: pentagon_cant_id, fact: "The Pentagon admits it cannot identify the objects in the recently released images.", loc: "00:03:07.3",
+    must: true}
+  - {id: graves_risk, fact: "Ryan Graves regards the unidentified objects as a security risk.", speaker: "Graves, Ryan", attest: first_hand,
+    loc: "00:04:06.2", must: true}
+  - {id: graves_squadron, fact: "Ryan Graves' F/A-18 squadron began seeing UAP over restricted airspace southeast of Virginia
+      Beach in 2014 after a radar upgrade enabled infrared targeting.", speaker: "Graves, Ryan", attest: first_hand, loc: "00:04:12.9",
+    must: true}
+  - {id: spoof, fact: "The dual detection of UAP on both radar and infrared makes the contacts hard to spoof.", speaker: "Graves,
+      Ryan", attest: first_hand, loc: "00:04:29.7", must: true, qa: "Whitaker: you're seeing it both with radar and infrared,
+      that tells you there is something out there. / Graves: Pretty hard to spoof that."}
+  - {id: photos_2019, fact: "Photographs of unidentified objects were taken in 2019 in the same area off Virginia Beach.",
+    loc: "00:04:38.6", must: false}
+  - {id: pentagon_cant_id2, fact: "The Pentagon confirms the 2019 images show objects it cannot identify.", loc: "00:04:43.0",
+    must: true}
+  - {id: everyday, fact: "Pilots training off the Atlantic coast saw UAP every day for at least a couple of years.", speaker: "Graves,
+      Ryan", attest: first_hand, loc: "00:04:55.3", must: true}
+  - {id: jacksonville, fact: "A UAP was filmed off Jacksonville, Florida in 2015 on a targeting camera by members of Ryan
+      Graves' squadron.", loc: "00:05:04.3", must: true}
+  - {id: rotating, fact: "The Jacksonville object was rotating and moving against a 120-knot wind.", attest: first_hand, loc: "00:05:12.8",
+    must: false}
+  - {id: graves_threat_prog, fact: "Ryan Graves considers a threat observation program the most likely explanation for the
+      observed UAP.", speaker: "Graves, Ryan", attest: first_hand, loc: "00:05:56.0", must: true}
+  - {id: russian_chinese, fact: "Russian or Chinese technology is a possible explanation for the observed UAP.", speaker: "Graves,
+      Ryan", attest: first_hand, loc: "00:06:00.5", must: true, qa: "Whitaker: Could it be Russian or Chinese technology?
+      / Graves: I don't see why not."}
+  - {id: graves_worried, fact: "Ryan Graves is worried that the unidentified objects are being ignored despite watching US
+      airspace daily.", speaker: "Graves, Ryan", attest: first_hand, loc: "00:06:07.0", must: true}
+  - {id: blue_book, fact: "The US government ignored UAP publicly after closing its Project Blue Book investigation in 1969.",
+    loc: "00:06:23.4", must: true}
+  - {id: nimitz_intro, fact: "The 2004 incident off Southern California was documented by radar, by camera, and by four naval
+      aviators.", loc: "00:06:30.3", must: true}
+  - {id: fravor_bio, fact: "David Fravor is a Top Gun Naval Flight School graduate and was commander of the F-18 squadron
+      on the USS Nimitz.", loc: "00:06:40.8", must: false}
+  - {id: dietrich_bio, fact: "Alex Dietrich flew at David Fravor's wing during the 2004 encounter and had never spoken publicly
+      about it before.", loc: "00:06:40.8", must: false}
+  - {id: dietrich_why, fact: "Alex Dietrich speaks publicly about the encounter because she was in a government aircraft,
+      on the clock, and feels a responsibility to share what is unclassified.", speaker: "Dietrich, Alex", attest: first_hand,
+    loc: "00:07:02.7", must: false}
+  - {id: nimitz_training, fact: "In November 2004 the USS Nimitz Carrier Strike Group was training approximately 160 kilometres
+      southwest of San Diego.", loc: "00:07:14.4", must: true}
+  - {id: princeton_radar, fact: "For a week the USS Princeton's radar detected multiple anomalous aerial vehicles descending
+      approximately 24,000 metres in less than a second.", loc: "00:07:23.1", must: true}
+  - {id: diverted, fact: "On 2004-11-14 David Fravor and Alex Dietrich, each with a weapons system officer, were diverted
+      to investigate.", loc: "00:07:39.3", must: true}
+  - {id: white_water, fact: "The pilots found an area of roiling white water the size of a Boeing 737 in an otherwise calm
+      sea.", loc: "00:07:47.8", must: true}
+  - {id: tictac, fact: "David Fravor saw a small white tic-tac-shaped object moving above the disturbed water.", speaker: "Fravor,
+      David", attest: first_hand, loc: "00:08:06.3", must: true}
+  - {id: mirror, fact: "The tic-tac object abruptly mirrored David Fravor's movements, appearing aware of the aircraft.",
+    speaker: "Fravor, David", attest: first_hand, loc: "00:08:20.2", must: true}
+  - {id: size, fact: "The object was about the size of an F/A-18, with no markings, no wings and no exhaust plumes.", attest: first_hand,
+    loc: "00:08:30.5", must: true}
+  - {id: vanish, fact: "The object climbed, then disappeared and sped off.", speaker: "Fravor, David", attest: first_hand,
+    loc: "00:08:39.0", must: true}
+  - {id: five_min, fact: "Four aircrew watched the object for roughly five minutes.", speaker: "Fravor, David", attest: first_hand,
+    loc: "00:09:04.2", must: false}
+  - {id: reacquire, fact: "Seconds later the USS Princeton reacquired the target 60 miles away, and another crew briefly locked
+      onto it with a targeting camera before it sped off.", loc: "00:09:08.9", must: true}
+  - {id: better, fact: "David Fravor believes there was something out there better than his aircraft.", speaker: "Fravor,
+      David", attest: first_hand, loc: "00:09:45.8", must: true}
+  - {id: filed_nothing, fact: "The aircrew filed reports but nothing was done officially for five years until Luis Elizondo
+      investigated.", loc: "00:09:56.5", must: true}
+  - {id: eliz_compelling, fact: "Luis Elizondo found the encounter compelling because trained pilots saw something they could
+      not explain, backed by electro-optical and radar data.", speaker: "Elizondo, Luis", attest: first_hand, loc: "00:10:13.2",
+    must: false}
+  - {id: skepticism, fact: "Inside the Pentagon, Luis Elizondo's findings were met with scepticism and AATIP's funding was
+      eliminated in 2012.", loc: "00:10:27.7", must: true}
+  - {id: eliz_quit, fact: "Luis Elizondo quit the Pentagon in 2017, having got three Navy videos declassified.", loc: "00:10:31.7",
+    must: true}
+  - {id: mellon_bio, fact: "Christopher Mellon served as Deputy Assistant Secretary of Defense for Intelligence under Presidents
+      Clinton and George W. Bush, with access to top-secret programs.", loc: "00:10:57.5", must: false}
+  - {id: mellon_notus, fact: "Christopher Mellon states with high confidence that the objects are not US technology.", speaker: "Mellon,
+      Christopher", attest: first_hand, loc: "00:11:08.4", must: true}
+  - {id: mellon_leak, fact: "In 2017, as a private citizen, Christopher Mellon acquired the three declassified Navy videos
+      and leaked them to The New York Times.", loc: "00:11:18.7", must: true}
+  - {id: campaign, fact: "Christopher Mellon and Luis Elizondo took their account to newspapers, the History Channel and members
+      of Congress to build public and Congressional interest.", loc: "00:11:46.1", must: false}
+  - {id: taskforce, fact: "In August 2021 the Pentagon resurrected AATIP as the UAP Task Force and began encouraging service
+      members to report encounters.", loc: "00:12:09.1", must: true}
+  - {id: rubio_threat, fact: "Marco Rubio regards anything entering airspace where it should not be as a threat.", speaker: "Rubio,
+      Marco", attest: first_hand, loc: "00:12:22.6", must: false}
+  - {id: rubio_request, fact: "In December 2020, as head of the Senate Intelligence Committee, Marco Rubio asked the Director
+      of National Intelligence and the Pentagon for an unclassified report by June 2021.", loc: "00:12:34.0", must: true}
+  - {id: rubio_stigma, fact: "Marco Rubio says a stigma on Capitol Hill should not stop UAP being taken seriously.", speaker: "Rubio,
+      Marco", attest: first_hand, loc: "00:12:59.0", must: false,}
+
+# Notes / adversarial points to watch:
+# - cap_* MUST be 6 separate claims, not one merged sentence (atomicity test).
+# - spoof + russian_chinese: the quote must contain BOTH the question and answer.
+# - speaker tag carries the name; the fact text should NOT need "X said" framing
+#   unless the identity is part of the substance (portability).
+# - all imperial converted to SI in the fact; original units only in the quote.
+# - "the same area", "these objects", "video footage" must be resolved to be portable.

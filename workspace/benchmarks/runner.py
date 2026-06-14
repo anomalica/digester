@@ -75,12 +75,24 @@ def normalise(name: str) -> str:
     return n
 
 
+def _strip_parens(name: str) -> str:
+    """Drop parenthetical qualifiers/acronyms: 'X (ACRONYM)' / 'Place (offshore)'
+    -> 'X' / 'Place'. The canonical 'Full Name (ACRONYM)' and 'Place (qualifier)'
+    node forms must still match the bare golden name."""
+    return re.sub(r"\s*\([^)]*\)", "", name).strip()
+
+
 def name_variants(name: str) -> set[str]:
-    """Normalised forms to match on, including the "Last, First" reversal."""
-    v = {normalise(name)}
-    if "," in name:
-        a, b = name.split(",", 1)
-        v.add(normalise(f"{b.strip()} {a.strip()}"))
+    """Normalised forms to match on: the name, its paren-stripped form, and the
+    'Last, First' reversal of each."""
+    v: set[str] = set()
+    for form in {name, _strip_parens(name)}:
+        if not form:
+            continue
+        v.add(normalise(form))
+        if "," in form:
+            a, b = form.split(",", 1)
+            v.add(normalise(f"{b.strip()} {a.strip()}"))
     return {x for x in v if x}
 
 
@@ -153,14 +165,18 @@ def _content_tokens(name: str) -> set[str]:
 
 def build_loose_matcher(
     golden_entities: list[dict],
-) -> list[tuple[set[str], str]]:
-    """[(union_of_content_tokens_over_canonical+aliases, canonical), ...]."""
+) -> list[tuple[list[set[str]], str]]:
+    """[([token_set_per_form], canonical), ...]. Canonical and each alias are
+    kept as SEPARATE token sets so coverage is measured against the best single
+    form - unioning them would inflate the denominator and reject good matches."""
     out = []
     for ent in golden_entities:
-        toks = _content_tokens(ent["canonical"])
+        forms = [_content_tokens(ent["canonical"])]
         for alias in ent.get("aliases") or []:
-            toks |= _content_tokens(alias)
-        out.append((toks, ent["canonical"]))
+            t = _content_tokens(alias)
+            if t:
+                forms.append(t)
+        out.append(([f for f in forms if f], ent["canonical"]))
     return out
 
 
@@ -179,15 +195,14 @@ def loose_match(
         return None
     best = None
     best_cov = 0.0
-    for toks, canonical in loose_matcher:
-        if not toks:
-            continue
-        shared = ext & toks
-        if len(shared) < 2:
-            continue
-        coverage = len(shared) / len(toks)
-        if coverage >= 0.6 and coverage > best_cov:
-            best, best_cov = canonical, coverage
+    for forms, canonical in loose_matcher:
+        for toks in forms:
+            shared = ext & toks
+            if len(shared) < 2:
+                continue
+            coverage = len(shared) / len(toks)
+            if coverage >= 0.6 and coverage > best_cov:
+                best, best_cov = canonical, coverage
     return best
 
 
