@@ -175,8 +175,9 @@ def two_pass_result_to_yaml(
         item: dict = {
             "id": str(uuid.uuid4()),
             "type": c["claim_type"],
-            "attestation": c["attestation"],
         }
+        if c.get("attestation"):
+            item["attestation"] = c["attestation"]
         if c.get("speaker"):
             item["speaker"] = _ref(c["speaker"])
         if c.get("location_in_record"):
@@ -265,8 +266,9 @@ def parsed_dict_to_digest_yaml(parsed: dict) -> str:
         item: dict = {
             "id": c.get("id"),
             "type": c.get("claim_type"),
-            "attestation": c.get("attestation"),
         }
+        if c.get("attestation"):
+            item["attestation"] = c["attestation"]
         if c.get("speaker"):
             item["speaker"] = _ref(c["speaker"])
         if c.get("location_in_record"):

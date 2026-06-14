@@ -1290,6 +1290,8 @@ Do NOT bundle "who this person is" with "what they did". "George Knapp, a journa
   Claim 1: "George Knapp is a journalist at KLAS-TV in Las Vegas." (administrative, infrastructure if it's only about source attribution; domain if it's substantive)
   Claim 2: "In June 2019, George Knapp published the Harry Reid 2009 SAP Memo." (administrative, domain)
 
+A sentence listing SEVERAL distinct capabilities, measurements, or properties becomes SEVERAL claims - never one merged claim. "a technology that can do 600-700 G-forces, fly at 13,000 miles per hour, evade radar, fly through air and water, with no wings or propulsion, and defy gravity" splits into SEPARATE claims: one for the 600-700 G-force figure, one for the speed, one for evading radar, one for travelling through air and water, one for the absence of wings/propulsion, one for defying gravity. Each measurement or property is its own claim. Merging a list into a single narrative sentence is WRONG - extract the individual facts.
+
 ================================================================
 ANCHORING
 ================================================================
@@ -1307,12 +1309,35 @@ PERSON REFERENCES IN CLAIM TEXT
 Use the full natural-order name inside claim text ("Luis Elizondo", "David Fravor") - NOT a surname-only shortcut. node_references uses the canonical "Last, First" form from the directory.
 
 ================================================================
-UNIT NORMALISATION
+UNIT NORMALISATION - metric only, never leave imperial
 ================================================================
 
-Convert measurements in "content" to metric: "10 metres" not "10m", "24,000 metres" not "24km". Preserve precision - "about 80,000 feet" -> "approximately 24,000 metres" (rounded), NOT "24,384 metres".
+ALWAYS convert imperial/US units in "content" to metric. NEVER leave a bare imperial value in a claim. miles per hour -> km/h, miles -> kilometres, feet -> metres, pounds -> kilograms, Fahrenheit -> Celsius. "13,000 miles per hour" becomes "approximately 21,000 km/h"; "about 80,000 feet" becomes "approximately 24,000 metres". Preserve precision and the original's hedge ("about", "approximately") - round, do NOT give false precision ("24,384 metres"). Knots (aviation/nautical standard) may be kept but add the km/h equivalent: "120 knots (approximately 220 km/h)".
 
-original_excerpt preserves source phrasing verbatim.
+original_excerpt preserves source phrasing verbatim (keep the imperial units there).
+
+================================================================
+BRITISH ENGLISH - mandatory in all claim text and node names
+================================================================
+
+Use British spelling everywhere: categorise (not categorize), organise, recognise, analyse, emphasise, prioritise, colour, behaviour, defence, offence, licence (noun), metre, centre, manoeuvre, aluminium, fibre. Never American spellings.
+
+================================================================
+DURABILITY - every claim must stand alone out of context
+================================================================
+
+Each claim is read in isolation in the knowledge graph, months later, by someone who has NOT seen this document. It must be fully self-contained. Resolve every vague or deictic reference into a concrete one:
+  - not "the video footage" / "the footage" but the named item ("the 2004 USS Nimitz FLIR1 video").
+  - not "the objects" / "these objects" / "the unidentified objects" but what they are and where ("the UAP observed off Virginia Beach in 2014").
+  - not "the same area" / "the area" but the named place; not "the incident" / "the encounter" but the named event.
+  - NEVER begin a claim with a bare "It", "They", "This", "These", "That" - name the subject.
+A reader seeing only this one claim, with no surrounding text, must understand exactly what it refers to.
+
+================================================================
+FIDELITY - capture what was said, do not embellish
+================================================================
+
+State what the source actually says. Do NOT add reasoning, qualifiers, consequences, or detail the speaker did not express. "Pretty hard to spoof that" becomes "[Speaker] said the dual radar-and-infrared detection is hard to spoof" - NOT "...hard to spoof or dismiss as false contacts" (the speaker never said "dismiss as false contacts"). Resolve context (durability) without inventing content.
 
 ================================================================
 ISO DATES MANDATORY EVERYWHERE
@@ -1332,7 +1357,26 @@ EXHAUSTIVE EXTRACTION - do not summarise
 
 Capture every factual statement, however incidental - dates, names, places, quoted figures, asides, parenthetical remarks. Coverage matters more than highlighting "important" points.
 
+OPINIONS AND INTERVIEW EXCHANGES: an opinion, assessment, or judgement - especially from an interviewee or expert - is a claim (claim_type "opinion"). When a person gives a short answer, confirmation, or reaction to a question or a stated proposition ("Pretty hard to spoof that", "Every day", "I don't see why not"), it IS a claim: expand it into a standalone assertion by resolving it against the question or statement it responds to, and attribute it to the person who answered. Do NOT drop a conversational turn just because it is brief or depends on the previous line for its meaning.
+
 If a claim references an entity that does NOT appear in the node directory above, do NOT make up a name for it - either find it in the directory under a different surface form, OR skip that claim. Adding new node names breaks the locked-directory guarantee.
+
+================================================================
+ATTESTATION - optional, omit unless there is a clear evidential stance
+================================================================
+
+attestation records the evidential standing of a claim. It is OPTIONAL and depends on the
+NATURE of the statement, not the speaker's role. Only set it when the claim is an evidential
+account of something observed or done:
+  - "first_hand": the speaker is stating what they personally did, witnessed, or observed (a pilot describing his own encounter; "I saw the object descend").
+  - "second_hand": the speaker is relaying a specific other person's account or observation, or reporting a specific organisation's finding ("David Fravor told me the object accelerated"; "the Pentagon confirmed it cannot identify the objects").
+  - "third_hand": the speaker is relaying something passed through an intermediary ("he said the rancher had heard that ...").
+
+OMIT attestation entirely when there is no evidential stance to record - a narrator, host, or
+interviewer simply conveying information, framing, or context, or a bare factual statement with
+no observer attached. Do NOT default to first_hand. A missing attestation is correct and
+expected for most narration. When a researcher or interviewee does inject a genuine first- or
+second-hand account into otherwise neutral narration, tag that claim.
 
 ================================================================
 OUTPUT FORMAT - valid JSON only, no markdown fencing
@@ -1345,7 +1389,7 @@ OUTPUT FORMAT - valid JSON only, no markdown fencing
       "original_excerpt": "exact original wording from source",
       "category": "domain|infrastructure",
       "claim_type": "observation|testimony|hearsay|opinion|measurement|administrative",
-      "attestation": "first_hand|second_hand|third_hand",
+      "attestation": "first_hand|second_hand|third_hand (OPTIONAL - omit for plain narration/framing)",
       "speaker": "person name from directory, or null",
       "location_in_record": "page, paragraph, or timestamp",
       "date": "YYYY-MM-DD if applicable",
@@ -1373,7 +1417,7 @@ def build_claims_schema_v2(node_names: list[str]) -> dict:
                 "type": "array",
                 "items": {
                     "type": "object",
-                    "required": ["content", "category", "claim_type", "attestation"],
+                    "required": ["content", "category", "claim_type"],
                     "properties": {
                         "content": {"type": "string"},
                         "original_excerpt": {"type": "string"},
@@ -1426,6 +1470,25 @@ def _format_directory_v2(nodes: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def _nodes_prompt() -> str:
+    """Nodes-pass prompt, overridable per run via DIGESTER_NODES_PROMPT_FILE
+    (used for prompt tuning - lets Haiku and Sonnet carry different prompts)."""
+    p = os.environ.get("DIGESTER_NODES_PROMPT_FILE")
+    if p and os.path.exists(p):
+        return open(p).read()
+    return NODES_PROMPT_V2
+
+
+def _claims_prompt_template() -> str:
+    """Claims-pass prompt template, overridable via DIGESTER_CLAIMS_PROMPT_FILE.
+    Must keep the {directory}/{main_subject}/{codenames_block}/{acronyms_block}
+    placeholders and {{ }} for literal braces."""
+    p = os.environ.get("DIGESTER_CLAIMS_PROMPT_FILE")
+    if p and os.path.exists(p):
+        return open(p).read()
+    return CLAIMS_PROMPT_V2_TEMPLATE
+
+
 def extract_nodes_v2(
     text: str,
     model: str = DEFAULT_MODEL,
@@ -1456,7 +1519,7 @@ def extract_nodes_v2(
             directory_lines = [
                 f"  - ({n['node_type']}) {name}" for name, n in merged_nodes.items()
             ]
-            prompt = record_context + NODES_PROMPT_V2
+            prompt = record_context + _nodes_prompt()
             if directory_lines:
                 prompt = (
                     "EXISTING NODE DIRECTORY from previous chunks/rounds - "
@@ -1465,7 +1528,7 @@ def extract_nodes_v2(
                     + "\n\n"
                     + prompt
                 )
-            raw = _call_cli(prompt, chunk, model, schema=NODES_SCHEMA_V2)
+            raw = _call(prompt, chunk, model, schema=NODES_SCHEMA_V2)
             result = json.loads(raw) if isinstance(raw, str) else raw
 
             new_in_round = 0
@@ -1548,7 +1611,7 @@ def extract_claims_v2(
 
         chunk_claims: list[dict] = []
         for it in range(ITERATION_MAX):
-            prompt = record_context + CLAIMS_PROMPT_V2_TEMPLATE.format(
+            prompt = record_context + _claims_prompt_template().format(
                 directory=directory,
                 main_subject=main_subject,
                 codenames_block=codenames_block,
@@ -1566,7 +1629,7 @@ def extract_claims_v2(
                     "and set extraction_complete=true."
                 )
 
-            raw = _call_cli(prompt, chunk, model, schema=schema)
+            raw = _call(prompt, chunk, model, schema=schema)
             result = json.loads(raw) if isinstance(raw, str) else raw
 
             new_in_round = 0
@@ -1710,24 +1773,73 @@ def _call_cli(prompt: str, text: str, model: str, schema: dict | None = None) ->
         os.unlink(temp_path)
 
 
-def _call_api(prompt: str, text: str, model: str) -> str:
-    """Call Claude via the Anthropic API."""
+API_MODEL_MAP = {
+    "sonnet": "claude-sonnet-4-6",
+    "opus": "claude-opus-4-8",
+    "haiku": "claude-haiku-4-5-20251001",
+}
+
+_API_MAX_TOKENS = 16384
+
+
+def _call_api(prompt: str, text: str, model: str, schema: dict | None = None) -> str:
+    """Call Claude via the Anthropic Messages API.
+
+    Structured extraction uses forced tool use: the JSON schema is the tool's
+    input_schema and tool_choice pins that tool, so the model must answer with a
+    tool_use block whose input conforms - including the node_references enum that
+    locks claims to the Pass-A node names. This mirrors what the CLI's
+    --json-schema did. Returns a JSON string for the existing _parse_json path.
+    """
     import anthropic
 
-    model_map = {
-        "sonnet": "claude-sonnet-4-6",
-        "opus": "claude-opus-4-7",
-        "haiku": "claude-haiku-4-5-20251001",
-    }
-    model_id = model_map.get(model, model)
-
+    model_id = API_MODEL_MAP.get(model, model)
     client = anthropic.Anthropic()
-    message = client.messages.create(
-        model=model_id,
-        max_tokens=8192,
-        messages=[{"role": "user", "content": f"{prompt}\n\nDOCUMENT:\n{text}"}],
-    )
-    return message.content[0].text
+
+    kwargs: dict = {
+        "model": model_id,
+        "max_tokens": _API_MAX_TOKENS,
+        "system": prompt,
+        "messages": [{"role": "user", "content": f"DOCUMENT:\n{text}"}],
+    }
+    if schema is not None:
+        kwargs["tools"] = [
+            {
+                "name": "emit_extraction",
+                "description": "Emit the structured extraction result.",
+                "input_schema": schema,
+            }
+        ]
+        kwargs["tool_choice"] = {"type": "tool", "name": "emit_extraction"}
+
+    message = client.messages.create(**kwargs)
+
+    if message.stop_reason == "max_tokens":
+        raise RuntimeError(
+            f"API response hit max_tokens ({_API_MAX_TOKENS}); output truncated. "
+            "Lower chunk size or raise _API_MAX_TOKENS."
+        )
+
+    if schema is not None:
+        for block in message.content:
+            if getattr(block, "type", None) == "tool_use":
+                return json.dumps(block.input)
+        raise RuntimeError(
+            f"API returned no tool_use block. stop_reason={message.stop_reason} "
+            f"types={[getattr(b, 'type', None) for b in message.content]}"
+        )
+    for block in message.content:
+        if getattr(block, "type", None) == "text":
+            return block.text
+    raise RuntimeError(f"API returned no text. stop_reason={message.stop_reason}")
+
+
+def _call(prompt: str, text: str, model: str, schema: dict | None = None) -> str:
+    """Dispatch an extraction call. Defaults to the Anthropic API; set
+    DIGESTER_USE_API=0 to fall back to the Claude Code CLI transport."""
+    if os.environ.get("DIGESTER_USE_API", "1") == "0":
+        return _call_cli(prompt, text, model, schema=schema)
+    return _call_api(prompt, text, model, schema=schema)
 
 
 def _parse_json(raw: str) -> dict:
