@@ -61,9 +61,8 @@ def _write_claims_section(
     for claim in claims:
         claim_id = str(uuid.uuid4())
         speaker_str = f" speaker:{claim.speaker}" if claim.speaker else ""
-        lines.append(
-            f"### {claim_id} [{claim.claim_type.value}/{claim.attestation.value}]{speaker_str}"
-        )
+        att_str = f"/{claim.attestation.value}" if claim.attestation else ""
+        lines.append(f"### {claim_id} [{claim.claim_type.value}{att_str}]{speaker_str}")
         lines.append(claim.content)
         if claim.original_excerpt:
             lines.append(f"> {claim.original_excerpt}")

@@ -75,9 +75,9 @@ def score_claim(conn: sqlite3.Connection, claim_id: str) -> ScoreBreakdown:
         )
 
     claim_type = ClaimType(row[0])
-    attestation = AttestationLevel(row[1])
+    attestation = AttestationLevel(row[1]) if row[1] else None
 
-    # Base weight from claim type and attestation
+    # Base weight from claim type and attestation (absent attestation = neutral)
     type_weight = CLAIM_TYPE_WEIGHTS.get(claim_type, 0.5)
     attestation_weight = ATTESTATION_WEIGHTS.get(attestation, 0.5)
     base_weight = type_weight * attestation_weight
@@ -105,7 +105,7 @@ def score_claim(conn: sqlite3.Connection, claim_id: str) -> ScoreBreakdown:
         score=final,
         record_count=source_count,
         corroboration_count=len(corroborations),
-        attestation=attestation.value,
+        attestation=attestation.value if attestation else "unattributed",
         claim_type=claim_type.value,
         base_weight=base_weight,
         corroboration_bonus=combined - base_weight,

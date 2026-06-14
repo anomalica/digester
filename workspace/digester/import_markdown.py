@@ -497,7 +497,7 @@ def import_extraction(
                 content=claim_def["content"],
                 original_excerpt=claim_def.get("original_excerpt"),
                 claim_type=claim_def["claim_type"],
-                attestation=claim_def["attestation"],
+                attestation=claim_def.get("attestation"),
                 record_id=record.id,
                 speaker_id=speaker_id,
                 location_in_record=claim_def.get("location_in_record"),

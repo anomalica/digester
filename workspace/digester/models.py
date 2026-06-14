@@ -111,7 +111,7 @@ class Claim(BaseModel):
     claim_type: ClaimType
     claim_role: ClaimRole | None = None
     category: ClaimCategory = ClaimCategory.domain
-    attestation: AttestationLevel
+    attestation: AttestationLevel | None = None
     record_id: str
     speaker_id: str | None = None
     location_in_record: str | None = None
@@ -142,7 +142,7 @@ class ExtractedClaim(BaseModel):
     claim_type: ClaimType
     claim_role: ClaimRole | None = None
     category: ClaimCategory = ClaimCategory.domain
-    attestation: AttestationLevel
+    attestation: AttestationLevel | None = None
     speaker: str | None = None
     location_in_record: str | None = None
     date: str | None = None
