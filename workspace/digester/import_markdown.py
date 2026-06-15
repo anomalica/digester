@@ -213,8 +213,18 @@ def _lookup_ingest_metadata(
     """
     from pathlib import Path as _P
 
-    records_dir = _P(_INGESTS_DIR) / "records"
-    if not records_dir.exists():
+    # The records directory: the configured/container path first, then - so a
+    # host-side rebuild does not silently lose content_hash when the container
+    # path is absent - the ingests dir derived from the digest's own location
+    # (<root>/digests/records/<stem>.yaml -> <root>/ingests/records).
+    candidate_dirs = [_P(_INGESTS_DIR) / "records"]
+    if source_path:
+        derived = (
+            _P(str(source_path)).resolve().parent.parent.parent / "ingests" / "records"
+        )
+        candidate_dirs.append(derived)
+    records_dir = next((d for d in candidate_dirs if d.exists()), None)
+    if records_dir is None:
         return None, None
 
     candidate_stem: str | None = None
@@ -371,6 +381,16 @@ def import_extraction(
         if not content_hash:
             content_hash, friendly_name = _lookup_ingest_metadata(
                 fm.get("record_title", ""), source_path
+            )
+        if not content_hash:
+            # Never silent: a null content_hash breaks workbench deep-links on
+            # every claim/node sourced from this record. Surface it loudly so a
+            # mis-pointed ingests dir is diagnosed, not mistaken for needing a
+            # re-digest. Set ANOMALICA_INGESTS_DIR if running outside the container.
+            log(
+                f"  WARNING: no content_hash for {record_title!r} - workbench "
+                f"links will be absent (checked ANOMALICA_INGESTS_DIR="
+                f"{_INGESTS_DIR!r} and the digest-relative ingests dir)"
             )
         record = insert_record(
             conn,
