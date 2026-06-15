@@ -721,6 +721,36 @@ def rewire_refs_cmd(extracts_dir: str) -> None:
         click.echo(f"  {count:4d}  {fname}")
 
 
+@main.command(name="backfill-record-fields")
+@click.argument("digests_dir", type=click.Path(exists=True))
+@click.option(
+    "--ingests-dir",
+    type=click.Path(),
+    default=None,
+    help="Path to the ingests repo (default: ANOMALICA_INGESTS_DIR or derived "
+    "from the digests location)",
+)
+def backfill_record_fields_cmd(digests_dir: str, ingests_dir: str | None) -> None:
+    """Backfill content_hash/publisher/medium/duration into legacy digest blocks.
+
+    Deterministic, no AI: the values come straight from each record's ingest
+    frontmatter. Only the record: block is rewritten; nodes and claims are left
+    byte-identical. Rebuild the DB afterwards if you want them there too.
+    """
+    from digester.backfill import backfill_record_fields_in_dir
+
+    results = backfill_record_fields_in_dir(
+        Path(digests_dir), Path(ingests_dir) if ingests_dir else None
+    )
+    if not results:
+        click.echo("No digests needed backfilling.")
+        return
+    total = sum(len(v) for v in results.values())
+    click.echo(f"Backfilled {total} fields across {len(results)} digests:")
+    for fname, fields in sorted(results.items()):
+        click.echo(f"  {fname}: {', '.join(fields)}")
+
+
 @main.command(name="export-obsidian")
 @click.argument("output_dir", type=click.Path())
 @click.pass_context
