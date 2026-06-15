@@ -330,6 +330,12 @@ def rebuild(ctx: click.Context, directory: str) -> None:
 @click.option("--model", default="sonnet", help="Claude model to use")
 @click.option("--api", is_flag=True, help="Use Anthropic API instead of CLI")
 @click.option("--domain-only", is_flag=True, help="Skip infrastructure extraction")
+@click.option(
+    "--confirm",
+    is_flag=True,
+    help="Confirm the printed cost estimate and proceed with the metered run "
+    "(required for any spend; see anomalica/CLAUDE.md spend gate)",
+)
 @click.pass_context
 def digest(
     ctx: click.Context,
@@ -338,6 +344,7 @@ def digest(
     model: str,
     api: bool,
     domain_only: bool,
+    confirm: bool,
 ) -> None:
     """Digest a record: extract to markdown then import into database."""
     ctx.invoke(
@@ -347,6 +354,7 @@ def digest(
         model=model,
         api=api,
         domain_only=domain_only,
+        confirm=confirm,
     )
 
     # Determine the digest path
