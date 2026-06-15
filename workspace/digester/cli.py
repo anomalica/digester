@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import os
 import sqlite3
 from pathlib import Path
 
 import click
 
+from digester.cost import estimate_batch, estimate_record, format_estimate
 from digester.database import (
     get_claims_for_node,
     get_nodes,
@@ -25,6 +27,25 @@ from digester.yaml_format import parse_digest_yaml
 from digester.scoring import score_claim, tier_label
 
 DEFAULT_DB = Path.home() / ".local" / "share" / "digester" / "knowledge.db"
+
+
+def _spend_confirmed(estimate: dict, model: str, confirm: bool) -> bool:
+    """The metered-spend pre-flight gate (anomalica/CLAUDE.md). Prints the cost
+    estimate and returns True only if the run may proceed. No gate when not on
+    the metered API path (DIGESTER_USE_API=0). Refuses (returns False) on the
+    metered path unless --confirm was passed."""
+    if os.environ.get("DIGESTER_USE_API", "1") == "0":
+        return True  # CLI/subscription fallback is not per-token metered spend
+    click.echo(format_estimate(estimate, model))
+    if confirm:
+        click.echo("Confirmed (--confirm) - proceeding with the metered run.")
+        return True
+    click.echo(
+        "\nREFUSING: this run spends real money and was not confirmed.\n"
+        "Re-run with --confirm once the figure above is approved.",
+        err=True,
+    )
+    return False
 
 
 def _connect(db_path: Path) -> sqlite3.Connection:
@@ -66,6 +87,12 @@ def main(ctx: click.Context, db: str) -> None:
 @click.option("--model", default="sonnet", help="Claude model to use")
 @click.option("--api", is_flag=True, help="Use Anthropic API instead of CLI")
 @click.option("--domain-only", is_flag=True, help="Skip infrastructure extraction")
+@click.option(
+    "--confirm",
+    is_flag=True,
+    help="Confirm the printed cost estimate and proceed with the metered run "
+    "(required for any spend; see anomalica/CLAUDE.md spend gate)",
+)
 @click.pass_context
 def extract_cmd(
     ctx: click.Context,
@@ -74,6 +101,7 @@ def extract_cmd(
     model: str,
     api: bool,
     domain_only: bool,
+    confirm: bool,
 ) -> None:
     """Extract knowledge from a record into a reviewable markdown file."""
     path = Path(file_path)
@@ -82,6 +110,23 @@ def extract_cmd(
     click.echo(f"Parsing record: {path.name}")
     parsed = parse_record(text)
 
+    # SPEND GATE (anomalica/CLAUDE.md operating rule): when this run will hit
+    # the metered API, print a cost estimate and refuse to proceed without an
+    # explicit --confirm. A promise/convention is not enough - this is the gate.
+    if not _spend_confirmed(
+        estimate_record(len(parsed.body or ""), model), model, confirm
+    ):
+        ctx.exit(2)
+
+    _do_extract(path, parsed, Path(output) if output else None, model)
+
+
+def _do_extract(path: Path, parsed, output: Path | None, model: str) -> Path:
+    """Run the two-pass extraction for one parsed record and write the digest YAML.
+
+    Caller is responsible for the spend gate - this assumes the run is approved.
+    Returns the path the digest was written to.
+    """
     # 2026-05-25 architecture: two-pass extract. Pass A nodes-only (with
     # chunking + iteration + cross-chunk directory threading + main_subject /
     # codenames / acronyms folded in from the deprecated terminology pre-pass).
@@ -118,13 +163,61 @@ def extract_cmd(
         model=model,
     )
 
-    if output:
-        out_path = Path(output)
-    else:
-        out_path = path.with_suffix(".yaml")
-
+    out_path = output if output else path.with_suffix(".yaml")
     out_path.write_text(text)
     click.echo(f"\nWritten to: {out_path}")
+    return out_path
+
+
+@main.command(name="batch-extract")
+@click.argument("file_paths", nargs=-1, type=click.Path(exists=True), required=True)
+@click.option(
+    "--output-dir",
+    "-o",
+    type=click.Path(),
+    default=None,
+    help="Directory for the digest YAML files (default: alongside each record)",
+)
+@click.option("--model", default="sonnet", help="Claude model to use")
+@click.option(
+    "--confirm",
+    is_flag=True,
+    help="Confirm the printed aggregate cost estimate and proceed with the "
+    "metered run (required for any spend; see anomalica/CLAUDE.md spend gate)",
+)
+@click.pass_context
+def batch_extract_cmd(
+    ctx: click.Context,
+    file_paths: tuple[str, ...],
+    output_dir: str | None,
+    model: str,
+    confirm: bool,
+) -> None:
+    """Extract knowledge from many records, behind one aggregate spend gate.
+
+    Prints a single cost estimate for the whole batch and refuses to run
+    without --confirm. This is the corpus-scale path - the one the spend rule
+    exists to guard.
+    """
+    paths = [Path(p) for p in file_paths]
+    parsed_records = []
+    for p in paths:
+        click.echo(f"Parsing record: {p.name}")
+        parsed_records.append((p, parse_record(p.read_text())))
+
+    # SPEND GATE: one aggregate estimate for the whole batch.
+    char_counts = [len(parsed.body or "") for _, parsed in parsed_records]
+    if not _spend_confirmed(estimate_batch(char_counts, model), model, confirm):
+        ctx.exit(2)
+
+    out_dir = Path(output_dir) if output_dir else None
+    if out_dir:
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+    for i, (p, parsed) in enumerate(parsed_records, 1):
+        click.echo(f"\n[{i}/{len(parsed_records)}] {p.name}")
+        out = out_dir / p.with_suffix(".yaml").name if out_dir else None
+        _do_extract(p, parsed, out, model)
 
 
 # --- Import: deterministic markdown to database ---
