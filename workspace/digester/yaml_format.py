@@ -142,6 +142,10 @@ def two_pass_result_to_yaml(
     record_date: str | None = None,
     record_reference: str | None = None,
     record_id: str | None = None,
+    record_content_hash: str | None = None,
+    record_medium: str | None = None,
+    record_duration: str | None = None,
+    record_publisher: str | None = None,
     model: str = "unknown",
 ) -> str:
     """Convert the dict returned by extract.extract_two_pass into a YAML
@@ -218,7 +222,11 @@ def two_pass_result_to_yaml(
                     "id": record_id,
                     "title": record_title,
                     "producer": record_producer,
+                    "publisher": record_publisher,
                     "date": record_date,
+                    "medium": record_medium,
+                    "duration": record_duration,
+                    "content_hash": record_content_hash,
                     "reference": record_reference,
                 }
             ),

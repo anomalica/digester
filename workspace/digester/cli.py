@@ -110,7 +110,11 @@ def extract_cmd(
         result,
         record_title=parsed.title,
         record_producer=(parsed.authors[0] if parsed.authors else None),
+        record_publisher=parsed.metadata.get("publisher"),
         record_date=parsed.date,
+        record_medium=parsed.source_type,
+        record_duration=parsed.metadata.get("duration"),
+        record_content_hash=parsed.metadata.get("content_hash"),
         model=model,
     )
 
