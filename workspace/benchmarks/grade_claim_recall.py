@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 """Claim-recall grader: for each must-capture ground-truth fact, decide whether
 any extracted claim covers it. Uses Haiku (cheap) with forced-tool structured
-output. Usage: grade_claim_recall.py <gt.yaml> <digest.yaml> [model]"""
+output. Routes through the digester's transport dispatcher, so it follows the
+same policy as extraction - the Claude subscription by default, the metered API
+only under DIGESTER_USE_API=1. Usage: grade_claim_recall.py <gt.yaml> <digest.yaml> [model]"""
 
 import sys
 
-import anthropic
 import yaml
+
+from digester.extract import _call, _parse_json
 
 gt = yaml.safe_load(open(sys.argv[1]))
 dig = yaml.safe_load(open(sys.argv[2]))
-grader_model = sys.argv[3] if len(sys.argv) > 3 else "claude-haiku-4-5-20251001"
+grader_model = sys.argv[3] if len(sys.argv) > 3 else "haiku"
 
 must = [c for c in gt["claims"] if c.get("must")]
 claims = [c.get("text", "") for c in dig.get("domain_claims", []) or []]
@@ -53,23 +56,8 @@ EXTRACTED CLAIMS:
 {cl_block}
 """
 
-client = anthropic.Anthropic()
-with client.messages.stream(
-    model=grader_model,
-    max_tokens=8000,
-    messages=[{"role": "user", "content": prompt}],
-    tools=[
-        {"name": "emit", "description": "Emit recall results.", "input_schema": schema}
-    ],
-    tool_choice={"type": "tool", "name": "emit"},
-) as stream:
-    msg = stream.get_final_message()
-
-res = None
-for b in msg.content:
-    if getattr(b, "type", None) == "tool_use":
-        res = b.input
-results = res["results"]
+raw = _call(prompt, "", grader_model, schema=schema)
+results = _parse_json(raw)["results"]
 covered = [r for r in results if r.get("covered")]
 missed = [r["gt_id"] for r in results if not r.get("covered")]
 id_to_fact = {f"G{i}": c["id"] for i, c in enumerate(must)}
