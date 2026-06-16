@@ -93,7 +93,12 @@ def digestibility(
             "sidecar",
         )
 
-    # Fallback: compute observed line-coverage from raw spans (schema /0).
+    # Fallback for legacy /0 sidecars with no verdict: compute observed
+    # line-coverage from raw spans. APPROXIMATE and not authoritative - the
+    # spans index line numbers in the body as it was at review time, which a
+    # re-ingest can shift (bodies have moved to store/v1/), and 'to' is treated
+    # as inclusive here. The workbench's computed verdict (above) is the source
+    # of truth; this only keeps pre-/1 sidecars from silently reading as 0%.
     content = _content_line_numbers(record_text)
     if not content:
         return Digestibility(
