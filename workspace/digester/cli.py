@@ -730,6 +730,41 @@ def rewire_refs_cmd(extracts_dir: str) -> None:
         click.echo(f"  {count:4d}  {fname}")
 
 
+@main.command(name="coverage")
+@click.argument("records_dir", type=click.Path(exists=True))
+@click.option(
+    "--threshold",
+    default=1.0,
+    type=float,
+    help="Observed-coverage fraction required to be digestible (default 1.0)",
+)
+def coverage_cmd(records_dir: str, threshold: float) -> None:
+    """Report each record's review observation coverage and digestibility.
+
+    The review-gate (quality, not cost): a record is digestible only when a
+    reviewer has observed all of it. Records with no review sidecar are
+    unreviewed and not digestible. Sorted by coverage so the review backlog is
+    visible at a glance.
+    """
+    from digester.review_gate import assess_record
+
+    rdir = Path(records_dir)
+    rows = []
+    for md in sorted(rdir.glob("*.md")):
+        d = assess_record(md, rdir.parent, threshold)
+        rows.append((md.name, d))
+    rows.sort(key=lambda r: r[1].observed_coverage, reverse=True)
+
+    digestible = sum(1 for _, d in rows if d.digestible)
+    click.echo(
+        f"{digestible}/{len(rows)} records digestible (observed >= {threshold:.0%})\n"
+    )
+    click.echo(f"{'cov':>6}  {'digest':>6}  record")
+    for name, d in rows:
+        flag = "YES" if d.digestible else "no"
+        click.echo(f"{d.observed_coverage:>6.1%}  {flag:>6}  {name[:72]}")
+
+
 @main.command(name="backfill-record-fields")
 @click.argument("digests_dir", type=click.Path(exists=True))
 @click.option(
