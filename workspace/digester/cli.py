@@ -31,11 +31,12 @@ DEFAULT_DB = Path.home() / ".local" / "share" / "digester" / "knowledge.db"
 
 def _spend_confirmed(estimate: dict, model: str, confirm: bool) -> bool:
     """The metered-spend pre-flight gate (anomalica/CLAUDE.md). Prints the cost
-    estimate and returns True only if the run may proceed. No gate when not on
-    the metered API path (DIGESTER_USE_API=0). Refuses (returns False) on the
-    metered path unless --confirm was passed."""
-    if os.environ.get("DIGESTER_USE_API", "1") == "0":
-        return True  # CLI/subscription fallback is not per-token metered spend
+    estimate and returns True only if the run may proceed. The default transport
+    is the Claude Code subscription (DIGESTER_USE_API unset/0), which is not
+    per-token metered spend, so the gate is a no-op there. It engages only on the
+    metered API path (DIGESTER_USE_API=1), refusing unless --confirm was passed."""
+    if os.environ.get("DIGESTER_USE_API", "0") != "1":
+        return True  # subscription transport is not per-token metered spend
     click.echo(format_estimate(estimate, model))
     if confirm:
         click.echo("Confirmed (--confirm) - proceeding with the metered run.")

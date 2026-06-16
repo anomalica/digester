@@ -1874,11 +1874,13 @@ def _call_api(prompt: str, text: str, model: str, schema: dict | None = None) ->
 
 
 def _call(prompt: str, text: str, model: str, schema: dict | None = None) -> str:
-    """Dispatch an extraction call. Defaults to the Anthropic API; set
-    DIGESTER_USE_API=0 to fall back to the Claude Code CLI transport."""
-    if os.environ.get("DIGESTER_USE_API", "1") == "0":
-        return _call_cli(prompt, text, model, schema=schema)
-    return _call_api(prompt, text, model, schema=schema)
+    """Dispatch an extraction call. Defaults to the Claude Code subscription CLI
+    transport (no per-token dollar spend, uses the Max plan); set
+    DIGESTER_USE_API=1 to use the metered Anthropic API instead (the money-gate
+    in the CLI applies on that path)."""
+    if os.environ.get("DIGESTER_USE_API", "0") == "1":
+        return _call_api(prompt, text, model, schema=schema)
+    return _call_cli(prompt, text, model, schema=schema)
 
 
 def _parse_json(raw: str) -> dict:
