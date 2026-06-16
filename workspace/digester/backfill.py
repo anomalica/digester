@@ -14,7 +14,7 @@ from pathlib import Path
 
 import yaml
 
-from digester.yaml_format import _yaml_dump
+from anomalica_common.digest import _yaml_dump
 
 # Fields we backfill, mapped to the ingest-frontmatter key they come from.
 # medium is the ingest's source_type.

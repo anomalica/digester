@@ -1,5 +1,5 @@
 from digester.markdown_format import extraction_to_markdown, parse_extraction_markdown
-from digester.models import (
+from anomalica_common.digest import (
     AttestationLevel,
     ClaimType,
     ExtractionResult,

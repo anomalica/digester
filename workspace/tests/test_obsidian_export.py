@@ -8,7 +8,14 @@ from digester.database import (
     insert_node,
     insert_record,
 )
-from digester.models import AttestationLevel, Claim, ClaimType, Node, NodeType, Record
+from anomalica_common.digest import (
+    AttestationLevel,
+    Claim,
+    ClaimType,
+    Node,
+    NodeType,
+    Record,
+)
 from digester.obsidian_export import (
     _safe_filename,
     _safe_wikilink,

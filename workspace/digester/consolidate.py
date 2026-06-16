@@ -17,8 +17,8 @@ from digester.embeddings import (
     search_similar_claims,
     store_claim_embedding,
 )
-from digester.extract import _call_cli, _parse_json
-from digester.models import Claim
+from anomalica_common.llm import _call_cli, _parse_json
+from anomalica_common.digest import Claim
 
 CONSOLIDATION_PROMPT = """You are deduplicating claims extracted from multiple records in a knowledge graph.
 Below are groups of similar claims. For each group, decide whether they represent

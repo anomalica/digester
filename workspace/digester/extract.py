@@ -9,16 +9,21 @@ from __future__ import annotations
 
 import json
 import os
-import subprocess
-import tempfile
 
-from digester.models import (
+from anomalica_common.digest import (
     AttestationLevel,
     ClaimType,
     ExtractionResult,
     ExtractedClaim,
     ExtractedNode,
     NodeType,
+)
+from anomalica_common.llm import (
+    DEFAULT_MODEL,
+    _call,
+    _call_api,
+    _call_cli,
+    _parse_json,
 )
 
 EXTRACTION_PROMPT = """You are extracting structured knowledge from a document for a knowledge graph.
@@ -419,8 +424,6 @@ OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
       "node_references": ["Node A", "Node B"],
       "confidence": 1.0}}
 ]}}"""
-
-DEFAULT_MODEL = "sonnet"
 
 
 # Acronyms universally recognisable to any educated reader. The model is told
@@ -1738,170 +1741,6 @@ def extract_two_pass(
         "acronyms": nodes_result["acronyms"],
         "claims": claims,
     }
-
-
-def _call_cli(prompt: str, text: str, model: str, schema: dict | None = None) -> str:
-    """Call Claude via the CLI subprocess.
-
-    Restricts Claude Code to the Read tool with --effort low to avoid the full
-    agentic stack (Bash, Edit, MCP servers, skills, auto-memory, etc.) that
-    is loaded by default. Without these flags a structured-extraction call
-    can take 8+ minutes because the model spends time choosing between tools.
-    With them, the same call completes in 10-30 seconds.
-
-    When `schema` is provided, it is passed via --json-schema so the model
-    cannot emit malformed JSON (the failure mode that cost us records in the
-    first batch run).
-    """
-    env = {
-        k: v
-        for k, v in os.environ.items()
-        if k not in ("CLAUDECODE", "CLAUDE_CODE_ENTRYPOINT")
-        and not k.startswith("CLAUDE_CODE_")
-    }
-    fd, temp_path = tempfile.mkstemp(suffix=".txt", prefix="digester-")
-    try:
-        with os.fdopen(fd, "w") as f:
-            f.write(text)
-        full_prompt = f"{prompt}\n\nRead and analyse the document at: {temp_path}"
-        cmd = [
-            "claude",
-            "-p",
-            full_prompt,
-            "--model",
-            model,
-            "--no-session-persistence",
-            "--dangerously-skip-permissions",
-            "--disable-slash-commands",
-            "--tools",
-            "Read",
-            "--effort",
-            "low",
-        ]
-        if schema is not None:
-            # --json-schema makes Claude emit via a StructuredOutput tool call;
-            # the validated object lives in `structured_output` of the JSON
-            # wrapper, not in the text stream. We unwrap it here and re-encode
-            # so downstream _parse_json sees a normal JSON string.
-            cmd.extend(["--json-schema", json.dumps(schema)])
-            cmd.extend(["--output-format", "json"])
-        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=900, env=env)
-        if proc.returncode != 0:
-            raise RuntimeError(f"Claude CLI failed: {proc.stderr}")
-        if schema is not None:
-            try:
-                wrapper = json.loads(proc.stdout)
-            except json.JSONDecodeError as e:
-                raise RuntimeError(
-                    f"Claude CLI emitted non-JSON wrapper: {e}\n{proc.stdout[:500]}"
-                ) from e
-            structured = wrapper.get("structured_output")
-            if structured is None:
-                raise RuntimeError(
-                    f"Claude CLI returned no structured_output. "
-                    f"is_error={wrapper.get('is_error')} "
-                    f"api_error_status={wrapper.get('api_error_status')} "
-                    f"result_preview={str(wrapper.get('result'))[:200]}"
-                )
-            return json.dumps(structured)
-        return proc.stdout.strip()
-    finally:
-        os.unlink(temp_path)
-
-
-API_MODEL_MAP = {
-    "sonnet": "claude-sonnet-4-6",
-    "opus": "claude-opus-4-8",
-    "haiku": "claude-haiku-4-5-20251001",
-}
-
-_API_MAX_TOKENS = 32000
-
-
-def _call_api(prompt: str, text: str, model: str, schema: dict | None = None) -> str:
-    """Call Claude via the Anthropic Messages API.
-
-    Structured extraction uses forced tool use: the JSON schema is the tool's
-    input_schema and tool_choice pins that tool, so the model must answer with a
-    tool_use block whose input conforms - including the node_references enum that
-    locks claims to the Pass-A node names. This mirrors what the CLI's
-    --json-schema did. Returns a JSON string for the existing _parse_json path.
-    """
-    import anthropic
-
-    model_id = API_MODEL_MAP.get(model, model)
-    client = anthropic.Anthropic()
-
-    kwargs: dict = {
-        "model": model_id,
-        "max_tokens": _API_MAX_TOKENS,
-        "system": prompt,
-        "messages": [{"role": "user", "content": f"DOCUMENT:\n{text}"}],
-    }
-    if schema is not None:
-        kwargs["tools"] = [
-            {
-                "name": "emit_extraction",
-                "description": "Emit the structured extraction result.",
-                "input_schema": schema,
-            }
-        ]
-        kwargs["tool_choice"] = {"type": "tool", "name": "emit_extraction"}
-
-    # Stream: a high max_tokens can exceed the SDK's 10-minute non-streaming
-    # guard, and exhaustive claim sets are large. Streaming removes the ceiling.
-    with client.messages.stream(**kwargs) as stream:
-        message = stream.get_final_message()
-
-    if message.stop_reason == "max_tokens":
-        raise RuntimeError(
-            f"API response hit max_tokens ({_API_MAX_TOKENS}); output truncated. "
-            "Lower chunk size or raise _API_MAX_TOKENS."
-        )
-
-    if schema is not None:
-        for block in message.content:
-            if getattr(block, "type", None) == "tool_use":
-                return json.dumps(block.input)
-        raise RuntimeError(
-            f"API returned no tool_use block. stop_reason={message.stop_reason} "
-            f"types={[getattr(b, 'type', None) for b in message.content]}"
-        )
-    for block in message.content:
-        if getattr(block, "type", None) == "text":
-            return block.text
-    raise RuntimeError(f"API returned no text. stop_reason={message.stop_reason}")
-
-
-def _call(prompt: str, text: str, model: str, schema: dict | None = None) -> str:
-    """Dispatch an extraction call. Defaults to the Claude Code subscription CLI
-    transport (no per-token dollar spend, uses the Max plan); set
-    DIGESTER_USE_API=1 to use the metered Anthropic API instead (the money-gate
-    in the CLI applies on that path)."""
-    if os.environ.get("DIGESTER_USE_API", "0") == "1":
-        return _call_api(prompt, text, model, schema=schema)
-    return _call_cli(prompt, text, model, schema=schema)
-
-
-def _parse_json(raw: str) -> dict:
-    cleaned = raw.strip()
-    if not cleaned:
-        raise ValueError("Empty response from Claude")
-    if cleaned.startswith("```"):
-        lines = cleaned.split("\n")
-        lines = [line for line in lines if not line.strip().startswith("```")]
-        cleaned = "\n".join(lines).strip()
-    start = cleaned.find("{")
-    if start == -1:
-        raise ValueError(f"No JSON object found in response: {cleaned[:200]}")
-    decoder = json.JSONDecoder()
-    try:
-        obj, _idx = decoder.raw_decode(cleaned[start:])
-        return obj
-    except json.JSONDecodeError as e:
-        raise ValueError(
-            f"Invalid JSON from Claude: {e}\nResponse: {cleaned[start : start + 500]}"
-        ) from e
 
 
 def _parse_response(raw: str) -> ExtractionResult:

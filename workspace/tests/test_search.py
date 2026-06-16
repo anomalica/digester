@@ -1,7 +1,7 @@
 import sqlite3
 
 from digester.database import init_db, insert_claim, insert_record
-from digester.models import AttestationLevel, Claim, ClaimType, Record
+from anomalica_common.digest import AttestationLevel, Claim, ClaimType, Record
 from digester.search import (
     _sigmoid,
     _tokenise_query,

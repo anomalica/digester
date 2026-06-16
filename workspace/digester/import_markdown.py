@@ -19,7 +19,7 @@ from digester.database import (
     insert_record,
 )
 from digester.matching import match_node, normalise_node_name
-from digester.models import Claim, Node, Record
+from anomalica_common.digest import Claim, Node, Record
 
 
 # Patterns that mark a node name as unusable:

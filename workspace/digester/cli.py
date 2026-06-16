@@ -6,7 +6,7 @@ from pathlib import Path
 
 import click
 
-from digester.cost import estimate_batch, estimate_record, format_estimate
+from anomalica_common.llm import estimate_batch, estimate_record, spend_confirmed
 from digester.database import (
     get_claims_for_node,
     get_nodes,
@@ -23,30 +23,10 @@ from digester.embeddings import (
 )
 from digester.import_markdown import import_extraction
 from digester.record_parser import parse_record
-from digester.yaml_format import parse_digest_yaml
+from anomalica_common.digest import parse_digest_yaml
 from digester.scoring import score_claim, tier_label
 
 DEFAULT_DB = Path.home() / ".local" / "share" / "digester" / "knowledge.db"
-
-
-def _spend_confirmed(estimate: dict, model: str, confirm: bool) -> bool:
-    """The metered-spend pre-flight gate (anomalica/CLAUDE.md). Prints the cost
-    estimate and returns True only if the run may proceed. The default transport
-    is the Claude Code subscription (DIGESTER_USE_API unset/0), which is not
-    per-token metered spend, so the gate is a no-op there. It engages only on the
-    metered API path (DIGESTER_USE_API=1), refusing unless --confirm was passed."""
-    if os.environ.get("DIGESTER_USE_API", "0") != "1":
-        return True  # subscription transport is not per-token metered spend
-    click.echo(format_estimate(estimate, model))
-    if confirm:
-        click.echo("Confirmed (--confirm) - proceeding with the metered run.")
-        return True
-    click.echo(
-        "\nREFUSING: this run spends real money and was not confirmed.\n"
-        "Re-run with --confirm once the figure above is approved.",
-        err=True,
-    )
-    return False
 
 
 def _connect(db_path: Path) -> sqlite3.Connection:
@@ -114,8 +94,8 @@ def extract_cmd(
     # SPEND GATE (anomalica/CLAUDE.md operating rule): when this run will hit
     # the metered API, print a cost estimate and refuse to proceed without an
     # explicit --confirm. A promise/convention is not enough - this is the gate.
-    if not _spend_confirmed(
-        estimate_record(len(parsed.body or ""), model), model, confirm
+    if not spend_confirmed(
+        estimate_record(len(parsed.body or ""), model), model, confirm, echo=click.echo
     ):
         ctx.exit(2)
 
@@ -135,7 +115,7 @@ def _do_extract(path: Path, parsed, output: Path | None, model: str) -> Path:
     # JSON schema enum on node_references items. Each claim carries
     # category=domain|infrastructure for the assembler to filter on.
     from digester.extract import build_record_context, extract_two_pass
-    from digester.yaml_format import two_pass_result_to_yaml
+    from anomalica_common.digest import two_pass_result_to_yaml
 
     record_context = build_record_context(
         title=parsed.title,
@@ -208,7 +188,9 @@ def batch_extract_cmd(
 
     # SPEND GATE: one aggregate estimate for the whole batch.
     char_counts = [len(parsed.body or "") for _, parsed in parsed_records]
-    if not _spend_confirmed(estimate_batch(char_counts, model), model, confirm):
+    if not spend_confirmed(
+        estimate_batch(char_counts, model), model, confirm, echo=click.echo
+    ):
         ctx.exit(2)
 
     out_dir = Path(output_dir) if output_dir else None
@@ -285,7 +267,6 @@ def rebuild(ctx: click.Context, directory: str) -> None:
     Deletes and recreates both domain and infrastructure databases,
     then imports all .yaml digests from the given directory.
     """
-    import os
 
     db_path = ctx.obj["db_path"]
     infra_path = ctx.obj["infra_db_path"]
@@ -504,7 +485,7 @@ def corroborate(
     """
     from digester.database import insert_corroboration
     from digester.embeddings import deserialise_f32, search_similar_claims
-    from digester.extract import _call_cli, _parse_json
+    from anomalica_common.llm import _call_cli, _parse_json
 
     conn = _connect(ctx.obj["db_path"])
     init_vec(conn)

@@ -1,7 +1,7 @@
 # Model comparison: opus vs sonnet vs haiku (navy record)
 
 Date: 2026-06-16
-Transport: Claude subscription (DIGESTER_USE_API=0), no API dollars.
+Transport: Claude subscription (ANOMALICA_USE_API=0), no API dollars.
 Method: same production two-pass prompt (NODES_PROMPT_V2, no per-model override)
 on `2021-05-17 Navy pilots describe encounters with UFOs`, so the model is the
 only variable. Node recall/precision graded deterministically against

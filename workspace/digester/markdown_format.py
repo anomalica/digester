@@ -46,7 +46,7 @@ from datetime import datetime, timezone
 
 import yaml
 
-from digester.models import (
+from anomalica_common.digest import (
     ExtractionResult,
     ExtractedClaim,
 )

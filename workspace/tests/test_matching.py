@@ -2,7 +2,7 @@ import sqlite3
 
 from digester.database import init_db, insert_alias, insert_node
 from digester.matching import match_node
-from digester.models import Node, NodeType
+from anomalica_common.digest import Node, NodeType
 
 
 def _db():

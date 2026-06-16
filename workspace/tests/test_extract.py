@@ -11,7 +11,7 @@ from digester.extract import (
     _parse_json,
     _split_at_chapters,
 )
-from digester.models import AttestationLevel, ClaimType, ExtractedClaim
+from anomalica_common.digest import AttestationLevel, ClaimType, ExtractedClaim
 
 
 def test_parse_json_strips_markdown_fence():
@@ -70,7 +70,7 @@ def test_domain_schema_excludes_record_node_type():
 
 def test_concept_is_a_first_class_node_type():
     # decision 0025: concept is an ingestion type, in both schemas
-    from digester.models import NodeType
+    from anomalica_common.digest import NodeType
 
     assert NodeType.concept.value == "concept"
     assert (

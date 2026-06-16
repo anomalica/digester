@@ -3,7 +3,7 @@
 any extracted claim covers it. Uses Haiku (cheap) with forced-tool structured
 output. Routes through the digester's transport dispatcher, so it follows the
 same policy as extraction - the Claude subscription by default, the metered API
-only under DIGESTER_USE_API=1. Usage: grade_claim_recall.py <gt.yaml> <digest.yaml> [model]"""
+only under ANOMALICA_USE_API=1. Usage: grade_claim_recall.py <gt.yaml> <digest.yaml> [model]"""
 
 import sys
 from pathlib import Path
@@ -12,7 +12,7 @@ import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from digester.extract import _call, _parse_json  # noqa: E402
+from anomalica_common.llm import _call, _parse_json  # noqa: E402
 
 gt = yaml.safe_load(open(sys.argv[1]))
 dig = yaml.safe_load(open(sys.argv[2]))

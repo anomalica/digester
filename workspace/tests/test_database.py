@@ -13,7 +13,7 @@ from digester.database import (
     insert_node,
     insert_record,
 )
-from digester.models import (
+from anomalica_common.digest import (
     AttestationLevel,
     Claim,
     ClaimRole,

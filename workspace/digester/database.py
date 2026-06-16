@@ -4,7 +4,7 @@ import json
 import sqlite3
 from datetime import datetime, timezone
 
-from digester.models import Claim, ClaimRole, Node, Record
+from anomalica_common.digest import Claim, ClaimRole, Node, Record
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS nodes (

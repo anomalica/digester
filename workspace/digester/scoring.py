@@ -15,7 +15,7 @@ import sqlite3
 from dataclasses import dataclass, field
 
 from digester.database import get_corroborations, get_independent_source_count
-from digester.models import AttestationLevel, ClaimType
+from anomalica_common.digest import AttestationLevel, ClaimType
 
 
 ATTESTATION_WEIGHTS = {
