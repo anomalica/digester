@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 import click
@@ -15,6 +16,20 @@ from digester.record_parser import parse_record
 # The digester resolves its own metered toggle: DIGESTER_USE_API > global
 # ANOMALICA_USE_API > subscription (per-component scheme; see anomalica/CLAUDE.md).
 _USE_API_VAR = "DIGESTER_USE_API"
+
+# Annotation tokens (e.g. {{redacted}}) can leak into a record's creators list
+# from ingest extraction; they must never surface as the producer.
+_ANNOTATION_TOKEN = re.compile(r"^\s*\{\{.*\}\}\s*$")
+
+
+def _producer_from_creators(creators: list[str] | None) -> str | None:
+    """The producer is the first creator that is a real name, skipping
+    annotation tokens like {{redacted}} (defensive - the ingester also stops
+    emitting them and reviewers can edit creators)."""
+    for c in creators or []:
+        if c and not _ANNOTATION_TOKEN.match(c):
+            return c
+    return None
 
 
 @click.group()
@@ -109,7 +124,7 @@ def _do_extract(
     text = two_pass_result_to_yaml(
         result,
         record_title=parsed.title,
-        record_producer=(parsed.creators[0] if parsed.creators else None),
+        record_producer=_producer_from_creators(parsed.creators),
         record_publisher=parsed.metadata.get("publisher"),
         record_date=parsed.date,
         record_medium=parsed.source_type,
