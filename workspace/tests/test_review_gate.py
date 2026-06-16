@@ -60,6 +60,27 @@ def test_precomputed_workbench_verdict_is_preferred():
     assert d.source == "sidecar"
 
 
+def test_verdict_fraction_is_rethresholded_not_blindly_trusted():
+    # /1 carries observed_coverage + a digestible computed at 100%. Our gate
+    # re-applies OUR threshold to the fraction, so --threshold stays meaningful.
+    sc = {
+        "schema": "anomalica/review-coverage/1",
+        "digestible": False,  # workbench's 100% verdict
+        "observed_coverage": 0.95,
+        "total_units": 100,
+    }
+    assert not digestibility(RECORD, sc).digestible  # default 1.0: 0.95 < 1.0
+    assert digestibility(RECORD, sc, threshold=0.9).digestible  # re-thresholded
+    assert digestibility(RECORD, sc, threshold=0.9).source == "sidecar"
+
+
+def test_verdict_without_fraction_falls_back_to_boolean():
+    sc = {"schema": "anomalica/review-coverage/1", "digestible": True}
+    d = digestibility(RECORD, sc)
+    assert d.digestible
+    assert d.source == "sidecar"
+
+
 def test_threshold_below_one_allows_partial():
     sc = _sidecar([{"from": 7, "to": 8, "kind": "observed"}])  # 0.67
     assert digestibility(RECORD, sc, threshold=0.6).digestible

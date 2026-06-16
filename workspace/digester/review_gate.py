@@ -81,15 +81,34 @@ def digestibility(
             False, 0.0, 0, 0, "no review sidecar (unreviewed)", "no-sidecar"
         )
 
-    # Prefer a verdict the workbench computed (forward-compat with schema /1).
+    # Prefer the workbench-computed coverage (schema /1). The fraction is the
+    # authoritative number - computed at review time against the body the
+    # reviewer saw, in the right units (words for v2, lines for v1). We re-apply
+    # OUR threshold to it, so --threshold stays meaningful even on /1 records;
+    # the workbench's own `digestible` boolean (computed at 100%) is only used
+    # when no fraction is carried.
+    cov = sidecar.get("observed_coverage")
+    if cov is not None:
+        cov = float(cov)
+        total = int(sidecar.get("total_units") or 0)
+        ok = cov >= threshold
+        return Digestibility(
+            ok,
+            round(cov, 4),
+            total,
+            round(cov * total),
+            "fully observed"
+            if ok
+            else f"observed {cov:.1%} < {threshold:.0%} threshold",
+            "sidecar",
+        )
     if "digestible" in sidecar:
-        cov = float(sidecar.get("observed_coverage") or 0.0)
         return Digestibility(
             bool(sidecar["digestible"]),
-            cov,
+            0.0,
             int(sidecar.get("total_units") or 0),
-            round(cov * float(sidecar.get("total_units") or 0)),
-            "workbench-computed verdict",
+            0,
+            "workbench verdict (no coverage fraction to re-threshold)",
             "sidecar",
         )
 
