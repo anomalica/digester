@@ -23,8 +23,8 @@ class NodeType(str, Enum):
     record = "record"
     claim = "claim"
     # ADR 0028 additions, kept for back-compat with older DB state
-    programme = "programme"
-    investigation = "investigation"
+    programme = "programme"  # deprecated by ADR 0028/0029; folded into `project`, back-compat read only
+    investigation = "investigation"  # deprecated by ADR 0028/0029; folded into `project`, back-compat read only
     pattern = "pattern"
     # 2026-05-25 taxonomy revision (ADR 0029): project collapses
     # programme+investigation; topic replaces concept (the word "concept"
