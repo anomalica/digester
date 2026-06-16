@@ -35,7 +35,13 @@ stages:
         - ~/.local/bin/claude:/usr/local/bin/claude:ro
         - ~/.claude:~/.claude
         - ~/.claude.json:~/.claude.json
+        # Shared lib lives in a sibling repo, outside the build context; mount
+        # its src and add it to the path (dev only). Production packaging of the
+        # shared lib across container-magic projects is a flagged cm feature gap.
+        - ~/repos/anomalica/anomalica-common/src:/opt/anomalica-common:ro
     steps:
+      - env:
+          PYTHONPATH: /opt/anomalica-common
       - pip:
           install:
             - pytest
