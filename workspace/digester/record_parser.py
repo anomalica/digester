@@ -17,7 +17,7 @@ class ParsedRecord:
 
     title: str = ""
     date: str | None = None
-    authors: list[str] = field(default_factory=list)
+    creators: list[str] = field(default_factory=list)
     source_type: str | None = None
     reference: str | None = None
     schema_version: str | None = None
@@ -56,7 +56,7 @@ def parse_record(text: str) -> ParsedRecord:
                         pass
                     elif record.date is not None:
                         record.date = str(record.date)
-                    record.authors = fm.get("authors", [])
+                    record.creators = fm.get("creators", [])
                     record.source_type = fm.get("source_type")
                     record.reference = fm.get("reference")
                     record.schema_version = fm.get("schema")
@@ -67,7 +67,7 @@ def parse_record(text: str) -> ParsedRecord:
                         not in (
                             "title",
                             "date",
-                            "authors",
+                            "creators",
                             "source_type",
                             "reference",
                             "schema",

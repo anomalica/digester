@@ -1000,30 +1000,30 @@ def _extract_chunked(
 
 def build_record_context(
     title: str,
-    authors: list[str] | None,
+    creators: list[str] | None,
     date: str | None,
     source_type: str | None,
 ) -> str:
     """Build the SOURCE RECORD framing prepended to every extraction prompt.
 
-    Pins first-person / "the author" references to the named author so the
+    Pins first-person / "the author" references to the named creator so the
     model never emits an unpinned "the author" node. Unpinned nodes are
     graph-wide contaminants because nodes are global (shared across records),
     so a vague node would wrongly merge across every first-person source.
     """
-    author_str = ", ".join(authors) if authors else None
+    creator_str = ", ".join(creators) if creators else None
     bits = [f'"{title}"' if title else "an untitled record"]
     if source_type:
         bits.append(f"({source_type})")
-    if author_str:
-        bits.append(f"by {author_str}")
+    if creator_str:
+        bits.append(f"by {creator_str}")
     if date:
         bits.append(f"dated {date}")
     line = "SOURCE RECORD: " + " ".join(bits) + ".\n"
-    if author_str:
+    if creator_str:
         line += (
             f'When the text uses "the author", "I", "me", "my", or first '
-            f"person, that refers to {author_str}. Resolve such references to "
+            f"person, that refers to {creator_str}. Resolve such references to "
             f'the named person; never emit "the author" or a vague '
             f"first-person entity as a node.\n"
         )

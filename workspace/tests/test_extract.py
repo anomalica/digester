@@ -100,7 +100,7 @@ def test_build_record_context_pins_author():
 
     ctx = build_record_context(
         title="In Plain Sight",
-        authors=["Ross Coulthart"],
+        creators=["Ross Coulthart"],
         date="2023",
         source_type="ebook",
     )
@@ -117,7 +117,7 @@ def test_build_record_context_no_authors_omits_pin():
 
     ctx = build_record_context(
         title="FOIA Release 18-F-0324",
-        authors=[],
+        creators=[],
         date=None,
         source_type="pdf",
     )
@@ -132,7 +132,7 @@ def test_build_record_context_multiple_authors():
 
     ctx = build_record_context(
         title="Some Article",
-        authors=["Helene Cooper", "Ralph Blumenthal", "Leslie Kean"],
+        creators=["Helene Cooper", "Ralph Blumenthal", "Leslie Kean"],
         date="2017-12-16",
         source_type="web",
     )

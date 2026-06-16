@@ -6,7 +6,7 @@ def test_parse_frontmatter():
 schema: anomalica/record/1
 title: Test Document
 date: 2004-11-14
-authors:
+creators:
   - Alice
   - Bob
 source_type: interview
@@ -17,7 +17,7 @@ Body text here.
     result = parse_record(text)
     assert result.title == "Test Document"
     assert result.date == "2004-11-14"
-    assert result.authors == ["Alice", "Bob"]
+    assert result.creators == ["Alice", "Bob"]
     assert result.source_type == "interview"
     assert result.schema_version == "anomalica/record/1"
     assert "Body text here." in result.body

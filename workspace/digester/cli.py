@@ -92,7 +92,7 @@ def _do_extract(
 
     record_context = build_record_context(
         title=parsed.title,
-        authors=parsed.authors,
+        creators=parsed.creators,
         date=parsed.date,
         source_type=parsed.source_type,
     )
@@ -109,7 +109,7 @@ def _do_extract(
     text = two_pass_result_to_yaml(
         result,
         record_title=parsed.title,
-        record_producer=(parsed.authors[0] if parsed.authors else None),
+        record_producer=(parsed.creators[0] if parsed.creators else None),
         record_publisher=parsed.metadata.get("publisher"),
         record_date=parsed.date,
         record_medium=parsed.source_type,
