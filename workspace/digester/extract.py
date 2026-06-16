@@ -1533,6 +1533,7 @@ def extract_nodes_v2(
     model: str = DEFAULT_MODEL,
     record_context: str = "",
     on_progress=None,
+    use_api: bool = False,
 ) -> dict:
     """Pass A of the v2 architecture: extract all nodes (no claims).
 
@@ -1567,7 +1568,7 @@ def extract_nodes_v2(
                     + "\n\n"
                     + prompt
                 )
-            raw = _call(prompt, chunk, model, schema=NODES_SCHEMA_V2)
+            raw = _call(prompt, chunk, model, schema=NODES_SCHEMA_V2, use_api=use_api)
             result = json.loads(raw) if isinstance(raw, str) else raw
 
             new_in_round = 0
@@ -1612,6 +1613,7 @@ def extract_claims_v2(
     model: str = DEFAULT_MODEL,
     record_context: str = "",
     on_progress=None,
+    use_api: bool = False,
 ) -> list[dict]:
     """Pass B of the v2 architecture: extract claims, constrained to using
     only the node names from nodes_pass_result. Chunks the document and
@@ -1668,7 +1670,7 @@ def extract_claims_v2(
                     "and set extraction_complete=true."
                 )
 
-            raw = _call(prompt, chunk, model, schema=schema)
+            raw = _call(prompt, chunk, model, schema=schema, use_api=use_api)
             result = json.loads(raw) if isinstance(raw, str) else raw
 
             new_in_round = 0
@@ -1700,15 +1702,23 @@ def extract_two_pass(
     model: str = DEFAULT_MODEL,
     record_context: str = "",
     on_progress=None,
+    use_api: bool = False,
 ) -> dict:
     """Top-level v2 entry point. Runs nodes pass then claims pass. Returns
     a dict with keys: nodes, claims, main_subject, codenames_to_resolve,
     acronyms. cli.py consumes this and writes the YAML digest.
+
+    `use_api` is the resolved per-component metered toggle (the digester resolves
+    DIGESTER_USE_API), threaded to every model call.
     """
     if on_progress:
         on_progress("Pass A: nodes (with iteration + chunking)")
     nodes_result = extract_nodes_v2(
-        text, model=model, record_context=record_context, on_progress=on_progress
+        text,
+        model=model,
+        record_context=record_context,
+        on_progress=on_progress,
+        use_api=use_api,
     )
     if on_progress:
         on_progress(
@@ -1726,6 +1736,7 @@ def extract_two_pass(
         model=model,
         record_context=record_context,
         on_progress=on_progress,
+        use_api=use_api,
     )
     if on_progress:
         n_dom = sum(1 for c in claims if c.get("category") == "domain")

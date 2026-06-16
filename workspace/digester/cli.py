@@ -4,8 +4,17 @@ from pathlib import Path
 
 import click
 
-from anomalica_common.llm import estimate_batch, estimate_record, spend_confirmed
+from anomalica_common.llm import (
+    estimate_batch,
+    estimate_record,
+    resolve_use_api,
+    spend_confirmed,
+)
 from digester.record_parser import parse_record
+
+# The digester resolves its own metered toggle: DIGESTER_USE_API > global
+# ANOMALICA_USE_API > subscription (per-component scheme; see anomalica/CLAUDE.md).
+_USE_API_VAR = "DIGESTER_USE_API"
 
 
 @click.group()
@@ -51,15 +60,22 @@ def extract_cmd(
     # SPEND GATE (anomalica/CLAUDE.md operating rule): when this run will hit
     # the metered API, print a cost estimate and refuse to proceed without an
     # explicit --confirm. A promise/convention is not enough - this is the gate.
+    use_api = resolve_use_api(_USE_API_VAR)
     if not spend_confirmed(
-        estimate_record(len(parsed.body or ""), model), model, confirm, echo=click.echo
+        estimate_record(len(parsed.body or ""), model),
+        model,
+        confirm,
+        echo=click.echo,
+        use_api=use_api,
     ):
         ctx.exit(2)
 
-    _do_extract(path, parsed, Path(output) if output else None, model)
+    _do_extract(path, parsed, Path(output) if output else None, model, use_api)
 
 
-def _do_extract(path: Path, parsed, output: Path | None, model: str) -> Path:
+def _do_extract(
+    path: Path, parsed, output: Path | None, model: str, use_api: bool = False
+) -> Path:
     """Run the two-pass extraction for one parsed record and write the digest YAML.
 
     Caller is responsible for the spend gate - this assumes the run is approved.
@@ -87,6 +103,7 @@ def _do_extract(path: Path, parsed, output: Path | None, model: str) -> Path:
         model=model,
         record_context=record_context,
         on_progress=click.echo,
+        use_api=use_api,
     )
 
     text = two_pass_result_to_yaml(
@@ -145,8 +162,13 @@ def batch_extract_cmd(
 
     # SPEND GATE: one aggregate estimate for the whole batch.
     char_counts = [len(parsed.body or "") for _, parsed in parsed_records]
+    use_api = resolve_use_api(_USE_API_VAR)
     if not spend_confirmed(
-        estimate_batch(char_counts, model), model, confirm, echo=click.echo
+        estimate_batch(char_counts, model),
+        model,
+        confirm,
+        echo=click.echo,
+        use_api=use_api,
     ):
         ctx.exit(2)
 
@@ -157,7 +179,7 @@ def batch_extract_cmd(
     for i, (p, parsed) in enumerate(parsed_records, 1):
         click.echo(f"\n[{i}/{len(parsed_records)}] {p.name}")
         out = out_dir / p.with_suffix(".yaml").name if out_dir else None
-        _do_extract(p, parsed, out, model)
+        _do_extract(p, parsed, out, model, use_api)
 
 
 # --- Coverage: review-gate visibility (which records are digestible) ---
