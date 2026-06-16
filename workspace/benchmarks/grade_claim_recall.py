@@ -6,10 +6,13 @@ same policy as extraction - the Claude subscription by default, the metered API
 only under DIGESTER_USE_API=1. Usage: grade_claim_recall.py <gt.yaml> <digest.yaml> [model]"""
 
 import sys
+from pathlib import Path
 
 import yaml
 
-from digester.extract import _call, _parse_json
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from digester.extract import _call, _parse_json  # noqa: E402
 
 gt = yaml.safe_load(open(sys.argv[1]))
 dig = yaml.safe_load(open(sys.argv[2]))
