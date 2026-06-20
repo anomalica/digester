@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 
 from anomalica_common.digest import (
     AttestationLevel,
@@ -1697,6 +1698,22 @@ def extract_claims_v2(
     return merged_claims
 
 
+_WORD_TIMESTAMP = re.compile(r"\{\{t:[0-9.]+\}\}")
+
+
+def strip_word_timestamps(text: str) -> str:
+    """Remove inline `{{t:SECONDS}}` word-timing tokens from a record/2 body.
+
+    A v2 (record/2) body is ~65% timing tokens by character count; feeding them
+    to the model wrecks extraction. The tokens are stripped only for the
+    extraction input - the stored record keeps them so realign.py can recover
+    quote timing afterward. Interim: the canonical clean_body() is the
+    ingester's and is pending; until it lands the digester self-protects so an
+    unattended runner can point `extract` straight at a store file.
+    """
+    return _WORD_TIMESTAMP.sub("", text)
+
+
 def extract_two_pass(
     text: str,
     model: str = DEFAULT_MODEL,
@@ -1711,6 +1728,7 @@ def extract_two_pass(
     `use_api` is the resolved per-component metered toggle (the digester resolves
     DIGESTER_USE_API), threaded to every model call.
     """
+    text = strip_word_timestamps(text)
     if on_progress:
         on_progress("Pass A: nodes (with iteration + chunking)")
     nodes_result = extract_nodes_v2(
