@@ -6,9 +6,32 @@ blocks. See ADR 0012 for the full specification.
 
 from __future__ import annotations
 
+import datetime as _dt
+import re
 from dataclasses import dataclass, field
 
 import yaml
+
+# A date-only publication date that arrived as a midnight ISO timestamp (e.g.
+# YouTube's "2026-04-24T00:00:00.000Z"); the time carries no information.
+_MIDNIGHT_ISO = re.compile(r"^(\d{4}-\d{2}-\d{2})T00:00:00(?:\.0+)?(?:Z|\+00:00)?$")
+
+
+def _normalise_date(value) -> str | None:
+    """Coerce a frontmatter date into a clean display string. Midnight (no real
+    time-of-day) collapses to YYYY-MM-DD; a meaningful time is kept; partial
+    precision (`2023`, `2023-07`) passes through unchanged."""
+    if value is None:
+        return None
+    if isinstance(value, _dt.datetime):
+        if (value.hour, value.minute, value.second, value.microsecond) == (0, 0, 0, 0):
+            return value.date().isoformat()
+        return value.isoformat()
+    if isinstance(value, _dt.date):
+        return value.isoformat()
+    s = str(value).strip()
+    m = _MIDNIGHT_ISO.match(s)
+    return m.group(1) if m else s
 
 
 @dataclass
@@ -51,14 +74,17 @@ def parse_record(text: str) -> ParsedRecord:
                 fm = yaml.safe_load(frontmatter_text)
                 if isinstance(fm, dict):
                     record.title = fm.get("title", "")
-                    record.date = fm.get("date")
-                    if isinstance(record.date, str):
-                        pass
-                    elif record.date is not None:
-                        record.date = str(record.date)
+                    # Canonical frontmatter is `date_published` (record-format
+                    # spec); `date` is a legacy fallback. Without this every
+                    # digest carried a null date.
+                    record.date = _normalise_date(
+                        fm.get("date_published") or fm.get("date")
+                    )
                     record.creators = fm.get("creators", [])
                     record.source_type = fm.get("source_type")
-                    record.reference = fm.get("reference")
+                    # The spec has no `reference` field; the source link lives in
+                    # `source_url`. Map it so the digest carries provenance.
+                    record.reference = fm.get("reference") or fm.get("source_url")
                     record.schema_version = fm.get("schema")
                     record.metadata = {
                         k: v
@@ -67,9 +93,11 @@ def parse_record(text: str) -> ParsedRecord:
                         not in (
                             "title",
                             "date",
+                            "date_published",
                             "creators",
                             "source_type",
                             "reference",
+                            "source_url",
                             "schema",
                         )
                     }

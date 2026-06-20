@@ -135,6 +135,7 @@ def _do_extract(
             record_medium=parsed.source_type,
             record_duration=parsed.metadata.get("duration"),
             record_content_hash=parsed.metadata.get("content_hash"),
+            record_reference=parsed.reference,
             record_processing_version=(parsed.metadata.get("processing") or {}).get(
                 "version"
             ),
