@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -8,6 +9,8 @@ import click
 from anomalica_common.llm import (
     estimate_batch,
     estimate_record,
+    get_usage,
+    reset_usage,
     resolve_use_api,
     spend_confirmed,
 )
@@ -113,33 +116,56 @@ def _do_extract(
     )
 
     click.echo(f"Extracting (two-pass) from: {parsed.title or path.name}")
-    result = extract_two_pass(
-        parsed.body,
-        model=model,
-        record_context=record_context,
-        on_progress=click.echo,
-        use_api=use_api,
-    )
+    reset_usage()
+    try:
+        result = extract_two_pass(
+            parsed.body,
+            model=model,
+            record_context=record_context,
+            on_progress=click.echo,
+            use_api=use_api,
+        )
 
-    text = two_pass_result_to_yaml(
-        result,
-        record_title=parsed.title,
-        record_producer=_producer_from_creators(parsed.creators),
-        record_publisher=parsed.metadata.get("publisher"),
-        record_date=parsed.date,
-        record_medium=parsed.source_type,
-        record_duration=parsed.metadata.get("duration"),
-        record_content_hash=parsed.metadata.get("content_hash"),
-        record_processing_version=(parsed.metadata.get("processing") or {}).get(
-            "version"
-        ),
-        model=model,
-    )
+        text = two_pass_result_to_yaml(
+            result,
+            record_title=parsed.title,
+            record_producer=_producer_from_creators(parsed.creators),
+            record_publisher=parsed.metadata.get("publisher"),
+            record_date=parsed.date,
+            record_medium=parsed.source_type,
+            record_duration=parsed.metadata.get("duration"),
+            record_content_hash=parsed.metadata.get("content_hash"),
+            record_processing_version=(parsed.metadata.get("processing") or {}).get(
+                "version"
+            ),
+            model=model,
+        )
 
-    out_path = output if output else path.with_suffix(".yaml")
-    out_path.write_text(text)
-    click.echo(f"\nWritten to: {out_path}")
-    return out_path
+        out_path = output if output else path.with_suffix(".yaml")
+        out_path.write_text(text)
+        click.echo(f"\nWritten to: {out_path}")
+        return out_path
+    finally:
+        _echo_usage()
+
+
+def _echo_usage() -> None:
+    """Emit per-job token usage for a runner to capture (telemetry lives in the
+    caller's store, not the digests repo). Printed on BOTH the success and
+    failure paths so a failed/crashed job's spent tokens still register on the
+    caller's usage trend - otherwise a crash-loop burns the rate-limit budget
+    invisibly. Success detection stays exit-code + output-file-exists,
+    independent of this line. USAGE_JSON is the machine line; cost_equiv_usd is
+    the would-be dollar value (zero actual dollars on the subscription default).
+    """
+    usage = get_usage()
+    click.echo(
+        f"Usage: {usage['calls']} calls, "
+        f"in={usage['input_tokens']} out={usage['output_tokens']} "
+        f"cache_read={usage['cache_read_input_tokens']} "
+        f"cost_equiv=${usage['cost_equiv_usd']:.4f}"
+    )
+    click.echo(f"USAGE_JSON: {json.dumps(usage)}")
 
 
 @main.command(name="batch-extract")
