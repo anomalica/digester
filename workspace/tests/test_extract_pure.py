@@ -11,6 +11,7 @@ from digester.extract import (
     _format_directory_v2,
     _parse_response,
     build_claims_schema_v2,
+    strip_word_timestamps,
 )
 
 
@@ -110,6 +111,23 @@ def test_schema_without_names_has_no_enum():
 def test_schema_requires_core_claim_fields():
     req = build_claims_schema_v2(["X"])["properties"]["claims"]["items"]["required"]
     assert set(req) == {"content", "category", "claim_type"}
+
+
+# --- v2 word-timestamp stripping (record/2 bodies are ~65% timing tokens) ---
+
+
+def test_strip_word_timestamps_removes_tokens_keeps_words():
+    body = "00:00:00.1 {{t:0.11}}Folks, {{t:0.65}}it {{t:0.85}}isn't every day."
+    assert strip_word_timestamps(body) == "00:00:00.1 Folks, it isn't every day."
+
+
+def test_strip_word_timestamps_noop_on_plain_text():
+    plain = "A web article with no timing tokens at all."
+    assert strip_word_timestamps(plain) == plain
+
+
+def test_strip_word_timestamps_handles_decimals_and_integers():
+    assert strip_word_timestamps("{{t:5}}a {{t:12.34}}b") == "a b"
 
 
 # --- chunking ---
