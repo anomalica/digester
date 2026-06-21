@@ -28,10 +28,25 @@ import yaml
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parent
 ANOM = WORKSPACE.parent.parent
-RECORD = (
-    ANOM
-    / "ingests/records/2021-05-17-video-navy-pilots-describe-encounters-with-ufos.md"
-)
+# The records/ slug symlinks are unreliable (store reorg moved bodies under
+# v1/), so resolve the navy benchmark record by its content hash in the store.
+_NAVY_HASH = "1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44"
+
+
+def _resolve_record() -> Path:
+    store = ANOM / "ingests/store"
+    for c in (
+        store / f"{_NAVY_HASH}.v2.md",
+        store / f"{_NAVY_HASH}.md",
+        store / "v1" / f"{_NAVY_HASH}.v2.md",
+        store / "v1" / f"{_NAVY_HASH}.md",
+    ):
+        if c.exists():
+            return c
+    raise SystemExit(f"navy benchmark record not found for {_NAVY_HASH}")
+
+
+RECORD = _resolve_record()
 GOLDEN = HERE / "navy-pilots" / "golden.yaml"
 GT = HERE / "ground-truth" / "2021-05-17-navy-pilots.gt.yaml"
 OUT_DIR = Path("/tmp/model-compare")
