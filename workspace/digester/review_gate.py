@@ -12,11 +12,18 @@ CLI command.
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from anomalica_common.review_gate import Digestibility, digestibility
 
 __all__ = ["Digestibility", "digestibility", "load_sidecar", "assess_record"]
+
+# A record body is {hash}.md or {hash}.v2.md (a processing-version infix), but
+# its review sidecar is keyed by the BARE content hash: {hash}.review.json. Strip
+# any version infix when deriving the sidecar name, else v2 records never find
+# their sidecar and read as unreviewed.
+_BODY_SUFFIX = re.compile(r"(\.v\d+)?\.md$")
 
 
 def load_sidecar(record_md: Path, ingests_dir: Path) -> dict | None:
@@ -27,7 +34,7 @@ def load_sidecar(record_md: Path, ingests_dir: Path) -> dict | None:
     colocated directory and walk up to the parent store dir.
     """
     target = record_md.resolve()
-    fname = target.name.replace(".md", ".review.json")
+    fname = _BODY_SUFFIX.sub(".review.json", target.name)
     for d in (target.parent, target.parent.parent):
         sidecar = d / fname
         if sidecar.exists():
