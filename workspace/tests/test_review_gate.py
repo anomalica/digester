@@ -55,6 +55,30 @@ def test_assess_record_end_to_end(tmp_path):
     assert d.source == "sidecar"
 
 
+def test_load_sidecar_resolves_v2_body_to_bare_hash_sidecar(tmp_path):
+    # A v2 body is {hash}.v2.md but its sidecar is {hash}.review.json (no .v2).
+    # The .v2 infix must be stripped or every v2 record reads as unreviewed.
+    import json
+
+    h = "c" * 64
+    (tmp_path / "store").mkdir(parents=True)
+    body = tmp_path / "store" / f"{h}.v2.md"
+    body.write_text(RECORD_BODY)
+    (tmp_path / "store" / f"{h}.review.json").write_text(
+        json.dumps(
+            {
+                "schema": "anomalica/review-coverage/1",
+                "observed_coverage": 1.0,
+                "digestible": True,
+                "total_units": 2,
+                "reviews": [],
+            }
+        )
+    )
+    assert load_sidecar(body, tmp_path) is not None
+    assert assess_record(body, tmp_path).digestible
+
+
 def test_assess_record_no_sidecar_not_digestible(tmp_path):
     (tmp_path / "store" / "v1").mkdir(parents=True)
     (tmp_path / "records").mkdir()
