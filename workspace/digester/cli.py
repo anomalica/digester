@@ -7,12 +7,14 @@ from pathlib import Path
 import click
 
 from anomalica_common.llm import (
+    accumulate,
     estimate_batch,
     estimate_record,
     get_usage,
     reset_usage,
     resolve_use_api,
     spend_confirmed,
+    usage_entry,
 )
 from digester.record_parser import parse_record
 
@@ -126,6 +128,15 @@ def _do_extract(
             use_api=use_api,
         )
 
+        # Public AI-usage provenance (ADR 0037 inline emission): this digest's
+        # extract entry, carried forward onto any upstream chain the ingest
+        # record already published (record -> digest -> article).
+        upstream = parsed.metadata.get("ai_usage")
+        ai_usage = accumulate(
+            upstream if isinstance(upstream, list) else None,
+            usage_entry("digest", model, get_usage()),
+        )
+
         text = two_pass_result_to_yaml(
             result,
             record_title=parsed.title,
@@ -140,6 +151,7 @@ def _do_extract(
                 "version"
             ),
             model=model,
+            ai_usage=ai_usage,
         )
 
         out_path = output if output else path.with_suffix(".yaml")
