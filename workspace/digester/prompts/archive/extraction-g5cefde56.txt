@@ -1,0 +1,58 @@
+You are extracting structured knowledge from a document for a knowledge graph.
+
+The knowledge graph uses these node types:
+- "person": a named human individual
+- "organisation": a named group (government bodies, military units, companies, programmes)
+- "place": a named geographic location
+- "event": a discrete thing that happened at a specific time (must have a date)
+- "matter": an ongoing situation spanning a period of time
+- "object": a specific named physical thing (craft, materials, devices, samples)
+
+And these claim types:
+- "observation": the speaker directly perceived something
+- "testimony": formally stated on record or under oath
+- "hearsay": relaying what someone else said
+- "opinion": expressing a belief or interpretation
+- "measurement": instrument or sensor data
+- "administrative": dates, funding, personnel assignments, organisational facts
+
+Attestation levels:
+- "first_hand": speaker directly observed or participated
+- "second_hand": speaker reporting what someone else observed
+- "third_hand": speaker reporting what someone heard from someone else
+
+TASK: Extract EVERY factual assertion from the document below.
+
+EXHAUSTIVE EXTRACTION: Do not summarise or curate. Capture every factual statement, however incidental - dates, names, places, quoted figures, asides, parenthetical remarks, footnotes, brief observations. A 300-page book contains thousands of claims, not dozens. Coverage matters more than highlighting "important" points.
+
+RULES:
+1. Claims must be atomic - one assertion per claim. Split compound statements.
+2. Every claim needs a claim_type and attestation level.
+3. node_references in claims should list the names of nodes the claim mentions.
+4. Use canonical short names for nodes (e.g. "David Fravor" not "Commander David Fravor, US Navy (Ret.)").
+5. Events MUST have a date. If you cannot determine at least a year, use "matter" instead.
+6. Normalise all text to English regardless of source language.
+7. speaker is the person making the assertion (may differ from the document's author).
+8. location_in_record is where in the document the claim appears (page, timestamp, paragraph).
+9. UNIT NORMALISATION: Convert all measurements in "content" to metric units using full unit names. Write "10 metres" not "10m", "24,000 metres" not "24km", "1,200 kilometres per hour" not "1200 km/h". Use the exact format: number + space + full unit name (metres, kilometres, kilograms, degrees Celsius, etc.). IMPORTANT: Preserve the original level of precision. If the source says "about 80,000 feet", convert to "approximately 24,000 metres" (rounded), NOT "24,384 metres" (over-precise). Round to the same number of significant figures as the original.
+10. original_excerpt: Preserve the EXACT original wording from the source document, including original units, language, and phrasing. This is for attribution and provenance. If the source says "about 30 to 40 feet", the original_excerpt must say exactly that.
+
+OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
+
+{{"record_title": "short title for this document",
+"record_date": "YYYY-MM-DD or YYYY-MM or YYYY if known",
+"record_producer": "person or organisation that produced this document",
+"nodes": [
+    {{"name": "canonical short name", "node_type": "person|organisation|place|event|matter|object", "metadata": {{"date_start": "...", "date_end": "..."}}}}
+],
+"claims": [
+    {{"content": "normalised assertion with metric units",
+      "original_excerpt": "exact original wording from the source document",
+      "claim_type": "observation|testimony|hearsay|opinion|measurement|administrative",
+      "attestation": "first_hand|second_hand|third_hand",
+      "speaker": "person name or null",
+      "location_in_record": "page 3, paragraph 2",
+      "date": "YYYY-MM-DD if applicable",
+      "node_references": ["Node A", "Node B"],
+      "confidence": 1.0}}
+]}}

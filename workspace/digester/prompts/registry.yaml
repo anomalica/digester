@@ -1,0 +1,146 @@
+# Versioned extraction prompts.
+#
+# The active version's `file` (relative to this directory) is the source of
+# truth for each prompt id. Historical versions under archive/ let past digests
+# be attributed to the prompt that produced them (by sha256, or by extracted_at
+# date against `added` for digests predating prompt-provenance stamping).
+# sha256 is computed from file content at load time - no stored hash to drift.
+#
+# A DIGESTER_NODES_PROMPT_FILE / DIGESTER_CLAIMS_PROMPT_FILE env override still
+# works for per-run/per-model experiments; recorded in the digest as version
+# "override" with the file's own hash, never silently.
+#
+# `extraction`/`infrastructure`/`terminology` are retired single-pass prompts
+# (active: null) kept only for attributing pre-two-pass digests.
+
+prompts:
+  nodes:
+    versions:
+      v2:
+        file: nodes.txt
+        added: '2026-06-29'
+        commit: 84e516c7f5
+        note: active two-pass nodes prompt
+      g249b8fd3:
+        file: archive/nodes-g249b8fd3.txt
+        added: '2026-06-29'
+        commit: 249b8fd3ef
+        note: earlier nodes v2 state
+      gd387a80e:
+        file: archive/nodes-gd387a80e.txt
+        added: '2026-06-14'
+        commit: d387a80ed7
+        note: earlier nodes v2 state
+      g0bdd15b0:
+        file: archive/nodes-g0bdd15b0.txt
+        added: '2026-05-29'
+        commit: 0bdd15b080
+        note: earlier nodes v2 state
+      g2788c43b:
+        file: archive/nodes-g2788c43b.txt
+        added: '2026-05-25'
+        commit: 2788c43bbf
+        note: earlier nodes v2 state
+    active: v2
+  claims:
+    versions:
+      v2:
+        file: claims.txt
+        added: '2026-06-14'
+        commit: d387a80ed7
+        note: active two-pass claims prompt
+      gbf739e15:
+        file: archive/claims-gbf739e15.txt
+        added: '2026-06-14'
+        commit: bf739e15ca
+        note: earlier claims v2 state
+      g2788c43b:
+        file: archive/claims-g2788c43b.txt
+        added: '2026-05-25'
+        commit: 2788c43bbf
+        note: earlier claims v2 state
+    active: v2
+  extraction:
+    versions:
+      g249b8fd3:
+        file: archive/extraction-g249b8fd3.txt
+        added: '2026-06-29'
+        commit: 249b8fd3ef
+        note: retired pre-V2 extraction prompt
+      ge5eef421:
+        file: archive/extraction-ge5eef421.txt
+        added: '2026-05-25'
+        commit: e5eef4216e
+        note: retired pre-V2 extraction prompt
+      g1b22ca69:
+        file: archive/extraction-g1b22ca69.txt
+        added: '2026-05-25'
+        commit: 1b22ca6993
+        note: retired pre-V2 extraction prompt
+      g4b9ae9d4:
+        file: archive/extraction-g4b9ae9d4.txt
+        added: '2026-05-15'
+        commit: 4b9ae9d4f0
+        note: retired pre-V2 extraction prompt
+      g5cefde56:
+        file: archive/extraction-g5cefde56.txt
+        added: '2026-05-14'
+        commit: 5cefde56f9
+        note: retired pre-V2 extraction prompt
+      g9758e273:
+        file: archive/extraction-g9758e273.txt
+        added: '2026-03-28'
+        commit: 9758e27314
+        note: retired pre-V2 extraction prompt
+      g924f06ea:
+        file: archive/extraction-g924f06ea.txt
+        added: '2026-03-28'
+        commit: 924f06eaca
+        note: retired pre-V2 extraction prompt
+      g13991342:
+        file: archive/extraction-g13991342.txt
+        added: '2026-03-28'
+        commit: '1399134295'
+        note: retired pre-V2 extraction prompt
+    active: null
+  infrastructure:
+    versions:
+      g249b8fd3:
+        file: archive/infrastructure-g249b8fd3.txt
+        added: '2026-06-29'
+        commit: 249b8fd3ef
+        note: retired pre-V2 infrastructure prompt
+      ge5eef421:
+        file: archive/infrastructure-ge5eef421.txt
+        added: '2026-05-25'
+        commit: e5eef4216e
+        note: retired pre-V2 infrastructure prompt
+      g1b22ca69:
+        file: archive/infrastructure-g1b22ca69.txt
+        added: '2026-05-25'
+        commit: 1b22ca6993
+        note: retired pre-V2 infrastructure prompt
+      g5cefde56:
+        file: archive/infrastructure-g5cefde56.txt
+        added: '2026-05-14'
+        commit: 5cefde56f9
+        note: retired pre-V2 infrastructure prompt
+      g655987a4:
+        file: archive/infrastructure-g655987a4.txt
+        added: '2026-03-30'
+        commit: 655987a41e
+        note: retired pre-V2 infrastructure prompt
+    active: null
+  terminology:
+    versions:
+      ge5eef421:
+        file: archive/terminology-ge5eef421.txt
+        added: '2026-05-25'
+        commit: e5eef4216e
+        note: retired pre-V2 terminology prompt
+      g1b22ca69:
+        file: archive/terminology-g1b22ca69.txt
+        added: '2026-05-25'
+        commit: 1b22ca6993
+        note: retired pre-V2 terminology prompt
+    active: null

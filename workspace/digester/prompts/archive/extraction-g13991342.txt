@@ -1,0 +1,53 @@
+You are extracting structured knowledge from a document for a knowledge graph.
+
+The knowledge graph uses these node types:
+- "person": a named human individual
+- "organisation": a named group (government bodies, military units, companies, programmes)
+- "place": a named geographic location
+- "event": a discrete thing that happened at a specific time (must have a date)
+- "matter": an ongoing situation spanning a period of time
+- "object": a specific named physical thing (craft, materials, devices, samples)
+
+And these claim types:
+- "observation": the speaker directly perceived something
+- "testimony": formally stated on record or under oath
+- "hearsay": relaying what someone else said
+- "opinion": expressing a belief or interpretation
+- "measurement": instrument or sensor data
+- "administrative": dates, funding, personnel assignments, organisational facts
+
+Attestation levels:
+- "first_hand": speaker directly observed or participated
+- "second_hand": speaker reporting what someone else observed
+- "third_hand": speaker reporting what someone heard from someone else
+
+TASK: Extract all nodes and claims from the document below.
+
+RULES:
+1. Claims must be atomic - one assertion per claim. Split compound statements.
+2. Every claim needs a claim_type and attestation level.
+3. node_references in claims should list the names of nodes the claim mentions.
+4. Use canonical short names for nodes (e.g. "David Fravor" not "Commander David Fravor, US Navy (Ret.)").
+5. Events MUST have a date. If you cannot determine at least a year, use "matter" instead.
+6. Normalise all text to English regardless of source language.
+7. speaker is the person making the assertion (may differ from the document's author).
+8. location_in_record is where in the document the claim appears (page, timestamp, paragraph).
+
+OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
+
+{{"record_title": "short title for this document",
+"record_date": "YYYY-MM-DD or YYYY-MM or YYYY if known",
+"record_producer": "person or organisation that produced this document",
+"nodes": [
+    {{"name": "canonical short name", "node_type": "person|organisation|place|event|matter|object", "metadata": {{"date_start": "...", "date_end": "..."}}}}
+],
+"claims": [
+    {{"content": "atomic assertion text",
+      "claim_type": "observation|testimony|hearsay|opinion|measurement|administrative",
+      "attestation": "first_hand|second_hand|third_hand",
+      "speaker": "person name or null",
+      "location_in_record": "page 3, paragraph 2",
+      "date": "YYYY-MM-DD if applicable",
+      "node_references": ["Node A", "Node B"],
+      "confidence": 1.0}}
+]}}

@@ -1,0 +1,100 @@
+You are extracting EVERY factual claim from a document chunk for a knowledge graph. A previous pass has identified all named entities (the NODE DIRECTORY below). Each claim must reference ONLY those existing nodes by their exact canonical names.
+
+================================================================
+NODE DIRECTORY - use ONLY these names in node_references
+================================================================
+
+{directory}
+
+MAIN SUBJECT of this document: {main_subject}
+  Use this name verbatim as the anchor for claims that are specifically about the main subject (see anchoring rules below).
+
+{codenames_block}
+
+{acronyms_block}
+
+================================================================
+CLAIM CATEGORIES - every claim is tagged with one
+================================================================
+
+- "domain" (most claims): facts about UAP, witnesses, encounters, investigations, careers, programmes, organisations, biographical facts, observations, measurements, official statements, findings. Anything that establishes a fact about the world.
+
+- "infrastructure" (the source-graph): claims whose purpose is to point at OTHER content - X cites Y, X recommends Z, X interviewed Y, X appeared on Z's podcast, X mentions Y's book. "Coulthart cites Vallée's Passport to Magonia" = infrastructure. "Mellon appeared on Fox & Friends" = infrastructure. "Bender wrote in Politico that..." (where the substance is "X reported Y elsewhere"): infrastructure if the focus is the report, domain if the focus is the substantive fact Y. NOT publication facts about the document itself - those are still infrastructure but be sparing.
+
+The rule of thumb: if the claim's purpose is "look at this other content" or "X is recommending/citing Y", it is infrastructure. If the claim establishes a substantive fact (even when sourced from another publication), it is domain.
+
+================================================================
+ATOMIC CLAIMS - one assertion per claim, split compound statements
+================================================================
+
+Do NOT bundle "who this person is" with "what they did". "George Knapp, a journalist at KLAS-TV, published the memo in June 2019" splits into:
+  Claim 1: "George Knapp is a journalist at KLAS-TV in Las Vegas." (administrative, infrastructure if it's only about source attribution; domain if it's substantive)
+  Claim 2: "In June 2019, George Knapp published the Harry Reid 2009 SAP Memo." (administrative, domain)
+
+================================================================
+ANCHORING
+================================================================
+
+If a claim is specifically ABOUT the main subject, anchor with the subject's exact name as a temporal/contextual scene-setter ("During X, ..." / "In X, ..." / "At X, ..."). DO NOT use "X states that..." / "X says that..." / "X testified that..." as anchors - that turns claims into reported speech and duplicates the metadata. The claim should BE the assertion.
+
+If the claim is NOT about the main subject, write naturally with no anchor prefix.
+
+Forbidden anchor verbs at the head of a claim: "X states that", "X says that", "X testified that", "X declared that", "X announced that", "X reported that". Use a positional preposition or no anchor instead.
+
+================================================================
+PERSON REFERENCES IN CLAIM TEXT
+================================================================
+
+Use the full natural-order name inside claim text ("Luis Elizondo", "David Fravor") - NOT a surname-only shortcut. node_references uses the canonical "Last, First" form from the directory.
+
+================================================================
+UNIT NORMALISATION
+================================================================
+
+Convert measurements in "content" to metric: "10 metres" not "10m", "24,000 metres" not "24km". Preserve precision - "about 80,000 feet" -> "approximately 24,000 metres" (rounded), NOT "24,384 metres".
+
+original_excerpt preserves source phrasing verbatim.
+
+================================================================
+ISO DATES MANDATORY EVERYWHERE
+================================================================
+
+Claim text uses ISO: "2004-11-14" not "14 November 2004". original_excerpt preserves source phrasing.
+
+================================================================
+ACRONYM EXPANSION IN CLAIM TEXT
+================================================================
+
+Expand each acronym on first use in a claim: "Anomalous Aerial Vehicle (AAV)", "forward-looking infrared (FLIR)". Subsequent uses in the same claim are bare. SAFE acronyms (UFO, UAP, CIA, DoD, etc) are always bare.
+
+================================================================
+EXHAUSTIVE EXTRACTION - do not summarise
+================================================================
+
+Capture every factual statement, however incidental - dates, names, places, quoted figures, asides, parenthetical remarks. Coverage matters more than highlighting "important" points.
+
+If a claim references an entity that does NOT appear in the node directory above, do NOT make up a name for it - either find it in the directory under a different surface form, OR skip that claim. Adding new node names breaks the locked-directory guarantee.
+
+================================================================
+OUTPUT FORMAT - valid JSON only, no markdown fencing
+================================================================
+
+{{
+  "claims": [
+    {{
+      "content": "normalised assertion with metric units",
+      "original_excerpt": "exact original wording from source",
+      "category": "domain|infrastructure",
+      "claim_type": "observation|testimony|hearsay|opinion|measurement|administrative",
+      "attestation": "first_hand|second_hand|third_hand",
+      "speaker": "person name from directory, or null",
+      "location_in_record": "page, paragraph, or timestamp",
+      "date": "YYYY-MM-DD if applicable",
+      "node_references": ["Node A from directory", "Node B from directory"],
+      "confidence": 1.0
+    }}
+  ],
+  "extraction_complete": true
+}}
+
+Set extraction_complete=true when you have nothing further to extract from this chunk. The iterative loop stops asking when this is true.

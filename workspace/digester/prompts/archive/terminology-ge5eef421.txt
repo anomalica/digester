@@ -1,0 +1,65 @@
+You are doing a TERMINOLOGY EXTRACTION pre-pass on a document. You are NOT extracting claims yet. Your only task is to read the document and identify:
+
+1. THE MAIN MATTER - the broad ongoing subject the whole document covers. This is what a knowledgeable reader would say the document is "about" in one sentence. For a Nimitz incident report it is the week-long detection-and-intercept period off the western coast, not a single flight. For a book it is the book itself. For congressional testimony it is the testimony as an event.
+
+2. THE MAIN EVENT (only if applicable) - a single dated occurrence that is the document's principal subject, distinct from the broader matter. For the Nimitz incident report this is the 14 November F/A-18F intercept; for a testimony document there is usually no separate "main event" because the testimony IS the document.
+
+3. CODENAMES - operational shorthand the document uses that resolves to an underlying entity. Callsigns (FASTEAGLE 01, FASTEAGLE 02), military codenames (Tic Tac, Fast Walker), internal nicknames. For each codename, identify what it actually refers to: which person, which aircraft, which object. Use real identifiers in the resolution, not other codenames.
+
+4. ACRONYMS - any abbreviation the document uses for which the full form matters: agency acronyms (AATIP, AARO, DIA), domain shorthand (AAV, FLIR, WSO, NDA, MISREP, CAP, CVIC, SCIF), squadron designators (VFA-41, CSG-11) etc.
+
+   EXCLUDE the universally-recognised SAFE ACRONYMS: UFO, UAP, CIA, FBI, NSA, NASA, DOD, DoD, FAA, NATO, UN, EU, US, USA, UK, USSR, GPS, TV, CPU, GPU, USB, URL, API. These do NOT need expansion - do not include them in the acronyms list you return. Their full forms are universally known.
+
+NAMING RULES for the canonical names you produce - aim for the Wikipedia article-title register: short, memorable, recognisable. The Nimitz UFO incident's Wikipedia article is titled "USS Nimitz UFO incident" - four words and a stranger can look it up. Aim for that.
+
+- MAX 8 WORDS. If your candidate name is longer, you are over-engineering it.
+- Include the universally-recognised identifier (Nimitz, AATIP, Elizondo, Fravor, Roswell). NEVER put a codename or callsign (FASTEAGLE, Tic Tac as a codename) in the canonical name. "Tic Tac" can appear if the source uses it as a shape description, but as a codename for the object it is not the canonical identifier.
+- Do NOT repeat the node type in the name. The "type" field says matter/event/etc.; the name does not need to end with "Matter" or "Event" or "Detection Matter". "Nimitz UAP Incident" is the name; the type is matter. Not "Nimitz UAP Detection Matter".
+- Date: use the SHORTEST ISO form that distinguishes it. Prefer year ("2004"), use year-month ("2004-11") when needed to disambiguate, use full date ("2004-11-14") only for specific dated events. Do NOT pack a full date range into the name - the matter node carries its date range as separate metadata. "Nimitz UAP Incident, 2004" beats "Nimitz Anomalous Aerial Vehicle Incident, 2004-11-10 to 2004-11-16".
+- Acronyms: only expand bare ones that are opaque. "UAP" is universal in this domain - leave it. "AAV" is opaque - either expand it ("Anomalous Aerial Vehicle Incident") or use the more universal substitute ("UAP Incident"). Prefer the most universal short form.
+- ISO month names only: never "14 November 2004". If you need a date in the name at all, it is "2004-11-14".
+- NO "the" in the name - it implies a known referent. "Nimitz UAP Incident, 2004", not "The Nimitz UAP Incident".
+
+GOOD canonical name examples (the register to aim for):
+- "Nimitz UAP Incident, 2004" (matter, ~4 words)
+- "Nimitz F/A-18F UAP Intercept, 2004-11-14" (event, specific date)
+- "Elizondo Senate UAP Testimony, 2024-11" (event)
+- "Imminent (Elizondo book, 2024)" (matter)
+- "Lex Fridman Podcast 122: Fravor, 2020-09" (event)
+- "Coulthart In Plain Sight (2023 book)" (matter)
+- "Roswell Crash, 1947" (event)
+
+BAD canonical name examples (do not produce these):
+- "Nimitz Carrier Strike Group (CSG-11) Anomalous Aerial Vehicle (AAV) Detection Matter, 2004-11-10 to 2004-11-16" - way too long, repeats node type in name, full date range crammed in
+- "FASTEAGLE Flight AAV Intercept 14 November 2004" - codename in name, bare acronym, spelled month
+- "AAV Detection Period" - missing identifier, bare acronym
+- "Nimitz CSG-11 AAV Detection Matter" - reads like a database key, has "Matter" suffix repeating the node type
+- "AAV Detection Matter" - bare acronym, has "Matter" suffix
+
+EMPHATIC: never put "Matter", "Event", "Concept", "Document", "Organisation" etc. as a suffix in a canonical name. The node TYPE is a separate field; the name does not repeat it.
+
+OUTPUT FORMAT - respond with ONLY valid JSON, no markdown fencing:
+
+{{
+  "main_matter": {{
+    "name": "canonical portable name following the rules above",
+    "type": "event or organisation or pattern (use 'event' for a dated subject the document is about; 'organisation' for a named body/programme the document covers; 'pattern' for a cross-case shape the document analyses; 'matter' is no longer a valid type)",
+    "date": "YYYY-MM-DD or YYYY-MM or YYYY or YYYY-MM-DD to YYYY-MM-DD"
+  }},
+  "main_event": {{
+    "name": "canonical portable name, or null if no distinct main event",
+    "type": "event",
+    "date": "YYYY-MM-DD"
+  }} or null,
+  "codenames": [
+    {{"codename": "FASTEAGLE 01", "refers_to": "F/A-18F flown by David Fravor during the 2004-11-14 intercept"}},
+    {{"codename": "FASTEAGLE 02", "refers_to": "F/A-18F flown by Alex Dietrich during the 2004-11-14 intercept"}}
+  ],
+  "acronyms": [
+    {{"acronym": "AAV", "expansion": "Anomalous Aerial Vehicle"}},
+    {{"acronym": "FLIR", "expansion": "forward-looking infrared"}},
+    {{"acronym": "CSG-11", "expansion": "Carrier Strike Group 11"}}
+  ]
+}}
+
+DOCUMENT TEXT:

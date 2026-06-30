@@ -8,7 +8,8 @@ Supports two backends:
 from __future__ import annotations
 
 import json
-import os
+
+from digester import prompt_registry
 import re
 
 from anomalica_common.digest import (
@@ -1123,114 +1124,6 @@ NODE_TYPES_V2 = [
 CATEGORIES_V2 = ["domain", "infrastructure"]
 
 
-NODES_PROMPT_V2 = """You are extracting the COMPLETE NODE DIRECTORY for a knowledge graph from a single document chunk.
-
-Your ONLY job in this call is to identify every distinct named entity in the chunk and return ONE canonical record per real-world thing. Claims are a separate pass.
-
-================================================================
-NODE TYPES (eight - choose one per node)
-================================================================
-
-- "person": a named human individual. Format "Last, First Middle". No titles/ranks/honourifics. Pseudonyms and single-name historical figures stay as-is. Do NOT create person nodes for redacted/anonymous actors ("USS Louisville Officer (redacted)") - attribute to the relevant organisation instead.
-
-- "organisation": a named acting BODY - government agencies, military units, companies, research institutes, publications, news outlets, committees, standing offices, foundations. Distinguished from project: an organisation is the BODY; a project is the WORK it runs.
-
-- "project": a NAMED time-bounded or initiative-bounded effort - programmes, investigations, operations, research projects, official inquiries. AATIP, Project Apollo, Project Blue Book, AAWSAP, the Condon Committee inquiry, the AARO Historical Record review, the Manhattan Project, OXCART, Stargate. The US Air Force is an organisation; Project Blue Book is a project the Air Force ran.
-
-- "place": a named geographic location. Format "Country, Region, Specific" largest-unit-first. "USA, Nevada, Area 51", "USA, California, San Diego". Do NOT extract countries/states/regions/operating-areas on their own. The node name is the place ITSELF - never append a locational qualifier like "(vicinity)", "(offshore)", "(restricted airspace)" or "(area)"; that nuance belongs in the claim text, not the node name.
-
-- "event": a discrete or bounded-in-time occurrence. Has at least a start year. Can span hours, days, months, years - use metadata.date_start (required) and optionally metadata.date_end. The Nimitz UAP encounter 2004-11-10 to 2004-11-16 is ONE event.
-
-- "object": a specific named PHYSICAL thing - craft, vessel, named vehicle or aircraft TYPE, sample, device, named building, recovered material. Must pass the touch test. A named aircraft/vehicle model is an object ("F/A-18", "USS Nimitz", "USS Princeton"). Phenomena, effects, video footage all FAIL the touch test.
-
-- "document": a written or recorded artefact - book, report, paper, FOIA release, video footage, podcast episode, article, memo, testimony, affidavit, patent application.
-
-- "topic": a RECOGNISED named idea, theory, framework, or phenomenon that exists independent of this document (general relativity, the Pais Effect, anti-gravity propulsion, zero-point energy, vacuum polarisation). NOT a specific named alleged craft (TR-3B is NOT a topic - it is an alleged craft, classify as object or document). NOT generic touchable nouns (gravity, plasma). NOT mechanisms lifted from patent jargon. NOT vague catch-alls. NOT ad-hoc theories named only within this document.
-
-NOTE: there is no "matter", "concept", or "pattern" type for extraction in this pass. Things that previously would have been matters now classify as event (bounded time), organisation (standing body), project (named effort), or topic (recognised idea). Cross-case patterns are curator-created, not extractor-emitted.
-
-================================================================
-COMPLETENESS - sweep every type, do not stop at the obvious
-================================================================
-
-Be exhaustive. Under-extraction is the main failure. After listing the obvious people and programmes, deliberately sweep for the easily-missed:
-
-  - TOPICS: the central recognised phenomenon/idea IS a node. In a UAP document, emit "Unidentified Aerial Phenomena (UAP)" and "anomalous aerial vehicle (AAV)" as topic nodes even though they pervade the text. Other recognised ideas (a named theory, effect, propulsion concept) are topics too.
-  - ORGANISATIONS: include military branches ("United States Navy"), legislative bodies and their committees ("United States Congress", "US Senate Select Committee on Intelligence"), standing offices ("Office of the Director of National Intelligence (ODNI)"), schools/academies ("Top Gun Naval Flight School"), and news outlets - not just the headline agency.
-  - OBJECTS: named aircraft/vehicle/vessel types and models ("F/A-18", "USS Nimitz", "USS Princeton").
-  - EVENTS: the named incident(s) the document is about ("2004 USS Nimitz UAP encounter").
-  - PLACES: every named populated place or installation (Country-first), but not bare countries/regions.
-
-A central entity that appears in many claims (the phenomenon, the principal agency, the aircraft) is exactly the kind that gets forgotten because it feels like background - emit it.
-
-================================================================
-PORTABILITY - the card test
-================================================================
-
-Every node name must be identifiable on its own, out of context. "the testimony", "the hearing", "the report" all FAIL - include enough specificity (date, parties, subject) that the name stands alone.
-
-================================================================
-ACRONYM EXPANSION in node names
-================================================================
-
-Write acronyms as "Full Name (ACRONYM)":
-  - AATIP -> "Advanced Aerospace Threat Identification Program (AATIP)"
-  - AARO -> "All-Domain Anomaly Resolution Office (AARO)"
-  - DIA -> "Defense Intelligence Agency (DIA)"
-  - VFA-41 -> "Strike Fighter Squadron 41 (VFA-41)"
-  - CSG-11 -> "Carrier Strike Group 11 (CSG-11)"
-  - NAVAIR -> "Naval Air Systems Command (NAVAIR)"
-  - LIGO -> "Laser Interferometer Gravitational-Wave Observatory (LIGO)"
-
-Expand EVERY acronym that has a full name - agencies and phenomena included: Central Intelligence Agency (CIA), Federal Bureau of Investigation (FBI), National Security Agency (NSA), National Aeronautics and Space Administration (NASA), Department of Defense (DoD), Federal Aviation Administration (FAA), North Atlantic Treaty Organization (NATO), United Nations (UN), Unidentified Flying Object (UFO), Unidentified Aerial Phenomena (UAP), European Union (EU), Global Positioning System (GPS). Leave an acronym bare ONLY when it has no meaningful full name or the abbreviation is itself the standard form: US, USA, UK, TV, CPU, GPU, USB, URL, API.
-
-================================================================
-DEDUPLICATION - mandatory
-================================================================
-
-Each real-world entity appears as ONE node only. Before emitting, check for these duplicate variants and merge:
-
-  (a) Acronym suffix present vs absent: "Defense Intelligence Agency" + "Defense Intelligence Agency (DIA)" - emit ONCE with acronym.
-  (b) Country prefix variants: "Navy" + "US Navy" + "United States Navy" - emit ONCE.
-  (c) DoD variants: "DoD" + "Department of Defense" + "United States Department of Defense" + "Department of Defense (DoD)" - emit ONCE.
-  (d) US/UK spelling: "Naval Air Warfare Center" + "Naval Air Warfare Centre" - emit ONCE.
-  (e) Long-form vs short-form: "House Oversight Subcommittee" + "the subcommittee" - emit ONCE with the long portable form.
-  (f) Descriptor parentheses: "Project Unity" + "Project Unity (podcast)" - emit ONCE.
-
-If a candidate appears in the EXISTING NODE DIRECTORY below (from prior chunks), use the EXACT name from the directory - do NOT create a variant.
-
-================================================================
-ALSO RETURN with the nodes list
-================================================================
-
-  - main_subject: the canonical NAME of the one node from your list (or the existing directory) that is this document's principal subject. Used by downstream claim extraction to anchor claims. If this is a chunk of a larger document, the main subject is the same across all chunks; just emit it.
-
-  - codenames_to_resolve: callsigns and military codenames (FASTEAGLE 01, Tic Tac, Fast Walker) that should NEVER become person/object nodes. For each, name the real entity it refers to.
-
-  - acronyms: every domain-specific acronym, with its expansion. Helps the claims pass expand on first use.
-
-================================================================
-OUTPUT FORMAT - valid JSON only, no markdown fencing
-================================================================
-
-{{
-  "main_subject": "canonical name",
-  "nodes": [
-    {{
-      "name": "canonical portable name",
-      "node_type": "person|organisation|project|place|event|object|document|topic",
-      "metadata": {{"date_start": "...", "date_end": "..." (events only, optional)}}
-    }}
-  ],
-  "codenames_to_resolve": [{{"codename": "X", "refers_to": "canonical name"}}],
-  "acronyms": [{{"acronym": "AAV", "expansion": "Anomalous Aerial Vehicle"}}],
-  "extraction_complete": true
-}}
-
-If the model has emitted everything it can from this chunk in this round (no more nodes to add), set extraction_complete=true. The iterative loop reads this and stops asking for more.
-"""
-
-
 NODES_SCHEMA_V2 = {
     "type": "object",
     "required": ["nodes", "main_subject", "extraction_complete"],
@@ -1273,175 +1166,6 @@ NODES_SCHEMA_V2 = {
         "extraction_complete": {"type": "boolean"},
     },
 }
-
-
-CLAIMS_PROMPT_V2_TEMPLATE = """You are extracting EVERY factual claim from a document chunk for a knowledge graph. A previous pass has identified all named entities (the NODE DIRECTORY below). Each claim must reference ONLY those existing nodes by their exact canonical names.
-
-================================================================
-NODE DIRECTORY - use ONLY these names in node_references
-================================================================
-
-{directory}
-
-MAIN SUBJECT of this document: {main_subject}
-  Use this name verbatim as the anchor for claims that are specifically about the main subject (see anchoring rules below).
-
-{codenames_block}
-
-{acronyms_block}
-
-================================================================
-CLAIM CATEGORIES - every claim is tagged with one
-================================================================
-
-- "domain" (most claims): facts about UAP, witnesses, encounters, investigations, careers, programmes, organisations, biographical facts, observations, measurements, official statements, findings. Anything that establishes a fact about the world.
-
-- "infrastructure" (the source-graph): claims whose purpose is to point at OTHER content - X cites Y, X recommends Z, X interviewed Y, X appeared on Z's podcast, X mentions Y's book. "Coulthart cites Vallée's Passport to Magonia" = infrastructure. "Mellon appeared on Fox & Friends" = infrastructure. "Bender wrote in Politico that..." (where the substance is "X reported Y elsewhere"): infrastructure if the focus is the report, domain if the focus is the substantive fact Y. NOT publication facts about the document itself - those are still infrastructure but be sparing.
-
-The rule of thumb: if the claim's purpose is "look at this other content" or "X is recommending/citing Y", it is infrastructure. If the claim establishes a substantive fact (even when sourced from another publication), it is domain.
-
-================================================================
-ATOMIC CLAIMS - one assertion per claim, split compound statements
-================================================================
-
-Do NOT bundle "who this person is" with "what they did". "George Knapp, a journalist at KLAS-TV, published the memo in June 2019" splits into:
-  Claim 1: "George Knapp is a journalist at KLAS-TV in Las Vegas." (administrative, infrastructure if it's only about source attribution; domain if it's substantive)
-  Claim 2: "In June 2019, George Knapp published the Harry Reid 2009 SAP Memo." (administrative, domain)
-
-A sentence listing SEVERAL distinct capabilities, measurements, or properties becomes SEVERAL claims - never one merged claim. "a technology that can do 600-700 G-forces, fly at 13,000 miles per hour, evade radar, fly through air and water, with no wings or propulsion, and defy gravity" splits into SEPARATE claims: one for the 600-700 G-force figure, one for the speed, one for evading radar, one for travelling through air and water, one for the absence of wings/propulsion, one for defying gravity. Each measurement or property is its own claim. Merging a list into a single narrative sentence is WRONG - extract the individual facts.
-
-================================================================
-ASSERTION, NOT REPORTED SPEECH (critical - most common error)
-================================================================
-
-The claim text IS the fact. NEVER wrap it in a reporting verb naming the speaker - the speaker is already captured in the structured speaker field, so "X stated/said/noted/claimed/testified/confirmed that ..." is DUPLICATION and is FORBIDDEN. Two correct rewrites depending on who the fact is about:
-
-(a) The speaker is just RELAYING a fact about something else -> drop the name entirely, state the bare fact:
-   WRONG: "Luis Elizondo stated that the US government has confirmed UAP are real."
-   RIGHT: "The US government has officially confirmed for the record that UAP are real."  (speaker=Elizondo lives in the speaker field)
-   WRONG: "Ryan Graves stated that the dual radar-and-infrared detection is hard to spoof."
-   RIGHT: "The dual radar-and-infrared detection of UAP is hard to spoof."
-
-(b) The speaker IS the actor/observer/opinion-holder of the fact -> name them as the SUBJECT with a substantive verb (observed, saw, considers, believes, is worried, encountered), never "stated that":
-   WRONG: "Ryan Graves stated that he observed no exhaust plume."
-   RIGHT: "Ryan Graves observed no exhaust plume on the UAP off the Atlantic coast."
-   WRONG: "Ryan Graves stated that Russian or Chinese technology is a possible explanation."
-   RIGHT: "Ryan Graves considers Russian or Chinese technology a possible explanation for the observed UAP."
-
-Forbidden at the head of a claim: "X states/stated that", "X says/said that", "X testified that", "X declared that", "X announced that", "X reported that", "X noted that", "X claimed that", "X confirmed that", "X explained that". If you have written one, rewrite it as (a) or (b).
-
-When a claim IS specifically about the main subject, you may anchor with the subject's exact name as a temporal/contextual scene-setter ("During X, ..." / "In X, ..." / "At X, ..."), never as reported speech. If the claim is NOT about the main subject, write it naturally with no anchor prefix.
-
-================================================================
-PERSON REFERENCES IN CLAIM TEXT
-================================================================
-
-Use the full natural-order name inside claim text ("Luis Elizondo", "David Fravor") - NOT a surname-only shortcut. node_references uses the canonical "Last, First" form from the directory.
-
-================================================================
-UNIT NORMALISATION - metric only, never leave imperial
-================================================================
-
-The "content"/"text" field uses METRIC SI units with the unit's FULL NAME spelled out - "kilometres per hour" not "km/h", "metres" not "m", "kilometres" not "km". Convert every imperial/US/nautical unit: miles per hour and knots -> kilometres per hour, miles -> kilometres, feet -> metres, pounds -> kilograms, Fahrenheit -> Celsius. "13,000 miles an hour" becomes "approximately 21,000 kilometres per hour"; "about 80,000 feet" becomes "approximately 24,000 metres"; "120 knots" becomes "approximately 220 kilometres per hour". Preserve the source's precision and hedges ("about", "approximately") - round, never give false precision ("24,384 metres").
-
-NEVER put the original imperial value in the content, not even in parentheses. The content is SI-only. The original units survive ONLY in original_excerpt (the verbatim quote). If a reader wants the original unit they read the quote.
-
-================================================================
-BRITISH ENGLISH - mandatory in all claim text and node names
-================================================================
-
-Use British spelling everywhere: categorise (not categorize), organise, recognise, analyse, emphasise, prioritise, colour, behaviour, defence, offence, licence (noun), metre, centre, manoeuvre, aluminium, fibre. Never American spellings.
-
-================================================================
-DURABILITY - every claim must stand alone out of context
-================================================================
-
-Each claim is read in isolation in the knowledge graph, months later, by someone who has NOT seen this document. It must be fully self-contained. Resolve every vague or deictic reference into a concrete one:
-  - not "the video footage" / "the footage" but the named item ("the 2004 USS Nimitz FLIR1 video").
-  - not "the objects" / "these objects" / "the unidentified objects" but what they are and where ("the UAP observed off Virginia Beach in 2014").
-  - not "the same area" / "the area" but the named place; not "the incident" / "the encounter" but the named event.
-  - NEVER begin a claim with a bare "It", "They", "This", "These", "That" - name the subject.
-A reader seeing only this one claim, with no surrounding text, must understand exactly what it refers to.
-
-================================================================
-FIDELITY - capture what was said, do not embellish
-================================================================
-
-State what the source actually says. Do NOT add reasoning, qualifiers, consequences, or detail the speaker did not express. "Pretty hard to spoof that" becomes "[Speaker] said the dual radar-and-infrared detection is hard to spoof" - NOT "...hard to spoof or dismiss as false contacts" (the speaker never said "dismiss as false contacts"). Resolve context (durability) without inventing content.
-
-================================================================
-ISO DATES MANDATORY EVERYWHERE
-================================================================
-
-Claim text uses ISO: "2004-11-14" not "14 November 2004". original_excerpt preserves source phrasing.
-
-================================================================
-LOCATION_IN_RECORD - most precise span the source allows
-================================================================
-
-This document is timestamped (each source line begins with HH:MM:SS.D). Set location_in_record to the timestamp RANGE the claim is drawn from: "HH:MM:SS.D-HH:MM:SS.D" (start of the relevant span to its end), using a plain ASCII hyphen "-" (never an en-dash). A range, not a single point - an assertion spans seconds, and a Q&A claim spans the question and the answer. For a single short line a single timestamp is acceptable.
-
-================================================================
-ACRONYM EXPANSION IN CLAIM TEXT
-================================================================
-
-Expand each acronym on first use in a claim: "Anomalous Aerial Vehicle (AAV)", "forward-looking infrared (FLIR)". Subsequent uses in the same claim are bare. SAFE acronyms (UFO, UAP, CIA, DoD, etc) are always bare.
-
-================================================================
-EXHAUSTIVE EXTRACTION - do not summarise
-================================================================
-
-Capture every factual statement, however incidental - dates, names, places, quoted figures, asides, parenthetical remarks. Coverage matters more than highlighting "important" points.
-
-OPINIONS AND INTERVIEW EXCHANGES: an opinion, assessment, or judgement - especially from an interviewee or expert - is a claim (claim_type "opinion"). When a person gives a short answer, confirmation, or reaction to a question or a stated proposition ("Pretty hard to spoof that", "Every day", "I don't see why not"), it IS a claim: resolve it into a standalone assertion and attribute it to the person who ANSWERED. Do NOT drop a conversational turn because it is brief or depends on the previous line.
-
-  - The speaker is the ANSWERER, not the interviewer. A leading question that contains the fact ("Could it be Russian or Chinese technology?") does NOT make the interviewer the source - the claim and its speaker are the answerer's.
-  - For a claim built from a question-and-answer exchange, original_excerpt MUST contain BOTH turns verbatim, each turn prefixed with the speaker's name, so the quote alone proves the claim. Example: original_excerpt = "Bill Whitaker: Could it be Russian or Chinese technology? Ryan Graves: I don't see why not." and content = "Ryan Graves considers Russian or Chinese technology a possible explanation for the observed UAP." (note: content states the assertion with the actor named as SUBJECT - never with a reporting verb like "stated that").
-  - location_in_record then spans both turns (start of the question to end of the answer).
-
-If a claim references an entity that does NOT appear in the node directory above, do NOT make up a name for it - either find it in the directory under a different surface form, OR skip that claim. Adding new node names breaks the locked-directory guarantee.
-
-================================================================
-ATTESTATION - optional, omit unless there is a clear evidential stance
-================================================================
-
-attestation records the evidential standing of a claim. It is OPTIONAL and depends on the
-NATURE of the statement, not the speaker's role. Only set it when the claim is an evidential
-account of something observed or done:
-  - "first_hand": the speaker is stating what they personally did, witnessed, or observed (a pilot describing his own encounter; "I saw the object descend").
-  - "second_hand": the speaker is relaying a specific other person's account or observation, or reporting a specific organisation's finding ("David Fravor told me the object accelerated"; "the Pentagon confirmed it cannot identify the objects").
-  - "third_hand": the speaker is relaying something passed through an intermediary ("he said the rancher had heard that ...").
-
-OMIT attestation entirely when there is no evidential stance to record - a narrator, host, or
-interviewer simply conveying information, framing, or context, or a bare factual statement with
-no observer attached. Do NOT default to first_hand. A missing attestation is correct and
-expected for most narration. When a researcher or interviewee does inject a genuine first- or
-second-hand account into otherwise neutral narration, tag that claim.
-
-================================================================
-OUTPUT FORMAT - valid JSON only, no markdown fencing
-================================================================
-
-{{
-  "claims": [
-    {{
-      "content": "normalised assertion with metric units",
-      "original_excerpt": "exact original wording from source",
-      "category": "domain|infrastructure",
-      "claim_type": "observation|testimony|hearsay|opinion|measurement|administrative",
-      "attestation": "first_hand|second_hand|third_hand (OPTIONAL - omit for plain narration/framing)",
-      "speaker": "person name from directory, or null",
-      "location_in_record": "page, paragraph, or timestamp",
-      "date": "YYYY-MM-DD if applicable",
-      "node_references": ["Node A from directory", "Node B from directory"],
-      "confidence": 1.0
-    }}
-  ],
-  "extraction_complete": true
-}}
-
-Set extraction_complete=true when you have nothing further to extract from this chunk. The iterative loop stops asking when this is true.
-"""
 
 
 def build_claims_schema_v2(node_names: list[str]) -> dict:
@@ -1511,22 +1235,30 @@ def _format_directory_v2(nodes: list[dict]) -> str:
 
 
 def _nodes_prompt() -> str:
-    """Nodes-pass prompt, overridable per run via DIGESTER_NODES_PROMPT_FILE
-    (used for prompt tuning - lets Haiku and Sonnet carry different prompts)."""
-    p = os.environ.get("DIGESTER_NODES_PROMPT_FILE")
-    if p and os.path.exists(p):
-        return open(p).read()
-    return NODES_PROMPT_V2
+    """Nodes-pass prompt from the registry, overridable per run via
+    DIGESTER_NODES_PROMPT_FILE (lets Haiku and Sonnet carry different prompts).
+    The version/hash actually used is recorded via prompt_provenance()."""
+    return prompt_registry.prompt_text("nodes", "DIGESTER_NODES_PROMPT_FILE")
 
 
 def _claims_prompt_template() -> str:
-    """Claims-pass prompt template, overridable via DIGESTER_CLAIMS_PROMPT_FILE.
-    Must keep the {directory}/{main_subject}/{codenames_block}/{acronyms_block}
-    placeholders and {{ }} for literal braces."""
-    p = os.environ.get("DIGESTER_CLAIMS_PROMPT_FILE")
-    if p and os.path.exists(p):
-        return open(p).read()
-    return CLAIMS_PROMPT_V2_TEMPLATE
+    """Claims-pass prompt template from the registry, overridable via
+    DIGESTER_CLAIMS_PROMPT_FILE. Keeps the
+    {directory}/{main_subject}/{codenames_block}/{acronyms_block} placeholders
+    and {{ }} for literal braces."""
+    return prompt_registry.prompt_text("claims", "DIGESTER_CLAIMS_PROMPT_FILE")
+
+
+def prompt_provenance() -> list[dict]:
+    """Which prompt (id/version/sha256/file) each pass will use for this run,
+    resolving the same env-override + registry path as the loaders above. Stamped
+    into the digest so it is attributable to an exact prompt (ADR 0010 pattern)."""
+    nodes = prompt_registry.resolve_prompt("nodes", "DIGESTER_NODES_PROMPT_FILE")[1]
+    claims = prompt_registry.resolve_prompt("claims", "DIGESTER_CLAIMS_PROMPT_FILE")[1]
+    return [
+        {"pass": "nodes", **nodes.as_dict()},
+        {"pass": "claims", **claims.as_dict()},
+    ]
 
 
 def extract_nodes_v2(
@@ -1769,6 +1501,7 @@ def extract_two_pass(
         "codenames_to_resolve": nodes_result["codenames_to_resolve"],
         "acronyms": nodes_result["acronyms"],
         "claims": claims,
+        "prompt_provenance": prompt_provenance(),
     }
 
 

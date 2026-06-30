@@ -1,0 +1,65 @@
+You are extracting INFRASTRUCTURE information from a document. This is NOT about the phenomena described in the document. It is about the information ecosystem: who produced this content, who interviews whom, what other sources or media are mentioned, career backgrounds, and opinions about other sources.
+
+The knowledge graph uses these node types:
+- "person": a named human individual
+- "organisation": a named entity distinct from any single person (includes podcasts, news outlets, publications, agencies, companies; programmes and investigations are organisations with optional metadata.kind)
+- "place": a named geographic location
+- "event": a discrete or bounded-in-time thing that happened (must have at least a start year; can also have date_end for periods)
+- "object": a specific named physical thing
+- "document": a specific piece of content (a book, a podcast episode, a documentary, an article, a memo)
+- "concept": a recognised named idea or principle
+- "pattern": a recurring shape observed across cases
+
+Claim types:
+- "observation": the speaker directly perceived something
+- "testimony": formally stated on record or under oath
+- "hearsay": relaying what someone else said
+- "opinion": expressing a belief or interpretation
+- "measurement": instrument or sensor data
+- "administrative": dates, career facts, organisational facts
+
+TASK: Extract EVERY infrastructure claim from the document below.
+
+EXHAUSTIVE EXTRACTION: Do not summarise or curate. Capture every infrastructure-related statement, however incidental - every credential mentioned, every show appearance, every cited article, every working relationship, every aside about another journalist. Coverage matters more than highlighting "important" points.
+
+Ignore claims about the phenomena itself. Focus on:
+
+1. INTER-SOURCE REFERENCES: mentions of other media, books, podcasts, documentaries, articles. Include the sentiment (positive, negative, neutral) in metadata.
+2. PRODUCTION CONTEXT: who produced this content, who hosts the show, who conducted the interview.
+3. CAREER AND BACKGROUND: career history, qualifications, and credentials of speakers and people mentioned, where these are not directly about the phenomena.
+4. NETWORK CONNECTIONS: who knows whom, who worked with whom, professional relationships between people in the information ecosystem.
+5. OPINIONS ABOUT SOURCES: what speakers think about other media, journalists, organisations in terms of credibility or quality.
+
+Do NOT extract:
+- Claims about anomalous phenomena, sightings, encounters, or programmes
+- Testimony about what witnesses saw or experienced
+- Evidence, sensor data, or investigation findings
+
+NAMING RULES (apply to every node and every claim text):
+- PORTABILITY (the card test): every node name must be identifiable on its own, out of context. If you wrote the name on a card and handed it to a stranger who had never seen this document, they should tell what it refers to. Names that fail the card test: "the hearing", "the testimony", "this document", "the interview", "the meeting". ALWAYS include enough specificity (date, parties, subject) that the name stands alone.
+- REDACTED OR ANONYMOUS PEOPLE: do not extract a person node when the source identifies the actor only by role with a redacted/unknown name ("USS Louisville Commander (redacted)", "3rd Fleet N2 (redacted)"). There is no person to extract. Attribute the claim to the relevant organisation and describe the role in claim text.
+- ACRONYM EXPANSION IN NODE NAMES: write acronyms in node names as "Full Name (ACRONYM)". "VFA-41" -> "Strike Fighter Squadron 41 (VFA-41)". "CSG-11" -> "Carrier Strike Group 11 (CSG-11)". Applies to organisations, documents, events, objects, concepts.
+- ACRONYM EXPANSION IN CLAIM TEXT: inside claim "content", expand acronyms on first use with the acronym in parentheses ("Anomalous Aerial Vehicle (AAV)", "forward-looking infrared (FLIR)"). The original_excerpt preserves the source's exact phrasing.
+- SAFE ACRONYMS - do NOT expand: UFO, UAP, CIA, FBI, NSA, NASA, DOD, DoD, FAA, NATO, UN, EU, US, USA, UK, USSR, GPS, TV, CPU, GPU, USB, URL, API. These are universally known; use them bare in claim text and node names.
+- Person nodes use "Last, First Middle" order with NO titles/ranks/honourifics (decision 0023 + 0026). "Commander David Fravor" becomes "Fravor, David".
+- Inside the prose of claim "content" and "speaker" narration, refer to people by their full natural-order name ("Luis Elizondo", not "Elizondo") so each claim is intelligible in isolation. The node_references field still uses the canonical "Last, First" form.
+
+OUTPUT FORMAT (respond with ONLY valid JSON, no markdown fencing):
+
+{{"record_title": "short title for this document",
+"record_date": "YYYY-MM-DD or YYYY-MM or YYYY if known",
+"record_producer": "person or organisation that produced this document",
+"nodes": [
+    {{"name": "canonical short name", "node_type": "person|organisation|place|event|object|document|concept|pattern", "metadata": {{"sentiment": "positive|negative|neutral"}}}}
+],
+"claims": [
+    {{"content": "infrastructure assertion",
+      "original_excerpt": "exact original wording from the source document",
+      "claim_type": "observation|testimony|hearsay|opinion|measurement|administrative",
+      "attestation": "first_hand|second_hand|third_hand",
+      "speaker": "person name or null",
+      "location_in_record": "page or timestamp",
+      "date": "YYYY-MM-DD if applicable",
+      "node_references": ["Node A", "Node B"],
+      "confidence": 1.0}}
+]}}
