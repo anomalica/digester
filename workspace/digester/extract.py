@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 
+from anomalica_common.irrelevant import strip_irrelevant
 from digester import prompt_registry
 import re
 
@@ -1444,52 +1445,6 @@ def strip_word_timestamps(text: str) -> str:
     unattended runner can point `extract` straight at a store file.
     """
     return _WORD_TIMESTAMP.sub("", text)
-
-
-_SPEAKER_COMMENT = re.compile(r"^\s*<!--\s*speaker:\s*(.*?)\s*-->\s*$")
-# `<!-- irrelevant: start -->` is the canonical form (space after the colon, a
-# valid YAML key:value like every other body annotation); tolerate no-space too.
-_IRRELEVANT_START = re.compile(r"^\s*<!--\s*irrelevant:\s*start\s*-->\s*$")
-_IRRELEVANT_END = re.compile(r"^\s*<!--\s*irrelevant:\s*end\s*-->\s*$")
-
-
-def strip_irrelevant(text: str) -> str:
-    """Remove reviewer-marked irrelevant content before extraction.
-
-    Two markers, stripped only from the copy sent to the model (the stored
-    record keeps the text so the marks stay reversible and auditable):
-
-    - a transcript segment introduced by ``<!-- speaker: [irrelevant] -->`` -
-      the comment and every following line until the next ``<!-- speaker: ... -->``;
-    - a prose region ``<!-- irrelevant:start -->`` ... ``<!-- irrelevant:end -->``
-      (books/pdf), the markers and everything between, non-nesting.
-
-    Relevant speaker comments are kept - the model uses them for attribution.
-    Nothing filtered these today, so marked-irrelevant content was being
-    extracted from (record-format.md describes the behaviour; this builds it).
-    """
-    out: list[str] = []
-    in_prose_drop = False
-    in_speaker_drop = False
-    for line in text.splitlines(keepends=True):
-        if _IRRELEVANT_START.match(line):
-            in_prose_drop = True
-            continue
-        if _IRRELEVANT_END.match(line):
-            in_prose_drop = False
-            continue
-        if in_prose_drop:
-            continue
-        speaker = _SPEAKER_COMMENT.match(line)
-        if speaker:
-            in_speaker_drop = speaker.group(1) == "[irrelevant]"
-            if not in_speaker_drop:
-                out.append(line)  # keep a relevant speaker comment (attribution)
-            continue
-        if in_speaker_drop:
-            continue
-        out.append(line)
-    return "".join(out)
 
 
 def extract_two_pass(
