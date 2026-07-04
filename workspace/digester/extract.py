@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 
-from anomalica_common.irrelevant import strip_irrelevant
+from anomalica_common.pre_digest import materialise
 from digester import prompt_registry
 import re
 
@@ -803,7 +803,6 @@ def _split_at_chapters(text: str) -> list[str] | None:
     has no chapter annotations, in which case the caller falls back to
     char-window chunking. We trust the annotation - no minimum size check.
     """
-    import re
 
     parts = re.split(r"\n(?=<!-- chapter: )", text)
     if len(parts) < 2:
@@ -1431,22 +1430,6 @@ def extract_claims_v2(
     return merged_claims
 
 
-_WORD_TIMESTAMP = re.compile(r"\{\{t:[0-9.]+\}\}")
-
-
-def strip_word_timestamps(text: str) -> str:
-    """Remove inline `{{t:SECONDS}}` word-timing tokens from a record/2 body.
-
-    A v2 (record/2) body is ~65% timing tokens by character count; feeding them
-    to the model wrecks extraction. The tokens are stripped only for the
-    extraction input - the stored record keeps them so realign.py can recover
-    quote timing afterward. Interim: the canonical clean_body() is the
-    ingester's and is pending; until it lands the digester self-protects so an
-    unattended runner can point `extract` straight at a store file.
-    """
-    return _WORD_TIMESTAMP.sub("", text)
-
-
 def extract_two_pass(
     text: str,
     model: str = DEFAULT_MODEL,
@@ -1461,8 +1444,10 @@ def extract_two_pass(
     `use_api` is the resolved per-component metered toggle (the digester resolves
     DIGESTER_USE_API), threaded to every model call.
     """
-    text = strip_irrelevant(text)
-    text = strip_word_timestamps(text)
+    # Extract from the pre-digest (ADR 0042): all deterministic model-prep. The
+    # caller materialises + stores the pre-digest and records its hash; this is
+    # idempotent, so a raw-text caller (benchmarks) still gets the same input.
+    text = materialise(text)
     if on_progress:
         on_progress("Pass A: nodes (with iteration + chunking)")
     nodes_result = extract_nodes_v2(

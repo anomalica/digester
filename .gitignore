@@ -4,3 +4,8 @@ __pycache__/
 .claude/
 
 # Editor / OS noise
+
+# Local materialised artefacts carrying copyrighted source-body text (ADR 0042 /
+# grading) - served to the workbench from local disk, never committed to this public repo.
+predigests/
+grading/

@@ -4,6 +4,7 @@ breakable parts between the model and the data model."""
 
 import json
 
+from anomalica_common.pre_digest import strip_word_timestamps
 from digester.extract import (
     CHUNK_MAX_CHARS,
     _build_chunks,
@@ -11,7 +12,6 @@ from digester.extract import (
     _format_directory_v2,
     _parse_response,
     build_claims_schema_v2,
-    strip_word_timestamps,
 )
 
 

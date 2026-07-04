@@ -72,6 +72,14 @@ def main() -> None:
     "(a deliberate side-run with the active prompt; benchmarks).",
 )
 @click.option(
+    "--predigests-root",
+    type=click.Path(),
+    default=None,
+    help="Store the materialised pre-digest (ADR 0042) under this local, "
+    "gitignored dir. Its hash is recorded in the digest regardless; this stores "
+    "the artefact for the workbench's read-only pre-digest tab.",
+)
+@click.option(
     "--confirm",
     is_flag=True,
     help="Confirm the printed cost estimate and proceed with the metered run "
@@ -85,6 +93,7 @@ def extract_cmd(
     model: str,
     digests_root: str | None,
     variant_only: bool,
+    predigests_root: str | None,
     confirm: bool,
 ) -> None:
     """Extract knowledge from a record into a reviewable digest YAML file."""
@@ -115,6 +124,7 @@ def extract_cmd(
         use_api,
         Path(digests_root) if digests_root else None,
         variant_only,
+        Path(predigests_root) if predigests_root else None,
     )
 
 
@@ -126,6 +136,7 @@ def _do_extract(
     use_api: bool = False,
     digests_root: Path | None = None,
     variant_only: bool = False,
+    predigests_root: Path | None = None,
 ) -> Path:
     """Run the two-pass extraction for one parsed record and write the digest YAML.
 
@@ -139,6 +150,12 @@ def _do_extract(
     # JSON schema enum on node_references items. Each claim carries
     # category=domain|infrastructure for the assembler to filter on.
     from anomalica_common.digest import two_pass_result_to_yaml
+    from anomalica_common.pre_digest import (
+        PREP_VERSION,
+        materialise,
+        pre_digest_hash,
+        store_pre_digest,
+    )
     from digester.extract import build_record_context, extract_two_pass
 
     record_context = build_record_context(
@@ -147,6 +164,17 @@ def _do_extract(
         date=parsed.date,
         source_type=parsed.source_type,
     )
+
+    # Pre-digest (ADR 0042): the materialised model input. Its hash is recorded in
+    # every digest for exact reproducibility; the artefact is stored (gitignored,
+    # copyright-bearing) only when a predigests-root is configured.
+    pre_digest_text = materialise(parsed.body)
+    pd_sha = pre_digest_hash(pre_digest_text)
+    if predigests_root is not None:
+        record_key = (parsed.metadata.get("content_hash") or path.stem).removeprefix(
+            "sha256:"
+        )
+        store_pre_digest(predigests_root, record_key, pre_digest_text)
 
     click.echo(f"Extracting (two-pass) from: {parsed.title or path.name}")
     reset_usage()
@@ -183,6 +211,7 @@ def _do_extract(
             ),
             model=model,
             ai_usage=ai_usage,
+            pre_digest={"sha256": pd_sha, "prep_version": PREP_VERSION},
         )
 
         if digests_root is not None:
@@ -257,6 +286,13 @@ def _echo_usage() -> None:
     help="With --digests-root, write only variants, never the canonical.",
 )
 @click.option(
+    "--predigests-root",
+    type=click.Path(),
+    default=None,
+    help="Store each record's materialised pre-digest (ADR 0042) under this "
+    "local, gitignored dir for the workbench's pre-digest tab.",
+)
+@click.option(
     "--confirm",
     is_flag=True,
     help="Confirm the printed aggregate cost estimate and proceed with the "
@@ -270,6 +306,7 @@ def batch_extract_cmd(
     model: str,
     digests_root: str | None,
     variant_only: bool,
+    predigests_root: str | None,
     confirm: bool,
 ) -> None:
     """Extract knowledge from many records, behind one aggregate spend gate.
@@ -297,6 +334,7 @@ def batch_extract_cmd(
         ctx.exit(2)
 
     root = Path(digests_root) if digests_root else None
+    pd_root = Path(predigests_root) if predigests_root else None
     out_dir = Path(output_dir) if output_dir else None
     if out_dir:
         out_dir.mkdir(parents=True, exist_ok=True)
@@ -304,7 +342,7 @@ def batch_extract_cmd(
     for i, (p, parsed) in enumerate(parsed_records, 1):
         click.echo(f"\n[{i}/{len(parsed_records)}] {p.name}")
         out = out_dir / p.with_suffix(".yaml").name if out_dir else None
-        _do_extract(p, parsed, out, model, use_api, root, variant_only)
+        _do_extract(p, parsed, out, model, use_api, root, variant_only, pd_root)
 
 
 # --- Coverage: review-gate visibility (which records are digestible) ---
