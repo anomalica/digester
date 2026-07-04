@@ -67,6 +67,20 @@ def test_combined_transcript_and_prose():
     assert "front matter" not in out and "drop this" not in out
 
 
+def test_canonical_spaced_marker_form():
+    # record-format.md canonical: space after the colon (valid YAML key: value)
+    body = (
+        "keep before\n"
+        "<!-- irrelevant: start -->\n"
+        "drop me\n"
+        "<!-- irrelevant: end -->\n"
+        "keep after\n"
+    )
+    out = strip_irrelevant(body)
+    assert "keep before" in out and "keep after" in out
+    assert "drop me" not in out and "irrelevant:" not in out
+
+
 def test_no_markers_is_identity():
     body = "<!-- speaker: A -->\n00:00:01 hello\nplain text\n"
     assert strip_irrelevant(body) == body

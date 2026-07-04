@@ -1447,8 +1447,10 @@ def strip_word_timestamps(text: str) -> str:
 
 
 _SPEAKER_COMMENT = re.compile(r"^\s*<!--\s*speaker:\s*(.*?)\s*-->\s*$")
-_IRRELEVANT_START = re.compile(r"^\s*<!--\s*irrelevant:start\s*-->\s*$")
-_IRRELEVANT_END = re.compile(r"^\s*<!--\s*irrelevant:end\s*-->\s*$")
+# `<!-- irrelevant: start -->` is the canonical form (space after the colon, a
+# valid YAML key:value like every other body annotation); tolerate no-space too.
+_IRRELEVANT_START = re.compile(r"^\s*<!--\s*irrelevant:\s*start\s*-->\s*$")
+_IRRELEVANT_END = re.compile(r"^\s*<!--\s*irrelevant:\s*end\s*-->\s*$")
 
 
 def strip_irrelevant(text: str) -> str:
