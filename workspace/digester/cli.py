@@ -11,6 +11,7 @@ from anomalica_common.llm import (
     estimate_batch,
     estimate_record,
     get_usage,
+    get_usage_trace,
     reset_usage,
     resolve_use_api,
     spend_confirmed,
@@ -57,6 +58,20 @@ def main() -> None:
 )
 @click.option("--model", default="sonnet", help="Claude model to use")
 @click.option(
+    "--digests-root",
+    type=click.Path(),
+    default=None,
+    help="Write into a digests repo with the variant layout (ADR 0039): a "
+    "model+prompt variant under variants/, and the canonical under records/ for "
+    "a production run. Re-digests never overwrite prior ones.",
+)
+@click.option(
+    "--variant-only",
+    is_flag=True,
+    help="With --digests-root, write only the model variant, never the canonical "
+    "(a deliberate side-run with the active prompt; benchmarks).",
+)
+@click.option(
     "--confirm",
     is_flag=True,
     help="Confirm the printed cost estimate and proceed with the metered run "
@@ -68,6 +83,8 @@ def extract_cmd(
     file_path: str,
     output: str | None,
     model: str,
+    digests_root: str | None,
+    variant_only: bool,
     confirm: bool,
 ) -> None:
     """Extract knowledge from a record into a reviewable digest YAML file."""
@@ -90,11 +107,25 @@ def extract_cmd(
     ):
         ctx.exit(2)
 
-    _do_extract(path, parsed, Path(output) if output else None, model, use_api)
+    _do_extract(
+        path,
+        parsed,
+        Path(output) if output else None,
+        model,
+        use_api,
+        Path(digests_root) if digests_root else None,
+        variant_only,
+    )
 
 
 def _do_extract(
-    path: Path, parsed, output: Path | None, model: str, use_api: bool = False
+    path: Path,
+    parsed,
+    output: Path | None,
+    model: str,
+    use_api: bool = False,
+    digests_root: Path | None = None,
+    variant_only: bool = False,
 ) -> Path:
     """Run the two-pass extraction for one parsed record and write the digest YAML.
 
@@ -154,6 +185,26 @@ def _do_extract(
             ai_usage=ai_usage,
         )
 
+        if digests_root is not None:
+            from digester import digest_store
+
+            written = digest_store.write_digest(
+                digests_root,
+                path.stem,
+                text,
+                model,
+                result.get("prompt_provenance"),
+                variant_only=variant_only,
+            )
+            click.echo(f"\nVariant: {written['variant']}")
+            if written["canonical"]:
+                click.echo(f"Canonical (latest-written): {written['canonical']}")
+            else:
+                click.echo(
+                    "Canonical: unchanged (prompt override / experimental, or --variant-only)"
+                )
+            return written["variant"]
+
         out_path = output if output else path.with_suffix(".yaml")
         out_path.write_text(text)
         click.echo(f"\nWritten to: {out_path}")
@@ -179,6 +230,7 @@ def _echo_usage() -> None:
         f"cost_equiv=${usage['cost_equiv_usd']:.4f}"
     )
     click.echo(f"USAGE_JSON: {json.dumps(usage)}")
+    click.echo(f"TRACE_JSON: {json.dumps(get_usage_trace())}")
 
 
 @main.command(name="batch-extract")
@@ -192,6 +244,19 @@ def _echo_usage() -> None:
 )
 @click.option("--model", default="sonnet", help="Claude model to use")
 @click.option(
+    "--digests-root",
+    type=click.Path(),
+    default=None,
+    help="Write into a digests repo with the variant layout (ADR 0039): "
+    "per-record model+prompt variants under variants/, canonical under records/. "
+    "Re-digests never overwrite prior ones.",
+)
+@click.option(
+    "--variant-only",
+    is_flag=True,
+    help="With --digests-root, write only variants, never the canonical.",
+)
+@click.option(
     "--confirm",
     is_flag=True,
     help="Confirm the printed aggregate cost estimate and proceed with the "
@@ -203,6 +268,8 @@ def batch_extract_cmd(
     file_paths: tuple[str, ...],
     output_dir: str | None,
     model: str,
+    digests_root: str | None,
+    variant_only: bool,
     confirm: bool,
 ) -> None:
     """Extract knowledge from many records, behind one aggregate spend gate.
@@ -229,6 +296,7 @@ def batch_extract_cmd(
     ):
         ctx.exit(2)
 
+    root = Path(digests_root) if digests_root else None
     out_dir = Path(output_dir) if output_dir else None
     if out_dir:
         out_dir.mkdir(parents=True, exist_ok=True)
@@ -236,7 +304,7 @@ def batch_extract_cmd(
     for i, (p, parsed) in enumerate(parsed_records, 1):
         click.echo(f"\n[{i}/{len(parsed_records)}] {p.name}")
         out = out_dir / p.with_suffix(".yaml").name if out_dir else None
-        _do_extract(p, parsed, out, model, use_api)
+        _do_extract(p, parsed, out, model, use_api, root, variant_only)
 
 
 # --- Coverage: review-gate visibility (which records are digestible) ---
