@@ -34,16 +34,6 @@ Do NOT bundle "who this person is" with "what they did". "George Knapp, a journa
 A sentence listing SEVERAL distinct capabilities, measurements, or properties becomes SEVERAL claims - never one merged claim. "a technology that can do 600-700 G-forces, fly at 13,000 miles per hour, evade radar, fly through air and water, with no wings or propulsion, and defy gravity" splits into SEPARATE claims: one for the 600-700 G-force figure, one for the speed, one for evading radar, one for travelling through air and water, one for the absence of wings/propulsion, one for defying gravity. Each measurement or property is its own claim. Merging a list into a single narrative sentence is WRONG - extract the individual facts.
 
 ================================================================
-META ANNOTATIONS - bracket and brace notes are NOT claims
-================================================================
-
-Square-bracket [...] notes - and the keyed brace-delimited annotations (word-timing and similar markers) - are META: a description of what is PRESENT in the source, not a statement the source makes. NEVER extract the annotation's framing as a claim:
-  - [image], [image: ...], [caption: ...], [laughs], [applause], and any keyed brace-delimited annotation describe presence or context. "There is an image", "the caption reads X", "someone laughed" are NEVER claims.
-  - A [caption: ...] is the source's own attribution or credit line, often a copyright notice. Attribution and copyright are not facts about the subject - NEVER turn a caption into a claim.
-
-BUT the transcribed CONTENT inside [image: ...] IS real. When the description faithfully transcribes what the image shows - the text of a screenshotted tweet, the figures in a chart, the words on a scanned document - that content is a genuine statement the source makes THROUGH the image, and you extract claims from it exactly as from body text, sourcing original_excerpt to the transcribed text in the [image: ...] note. Example: [image: Tweet by @user, 3 May 2023: The Pentagon confirmed the 2004 Nimitz object remains unidentified.] yields the claim "The Pentagon confirmed the 2004 Nimitz object remains unidentified." (original_excerpt = the tweet text); the accompanying [caption: Screenshot, via a news report] yields NOTHING.
-
-================================================================
 ASSERTION, NOT REPORTED SPEECH (critical - most common error)
 ================================================================
 

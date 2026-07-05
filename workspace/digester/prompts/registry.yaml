@@ -16,11 +16,15 @@
 prompts:
   nodes:
     versions:
-      v2:
+      v3:
         file: nodes.txt
+        added: '2026-07-05'
+        note: meta-vs-verbatim rule for bracket/brace annotations
+      v2:
+        file: archive/nodes-v2.txt
         added: '2026-06-29'
         commit: 84e516c7f5
-        note: active two-pass nodes prompt
+        note: two-pass nodes prompt (pre bracket meta rule)
       g249b8fd3:
         file: archive/nodes-g249b8fd3.txt
         added: '2026-06-29'
@@ -41,14 +45,18 @@ prompts:
         added: '2026-05-25'
         commit: 2788c43bbf
         note: earlier nodes v2 state
-    active: v2
+    active: v3
   claims:
     versions:
-      v2:
+      v3:
         file: claims.txt
+        added: '2026-07-05'
+        note: meta-vs-verbatim rule for bracket/brace annotations
+      v2:
+        file: archive/claims-v2.txt
         added: '2026-06-14'
         commit: d387a80ed7
-        note: active two-pass claims prompt
+        note: two-pass claims prompt (pre bracket meta rule)
       gbf739e15:
         file: archive/claims-gbf739e15.txt
         added: '2026-06-14'
@@ -59,7 +67,7 @@ prompts:
         added: '2026-05-25'
         commit: 2788c43bbf
         note: earlier claims v2 state
-    active: v2
+    active: v3
   extraction:
     versions:
       g249b8fd3:

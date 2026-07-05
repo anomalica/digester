@@ -7,10 +7,11 @@ from digester import extract, prompt_registry
 
 
 def test_active_prompts_resolve_from_files():
+    reg = prompt_registry._registry()
     for pid in ("nodes", "claims"):
         text, prov = prompt_registry.resolve_prompt(pid)
         assert prov.id == pid
-        assert prov.version == "v2"
+        assert prov.version == reg[pid]["active"]  # whatever the registry marks active
         assert prov.sha256 == hashlib.sha256(text.encode()).hexdigest()
         assert (prompt_registry.PROMPTS_DIR / prov.file).read_text() == text
 

@@ -39,12 +39,6 @@ Be exhaustive. Under-extraction is the main failure. After listing the obvious p
 A central entity that appears in many claims (the phenomenon, the principal agency, the aircraft) is exactly the kind that gets forgotten because it feels like background - emit it.
 
 ================================================================
-META ANNOTATIONS - do not mint nodes from bracket/brace framing
-================================================================
-
-Square-bracket [...] notes - and the keyed brace-delimited annotations (word-timing and similar markers) - are META: a description of what is PRESENT, not source content. NEVER create a node from the annotation's framing or from a caption: [image], [caption: ...], [laughs], and keyed brace-delimited notes are not entities, and a [caption: ...] is attribution/credit (often a copyright line), not a subject entity. BUT the transcribed CONTENT inside [image: ...] IS real: entities named in a faithfully transcribed image description (a screenshotted tweet's author or subjects, names in a chart) are extracted exactly as from body text.
-
-================================================================
 PORTABILITY - the card test
 ================================================================
 
