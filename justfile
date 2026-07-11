@@ -18,6 +18,7 @@ vault:
 
     docker run --rm \
         -v "$(pwd)/workspace:/home/nonroot/workspace" \
+        -v "$HOME/repos/anomalica/anomalica-common/src:/opt/anomalica-common:ro" \
         -v "$OUT:/home/nonroot/vault" \
         -v "$HOME/.local/share/digester:/home/nonroot/.local/share/digester" \
         --user "$(id -u):$(id -g)" \
@@ -35,6 +36,7 @@ test:
     set -euo pipefail
     docker run --rm \
         -v "$(pwd)/workspace:/home/nonroot/workspace" \
+        -v "$HOME/repos/anomalica/anomalica-common/src:/opt/anomalica-common:ro" \
         --user "$(id -u):$(id -g)" \
         -w /home/nonroot/workspace \
         {{IMAGE}} \
