@@ -60,12 +60,16 @@ while [[ $# -gt 0 ]]; do
 done
 
 echo "Building image: ${IMAGE_NAME}:${TAG} (target: ${TARGET})"
+# Build-time secrets (BuildKit). Empty unless build_secrets is configured.
+SECRET_ARGS=()
+
 ${RUNTIME} build \
 	--target "${TARGET}" \
 	--build-arg USER_NAME="${USER_NAME}" \
 	--build-arg USER_UID="${USER_UID}" \
 	--build-arg USER_GID="${USER_GID}" \
 	--build-arg WORKSPACE_NAME="${WORKSPACE_NAME}" \
+	${SECRET_ARGS[@]+"${SECRET_ARGS[@]}"} \
 	--tag "${IMAGE_NAME}:${TAG}" \
 	.
 

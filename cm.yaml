@@ -10,22 +10,10 @@ stages:
     steps:
       - pip:
           install:
-            - anthropic
-            - click
-            - fastembed
-            - levenshtein
-            - huggingface-hub
-            - pydantic
-            - sentence-transformers
-            - sqlite-vec
-      - env:
-          EMBEDDING_MODEL_PATH: /opt/models/qwen3-embedding
-          RERANKER_MODEL_PATH: /opt/models/ms-marco-minilm
-      - run:
-          - python -c "from huggingface_hub import snapshot_download; snapshot_download('electroglyph/Qwen3-Embedding-0.6B-onnx-uint8',
-            local_dir='/opt/models/qwen3-embedding')"
-          - python -c "from huggingface_hub import snapshot_download; snapshot_download('cross-encoder/ms-marco-MiniLM-L-6-v2',
-            local_dir='/opt/models/ms-marco-minilm')"
+            - anthropic==0.116.0
+            - click==8.4.2
+            - pydantic==2.13.4
+            - pyyaml==6.0.3
 
   development:
     from: base
@@ -44,7 +32,7 @@ stages:
           PYTHONPATH: /opt/anomalica-common
       - pip:
           install:
-            - pytest
+            - pytest==9.1.1
 
   production:
     from: base

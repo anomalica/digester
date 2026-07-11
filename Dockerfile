@@ -15,42 +15,37 @@ ARG USER_GID=1000 \
 ENV WORKSPACE=${USER_HOME}/${WORKSPACE_NAME}
 WORKDIR ${USER_HOME}
 # Create user account (handles renaming if UID exists with different name)
+# hadolint ignore=DL4006
 RUN if [ "${USER_NAME}" != "root" ]; then \
-        # Check if the user already exists with exact match (name + uid + gid)
-        if getent passwd "${USER_UID}" | grep -q "^${USER_NAME}:"; then \
+        EXISTING_USER=$(getent passwd "${USER_UID}" | cut -d: -f1); \
+        if [ "${EXISTING_USER}" = "${USER_NAME}" ]; then \
             echo "User ${USER_NAME} with UID ${USER_UID} already exists, skipping creation"; \
+        elif [ -n "${EXISTING_USER}" ]; then \
+            echo "Renaming user ${EXISTING_USER} to ${USER_NAME}"; \
+            usermod -l "${USER_NAME}" "${EXISTING_USER}" && \
+            usermod -d "${USER_HOME}" -m "${USER_NAME}" || true; \
         else \
-            # Check if UID exists with a different name
-            EXISTING_USER=$(getent passwd "${USER_UID}" | cut -d: -f1 || echo ""); \
-            if [ -n "${EXISTING_USER}" ] && [ "${EXISTING_USER}" != "${USER_NAME}" ]; then \
-                # Rename the existing user to our desired name
-                echo "Renaming user ${EXISTING_USER} to ${USER_NAME}"; \
-                usermod -l "${USER_NAME}" "${EXISTING_USER}" && \
-                usermod -d "${USER_HOME}" -m "${USER_NAME}" || true; \
-            else \
-                # Create new user
-                if ! getent group "${USER_GID}" >/dev/null 2>&1; then \
-                    groupadd --gid "${USER_GID}" "${USER_NAME}"; \
-                fi && \
-                useradd --uid "${USER_UID}" --gid "${USER_GID}" --home-dir "${USER_HOME}" --create-home "${USER_NAME}"; \
-            fi \
+            getent group "${USER_GID}" >/dev/null 2>&1 || \
+                groupadd --gid "${USER_GID}" "${USER_NAME}"; \
+            useradd --uid "${USER_UID}" --gid "${USER_GID}" --home-dir "${USER_HOME}" --create-home "${USER_NAME}"; \
         fi && \
-        # Ensure home directory ownership (may have been created by WORKDIR)
         chown "${USER_UID}:${USER_GID}" "${USER_HOME}"; \
     fi
-RUN test -f /opt/venv/pyvenv.cfg || python3 -m venv --system-site-packages /opt/venv
-ENV VIRTUAL_ENV=/opt/venv
-ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
+# Disable PEP 668 (externally-managed-environment): host-system protection
+# against apt/pip conflicts, not applicable inside containers where the whole
+# environment is disposable.
+RUN rm -f /usr/lib/python*/EXTERNALLY-MANAGED \
+          /usr/local/lib/python*/EXTERNALLY-MANAGED \
+          /opt/conda/lib/python*/EXTERNALLY-MANAGED
 RUN pip install --no-cache-dir \
-        anthropic \
-        click \
-        fastembed \
-        levenshtein \
-        huggingface-hub \
-        pydantic \
-        sqlite-vec
-ENV EMBEDDING_MODEL_PATH="/opt/models/qwen3-embedding"
-RUN python -c "from huggingface_hub import snapshot_download; snapshot_download('electroglyph/Qwen3-Embedding-0.6B-onnx-uint8', local_dir='/opt/models/qwen3-embedding')"
+        anthropic==0.116.0 \
+        click==8.4.2 \
+        pydantic==2.13.4 \
+        pyyaml==6.0.3
+# Pre-compile .pyc bytecode so imports don't pay the compile cost on every
+# startup; the runtime user can't write .pyc back to root-owned site-packages.
+# hadolint ignore=SC2046
+RUN python3 -m compileall -q -j 0 $(python3 -c "import site; print(' '.join(site.getsitepackages()))")
 
 ################################################################################
 # Stage: development
@@ -61,8 +56,12 @@ ARG USER_GID=1000 \
     USER_UID=1000 \
     USER_NAME=nonroot \
     USER_HOME=/home/nonroot
-RUN pip install --no-cache-dir pytest
-RUN chown -R "${USER_UID}:${USER_GID}" /opt/venv
+ENV PYTHONPATH="/opt/anomalica-common"
+RUN pip install --no-cache-dir pytest==9.1.1
+# Pre-compile .pyc bytecode so imports don't pay the compile cost on every
+# startup; the runtime user can't write .pyc back to root-owned site-packages.
+# hadolint ignore=SC2046
+RUN python3 -m compileall -q -j 0 $(python3 -c "import site; print(' '.join(site.getsitepackages()))")
 USER ${USER_NAME}
 
 ################################################################################
@@ -75,5 +74,4 @@ ARG USER_GID=1000 \
     USER_NAME=nonroot \
     USER_HOME=/home/nonroot
 COPY workspace ${WORKSPACE}
-RUN chown -R "${USER_UID}:${USER_GID}" /opt/venv
 USER ${USER_NAME}

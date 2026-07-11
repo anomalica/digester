@@ -10,6 +10,7 @@ TAG="latest"
 WORKDIR="/home/nonroot"
 WORKSPACE_NAME="workspace"
 SHELL="/bin/bash"
+_RUN_SH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Detect runtime backend
 if command -v docker >/dev/null 2>&1; then
