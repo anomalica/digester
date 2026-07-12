@@ -148,6 +148,21 @@ claims share a source, and a source split into three by careless naming makes on
 like three independent confirmations.
 
 ================================================================
+NAMES ARE SPELLED HOW THE ENTITY SPELLS THEM
+================================================================
+
+A node name is an IDENTIFIER, not prose. Spell every organisation, agency, programme, place,
+document, vessel and person EXACTLY as that entity spells its own name. Never "correct" a name
+into British English, and never into American English either.
+
+  RIGHT: "Defense Intelligence Agency (DIA)"  - a US agency; that IS its name
+  RIGHT: "Ministry of Defence"                 - a UK department; that IS its name
+  WRONG: "Defence Intelligence Agency"         - anglicising a US federal agency
+
+This matters more here than anywhere else: node names are what the knowledge graph MERGES on.
+Re-spell a name and you do not tidy it, you create a second, separate organisation.
+
+================================================================
 OUTPUT FORMAT - valid JSON only, no markdown fencing
 ================================================================
 

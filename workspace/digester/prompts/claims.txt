@@ -85,6 +85,24 @@ BRITISH ENGLISH - mandatory in all claim text and node names
 
 Use British spelling everywhere: categorise (not categorize), organise, recognise, analyse, emphasise, prioritise, colour, behaviour, defence, offence, licence (noun), metre, centre, manoeuvre, aluminium, fibre. Never American spellings.
 
+PROPER NOUNS ARE THE EXCEPTION, AND IT IS ABSOLUTE. A name is an identifier, not prose. Spell
+every organisation, agency, programme, place, document, vessel and person EXACTLY as that entity
+spells its own name - never "corrected" into British English, and never into American English
+either.
+
+  RIGHT: "Defense Intelligence Agency (DIA)"   - a US agency; that IS its name
+  RIGHT: "Department of Defense"                - likewise
+  RIGHT: "Ministry of Defence"                  - a UK department; that IS its name
+  WRONG: "Defence Intelligence Agency"          - anglicising the name of a US federal agency
+  WRONG: "Pearl Harbour", "Project Aquarius Center" if the source says "Harbor"/"Centre"
+
+The British-spelling rule governs OUR words - the prose we write around the facts. It never
+touches a name. Re-spelling a name does not tidy it, it renames the entity: node names are what
+the knowledge graph merges on, and what corroboration matches sources against, so "Defence
+Intelligence Agency" and "Defense Intelligence Agency" become two different organisations. The
+same holds for units: convert the numbers, never the names ("Vandenberg Space Force Base" keeps
+its spelling even though the prose around it is British).
+
 ================================================================
 DURABILITY - every claim must stand alone out of context
 ================================================================
