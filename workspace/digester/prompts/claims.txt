@@ -126,6 +126,15 @@ EXHAUSTIVE EXTRACTION - do not summarise
 
 Capture every factual statement, however incidental - dates, names, places, quoted figures, asides, parenthetical remarks. Coverage matters more than highlighting "important" points.
 
+SINCERE ASSERTIONS ONLY - not every sentence is a claim. "Exhaustive" means never SKIM and never curate for importance; it does NOT mean literalise everything spoken. Extract a claim only where the source SINCERELY ASSERTS a fact. The following are NOT claims even though the words appear verbatim in the source, and emitting them as fact is a serious error:
+
+  - JOKES, DEADPAN AND IRONY. A comedic aside, a self-deprecating bit, or a running gag is not biography. Podcast and interview speakers joke about themselves constantly, and deadpan delivery gives no signal that a joke is underway. If a statement would be startling as fact, is played for a laugh, sits oddly against everything else known about the person, or recurs as a running bit, treat it as a JOKE and do not extract it. Example: a host who repeatedly describes himself as "a former pro wrestler who ran for governor" is doing a bit - do NOT emit "X is a former professional wrestler who ran for governor" as an administrative claim about him.
+  - HYPOTHETICALS AND RHETORICAL QUESTIONS ("suppose it really was a craft...", "what if they have been here all along?"). The speaker is not asserting it.
+  - STATEMENTS QUOTED IN ORDER TO REJECT THEM. When a speaker cites a position to argue AGAINST it, that position is not their claim.
+  - HYPERBOLE AND FIGURES OF SPEECH ("a million times faster", "everyone in Washington knows"). Never convert these into measurements or facts.
+
+When unsure whether a statement is sincere, check whether the speaker builds on it as fact anywhere else. If it is never treated as real again, it was not a claim. Omitting a joke costs almost nothing; asserting one as fact manufactures a false fact, which is the worst failure this system can produce.
+
 OPINIONS AND INTERVIEW EXCHANGES: an opinion, assessment, or judgement - especially from an interviewee or expert - is a claim (claim_type "opinion"). When a person gives a short answer, confirmation, or reaction to a question or a stated proposition ("Pretty hard to spoof that", "Every day", "I don't see why not"), it IS a claim: resolve it into a standalone assertion and attribute it to the person who ANSWERED. Do NOT drop a conversational turn because it is brief or depends on the previous line.
 
   - The speaker is the ANSWERER, not the interviewer. A leading question that contains the fact ("Could it be Russian or Chinese technology?") does NOT make the interviewer the source - the claim and its speaker are the answerer's.
@@ -150,6 +159,41 @@ interviewer simply conveying information, framing, or context, or a bare factual
 no observer attached. Do NOT default to first_hand. A missing attestation is correct and
 expected for most narration. When a researcher or interviewee does inject a genuine first- or
 second-hand account into otherwise neutral narration, tag that claim.
+
+================================================================
+PROVENANCE - attribution is part of a claim's identity
+================================================================
+
+GRADE ATTESTATION BY THE WHOLE CHAIN, not by the last mouth it passed through. If what the
+speaker relays reached them THROUGH someone else - a forwarded email, "a friend told me his
+contact said", a source repeating what another source told them - that is "third_hand", NOT
+"second_hand", even when the speaker names their own immediate contact. Count the removes: if
+the person who originally knew the fact is not the speaker, and there is anyone in between, it
+is third_hand.
+
+ANONYMOUS AND UNNAMED SOURCES - the chain lives in the claim text or nowhere. An anonymous
+source can NEVER become a node (see the rule forbidding person nodes for unnamed or redacted
+actors), so node_references cannot carry the attribution. The claim TEXT must carry it. When an
+assertion arrives from an unnamed source, write the chain into the text:
+
+  RIGHT: "An anonymous source claiming to work inside the Defense Intelligence Agency, in an
+  email forwarded to Jon Stewart by an intermediary, said the being filmed was a cloned
+  extraterrestrial biological entity type two from the Tau Ceti star system."
+  (claim_type "hearsay", attestation "third_hand")
+
+  WRONG: "The being was a cloned extraterrestrial biological entity type two from the Tau Ceti
+  star system." (with the DIA merely listed in node_references)
+
+The WRONG form is indistinguishable from the Defense Intelligence Agency having stated it
+officially. It converts an anonymous assertion into an institutional fact. Never do this.
+
+RE-STATEMENT IS NOT REPETITION. A source frequently asserts the same proposition more than once
+- first as a bare teaser or headline, later with its full attribution. Those are DIFFERENT
+claims and you must extract BOTH. The version carrying the richer provenance is the more
+valuable one and must NEVER be dropped because a bare version was captured earlier. If you are
+about to skip an assertion because "that was already said", check whether the source has since
+revealed WHO said it, HOW it reached them, or WHICH document it came from. If any of those is
+new, extract it as a separate claim with the fuller attribution.
 
 ================================================================
 OUTPUT FORMAT - valid JSON only, no markdown fencing

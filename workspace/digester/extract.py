@@ -834,6 +834,23 @@ def _format_exclude_list(claims: list[ExtractedClaim]) -> str:
     return "\n".join(f"{i + 1}. {c.content}" for i, c in enumerate(claims))
 
 
+def _claim_key_v2(c: dict) -> tuple[str, str, str, str]:
+    """Identity of a claim: the proposition PLUS the provenance it was asserted with.
+
+    Content alone is NOT identity, and the two-pass claims dedup is global across
+    chunks, so a content-only key is actively destructive: a proposition teased
+    early (bare, unattributed) suppresses the same proposition where the source
+    later names who told them and how it reached them. The attributed instance is
+    the one worth keeping, so the key must see the provenance.
+    """
+    return (
+        (c.get("content") or "").strip().lower(),
+        c.get("claim_type") or "",
+        c.get("attestation") or "",
+        (c.get("speaker") or "").strip().lower(),
+    )
+
+
 def _iterate_chunk(
     chunk_text: str,
     base_prompt: str,
@@ -1377,7 +1394,11 @@ def extract_claims_v2(
 
     chunks = _build_chunks(text)
     merged_claims: list[dict] = []
-    seen_content: set[str] = set()
+    # Keyed on the proposition AND its provenance, and global across chunks. A
+    # content-only key silently dropped the LATER of two assertions of the same
+    # proposition - and the later one is usually the one that finally names its
+    # source. See _claim_key_v2.
+    seen_content: set[tuple[str, str, str, str]] = set()
 
     for ci, chunk in enumerate(chunks):
         if on_progress and len(chunks) > 1:
@@ -1393,12 +1414,25 @@ def extract_claims_v2(
             )
             if chunk_claims:
                 exclude = "\n".join(
-                    f"{i + 1}. {c['content']}" for i, c in enumerate(chunk_claims)
+                    f"{i + 1}. {c['content']}  [type={c.get('claim_type') or '-'}"
+                    f"; speaker={c.get('speaker') or '-'}"
+                    f"; attestation={c.get('attestation') or '-'}]"
+                    for i, c in enumerate(chunk_claims)
                 )
                 prompt += (
-                    "\n\nALREADY EXTRACTED CLAIMS - do NOT repeat any of these:\n"
+                    "\n\nALREADY EXTRACTED CLAIMS - each shown with the provenance it was "
+                    "captured under. Do NOT repeat any of these:\n"
                     + exclude
-                    + "\n\nExtract ADDITIONAL factual claims from this chunk that are not in the list above. "
+                    + "\n\nPROVENANCE EXCEPTION - this overrides the no-repeat rule. A claim is "
+                    "a repeat only when the proposition AND its provenance match a line above. "
+                    "The same proposition asserted under DIFFERENT provenance is a SEPARATE "
+                    "claim and you MUST extract it - specifically when the source now names an "
+                    "originating source, an intermediary, or a document it did not name before, "
+                    "or when the evidential standing differs (a bare assertion earlier, the same "
+                    "assertion now attributed to someone). Never suppress an attributed "
+                    "assertion because an unattributed version was captured earlier - the "
+                    "attribution is the point."
+                    "\n\nExtract ADDITIONAL factual claims from this chunk that are not in the list above. "
                     "If only trivial or redundant claims would remain, return an empty claims array "
                     "and set extraction_complete=true."
                 )
@@ -1408,7 +1442,7 @@ def extract_claims_v2(
 
             new_in_round = 0
             for c in result.get("claims", []):
-                key = c["content"].strip().lower()
+                key = _claim_key_v2(c)
                 if key in seen_content:
                     continue
                 seen_content.add(key)
