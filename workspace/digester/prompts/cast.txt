@@ -1,0 +1,173 @@
+You are extracting the COMPLETE NODE DIRECTORY for a knowledge graph from a single document chunk.
+
+Your ONLY job in this call is to identify every distinct named entity in the chunk and return ONE canonical record per real-world thing. Claims are a separate pass.
+
+================================================================
+NODE TYPES (eight - choose one per node)
+================================================================
+
+- "person": a named human individual. Format "Last, First Middle". No titles/ranks/honourifics. Pseudonyms and single-name historical figures stay as-is. Do NOT create person nodes for redacted/anonymous actors ("USS Louisville Officer (redacted)") - attribute to the relevant organisation instead.
+
+- "organisation": a named acting BODY - government agencies, military units, companies, research institutes, publications, news outlets, committees, standing offices, foundations. Distinguished from project: an organisation is the BODY; a project is the WORK it runs.
+
+- "project": a NAMED time-bounded or initiative-bounded effort - programmes, investigations, operations, research projects, official inquiries. AATIP, Project Apollo, Project Blue Book, AAWSAP, the Condon Committee inquiry, the AARO Historical Record review, the Manhattan Project, OXCART, Stargate. The US Air Force is an organisation; Project Blue Book is a project the Air Force ran.
+
+- "place": a named geographic location. Format "Country, Region, Specific" largest-unit-first. "USA, Nevada, Area 51", "USA, California, San Diego". Do NOT extract countries/states/regions/operating-areas on their own. The node name is the place ITSELF - never append a locational qualifier like "(vicinity)", "(offshore)", "(restricted airspace)" or "(area)"; that nuance belongs in the claim text, not the node name.
+
+- "event": a discrete or bounded-in-time occurrence. Has at least a start year. Can span hours, days, months, years - use metadata.date_start (required) and optionally metadata.date_end. The Nimitz UAP encounter 2004-11-10 to 2004-11-16 is ONE event.
+
+- "object": a specific named PHYSICAL thing - craft, vessel, named vehicle or aircraft TYPE, sample, device, named building, recovered material. Must pass the touch test. A named aircraft/vehicle model is an object ("F/A-18", "USS Nimitz", "USS Princeton"). Phenomena, effects, video footage all FAIL the touch test.
+
+- "document": a written or recorded artefact - book, report, paper, FOIA release, video footage, podcast episode, article, memo, testimony, affidavit, patent application.
+
+- "topic": a RECOGNISED named idea, theory, framework, or phenomenon that exists independent of this document (general relativity, the Pais Effect, anti-gravity propulsion, zero-point energy, vacuum polarisation). NOT a specific named alleged craft (TR-3B is NOT a topic - it is an alleged craft, classify as object or document). NOT generic touchable nouns (gravity, plasma). NOT mechanisms lifted from patent jargon. NOT vague catch-alls. NOT ad-hoc theories named only within this document.
+
+NOTE: there is no "matter", "concept", or "pattern" type for extraction in this pass. Things that previously would have been matters now classify as event (bounded time), organisation (standing body), project (named effort), or topic (recognised idea). Cross-case patterns are curator-created, not extractor-emitted.
+
+================================================================
+COMPLETENESS - sweep every type, do not stop at the obvious
+================================================================
+
+Be exhaustive. Under-extraction is the main failure. After listing the obvious people and programmes, deliberately sweep for the easily-missed:
+
+  - TOPICS: the central recognised phenomenon/idea IS a node. In a UAP document, emit "Unidentified Aerial Phenomena (UAP)" and "anomalous aerial vehicle (AAV)" as topic nodes even though they pervade the text. Other recognised ideas (a named theory, effect, propulsion concept) are topics too.
+  - ORGANISATIONS: include military branches ("United States Navy"), legislative bodies and their committees ("United States Congress", "US Senate Select Committee on Intelligence"), standing offices ("Office of the Director of National Intelligence (ODNI)"), schools/academies ("Top Gun Naval Flight School"), and news outlets - not just the headline agency.
+  - OBJECTS: named aircraft/vehicle/vessel types and models ("F/A-18", "USS Nimitz", "USS Princeton").
+  - EVENTS: the named incident(s) the document is about ("2004 USS Nimitz UAP encounter").
+  - PLACES: every named populated place or installation (Country-first), but not bare countries/regions.
+
+A central entity that appears in many claims (the phenomenon, the principal agency, the aircraft) is exactly the kind that gets forgotten because it feels like background - emit it.
+
+================================================================
+META ANNOTATIONS - do not mint nodes from bracket/brace framing
+================================================================
+
+Square-bracket [...] notes - and the keyed brace-delimited annotations (word-timing and similar markers) - are META: a description of what is PRESENT, not source content. NEVER create a node from the annotation's framing or from a caption: [image], [caption: ...], [laughs], and keyed brace-delimited notes are not entities, and a [caption: ...] is attribution/credit (often a copyright line), not a subject entity. BUT the transcribed CONTENT inside [image: ...] IS real: entities named in a faithfully transcribed image description (a screenshotted tweet's author or subjects, names in a chart) are extracted exactly as from body text.
+
+================================================================
+PORTABILITY - the card test
+================================================================
+
+Every node name must be identifiable on its own, out of context. "the testimony", "the hearing", "the report" all FAIL - include enough specificity (date, parties, subject) that the name stands alone.
+
+================================================================
+ACRONYM EXPANSION in node names
+================================================================
+
+Write acronyms as "Full Name (ACRONYM)":
+  - AATIP -> "Advanced Aerospace Threat Identification Program (AATIP)"
+  - AARO -> "All-Domain Anomaly Resolution Office (AARO)"
+  - DIA -> "Defense Intelligence Agency (DIA)"
+  - VFA-41 -> "Strike Fighter Squadron 41 (VFA-41)"
+  - CSG-11 -> "Carrier Strike Group 11 (CSG-11)"
+  - NAVAIR -> "Naval Air Systems Command (NAVAIR)"
+  - LIGO -> "Laser Interferometer Gravitational-Wave Observatory (LIGO)"
+
+Expand EVERY acronym that has a full name - agencies and phenomena included: Central Intelligence Agency (CIA), Federal Bureau of Investigation (FBI), National Security Agency (NSA), National Aeronautics and Space Administration (NASA), Department of Defense (DoD), Federal Aviation Administration (FAA), North Atlantic Treaty Organization (NATO), United Nations (UN), Unidentified Flying Object (UFO), Unidentified Aerial Phenomena (UAP), European Union (EU), Global Positioning System (GPS). Leave an acronym bare ONLY when it has no meaningful full name or the abbreviation is itself the standard form: US, USA, UK, TV, CPU, GPU, USB, URL, API.
+
+================================================================
+DEDUPLICATION - mandatory
+================================================================
+
+Each real-world entity appears as ONE node only. Before emitting, check for these duplicate variants and merge:
+
+  (a) Acronym suffix present vs absent: "Defense Intelligence Agency" + "Defense Intelligence Agency (DIA)" - emit ONCE with acronym.
+  (b) Country prefix variants: "Navy" + "US Navy" + "United States Navy" - emit ONCE.
+  (c) DoD variants: "DoD" + "Department of Defense" + "United States Department of Defense" + "Department of Defense (DoD)" - emit ONCE.
+  (d) US/UK spelling: "Naval Air Warfare Center" + "Naval Air Warfare Centre" - emit ONCE.
+  (e) Long-form vs short-form: "House Oversight Subcommittee" + "the subcommittee" - emit ONCE with the long portable form.
+  (f) Descriptor parentheses: "Project Unity" + "Project Unity (podcast)" - emit ONCE.
+
+If a candidate appears in the EXISTING NODE DIRECTORY below (from prior chunks), use the EXACT name from the directory - do NOT create a variant.
+
+================================================================
+ALSO RETURN with the nodes list
+================================================================
+
+  - main_subject: the canonical NAME of the one node from your list (or the existing directory) that is this document's principal subject. Used by downstream claim extraction to anchor claims. If this is a chunk of a larger document, the main subject is the same across all chunks; just emit it.
+
+  - codenames_to_resolve: callsigns and military codenames (FASTEAGLE 01, Tic Tac, Fast Walker) that should NEVER become person/object nodes. For each, name the real entity it refers to.
+
+  - acronyms: every domain-specific acronym, with its expansion. Helps the claims pass expand on first use.
+
+================================================================
+SOURCES - who the assertions in this document ultimately come from
+================================================================
+
+Alongside the nodes, enumerate every SOURCE the document leans on: every party whose
+assertions the record carries. This is a CAST LIST for the whole record - build it once, and the
+claims pass will reference these by id rather than re-describing them.
+
+Give each an id of the form SRC1, SRC2, SRC3... . These are OUR internal labels, nothing to do
+with any name in the document - note this record itself talks about a facility called "S4", so
+never reuse a name from the record as an id. SRC1 is ALWAYS the speaker/author of the document itself.
+
+  "sources": [
+    {{
+      "id": "SRC1",
+      "origin_kind": "speaker",
+      "origin": "Jon Stewart",
+      "relay": []
+    }},
+    {{
+      "id": "SRC2",
+      "origin_kind": "anonymous",
+      "origin": "a person claiming to work inside the Defense Intelligence Agency",
+      "relay": ["an email", "an intermediary known to the speaker"]
+    }},
+    {{
+      "id": "SRC3",
+      "origin_kind": "named",
+      "origin": "Whitley Strieber",
+      "relay": ["a 2014 conference talk"]
+    }}
+  ]
+
+origin_kind:
+  - "speaker"      - the document's own speaker/author, asserting from their own knowledge.
+  - "named"        - an identifiable person, organisation, or document. It must ALSO be a node.
+  - "anonymous"    - an unnamed or unidentifiable source. It CANNOT be a node, so this list is
+                     the ONLY place it survives. Describe the CLAIMED identity without granting
+                     it: "a person claiming to work inside the Defense Intelligence Agency" -
+                     NEVER "the Defense Intelligence Agency". A claimed affiliation is not an
+                     affiliation, and naming the institution converts an anonymous assertion into
+                     an institutional one.
+  - "document"     - a document or record the speaker reads from or cites.
+  - "unattributed" - assertions the document makes with no attribution offered at all.
+
+relay: the ordered path from that origin to the speaker ([] when the speaker IS the origin).
+Its length is the number of removes, and it is what attestation is derived from - so a claim
+reaching the speaker via an intermediary is THIRD-hand, not second-hand, however confidently the
+speaker names the person who passed it on.
+
+ONE ENTRY PER REAL SOURCE. Two distinct anonymous whistleblowers are TWO entries. The same
+anonymous source referred to in three different ways is ONE entry - you are reading the whole
+record at once, so you can see that they are the same person. Getting this right is the entire
+point of resolving sources here rather than per-claim: corroboration is decided by whether two
+claims share a source, and a source split into three by careless naming makes one rumour look
+like three independent confirmations.
+
+================================================================
+OUTPUT FORMAT - valid JSON only, no markdown fencing
+================================================================
+
+{{
+  "main_subject": "canonical name",
+  "nodes": [
+    {{
+      "name": "canonical portable name",
+      "node_type": "person|organisation|project|place|event|object|document|topic",
+      "metadata": {{"date_start": "...", "date_end": "..." (events only, optional)}}
+    }}
+  ],
+  "sources": [
+    {{"id": "SRC1", "origin_kind": "speaker", "origin": "...", "relay": []}}
+  ],
+  "codenames_to_resolve": [{{"codename": "X", "refers_to": "canonical name"}}],
+  "acronyms": [{{"acronym": "AAV", "expansion": "Anomalous Aerial Vehicle"}}],
+  "extraction_complete": true
+}}
+
+You are reading the ENTIRE record, not a fragment. Name each entity ONCE - if you have already
+named the film, use that same name every time it appears; do not invent a second name for it
+later on. Set extraction_complete=true when you have nothing further to add.

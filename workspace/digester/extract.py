@@ -23,6 +23,7 @@ from anomalica_common.digest import (
     OriginKind,
 )
 from anomalica_common.llm import (
+    call_with_document,
     DEFAULT_MODEL,
     _call,
     _call_api,
@@ -1327,6 +1328,329 @@ def prompt_provenance() -> list[dict]:
         {"pass": "nodes", **nodes.as_dict()},
         {"pass": "claims", **claims.as_dict()},
     ]
+
+
+# ---------------------------------------------------------------------------
+# THE CAST PASS (ADR 0044 rebuild)
+#
+# One call over the WHOLE record - nodes AND sources together. Records were only
+# ever cut into pieces because a single response cannot emit 400 claims; the
+# INPUT always fitted (median record 12k tokens, the longest transcript 53k,
+# against a 200k window). Cutting the nodes pass up is what caused entity
+# fragmentation: the model named the film in piece 1, met it again in piece 3,
+# and - reasoning locally, unable to see it was the same thing - named it
+# differently. A model that has read every mention cannot do that.
+#
+# The same applies to sources, and more sharply: corroboration is decided by
+# whether two claims share a source, so one anonymous source split in two by
+# careless naming turns one rumour into two independent confirmations.
+# ---------------------------------------------------------------------------
+
+CAST_SCHEMA = {
+    "type": "object",
+    "required": ["main_subject", "nodes", "sources", "extraction_complete"],
+    "properties": {
+        "main_subject": {"type": "string"},
+        "nodes": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["name", "node_type"],
+                "properties": {
+                    "name": {"type": "string"},
+                    "node_type": {"type": "string", "enum": sorted(VALID_NODE_TYPES)},
+                    "metadata": {"type": "object"},
+                },
+            },
+        },
+        "sources": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["id", "origin_kind", "origin", "relay"],
+                "properties": {
+                    "id": {"type": "string"},
+                    "origin_kind": {
+                        "type": "string",
+                        "enum": list(VALID_ORIGIN_KINDS),
+                    },
+                    "origin": {"type": "string"},
+                    "relay": {"type": "array", "items": {"type": "string"}},
+                },
+            },
+        },
+        "codenames_to_resolve": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "codename": {"type": "string"},
+                    "refers_to": {"type": "string"},
+                },
+            },
+        },
+        "acronyms": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "acronym": {"type": "string"},
+                    "expansion": {"type": "string"},
+                },
+            },
+        },
+        "extraction_complete": {"type": "boolean"},
+    },
+}
+
+
+def _cast_prompt_template() -> str:
+    return prompt_registry.prompt_text("cast", "DIGESTER_CAST_PROMPT_FILE")
+
+
+def extract_cast(
+    text: str,
+    model: str = DEFAULT_MODEL,
+    record_context: str = "",
+    on_progress=None,
+    use_api: bool = False,
+) -> dict:
+    """Resolve the whole record's cast in ONE call: nodes + sources.
+
+    The document sits in a cached prefix; only the (small) task tail varies
+    between iterations, so re-asking for more costs the tail plus the output,
+    never the record again.
+    """
+    preamble = record_context + _cast_prompt_template()
+    nodes: dict[str, dict] = {}
+    sources: dict[str, dict] = {}
+    main_subject = ""
+    codenames: dict[str, str] = {}
+    acronyms: dict[str, str] = {}
+
+    for it in range(ITERATION_MAX):
+        task = "Emit the cast for this record: main_subject, nodes, sources."
+        if nodes:
+            task += (
+                "\n\nALREADY CAPTURED - do NOT repeat these, and REUSE these exact"
+                " names for anything you mention again:\n"
+                + "\n".join(f"  - {n}" for n in sorted(nodes))
+                + "\n\nSOURCES so far:\n"
+                + "\n".join(
+                    f"  - {sid}: {sv.get('origin')}"
+                    for sid, sv in sorted(sources.items())
+                )
+                + "\n\nAdd only what is MISSING. If nothing is missing, return empty"
+                " arrays and set extraction_complete=true."
+            )
+
+        raw = call_with_document(
+            preamble, text, task, model, schema=CAST_SCHEMA, use_api=use_api
+        )
+        result = json.loads(raw) if isinstance(raw, str) else raw
+
+        new_nodes = 0
+        for n in result.get("nodes", []) or []:
+            name = (n.get("name") or "").strip()
+            if name and name not in nodes:
+                nodes[name] = n
+                new_nodes += 1
+        new_sources = 0
+        for sv in result.get("sources", []) or []:
+            sid = (sv.get("id") or "").strip()
+            if sid and sid not in sources:
+                sources[sid] = sv
+                new_sources += 1
+        if not main_subject:
+            main_subject = result.get("main_subject") or ""
+        for c in result.get("codenames_to_resolve", []) or []:
+            if c.get("codename"):
+                codenames.setdefault(c["codename"], c.get("refers_to", ""))
+        for a in result.get("acronyms", []) or []:
+            if a.get("acronym"):
+                acronyms.setdefault(a["acronym"], a.get("expansion", ""))
+
+        if on_progress:
+            done = " [model: complete]" if result.get("extraction_complete") else ""
+            on_progress(
+                f"    cast iter {it + 1}: +{new_nodes} nodes, +{new_sources} sources "
+                f"(total {len(nodes)} nodes, {len(sources)} sources){done}"
+            )
+
+        if result.get("extraction_complete"):
+            break
+        if new_nodes == 0 and new_sources == 0:
+            break
+
+    return {
+        "main_subject": main_subject,
+        "nodes": list(nodes.values()),
+        "sources": [sources[k] for k in sorted(sources)],
+        "codenames_to_resolve": [
+            {"codename": k, "refers_to": v} for k, v in codenames.items()
+        ],
+        "acronyms": [{"acronym": k, "expansion": v} for k, v in acronyms.items()],
+    }
+
+
+def expand_source_ids(claims: list[dict], sources: list[dict]) -> int:
+    """Deterministic post-process: source_id -> the full provenance_chain.
+
+    No model. The chain was described ONCE, in the cast, so every claim citing a
+    source gets byte-identical provenance - which is what stops one source
+    fragmenting into several and inflating corroboration.
+    """
+    by_id = {s.get("id"): s for s in (sources or [])}
+    resolved = 0
+    for c in claims:
+        src = by_id.get(c.get("source_id"))
+        if not src:
+            continue
+        c["provenance_chain"] = {
+            "origin_kind": src.get("origin_kind"),
+            "origin": src.get("origin"),
+            "relay": src.get("relay") or [],
+        }
+        resolved += 1
+    return resolved
+
+
+def build_claims_schema_v3(node_names: list[str], source_ids: list[str]) -> dict:
+    """Claims schema for the rebuilt pipeline.
+
+    A claim cites its source by ID - one short token - instead of re-describing
+    the whole chain. Emitting a full chain object per claim made the model write
+    the SAME chain twelve times for twelve claims from one email, which roughly
+    doubled the claims output and is what pushed haiku past the call timeout,
+    twice. It also let the model word the same source differently on different
+    claims, fragmenting one source into several - and corroboration keys on that.
+    """
+    schema = build_claims_schema_v2(node_names)
+    item = schema["properties"]["claims"]["items"]
+    item["properties"].pop("provenance_chain", None)
+    item["required"] = [r for r in item["required"] if r != "provenance_chain"]
+    item["properties"]["source_id"] = (
+        {"type": "string", "enum": source_ids} if source_ids else {"type": "string"}
+    )
+    item["required"].append("source_id")
+    return schema
+
+
+def extract_claims_v3(
+    text: str,
+    cast: dict,
+    model: str = DEFAULT_MODEL,
+    record_context: str = "",
+    on_progress=None,
+    use_api: bool = False,
+) -> list[dict]:
+    """Claims over the WHOLE record, held in a cached prefix.
+
+    The document never moves. Coverage comes from varying the TASK TAIL - the
+    cheap, uncached part - walking the model through the record, rather than from
+    re-sending slices of it. Re-sending slices is what destroyed the cache: every
+    piece is a new prefix, so it paid the 1.25x write and never earned the 0.1x
+    read (measured: 390k written against 139k read).
+    """
+    nodes = cast.get("nodes", [])
+    node_names = [n["name"] for n in nodes]
+    sources = cast.get("sources", [])
+    source_ids = [s["id"] for s in sources]
+    schema = build_claims_schema_v3(node_names, source_ids)
+
+    source_block = (
+        "SOURCES - cite exactly one of these by id on every claim:\n"
+        + "\n".join(
+            f"  {s['id']}: {s.get('origin_kind')} - {s.get('origin')}"
+            + (f"  (via {' -> '.join(s.get('relay') or [])})" if s.get("relay") else "")
+            for s in sources
+        )
+    )
+    preamble = record_context + _claims_prompt_template().format(
+        directory=_format_directory_v2(nodes),
+        main_subject=cast.get("main_subject", ""),
+        codenames_block="",
+        acronyms_block="",
+    )
+
+    claims: list[dict] = []
+    seen: set = set()
+    for it in range(ITERATION_MAX):
+        task = source_block + "\n\nExtract factual claims from the document above."
+        if claims:
+            task += (
+                "\n\nALREADY EXTRACTED - do not repeat these:\n"
+                + "\n".join(
+                    f"{i + 1}. {c['content']}  [source={c.get('source_id')}]"
+                    for i, c in enumerate(claims)
+                )
+                + "\n\nExtract ADDITIONAL claims not in the list above, working"
+                " through the parts of the record you have not covered yet. If none"
+                " remain, return an empty array and set extraction_complete=true."
+            )
+
+        raw = call_with_document(
+            preamble, text, task, model, schema=schema, use_api=use_api
+        )
+        result = json.loads(raw) if isinstance(raw, str) else raw
+
+        new = 0
+        for c in result.get("claims", []) or []:
+            key = (
+                (c.get("content") or "").strip().lower(),
+                c.get("claim_type") or "",
+                c.get("source_id") or "",
+            )
+            if key in seen:
+                continue
+            seen.add(key)
+            claims.append(c)
+            new += 1
+
+        if on_progress:
+            done = " [model: complete]" if result.get("extraction_complete") else ""
+            on_progress(f"    claims iter {it + 1}: +{new} (total {len(claims)}){done}")
+        if result.get("extraction_complete"):
+            break
+        if new < ITERATION_MIN_NEW:
+            break
+
+    expand_source_ids(claims, sources)
+    return claims
+
+
+def extract_v3(
+    text: str,
+    model: str = DEFAULT_MODEL,
+    record_context: str = "",
+    on_progress=None,
+    use_api: bool = False,
+) -> dict:
+    """The rebuilt pipeline: cast (whole record) -> claims (by source id) -> expand."""
+    log = on_progress or (lambda _: None)
+    log("Pass 1: the cast (whole record, one cached prefix)")
+    cast = extract_cast(
+        text,
+        model=model,
+        record_context=record_context,
+        on_progress=log,
+        use_api=use_api,
+    )
+    log(
+        f"  {len(cast['nodes'])} nodes, {len(cast['sources'])} sources, "
+        f"main_subject={cast.get('main_subject')!r}"
+    )
+    log("Pass 2: claims (same cached document, citing sources by id)")
+    claims = extract_claims_v3(
+        text,
+        cast,
+        model=model,
+        record_context=record_context,
+        on_progress=log,
+        use_api=use_api,
+    )
+    log(f"  {len(claims)} claims")
+    return {"cast": cast, "claims": claims, "nodes": cast["nodes"]}
 
 
 def extract_nodes_v2(

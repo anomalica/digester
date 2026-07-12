@@ -1,18 +1,3 @@
-# Versioned extraction prompts.
-#
-# The active version's `file` (relative to this directory) is the source of
-# truth for each prompt id. Historical versions under archive/ let past digests
-# be attributed to the prompt that produced them (by sha256, or by extracted_at
-# date against `added` for digests predating prompt-provenance stamping).
-# sha256 is computed from file content at load time - no stored hash to drift.
-#
-# A DIGESTER_NODES_PROMPT_FILE / DIGESTER_CLAIMS_PROMPT_FILE env override still
-# works for per-run/per-model experiments; recorded in the digest as version
-# "override" with the file's own hash, never silently.
-#
-# `extraction`/`infrastructure`/`terminology` are retired single-pass prompts
-# (active: null) kept only for attributing pre-two-pass digests.
-
 prompts:
   nodes:
     versions:
@@ -152,3 +137,9 @@ prompts:
         commit: 1b22ca6993
         note: retired pre-V2 terminology prompt
     active: null
+  cast:
+    active: v1
+    versions:
+      v1:
+        file: cast.txt
+        added: '2026-07-12'
