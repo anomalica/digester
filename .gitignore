@@ -9,3 +9,6 @@ __pycache__/
 # grading) - served to the workbench from local disk, never committed to this public repo.
 predigests/
 grading/
+
+# Local trial/benchmark extractions - generated, must not ship in the image
+workspace/trial-*/

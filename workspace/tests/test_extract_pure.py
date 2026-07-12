@@ -9,10 +9,74 @@ from digester.extract import (
     CHUNK_MAX_CHARS,
     _build_chunks,
     _chunk_text,
+    _claim_key_v2,
     _format_directory_v2,
     _parse_response,
     build_claims_schema_v2,
 )
+
+
+# --- _claim_key_v2: provenance is part of a claim's identity ---
+#
+# The two-pass claims dedup is global across chunks. Keyed on content alone it
+# silently dropped the LATER assertion of a proposition - which is usually the
+# one that finally names its source. Regression case: the Jon Stewart record
+# teases "a type two clone from the Tau Ceti star system" in the cold open with
+# no provenance, then repeats it 100 minutes later as the content of an email
+# from an anonymous DIA source forwarded via an intermediary. The attributed
+# instance is the one worth keeping, and content-only dedup threw it away.
+
+_TAU_CETI = "the being was a cloned ebe type two from the tau ceti star system"
+
+
+def _claim(content, claim_type, attestation, speaker="Stewart, Jon"):
+    return {
+        "content": content,
+        "claim_type": claim_type,
+        "attestation": attestation,
+        "speaker": speaker,
+    }
+
+
+def test_claim_key_distinguishes_same_proposition_under_different_provenance():
+    cold_open = _claim(_TAU_CETI, "testimony", "second_hand")
+    from_source = _claim(_TAU_CETI, "hearsay", "third_hand")
+
+    assert _claim_key_v2(cold_open) != _claim_key_v2(from_source)
+
+
+def test_claim_key_still_collapses_a_genuine_duplicate():
+    first = _claim(_TAU_CETI, "testimony", "second_hand")
+    verbatim_repeat = _claim(_TAU_CETI.upper(), "testimony", "second_hand")
+
+    assert _claim_key_v2(first) == _claim_key_v2(verbatim_repeat)
+
+
+def test_attributed_instance_survives_dedup_against_the_bare_one():
+    """The bug: the bare cold-open teaser suppressed the sourced re-statement."""
+    seen: set = set()
+    kept = []
+    for claim in (
+        _claim(_TAU_CETI, "testimony", "second_hand"),  # cold open, chunk 1
+        _claim(_TAU_CETI, "hearsay", "third_hand"),  # DIA email, chunk 3
+        _claim(_TAU_CETI.upper(), "testimony", "second_hand"),  # true duplicate
+    ):
+        key = _claim_key_v2(claim)
+        if key in seen:
+            continue
+        seen.add(key)
+        kept.append(claim)
+
+    assert len(kept) == 2
+    assert kept[1]["claim_type"] == "hearsay"
+    assert kept[1]["attestation"] == "third_hand"
+
+
+def test_claim_key_treats_a_missing_attestation_as_its_own_frame():
+    hedged = _claim(_TAU_CETI, "hearsay", "third_hand")
+    unhedged = _claim(_TAU_CETI, "hearsay", None)
+
+    assert _claim_key_v2(hedged) != _claim_key_v2(unhedged)
 
 
 # --- _parse_response: sanitises model JSON into the data model ---
