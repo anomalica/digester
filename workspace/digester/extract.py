@@ -812,7 +812,7 @@ def _split_at_chapters(text: str) -> list[str] | None:
     return parts
 
 
-def _build_chunks(text: str) -> list[str]:
+def _build_chunks(text: str, max_chars: int = CHUNK_MAX_CHARS) -> list[str]:
     """Top-level chunker.
 
     1. If the document has `## ` headings sized like real chapters, use them.
@@ -821,14 +821,26 @@ def _build_chunks(text: str) -> list[str]:
     """
     chapters = _split_at_chapters(text)
     if chapters is None:
-        return _chunk_text(text)
+        return _chunk_text(text, max_chars=max_chars)
     final: list[str] = []
+    hard_max = min(CHUNK_HARD_MAX, max(max_chars, CHUNK_MIN_CHARS))
     for ch in chapters:
-        if len(ch) > CHUNK_HARD_MAX:
-            final.extend(_chunk_text(ch, max_chars=CHUNK_HARD_MAX, min_chars=50_000))
+        if len(ch) > hard_max:
+            final.extend(
+                _chunk_text(ch, max_chars=hard_max, min_chars=min(50_000, hard_max))
+            )
         else:
             final.append(ch)
     return final
+
+
+# The claims pass emits FAR more per chunk than the nodes pass: one object per
+# claim, each now carrying a provenance chain (ADR 0044), so a 50k-char chunk asks
+# for ~90 claims and tens of thousands of output tokens in a single call. Haiku
+# could not finish one inside the 900s CLI timeout and the whole run died after the
+# nodes pass had already been paid for. Chunk the claims pass smaller: same total
+# work, bounded output per call.
+CLAIMS_CHUNK_MAX_CHARS = 20_000
 
 
 def _format_exclude_list(claims: list[ExtractedClaim]) -> str:
@@ -1210,6 +1222,12 @@ def build_claims_schema_v2(node_names: list[str]) -> dict:
                         "category",
                         "claim_type",
                         "provenance_chain",
+                        # Whether the text names who asserted it. DECLARED by the
+                        # model that wrote the text - never derived downstream from
+                        # origin_kind/attestation, which are only proxies for a
+                        # property of the sentence and will eventually disagree
+                        # with it (ADR 0044).
+                        "attribution_in_text",
                     ],
                     "properties": {
                         "content": {"type": "string"},
@@ -1239,6 +1257,7 @@ def build_claims_schema_v2(node_names: list[str]) -> dict:
                                 },
                             },
                         },
+                        "attribution_in_text": {"type": "boolean"},
                         "attestation": {
                             "type": "string",
                             "enum": list(VALID_ATTESTATION),
@@ -1424,7 +1443,7 @@ def extract_claims_v2(
     schema = build_claims_schema_v2(node_names)
     directory = _format_directory_v2(nodes)
 
-    chunks = _build_chunks(text)
+    chunks = _build_chunks(text, max_chars=CLAIMS_CHUNK_MAX_CHARS)
     merged_claims: list[dict] = []
     # Keyed on the proposition AND its provenance, and global across chunks. A
     # content-only key silently dropped the LATER of two assertions of the same

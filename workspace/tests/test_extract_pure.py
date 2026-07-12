@@ -309,9 +309,16 @@ def test_schema_without_names_has_no_enum():
 
 def test_schema_requires_core_claim_fields():
     req = build_claims_schema_v2(["X"])["properties"]["claims"]["items"]["required"]
-    # provenance_chain joined the core set in ADR 0044: a claim may not be emitted
-    # without stating where the assertion came from.
-    assert set(req) == {"content", "category", "claim_type", "provenance_chain"}
+    # ADR 0044 added two to the core set: a claim may not be emitted without
+    # stating where the assertion came from, nor without declaring whether its own
+    # text names who asserted it.
+    assert set(req) == {
+        "content",
+        "category",
+        "claim_type",
+        "provenance_chain",
+        "attribution_in_text",
+    }
 
 
 # --- v2 word-timestamp stripping (record/2 bodies are ~65% timing tokens) ---
