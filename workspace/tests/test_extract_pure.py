@@ -6,9 +6,11 @@ import json
 
 from anomalica_common.digest import (
     AttestationLevel,
+    AttributionMode,
     ExtractedClaim,
     OriginKind,
     ProvenanceChain,
+    attribution_mode,
 )
 from anomalica_common.pre_digest import strip_word_timestamps
 from digester.extract import (
@@ -139,6 +141,77 @@ def test_a_digest_written_before_0044_still_parses():
     legacy = ExtractedClaim(content="x", claim_type="testimony")
 
     assert legacy.provenance_chain is None
+
+
+# --- attribution_mode: one rule, computed once, failing CLOSED (ADR 0044) ---
+#
+# This drifted to fail-open twice in one session because it lived in prose in
+# three repos. It now lives in one function, and these tests are the contract.
+
+
+def _mode(**kw):
+    base = dict(
+        claim_type="testimony",
+        attestation=None,
+        origin_kind="speaker",
+        attribution_in_text=False,
+        has_chain=True,
+    )
+    base.update(kw)
+    return attribution_mode(**base)
+
+
+def test_a_claim_with_no_chain_is_never_assertable():
+    """Every pre-0044 claim. Absence of a danger signal is not evidence of safety."""
+    assert _mode(has_chain=False) is AttributionMode.unknown
+
+
+def test_a_bare_anonymous_assertion_can_never_reach_bare_ok():
+    """The Tau Ceti hole, re-entered through the declared flag.
+
+    The model was required to inline the attribution and declared that it did
+    not. Neither branch is safe: asserting it publishes a rumour as fact, and
+    rendering it "as written" emits the same bare rumour. Fail closed.
+    """
+    slipped = _mode(
+        origin_kind="anonymous", attestation="third_hand", attribution_in_text=False
+    )
+
+    assert slipped is AttributionMode.unknown
+
+
+def test_hearsay_declared_bare_also_fails_closed():
+    assert _mode(claim_type="hearsay", attribution_in_text=False) is (
+        AttributionMode.unknown
+    )
+
+
+def test_the_declared_flag_leads_when_the_model_does_its_job():
+    honoured = _mode(
+        origin_kind="anonymous", attestation="third_hand", attribution_in_text=True
+    )
+
+    assert honoured is AttributionMode.in_text
+
+
+def test_plain_narration_still_renders_as_a_bare_fact():
+    """`unattributed` is a POSITIVE signal - the source offers no attribution.
+
+    Quite different from us not knowing. Otherwise "the Nimitz incident occurred
+    in 2004" gets hedged into absurdity, which is its own dishonesty.
+    """
+    assert _mode(origin_kind="unattributed", attribution_in_text=False) is (
+        AttributionMode.bare_ok
+    )
+
+
+def test_must_carry_is_a_veto_and_never_manufactures_in_text():
+    """It can only ever downgrade a declared false - never upgrade a declared true."""
+    not_load_bearing = _mode(
+        claim_type="observation", origin_kind="speaker", attribution_in_text=False
+    )
+
+    assert not_load_bearing is AttributionMode.bare_ok
 
 
 # --- _parse_response: sanitises model JSON into the data model ---
