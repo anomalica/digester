@@ -161,8 +161,51 @@ expected for most narration. When a researcher or interviewee does inject a genu
 second-hand account into otherwise neutral narration, tag that claim.
 
 ================================================================
-PROVENANCE - attribution is part of a claim's identity
+PROVENANCE_CHAIN - REQUIRED on every claim
 ================================================================
+
+Every claim MUST carry `provenance_chain`. You cannot emit a claim without answering: who
+ORIGINALLY asserted this, and how did it reach the speaker?
+
+  "provenance_chain": {{
+    "origin_kind": "speaker|named|anonymous|document|unattributed",
+    "origin": "short identification of who first asserted it",
+    "origin_ref": "stable handle for a recurring ANONYMOUS actor in THIS record; else \\"\\"",
+    "relay": ["ordered steps from origin to speaker; [] when the speaker IS the origin"]
+  }}
+
+origin_kind:
+  - "speaker"      - the speaker observed it, did it, or holds it themselves. relay: []
+  - "named"        - an identifiable person/organisation. It IS a node: also list it in node_references.
+  - "anonymous"    - an unnamed or unidentifiable source. It CANNOT be a node, so this field
+                     is the ONLY place it survives. Describe the CLAIMED identity without
+                     granting it: "a person claiming to work inside the Defense Intelligence
+                     Agency" - never "the Defense Intelligence Agency".
+  - "document"     - a document or record the speaker reads from or cites.
+  - "unattributed" - asserted with no attribution offered (ordinary narration).
+
+CANONICAL PHRASING FOR AN ANONYMOUS ORIGIN - this string is matched across records to detect
+when two claims trace back to the SAME source, so phrase it consistently: "a person claiming to
+<role or affiliation>". NEVER name the institution as the origin - a CLAIMED affiliation is not
+an affiliation, and writing "the Defense Intelligence Agency" converts an anonymous assertion
+into an institutional one.
+
+origin_ref - when the record gives a recurring unnamed actor a handle ("the chairman", "my
+source"), put a stable slug for that actor here, the same slug on every claim from them. This
+is what lets two DIFFERENT anonymous sources in one record be told apart. It identifies them
+only WITHIN this record - never assume this record's "the chairman" is another record's source.
+Leave it "" for non-anonymous origins.
+
+Worked example - the speaker reads out an email that an intermediary forwarded to him, which
+came from an anonymous source claiming to be inside the DIA, whom the record calls "the
+chairman":
+
+  "provenance_chain": {{
+    "origin_kind": "anonymous",
+    "origin": "a person claiming to work inside the Defense Intelligence Agency",
+    "origin_ref": "the-chairman",
+    "relay": ["an email", "an intermediary known to the speaker"]
+  }}
 
 GRADE ATTESTATION BY THE WHOLE CHAIN, not by the last mouth it passed through. If what the
 speaker relays reached them THROUGH someone else - a forwarded email, "a friend told me his
@@ -170,6 +213,38 @@ contact said", a source repeating what another source told them - that is "third
 "second_hand", even when the speaker names their own immediate contact. Count the removes: if
 the person who originally knew the fact is not the speaker, and there is anyone in between, it
 is third_hand.
+
+WHY THIS MATTERS AND IS NOT BOOKKEEPING: corroboration is decided by whether two claims share a
+chain ROOT. Ten repetitions of one anonymous email are ONE source, not ten. If you drop the
+chain, repetition of a single rumour is counted as independent confirmation of it.
+
+================================================================
+WHEN THE ATTRIBUTION IS LOAD-BEARING, IT GOES IN THE CLAIM TEXT
+================================================================
+
+The rule above - state the bare fact, keep the speaker in the speaker field - holds ONLY when
+the speaker is a CONDUIT for something that stands up regardless of who relayed it ("The Nimitz
+incident occurred in 2004").
+
+It REVERSES when the claim rests on the assertion itself. If origin_kind is "anonymous", OR
+claim_type is "hearsay" or "opinion", OR the attestation is second- or third-hand, then the
+attribution MUST appear INSIDE the claim text:
+
+  RIGHT: "An anonymous source claiming to work inside the Defense Intelligence Agency, in an
+  email forwarded to Jon Stewart by an intermediary, said the filmed entity was a cloned
+  extraterrestrial biological entity type two from the Tau Ceti star system."
+
+  WRONG: "The being was a cloned extraterrestrial biological entity type two from the Tau Ceti
+  star system."
+
+The WRONG form is not a tidier version of the RIGHT one - it says something different, and
+something false. "The entity came from Tau Ceti" is not a fact about the world and is not what
+the source establishes. The fact is THAT AN ANONYMOUS PERSON ASSERTED IT. Strip the attribution
+and a true statement about an assertion becomes a false statement about reality. The text is
+what gets published; write it so it is still honest when read entirely on its own.
+
+For an opinion, the holder is the subject: "Jon Stewart considers the green-blip account
+consistent with a government PSYOP" - never "the green-blip account is a government PSYOP".
 
 ANONYMOUS AND UNNAMED SOURCES - the chain lives in the claim text or nowhere. An anonymous
 source can NEVER become a node (see the rule forbidding person nodes for unnamed or redacted

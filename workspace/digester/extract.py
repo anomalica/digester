@@ -1228,6 +1228,11 @@ def build_claims_schema_v2(node_names: list[str]) -> dict:
                                     "enum": list(VALID_ORIGIN_KINDS),
                                 },
                                 "origin": {"type": "string"},
+                                # Record-scoped handle for a recurring anonymous
+                                # actor - lets corroboration split two distinct
+                                # whistleblowers inside one record. Never a
+                                # cross-record identity.
+                                "origin_ref": {"type": "string"},
                                 "relay": {
                                     "type": "array",
                                     "items": {"type": "string"},
