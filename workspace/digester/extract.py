@@ -20,6 +20,7 @@ from anomalica_common.digest import (
     ExtractedClaim,
     ExtractedNode,
     NodeType,
+    OriginKind,
 )
 from anomalica_common.llm import (
     DEFAULT_MODEL,
@@ -296,6 +297,7 @@ VALID_NODE_TYPES = {
 }
 VALID_CLAIM_TYPES = {t.value for t in ClaimType}
 VALID_ATTESTATION = {t.value for t in AttestationLevel}
+VALID_ORIGIN_KINDS = sorted(k.value for k in OriginKind)
 
 
 def _extraction_schema(node_types: list[str]) -> dict:
@@ -1198,7 +1200,17 @@ def build_claims_schema_v2(node_names: list[str]) -> dict:
                 "type": "array",
                 "items": {
                     "type": "object",
-                    "required": ["content", "category", "claim_type"],
+                    # provenance_chain is REQUIRED: this is the forcing function
+                    # (ADR 0044). Extraction runs under --json-schema, so a required
+                    # field cannot be skipped - the model must answer "where did this
+                    # come from?" at the moment it emits the claim. As an optional
+                    # field it was simply never filled in.
+                    "required": [
+                        "content",
+                        "category",
+                        "claim_type",
+                        "provenance_chain",
+                    ],
                     "properties": {
                         "content": {"type": "string"},
                         "original_excerpt": {"type": "string"},
@@ -1206,6 +1218,21 @@ def build_claims_schema_v2(node_names: list[str]) -> dict:
                         "claim_type": {
                             "type": "string",
                             "enum": list(VALID_CLAIM_TYPES),
+                        },
+                        "provenance_chain": {
+                            "type": "object",
+                            "required": ["origin_kind", "origin", "relay"],
+                            "properties": {
+                                "origin_kind": {
+                                    "type": "string",
+                                    "enum": list(VALID_ORIGIN_KINDS),
+                                },
+                                "origin": {"type": "string"},
+                                "relay": {
+                                    "type": "array",
+                                    "items": {"type": "string"},
+                                },
+                            },
                         },
                         "attestation": {
                             "type": "string",

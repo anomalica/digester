@@ -4,6 +4,12 @@ breakable parts between the model and the data model."""
 
 import json
 
+from anomalica_common.digest import (
+    AttestationLevel,
+    ExtractedClaim,
+    OriginKind,
+    ProvenanceChain,
+)
 from anomalica_common.pre_digest import strip_word_timestamps
 from digester.extract import (
     CHUNK_MAX_CHARS,
@@ -77,6 +83,62 @@ def test_claim_key_treats_a_missing_attestation_as_its_own_frame():
     unhedged = _claim(_TAU_CETI, "hearsay", None)
 
     assert _claim_key_v2(hedged) != _claim_key_v2(unhedged)
+
+
+# --- provenance_chain: required by the schema, attestation derived from it (ADR 0044) ---
+
+
+def test_claims_schema_requires_a_provenance_chain():
+    """The forcing function. Optional fields get skipped; required ones cannot be.
+
+    Extraction runs under --json-schema, so this is what physically stops a claim
+    being emitted without answering where the assertion came from.
+    """
+    item = build_claims_schema_v2(["Tau Ceti star system"])["properties"]["claims"][
+        "items"
+    ]
+
+    assert "provenance_chain" in item["required"]
+    chain = item["properties"]["provenance_chain"]
+    assert set(chain["required"]) == {"origin_kind", "origin", "relay"}
+    assert set(chain["properties"]["origin_kind"]["enum"]) == {
+        "speaker",
+        "named",
+        "anonymous",
+        "document",
+        "unattributed",
+    }
+
+
+def test_attestation_is_derived_from_chain_depth_not_the_models_word():
+    """The Tau Ceti chain is four removes; the model graded it second_hand."""
+    chain = ProvenanceChain(
+        origin_kind=OriginKind.anonymous,
+        origin="a person claiming to work inside the Defense Intelligence Agency",
+        relay=["an email", "an intermediary known to the speaker"],
+    )
+
+    assert chain.attestation() is AttestationLevel.third_hand
+
+
+def test_attestation_derivation_across_the_chain_kinds():
+    speaker_own = ProvenanceChain(origin_kind=OriginKind.speaker, relay=[])
+    one_remove = ProvenanceChain(
+        origin_kind=OriginKind.named, origin="Fravor, David", relay=["told the speaker"]
+    )
+    narration = ProvenanceChain(origin_kind=OriginKind.unattributed)
+
+    assert speaker_own.attestation() is AttestationLevel.first_hand
+    assert one_remove.attestation() is AttestationLevel.second_hand
+    # No evidential stance to record - not a default of first_hand.
+    assert narration.attestation() is None
+
+
+def test_a_digest_written_before_0044_still_parses():
+    """Absence of a chain means 'not captured', never 'no chain' - it must not crash."""
+    legacy = ExtractedClaim(content="x", claim_type="testimony")
+
+    assert legacy.provenance_chain is None
 
 
 # --- _parse_response: sanitises model JSON into the data model ---
@@ -174,7 +236,9 @@ def test_schema_without_names_has_no_enum():
 
 def test_schema_requires_core_claim_fields():
     req = build_claims_schema_v2(["X"])["properties"]["claims"]["items"]["required"]
-    assert set(req) == {"content", "category", "claim_type"}
+    # provenance_chain joined the core set in ADR 0044: a claim may not be emitted
+    # without stating where the assertion came from.
+    assert set(req) == {"content", "category", "claim_type", "provenance_chain"}
 
 
 # --- v2 word-timestamp stripping (record/2 bodies are ~65% timing tokens) ---
