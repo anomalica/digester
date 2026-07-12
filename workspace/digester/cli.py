@@ -345,6 +345,64 @@ def batch_extract_cmd(
         _do_extract(p, parsed, out, model, use_api, root, variant_only, pd_root)
 
 
+# --- Normalise locations: put every variant on one canonical time axis ---
+
+
+@main.command(name="normalise-locations")
+@click.argument("digest_path", type=click.Path(exists=True))
+@click.option(
+    "--record",
+    "record_path",
+    required=True,
+    type=click.Path(exists=True),
+    help="The source record the digest was extracted from (supplies word timing)",
+)
+@click.option(
+    "--output",
+    "-o",
+    type=click.Path(),
+    default=None,
+    help="Write here instead of rewriting the digest in place",
+)
+def normalise_locations_cmd(
+    digest_path: str, record_path: str, output: str | None
+) -> None:
+    """Rewrite every claim's location to a canonical HH:MM:SS.d range.
+
+    Deterministic post-process, no model call and no spend: each claim's quote is
+    verbatim, so its span is recovered by aligning it to the record's word stream.
+    Variants extracted by different models otherwise write locations on whatever
+    axis each chose - bare seconds, timecodes, even source line numbers - and
+    cannot be clustered against one another.
+    """
+    import yaml
+
+    from digester.realign import normalise_claim_locations, words_from_record2
+
+    digest = yaml.safe_load(Path(digest_path).read_text())
+    parsed = parse_record(Path(record_path).read_text())
+    words, times = words_from_record2(parsed.body)
+    if not words:
+        raise click.ClickException(
+            "No word timing in the record - normalisation needs a record/2 body "
+            "with inline {{t:}} tokens."
+        )
+
+    claims = (digest.get("domain_claims") or []) + (
+        digest.get("infrastructure_claims") or []
+    )
+    stats = normalise_claim_locations(claims, words, times)
+
+    out = Path(output) if output else Path(digest_path)
+    out.write_text(yaml.safe_dump(digest, sort_keys=False, allow_unicode=True))
+
+    click.echo(
+        f"Aligned {stats['aligned']}/{stats['total']} claims "
+        f"({stats['unaligned']} unalignable, {stats['ambiguous']} ambiguous)"
+    )
+    click.echo(f"Written to: {out}")
+
+
 # --- Coverage: review-gate visibility (which records are digestible) ---
 
 

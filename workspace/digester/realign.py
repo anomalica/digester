@@ -184,3 +184,43 @@ def align_quote(
         resolution=resolution,
         ambiguous=ambiguous,
     )
+
+
+def seconds_to_timecode(seconds: float) -> str:
+    """Seconds to the canonical HH:MM:SS.d timecode."""
+    tenths = int(round(max(seconds, 0.0) * 10))
+    whole, d = divmod(tenths, 10)
+    h, rem = divmod(whole, 3600)
+    m, s = divmod(rem, 60)
+    return f"{h:02d}:{m:02d}:{s:02d}.{d}"
+
+
+def normalise_claim_locations(
+    claims: list[dict], words: list[str], times: list[float]
+) -> dict:
+    """Rewrite every claim's `location` to a canonical HH:MM:SS.d range.
+
+    A model left to write `location` itself produces whatever axis it feels like
+    per chunk - bare seconds, timecodes, even source LINE numbers - so the same
+    passage lands on different axes in different variants and the two cannot be
+    clustered against each other. The quote, however, is verbatim, so the timing
+    is recoverable deterministically: align the quote to the word stream and take
+    the span. No model, no spend, and the answer is the same every run.
+
+    A claim whose quote will not align (paraphrased, or not verbatim-present)
+    keeps its original location and is counted as unaligned - fabricating a span
+    would be worse than admitting we do not have one.
+    """
+    stats = {"aligned": 0, "unaligned": 0, "ambiguous": 0, "total": len(claims)}
+    for claim in claims:
+        result = align_quote(claim.get("quote") or "", words, times, "word")
+        if result is None:
+            stats["unaligned"] += 1
+            continue
+        claim["location"] = (
+            f"{seconds_to_timecode(result.start)}-{seconds_to_timecode(result.end)}"
+        )
+        stats["aligned"] += 1
+        if result.ambiguous:
+            stats["ambiguous"] += 1
+    return stats
