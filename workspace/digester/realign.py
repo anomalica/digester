@@ -224,3 +224,54 @@ def normalise_claim_locations(
         if result.ambiguous:
             stats["ambiguous"] += 1
     return stats
+
+
+def words_from_text(body: str) -> tuple[list[str], list[float]]:
+    """(words, per-word CHARACTER OFFSET) from any untimed body.
+
+    align_quote's second array is just "a number per word" - for a transcript
+    those numbers are seconds, and nothing in the scoring cares. Feed it
+    character offsets and it returns character offsets, so one aligner
+    canonicalises location for timed and untimed records alike.
+
+    This exists because a model asked to describe WHERE a claim came from
+    invents its own notation, and two models never invent the same one. On real
+    output: haiku wrote "11" where sonnet wrote "line 11"; haiku wrote
+    "file_page: 1" where sonnet wrote "file_page 1, printed_page 5" - the same
+    line and the same page, sharing not one location string. Anything grouping
+    claims by that string sees two models that never once agree, which is not a
+    disagreement about the record, it is a disagreement about formatting.
+    """
+    words: list[str] = []
+    offsets: list[float] = []
+    for m in _WORD.finditer((body or "").lower()):
+        words.append(m.group())
+        offsets.append(float(m.start()))
+    return words, offsets
+
+
+def offsets_to_span(start: float, end: float) -> str:
+    """The canonical untimed location: a character span in the pre-digest."""
+    return f"char:{int(start)}-{int(end)}"
+
+
+def normalise_untimed_locations(claims: list[dict], body: str) -> dict:
+    """Rewrite every claim's location to a canonical char span, from its quote.
+
+    Same contract as normalise_claim_locations for timed records, and the same
+    reason: the quote is verbatim, so its position is recoverable deterministically
+    and identically for every model. A claim whose quote will not align keeps its
+    original location rather than getting a fabricated one.
+    """
+    words, offsets = words_from_text(body)
+    stats = {"aligned": 0, "unaligned": 0, "ambiguous": 0, "total": len(claims)}
+    for claim in claims:
+        r = align_quote(claim.get("quote") or "", words, offsets, "char")
+        if r is None:
+            stats["unaligned"] += 1
+            continue
+        claim["location"] = offsets_to_span(r.start, r.end)
+        stats["aligned"] += 1
+        if r.ambiguous:
+            stats["ambiguous"] += 1
+    return stats
