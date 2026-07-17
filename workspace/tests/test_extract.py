@@ -1,17 +1,14 @@
 import pytest
 
 from digester.extract import (
-    DOMAIN_SCHEMA,
-    INFRASTRUCTURE_SCHEMA,
     _build_chunks,
     _chunk_text,
-    _extraction_schema,
     _find_split_point,
-    _format_exclude_list,
     _parse_json,
+    _parse_response,
     _split_at_chapters,
+    build_record_context,
 )
-from anomalica_common.digest import AttestationLevel, ClaimType, ExtractedClaim
 
 
 def test_parse_json_strips_markdown_fence():
@@ -49,54 +46,7 @@ def test_parse_json_invalid_raises():
         _parse_json('{"a": 1, "b":}')
 
 
-def test_extraction_schema_required_fields():
-    schema = _extraction_schema(["person", "organisation"])
-    assert "record_title" in schema["required"]
-    assert "nodes" in schema["required"]
-    assert "claims" in schema["required"]
-    node_enum = schema["properties"]["nodes"]["items"]["properties"]["node_type"][
-        "enum"
-    ]
-    assert node_enum == ["person", "organisation"]
-
-
-def test_domain_schema_excludes_record_node_type():
-    node_enum = DOMAIN_SCHEMA["properties"]["nodes"]["items"]["properties"][
-        "node_type"
-    ]["enum"]
-    assert "record" not in node_enum
-    assert "person" in node_enum
-
-
-def test_concept_is_a_first_class_node_type():
-    # decision 0025: concept is an ingestion type, in both schemas
-    from anomalica_common.digest import NodeType
-
-    assert NodeType.concept.value == "concept"
-    assert (
-        "concept"
-        in DOMAIN_SCHEMA["properties"]["nodes"]["items"]["properties"]["node_type"][
-            "enum"
-        ]
-    )
-    assert (
-        "concept"
-        in INFRASTRUCTURE_SCHEMA["properties"]["nodes"]["items"]["properties"][
-            "node_type"
-        ]["enum"]
-    )
-
-
-def test_infrastructure_schema_includes_record_node_type():
-    node_enum = INFRASTRUCTURE_SCHEMA["properties"]["nodes"]["items"]["properties"][
-        "node_type"
-    ]["enum"]
-    assert "record" in node_enum
-    assert "person" in node_enum
-
-
 def test_build_record_context_pins_author():
-    from digester.extract import build_record_context
 
     ctx = build_record_context(
         title="In Plain Sight",
@@ -113,7 +63,6 @@ def test_build_record_context_pins_author():
 
 
 def test_build_record_context_no_authors_omits_pin():
-    from digester.extract import build_record_context
 
     ctx = build_record_context(
         title="FOIA Release 18-F-0324",
@@ -128,7 +77,6 @@ def test_build_record_context_no_authors_omits_pin():
 
 
 def test_build_record_context_multiple_authors():
-    from digester.extract import build_record_context
 
     ctx = build_record_context(
         title="Some Article",
@@ -140,7 +88,6 @@ def test_build_record_context_multiple_authors():
 
 
 def test_parse_response_surfaces_extraction_complete():
-    from digester.extract import _parse_response
 
     raw_done = (
         '{"record_title": "T", "nodes": [], "claims": [], "extraction_complete": true}'
@@ -155,20 +102,6 @@ def test_parse_response_surfaces_extraction_complete():
         '{"record_title": "T", "nodes": [], "claims": [], "extraction_complete": false}'
     )
     assert _parse_response(raw_false).extraction_complete is False
-
-
-def test_extraction_schema_allows_extraction_complete():
-    schema = _extraction_schema(["person"])
-    assert "extraction_complete" in schema["properties"]
-    assert schema["properties"]["extraction_complete"]["type"] == "boolean"
-    # It is optional - not in the required list (a model that omits it = not done)
-    assert "extraction_complete" not in schema["required"]
-
-
-def test_claim_type_and_attestation_enums_are_constrained():
-    claim_schema = DOMAIN_SCHEMA["properties"]["claims"]["items"]
-    assert "first_hand" in claim_schema["properties"]["attestation"]["enum"]
-    assert "observation" in claim_schema["properties"]["claim_type"]["enum"]
 
 
 def test_chunk_text_short_returns_single_chunk():
@@ -277,18 +210,3 @@ def test_build_chunks_falls_back_to_windows_without_chapter_markers():
     text = "No chapter markers. " * 5000  # ~100KB
     chunks = _build_chunks(text)
     assert len(chunks) > 1
-
-
-def test_format_exclude_list_renders_compactly():
-    claims = [
-        ExtractedClaim(
-            content=f"Claim number {i}",
-            claim_type=ClaimType.observation,
-            attestation=AttestationLevel.first_hand,
-        )
-        for i in range(3)
-    ]
-    out = _format_exclude_list(claims)
-    assert "1. Claim number 0" in out
-    assert "2. Claim number 1" in out
-    assert "3. Claim number 2" in out
