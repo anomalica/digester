@@ -10,6 +10,11 @@ set -u
 INGESTS_DIR=/home/mark/repos/anomalica/ingests
 DIGESTS_DIR=/home/mark/repos/anomalica/digests
 WORKSPACE_DIR=/home/mark/repos/anomalica/digester/workspace
+# The image sets PYTHONPATH=/opt/anomalica-common but mounts nothing there (that
+# mount is a container-magic dev-runtime volume, applied by `cm run`, not by a
+# bare `docker run`). So the extraction container must mount the shared library
+# itself or every import of anomalica_common fails.
+COMMON_DIR=/home/mark/repos/anomalica/anomalica-common/src
 
 cd "$WORKSPACE_DIR"
 
@@ -45,6 +50,7 @@ extract_with_retry() {
 			-v "$WORKSPACE_DIR:/home/nonroot/workspace" \
 			-v "$INGESTS_DIR:/home/nonroot/ingests:ro" \
 			-v "$DIGESTS_DIR:/home/nonroot/digests" \
+			-v "$COMMON_DIR:/opt/anomalica-common:ro" \
 			-v /home/mark/.local/share/digester:/home/nonroot/.local/share/digester \
 			-v /home/mark/.local/bin/claude:/usr/local/bin/claude:ro \
 			-v /home/mark/.claude:/home/nonroot/.claude \
@@ -109,6 +115,11 @@ ok=0
 
 for ingest in "${files[@]}"; do
 	name=$(basename "$ingest" .md)
+	# A record and its versioned re-ingest are ONE record: strip the .vN
+	# ingest-revision marker so foo.v2.md writes foo.yaml, not foo.v2.yaml.
+	# This --output path bypasses digest_store (which de-versions its own paths),
+	# so the strip has to happen here too or canonicals fragment the same way.
+	name=$(printf '%s' "$name" | sed -E 's/\.v[0-9]+$//')
 	output_host="$DIGESTS_DIR/records/${name}.yaml"
 	output_container="/home/nonroot/digests/records/${name}.yaml"
 	ingest_container="/home/nonroot/ingests/records/${name}.md"
@@ -136,44 +147,14 @@ if [ ${#failed[@]} -gt 0 ]; then
 	printf '  %s\n' "${failed[@]}"
 fi
 
-# Load the new YAMLs into the database.
-#   - Default (full re-ingest): drop-and-rebuild the DB from the whole
-#     digests/records corpus.
-#   - Scoped (RECORD_LIST set): INCREMENTAL import of only the just-processed
-#     records, so we add the PURSUE nodes to the existing graph WITHOUT
-#     wiping the existing UAP-disclosure corpus.
+# The graph half (import into the DB, rebuild, stats) is NOT the digester's job
+# any more - it moved to the assimilator when extraction and assimilation split
+# (ADR 0034), and `digester.cli import/rebuild/stats` no longer exist. This
+# script's job ends at writing per-record digests under digests/records/. To
+# build the graph from them, run the assimilator:
+#     python -m assimilator.cli rebuild <digests-root>
 echo
-if [ -n "${RECORD_LIST:-}" ]; then
-	echo "scoped run: incrementally importing ${#files[@]} record(s) (no DB rebuild)..."
-	for ingest in "${files[@]}"; do
-		name=$(basename "$ingest" .md)
-		yaml_container="/home/nonroot/digests/records/${name}.yaml"
-		[ -f "$DIGESTS_DIR/records/${name}.yaml" ] || continue
-		docker run --rm \
-			-v "$WORKSPACE_DIR:/home/nonroot/workspace" \
-			-v "$DIGESTS_DIR:/home/nonroot/digests" \
-			-v /home/mark/.local/share/digester:/home/nonroot/.local/share/digester \
-			--user "$(id -u):$(id -g)" \
-			-e HOME=/home/nonroot \
-			-w /home/nonroot/workspace \
-			anomalica-digester:development \
-			python -m digester.cli import "$yaml_container" 2>&1 | tail -3
-	done
-	docker run --rm \
-		-v "$WORKSPACE_DIR:/home/nonroot/workspace" \
-		-v /home/mark/.local/share/digester:/home/nonroot/.local/share/digester \
-		--user "$(id -u):$(id -g)" -e HOME=/home/nonroot -w /home/nonroot/workspace \
-		anomalica-digester:development \
-		python -m digester.cli stats
-else
-	echo "full re-ingest: rebuilding database from the whole YAML corpus..."
-	docker run --rm \
-		-v "$WORKSPACE_DIR:/home/nonroot/workspace" \
-		-v "$DIGESTS_DIR:/home/nonroot/digests" \
-		-v /home/mark/.local/share/digester:/home/nonroot/.local/share/digester \
-		--user "$(id -u):$(id -g)" \
-		-e HOME=/home/nonroot \
-		-w /home/nonroot/workspace \
-		anomalica-digester:development \
-		bash -c 'python -m digester.cli rebuild /home/nonroot/digests/records 2>&1 | tail -4 && python -m digester.cli stats'
-fi
+echo "Digests written. Graph build is the assimilator's job now:"
+echo "    (in the assimilator) python -m assimilator.cli rebuild $DIGESTS_DIR/records"
+
+exit $([ ${#failed[@]} -eq 0 ] && echo 0 || echo 1)
