@@ -1,0 +1,65 @@
+{
+  "schema": "anomalica/eval-gold/provisional/1",
+  "record_content_hash": "sha256:ed66b8e09c6c608649e68c7cfc3ccb63fdc9673bddb9f205347356065df35a8d",
+  "record": "2026-07-11-audio-nasa-uap-d003a-gemini-7-audio-excerpt-1965",
+  "provisional": true,
+  "drafted_by": "model-draft (digester tuning session)",
+  "note": "PROVISIONAL model-drafted highlight gold, pending human adjudication. May SCREEN hypotheses in the fast loop only; keep/discard decisions must cite human-signed gold (ADR 0042).",
+  "spans": [
+    {
+      "text": "at the start of the second revolution, we had a reference to several objects that the crew spotted.",
+      "why": "Gemini Control: crew spotted several objects at the start of the second revolution",
+      "locates": true
+    },
+    {
+      "text": "This was in the area of Antigua.",
+      "why": "location of the earlier sighting",
+      "locates": true
+    },
+    {
+      "text": "It contains references to sighting not only some particles, but as well as an unidentified object, plus the booster.",
+      "why": "Gemini Control frames the three distinct things sighted: particles, an unidentified object, the booster",
+      "locates": true
+    },
+    {
+      "text": "We have a bogey at 10 o'clock high.",
+      "why": "Borman's core report - a bogey at 10 o'clock high",
+      "locates": true
+    },
+    {
+      "text": "We have several, looks like debris up here, actual sighting.",
+      "why": "Borman confirms an actual sighting, describes it as debris",
+      "locates": true
+    },
+    {
+      "text": "We also have the booster in sight.",
+      "why": "Borman distinguishes the booster from the bogey - both in sight",
+      "locates": true
+    },
+    {
+      "text": "it looks like hundreds of little particles going by from the left out about three to four miles.",
+      "why": "Borman: hundreds of particles, three to four miles off",
+      "locates": true
+    },
+    {
+      "text": "Looks like a perhaps a vehicle that's disintegrated.",
+      "why": "Borman characterises the large object as a disintegrated vehicle",
+      "locates": true
+    },
+    {
+      "text": "It's ahead of us at 2 o'clock, slowly tumbling.",
+      "why": "Lovell: the object is ahead at 2 o'clock, slowly tumbling",
+      "locates": true
+    },
+    {
+      "text": "This is the unidentified object in addition to particles which appear to be headed in a polar orbit",
+      "why": "Gemini Control summary: the unidentified object plus particles apparently in a polar orbit",
+      "locates": true
+    },
+    {
+      "text": "It was Borman who reported sighting the bogey.",
+      "why": "Gemini Control attributes the bogey sighting to Borman",
+      "locates": true
+    }
+  ]
+}

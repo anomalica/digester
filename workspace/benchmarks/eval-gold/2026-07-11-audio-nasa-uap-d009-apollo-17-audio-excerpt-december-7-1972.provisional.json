@@ -1,0 +1,85 @@
+{
+  "schema": "anomalica/eval-gold/provisional/1",
+  "record_content_hash": "sha256:5d0f5e1ee03fcb55f104ee30fcaa0677b3b839d495457e745f01a6aa28547357",
+  "record": "2026-07-11-audio-nasa-uap-d009-apollo-17-audio-excerpt-december-7-1972",
+  "provisional": true,
+  "drafted_by": "model-draft (digester tuning session)",
+  "note": "PROVISIONAL model-drafted highlight gold, pending human adjudication. May SCREEN hypotheses in the fast loop only; keep/discard decisions must cite human-signed gold (ADR 0042).",
+  "spans": [
+    {
+      "text": "A few very bright particles or fragments or something that go drifting by as we maneuver.",
+      "why": "crew's initial report of bright drifting particles",
+      "locates": true
+    },
+    {
+      "text": "There's a whole bunch of big ones on my window there.",
+      "why": "larger particles at another window",
+      "locates": true
+    },
+    {
+      "text": "Looks like the 4th of July out Ron's window.",
+      "why": "vivid characterisation of the scene",
+      "locates": true
+    },
+    {
+      "text": "They're very jagged, angular, fragmented or tumbling.",
+      "why": "key shape description: jagged, angular, fragmented, tumbling",
+      "locates": true
+    },
+    {
+      "text": "They look like pieces or something.",
+      "why": "crew rejects Ground's 'fluid' reading - they are pieces",
+      "locates": true
+    },
+    {
+      "text": "these fragments are not, are tumbling at a very slow rate.",
+      "why": "fragments tumbling slowly",
+      "locates": true
+    },
+    {
+      "text": "I got the impression maybe they were curved a little bit, as if they might be off the side of the S-4B.",
+      "why": "crew hypothesis: the fragments may have come off the S-IVB stage",
+      "locates": true
+    },
+    {
+      "text": "Ice chunk, possibly.",
+      "why": "candidate explanation: ice",
+      "locates": true
+    },
+    {
+      "text": "Maybe there's paint coming off of it.",
+      "why": "candidate explanation: paint",
+      "locates": true
+    },
+    {
+      "text": "one of the flags, I thought it was in the S-2, but it might be on the S-4.",
+      "why": "Ground control's peeling-flag hypothesis for the fragments",
+      "locates": true
+    },
+    {
+      "text": "with the maneuver complete, the fragment field is essentially static, except for very slight tumbling within the fragment.",
+      "why": "the fragment field is static after the S-IVB maneuver",
+      "locates": true
+    },
+    {
+      "text": "Every once in a while a fragment of considerably higher velocity than the others goes across my window, but that's very rare.",
+      "why": "a rare higher-velocity fragment",
+      "locates": true
+    },
+    {
+      "text": "there's no apparent relative motion between fragments.",
+      "why": "no relative motion between fragments",
+      "locates": true
+    },
+    {
+      "text": "they are flat, flake-like particles, some maybe six inches across",
+      "why": "Cernan: flat, flake-like particles about six inches across",
+      "locates": true
+    },
+    {
+      "text": "most of them seem to be twinkling, and I think for the most part they're all moving away from us",
+      "why": "Cernan: the particles twinkle and move away from the spacecraft",
+      "locates": true
+    }
+  ]
+}
