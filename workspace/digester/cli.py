@@ -128,6 +128,40 @@ def extract_cmd(
     )
 
 
+def _normalise_locations(parsed, claims: list, echo=lambda _: None) -> None:
+    """Rewrite claim locations to a canonical span, timed or not.
+
+    Timed records (word timestamps present) resolve to HH:MM:SS.d ranges; every
+    other record resolves to a char span in the pre-digest. Both come from the
+    same aligner - its per-word array is just "a number per word", and nothing in
+    the scoring cares whether those numbers are seconds or offsets.
+
+    A claim whose quote will not align keeps whatever the model wrote. That is
+    deliberate: an unalignable quote means the claim is not verbatim-present, and
+    a fabricated span would be worse than an honest one we cannot canonicalise.
+    """
+    from anomalica_common.pre_digest import materialise
+    from digester.realign import (
+        normalise_claim_locations,
+        normalise_untimed_locations,
+        words_from_record2,
+    )
+
+    if not claims:
+        return
+    words, times = words_from_record2(parsed.body)
+    if words:
+        stats = normalise_claim_locations(claims, words, times)
+        axis = "timecode"
+    else:
+        stats = normalise_untimed_locations(claims, materialise(parsed.body))
+        axis = "char offset"
+    echo(
+        f"  locations -> {axis}: {stats['aligned']}/{stats['total']} aligned"
+        f" ({stats['unaligned']} unalignable, {stats['ambiguous']} ambiguous)"
+    )
+
+
 def _do_extract(
     path: Path,
     parsed,
@@ -186,6 +220,16 @@ def _do_extract(
             on_progress=click.echo,
             use_api=use_api,
         )
+
+        # Canonicalise every claim's location from its verbatim quote, before the
+        # digest is written. A model asked to say WHERE a claim came from invents
+        # its own notation and no two models invent the same one - on real output,
+        # haiku wrote "11" where sonnet wrote "line 11", and "file_page: 1" where
+        # sonnet wrote "file_page 1, printed_page 5". Same line, same page, not one
+        # shared string, so anything grouping claims by location saw two models that
+        # never agreed. Aligning the quote discards the model's notation entirely,
+        # which is why this cannot regress when a new model is added.
+        _normalise_locations(parsed, result.get("claims") or [], click.echo)
 
         # Public AI-usage provenance (ADR 0037 inline emission): this digest's
         # extract entry, carried forward onto any upstream chain the ingest
@@ -439,6 +483,103 @@ def coverage_cmd(records_dir: str, threshold: float) -> None:
     for name, d in rows:
         flag = "YES" if d.digestible else "no"
         click.echo(f"{d.observed_coverage:>6.1%}  {flag:>6}  {name[:72]}")
+
+
+# --- Eval: deterministic scoring of a digest against in-body highlight gold ---
+
+
+@main.command(name="eval")
+@click.argument("record", type=click.Path(exists=True))
+@click.argument("digests", nargs=-1, type=click.Path(exists=True), required=True)
+@click.option(
+    "--json-out",
+    type=click.Path(),
+    default=None,
+    help="Write the full per-digest results (with diagnostics) to this JSON file.",
+)
+@click.option(
+    "--recall-threshold",
+    default=None,
+    type=float,
+    help="Fraction of a gold highlight that claim spans must cover to count as "
+    "recalled (default 0.5).",
+)
+def eval_cmd(
+    record: str,
+    digests: tuple[str, ...],
+    json_out: str | None,
+    recall_threshold: float | None,
+) -> None:
+    """Grade one or more digests of RECORD against its in-body highlight gold.
+
+    No model runs: the same digest always scores the same, so a prompt change's
+    effect is a difference of two numbers. RECALL (did highlighted spans survive)
+    and QUOTE FIDELITY (does each quote appear verbatim in the source) are
+    gold-backed. OFF-TARGET rate (claims outside every highlight) is INTERPRETIVE,
+    not an absolute precision score - a highlight set is a sample of what matters,
+    not a complete keep-list (ADR 0042); read it as a relative signal between
+    variants at equal recall. Pass several DIGESTS to compare models side by side.
+    """
+    import yaml
+
+    from digester import eval as ev
+
+    body = parse_record(Path(record).read_text()).body or ""
+    thresh = recall_threshold if recall_threshold is not None else ev.RECALL_THRESH
+
+    gold_n = len([h for h in ev.parse_highlights(body) if h["text"]])
+    if gold_n == 0:
+        click.echo(
+            f"No highlight gold in {Path(record).name} - nothing to grade against. "
+            "Highlights are authored in the workbench and stored in the record body."
+        )
+        raise SystemExit(1)
+
+    results = []
+    for d in digests:
+        digest = yaml.safe_load(Path(d).read_text()) or {}
+        r = ev.grade_digest(body, digest, recall_thresh=thresh)
+        r["digest"] = Path(d).name
+        r["model"] = digest.get("model", "?")
+        results.append(r)
+
+    def pct(x: float | None) -> str:
+        return f"{x:>7.1%}" if isinstance(x, (int, float)) else f"{'n/a':>7}"
+
+    click.echo(
+        f"\nRecord: {Path(record).name}\n"
+        f"Gold: {results[0]['gold_spans']} locatable highlight spans"
+        f" ({results[0]['chain_units']} gold units after context chains)"
+        + (
+            f", {results[0]['unlocatable_gold']} highlight(s) not locatable in the pre-digest"
+            if results[0]["unlocatable_gold"]
+            else ""
+        )
+        + f".  Recall threshold {thresh:.0%}.\n"
+    )
+    click.echo(
+        f"{'model':20} {'claims':>6} {'recall':>7} {'fidelity':>8} "
+        f"{'contig':>7} {'elided':>6} {'broken':>6} {'off-tgt':>8}"
+    )
+    click.echo("-" * 76)
+    for r in results:
+        click.echo(
+            f"{str(r['model'])[:20]:20} {r['claims']:>6} {pct(r['recall'])} "
+            f"{pct(r['quote_fidelity'])} {pct(r['fidelity_contiguous'])} "
+            f"{r['elided']:>6} {r['broken']:>6} {pct(r['off_target_rate'])}"
+        )
+    click.echo(
+        "\nrecall + fidelity are gold-backed; off-target is interpretive "
+        "(relative signal only, ADR 0042).\n"
+        "fidelity = all quote fragments appear verbatim in the source. contig = the "
+        "whole quote is one\nverbatim span; elided = real fragments joined with '...'; "
+        "broken = a fragment does not locate\n(fabricated or paraphrased) = the only "
+        "true fidelity failure."
+    )
+
+    if json_out:
+        Path(json_out).write_text(json.dumps(results, indent=2, ensure_ascii=False))
+        click.echo(f"\nFull results (with diagnostics): {json_out}")
 
 
 if __name__ == "__main__":
