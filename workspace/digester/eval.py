@@ -218,26 +218,39 @@ def claims_of(digest: dict) -> list[dict]:
 
 
 def grade_digest(
-    record_body: str, digest: dict, recall_thresh: float = RECALL_THRESH
+    record_body: str,
+    digest: dict,
+    recall_thresh: float = RECALL_THRESH,
+    gold_texts: list[str] | None = None,
 ) -> dict:
-    """Grade one digest against the record's in-body highlight gold.
+    """Grade one digest against highlight gold.
+
+    Gold is the record's in-body {{highlight}} spans by default; pass
+    ``gold_texts`` (a list of span strings) to grade against an external gold set
+    instead - used for PROVISIONAL model-drafted gold that must not be written
+    into the ingest body (ADR 0042 honesty rule: such gold screens, it does not
+    decide). External gold carries no context chains, so each span is its own unit.
 
     Returns recall (gold-backed), quote_fidelity (gold-backed), off_target_rate
     (interpretive), raw counts, and diagnostics (missed gold, off-target and
-    unlocatable-quote samples for inspection).
+    broken-quote samples for inspection).
     """
     pre_digest = materialise(record_body)
     search, idx = searchable(pre_digest)
 
-    # Gold: locate each highlight's prose in the pre-digest space.
-    highlights = parse_highlights(record_body)
+    # Gold: locate each span's prose in the pre-digest space. Normalise through
+    # the SAME transform the index uses (drops any speaker comments / headers /
+    # line-timestamps the span crosses), so a span over a multi-speaker
+    # back-and-forth still matches.
+    if gold_texts is not None:
+        sources = [{"id": str(i), "text": t} for i, t in enumerate(gold_texts)]
+        chains: list[list[str]] = []
+    else:
+        sources = parse_highlights(record_body)
+        chains = parse_context_chains(record_body)
     gold: list[dict] = []
     unlocatable_gold = 0
-    for h in highlights:
-        # Normalise the highlight's prose through the SAME transform the index
-        # uses (drops any speaker comments / headers / line-timestamps the span
-        # happens to cross), so a highlight over a multi-speaker back-and-forth
-        # still matches the pre-digest.
+    for h in sources:
         cleaned = searchable(h["text"])[0]
         span = locate(cleaned, search, idx) if cleaned else None
         if span is None:
@@ -248,7 +261,6 @@ def grade_digest(
         )
     gold_spans = [(g["span"][0], g["span"][1]) for g in gold]
 
-    chains = parse_context_chains(record_body)
     units = _chain_units([g["id"] for g in gold], chains)
 
     # Claims: locate each quote in the same space. Fidelity distinguishes three

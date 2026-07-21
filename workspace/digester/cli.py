@@ -523,13 +523,22 @@ def coverage_cmd(records_dir: str, threshold: float) -> None:
     help="Fraction of a gold highlight that claim spans must cover to count as "
     "recalled (default 0.5).",
 )
+@click.option(
+    "--gold-json",
+    type=click.Path(exists=True),
+    default=None,
+    help="Grade against an external gold set (a JSON with a `spans` list of "
+    "`{text}`) instead of the record's in-body highlights. For PROVISIONAL "
+    "model-drafted gold that screens hypotheses but does not decide (ADR 0042).",
+)
 def eval_cmd(
     record: str,
     digests: tuple[str, ...],
     json_out: str | None,
     recall_threshold: float | None,
+    gold_json: str | None,
 ) -> None:
-    """Grade one or more digests of RECORD against its in-body highlight gold.
+    """Grade one or more digests of RECORD against highlight gold.
 
     No model runs: the same digest always scores the same, so a prompt change's
     effect is a difference of two numbers. RECALL (did highlighted spans survive)
@@ -538,6 +547,9 @@ def eval_cmd(
     not an absolute precision score - a highlight set is a sample of what matters,
     not a complete keep-list (ADR 0042); read it as a relative signal between
     variants at equal recall. Pass several DIGESTS to compare models side by side.
+
+    Gold is the record's in-body highlights by default; --gold-json grades against
+    an external (e.g. provisional model-drafted) gold set instead.
     """
     import yaml
 
@@ -546,10 +558,18 @@ def eval_cmd(
     body = parse_record(Path(record).read_text()).body or ""
     thresh = recall_threshold if recall_threshold is not None else ev.RECALL_THRESH
 
-    gold_n = len([h for h in ev.parse_highlights(body) if h["text"]])
+    gold_texts = None
+    if gold_json:
+        gold_doc = json.loads(Path(gold_json).read_text())
+        gold_texts = [s["text"] for s in gold_doc.get("spans", []) if s.get("text")]
+        gold_n = len(gold_texts)
+        provisional = gold_doc.get("provisional")
+    else:
+        gold_n = len([h for h in ev.parse_highlights(body) if h["text"]])
+        provisional = False
     if gold_n == 0:
         click.echo(
-            f"No highlight gold in {Path(record).name} - nothing to grade against. "
+            f"No highlight gold for {Path(record).name} - nothing to grade against. "
             "Highlights are authored in the workbench and stored in the record body."
         )
         raise SystemExit(1)
@@ -557,7 +577,7 @@ def eval_cmd(
     results = []
     for d in digests:
         digest = yaml.safe_load(Path(d).read_text()) or {}
-        r = ev.grade_digest(body, digest, recall_thresh=thresh)
+        r = ev.grade_digest(body, digest, recall_thresh=thresh, gold_texts=gold_texts)
         r["digest"] = Path(d).name
         r["model"] = digest.get("model", "?")
         results.append(r)
@@ -565,6 +585,11 @@ def eval_cmd(
     def pct(x: float | None) -> str:
         return f"{x:>7.1%}" if isinstance(x, (int, float)) else f"{'n/a':>7}"
 
+    if provisional:
+        click.echo(
+            "\n*** PROVISIONAL model-drafted gold - SCREENING ONLY. A keep/discard "
+            "decision on a prompt change must cite human-signed gold (ADR 0042). ***"
+        )
     click.echo(
         f"\nRecord: {Path(record).name}\n"
         f"Gold: {results[0]['gold_spans']} locatable highlight spans"
