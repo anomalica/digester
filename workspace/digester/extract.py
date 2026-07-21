@@ -1019,6 +1019,37 @@ def extract_v3(
     return {"cast": cast, "claims": claims, "nodes": cast["nodes"]}
 
 
+# --- Cooperative cancel (the scheduler's hard-limit cancel; SIGTERM) ---
+# A cancel sets a flag; the chunk loops check it BEFORE each model call and stop
+# at that boundary. A signal handler only sets the flag, so an in-flight model
+# call runs to completion and is stored in the call cache first (PEP 475 retries
+# the interrupted wait) - the cancel costs nothing beyond finishing the current
+# chunk, which is the whole point of the checkpoint cache. Completed chunks are on
+# disk; a resume of the same (record, model, prompt, prep) replays them.
+_cancel_requested = False
+
+
+class ExtractionCancelled(Exception):
+    """Raised at a chunk boundary when a cancel was requested. Not a failure - the
+    completed chunks are cached, the CLI exits with a dedicated code, and the run
+    is cheap to resume."""
+
+
+def request_cancel() -> None:
+    global _cancel_requested
+    _cancel_requested = True
+
+
+def reset_cancel() -> None:
+    global _cancel_requested
+    _cancel_requested = False
+
+
+def _check_cancel() -> None:
+    if _cancel_requested:
+        raise ExtractionCancelled()
+
+
 def extract_nodes_v2(
     text: str,
     model: str = DEFAULT_MODEL,
@@ -1047,6 +1078,7 @@ def extract_nodes_v2(
 
         seen_names_in_chunk: set[str] = set()
         for it in range(ITERATION_MAX):
+            _check_cancel()  # stop before dispatching the next call; prior calls cached
             directory_lines = [
                 f"  - ({n['node_type']}) {name}" for name, n in merged_nodes.items()
             ]
@@ -1147,6 +1179,7 @@ def extract_claims_v2(
 
         chunk_claims: list[dict] = []
         for it in range(ITERATION_MAX):
+            _check_cancel()  # stop before dispatching the next call; prior calls cached
             prompt = record_context + _claims_prompt_template().format(
                 directory=directory,
                 main_subject=main_subject,
@@ -1219,6 +1252,7 @@ def extract_two_pass(
     `use_api` is the resolved per-component metered toggle (the digester resolves
     DIGESTER_USE_API), threaded to every model call.
     """
+    reset_cancel()  # a cancel from a prior run in this process must not carry over
     # Extract from the pre-digest (ADR 0042): all deterministic model-prep. The
     # caller materialises + stores the pre-digest and records its hash; this is
     # idempotent, so a raw-text caller (benchmarks) still gets the same input.

@@ -116,16 +116,35 @@ def extract_cmd(
     ):
         ctx.exit(2)
 
-    _do_extract(
-        path,
-        parsed,
-        Path(output) if output else None,
-        model,
-        use_api,
-        Path(digests_root) if digests_root else None,
-        variant_only,
-        Path(predigests_root) if predigests_root else None,
-    )
+    # Cooperative cancel for the scheduler's hard-limit cancel: SIGTERM asks the
+    # extraction to stop at the next chunk boundary (the in-flight call finishes
+    # and is cached first), then we exit with a DEDICATED code so the scheduler
+    # tells "cancelled - cache valid, cheap retry" from a real failure. Completed
+    # chunks are already on disk; the resume replays them. Exit codes: 0 done,
+    # 75 clean cancel, 1 real failure (see the anomalica/scheduler contract).
+    import signal
+
+    from digester.extract import ExtractionCancelled, request_cancel
+
+    signal.signal(signal.SIGTERM, lambda *_: request_cancel())
+    try:
+        _do_extract(
+            path,
+            parsed,
+            Path(output) if output else None,
+            model,
+            use_api,
+            Path(digests_root) if digests_root else None,
+            variant_only,
+            Path(predigests_root) if predigests_root else None,
+        )
+    except ExtractionCancelled:
+        click.echo(
+            "\nCancelled at a chunk boundary. Completed chunks are cached; rerun the "
+            "same (record, model, prompt) to resume - only the remaining chunks will "
+            "call the model."
+        )
+        ctx.exit(75)
 
 
 def _normalise_locations(parsed, claims: list, echo=lambda _: None) -> None:
