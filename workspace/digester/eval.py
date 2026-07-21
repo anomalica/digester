@@ -97,24 +97,37 @@ def searchable(text: str) -> tuple[str, list[int]]:
     return "".join(out), idx
 
 
+def _norm(quote: str) -> str:
+    return re.sub(r"\s+", " ", quote.strip().lower())
+
+
+def _find(qn: str, search: str, start: int = 0) -> tuple[int, str]:
+    """search-string index of normalised `qn` at/after `start`, or -1. Retries
+    without trailing punctuation. Returns (position, the-matched-form) so a caller
+    can compute the span length and continue the search past the match."""
+    if not qn:
+        return -1, qn
+    pos = search.find(qn, start)
+    if pos < 0:
+        q2 = qn.rstrip(".,;:!?\"' ")
+        if not q2:
+            return -1, qn
+        pos = search.find(q2, start)
+        if pos < 0:
+            return -1, qn
+        qn = q2
+    return pos, qn
+
+
 def locate(quote: str, search: str, idx: list[int]) -> list[int] | None:
     """Raw [start, end) code-point span of `quote` in the indexed text, or None.
 
     Normalises whitespace and case (neither is a fidelity concern) and retries
     without trailing punctuation. None means the quote does not appear - a
     fabricated or paraphrased quote, or a highlight whose prose was stripped."""
-    q = re.sub(r"\s+", " ", quote.strip().lower())
-    if not q:
-        return None
-    pos = search.find(q)
+    pos, q = _find(_norm(quote), search)
     if pos < 0:
-        q2 = q.rstrip(".,;:!?\"' ")
-        if not q2:
-            return None
-        pos = search.find(q2)
-        if pos < 0:
-            return None
-        q = q2
+        return None
     return [idx[pos], idx[pos + len(q) - 1] + 1]
 
 
@@ -263,17 +276,25 @@ def grade_digest(
 
     units = _chain_units([g["id"] for g in gold], chains)
 
-    # Claims: locate each quote in the same space. Fidelity distinguishes three
-    # cases, because an elided quote is not a fabricated one - conflating them
-    # would misdirect the very fidelity hypothesis this measures:
+    # Claims: locate each quote in the same space. MECHANICAL fidelity (this is
+    # not the semantic axis - eliding away a negation that inverts sense is the
+    # human grader's call, not mechanical) distinguishes four cases, because an
+    # elided quote is not a fabricated one and a REORDERED one is quote-mining:
     #   contiguous - the whole quote is one verbatim span (strictest);
-    #   elided     - the quote joins real fragments with "..."; every fragment
-    #                locates, so it is faithful to the source, just not contiguous;
-    #   broken     - at least one fragment does not locate (fabricated/paraphrased).
-    # A located claim contributes ALL its fragment spans to recall/off-target.
+    #   elided     - real fragments joined with "...", located IN SOURCE ORDER;
+    #                faithful, just not contiguous;
+    #   reordered  - every fragment is verbatim but they are stitched OUT of source
+    #                order - recomposing what the speaker said (anomalica's
+    #                order-preservation rule); a fidelity FAILURE;
+    #   broken     - at least one fragment does not appear at all (fabricated).
+    # Order is enforced by searching each fragment only AT OR AFTER the previous
+    # fragment's match; a fragment that exists only earlier is reordered, one that
+    # exists nowhere is broken. A faithful claim contributes ALL fragment spans to
+    # recall/off-target.
     claims = claims_of(digest)
-    located: list[dict] = []  # claims whose quote (or all fragments) was found
-    broken_quotes: list[dict] = []  # fidelity failures - a fragment did not locate
+    located: list[dict] = []  # claims whose quote is faithful (contiguous or elided)
+    broken_quotes: list[dict] = []  # a fragment does not appear in the source
+    reordered_quotes: list[dict] = []  # verbatim fragments, but out of source order
     n_contiguous = 0
     n_elided = 0
     for c in claims:
@@ -285,16 +306,26 @@ def grade_digest(
             located.append({"spans": [tuple(whole)], "text": text, "quote": quote})
             continue
         fragments = [f.strip() for f in re.split(r"\.\.\.|…", quote) if f.strip()]
-        spans = (
-            [locate(f, search, idx) for f in fragments] if len(fragments) > 1 else []
-        )
-        if spans and all(s is not None for s in spans):
-            n_elided += 1
-            located.append(
-                {"spans": [tuple(s) for s in spans], "text": text, "quote": quote}
-            )
+        if len(fragments) <= 1:
+            broken_quotes.append({"quote": quote[:140], "text": text[:140]})
             continue
-        broken_quotes.append({"quote": quote[:140], "text": text[:140]})
+        spans, cursor, status = [], 0, "ordered"
+        for frag in fragments:
+            qn = _norm(frag)
+            pos, matched = _find(qn, search, cursor)
+            if pos < 0:
+                # Not found forward: is it anywhere at all (reordered) or nowhere (broken)?
+                status = "reordered" if _find(qn, search, 0)[0] >= 0 else "broken"
+                break
+            spans.append((idx[pos], idx[pos + len(matched) - 1] + 1))
+            cursor = pos + len(matched)
+        if status == "ordered":
+            n_elided += 1
+            located.append({"spans": spans, "text": text, "quote": quote})
+        elif status == "reordered":
+            reordered_quotes.append({"quote": quote[:140], "text": text[:140]})
+        else:
+            broken_quotes.append({"quote": quote[:140], "text": text[:140]})
     claim_spans = [sp for c in located for sp in c["spans"]]
 
     # Recall: fraction of gold spans covered past the threshold.
@@ -317,6 +348,9 @@ def grade_digest(
             off_target.append({"quote": c["quote"][:140], "text": c["text"][:140]})
     off_target_rate = (len(off_target) / len(located)) if located else None
 
+    # MECHANICAL fidelity: contiguous + in-order elided. Reordered and broken are
+    # both failures. This is not the semantic axis (a fragment join that inverts
+    # sense is the human grader's call) - report it as "mechanical".
     fidelity = (len(located) / len(claims)) if claims else None
 
     return {
@@ -329,11 +363,13 @@ def grade_digest(
         "fidelity_contiguous": (n_contiguous / len(claims)) if claims else None,
         "contiguous": n_contiguous,
         "elided": n_elided,
+        "reordered": len(reordered_quotes),
         "broken": len(broken_quotes),
         "off_target_rate": off_target_rate,
         "off_target_count": len(off_target),
         "covered": covered,
         "missed": missed,
         "off_target": off_target,
+        "reordered_quotes": reordered_quotes,
         "broken_quotes": broken_quotes,
     }

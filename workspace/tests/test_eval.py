@@ -81,9 +81,22 @@ def test_grade_recall_fidelity_offtarget():
     assert r["recall"] == 1.0  # both gold spans covered (one via an elided quote)
     assert r["contiguous"] == 2
     assert r["elided"] == 1
+    assert r["reordered"] == 0
     assert r["broken"] == 1
     assert abs(r["quote_fidelity"] - 0.75) < 1e-9  # 3 of 4 faithful
     assert r["off_target_count"] == 1  # the fox quote
+
+
+def test_reordered_fragments_are_a_fidelity_failure():
+    # Both fragments are verbatim, but stitched OUT of source order (quote-mining):
+    # in the body "A craft was recovered intact" precedes "by the Navy".
+    digest = _digest(["by the Navy... A craft was recovered intact"])
+    r = grade_digest(BODY, digest)
+    assert r["reordered"] == 1
+    assert r["elided"] == 0
+    assert r["broken"] == 0
+    assert r["quote_fidelity"] == 0.0  # reordered is NOT mechanically faithful
+    assert r["recall"] == 0.0  # a reordered claim contributes no spans to recall
 
 
 def test_elided_quote_covers_two_separate_gold_spans():

@@ -602,23 +602,25 @@ def eval_cmd(
         + f".  Recall threshold {thresh:.0%}.\n"
     )
     click.echo(
-        f"{'model':20} {'claims':>6} {'recall':>7} {'fidelity':>8} "
-        f"{'contig':>7} {'elided':>6} {'broken':>6} {'off-tgt':>8}"
+        f"{'model':20} {'claims':>6} {'recall':>7} {'mech-fid':>8} "
+        f"{'elided':>6} {'reord':>6} {'broken':>6} {'off-tgt':>8}"
     )
     click.echo("-" * 76)
     for r in results:
         click.echo(
             f"{str(r['model'])[:20]:20} {r['claims']:>6} {pct(r['recall'])} "
-            f"{pct(r['quote_fidelity'])} {pct(r['fidelity_contiguous'])} "
-            f"{r['elided']:>6} {r['broken']:>6} {pct(r['off_target_rate'])}"
+            f"{pct(r['quote_fidelity'])} {r['elided']:>6} {r.get('reordered', 0):>6} "
+            f"{r['broken']:>6} {pct(r['off_target_rate'])}"
         )
     click.echo(
-        "\nrecall + fidelity are gold-backed; off-target is interpretive "
+        "\nrecall + mech-fid are gold-backed; off-target is interpretive "
         "(relative signal only, ADR 0042).\n"
-        "fidelity = all quote fragments appear verbatim in the source. contig = the "
-        "whole quote is one\nverbatim span; elided = real fragments joined with '...'; "
-        "broken = a fragment does not locate\n(fabricated or paraphrased) = the only "
-        "true fidelity failure."
+        "mech-fid (MECHANICAL fidelity) = quote is contiguous, or elided from real "
+        "fragments IN SOURCE ORDER.\nelided = ordered '...' join (faithful); reord = "
+        "verbatim fragments stitched OUT of order\n(quote-mining) - a FAILURE; broken "
+        "= a fragment is not in the source (fabricated) - a FAILURE.\nSemantic "
+        "inversion (an elided-away negation) is the human grader's axis, not this "
+        "number."
     )
 
     if json_out:
