@@ -36,6 +36,20 @@ def _safe(model: str) -> str:
     return re.sub(r"[^A-Za-z0-9._-]", "-", model)
 
 
+# A record and its versioned re-ingest are ONE record: `jon-stewart` and
+# `jon-stewart.v2` name the same source at different ingest revisions, and their
+# digests must share a variant dir or a record's variants fragment across two
+# (the opus-v3 before-state sat under `.../jon-stewart/` while a run on the v2
+# symlink wrote into `.../jon-stewart.v2/`). The `.vN` is an ingest-revision
+# marker on the symlink name, never part of the record's identity - strip it so
+# the layout keys on the record, not the revision.
+_INGEST_VERSION_SUFFIX = re.compile(r"\.v\d+$")
+
+
+def _de_version(friendly_name: str) -> str:
+    return _INGEST_VERSION_SUFFIX.sub("", friendly_name)
+
+
 def is_active_prompt(prompt_provenance: list[dict] | None) -> bool:
     """True for a production run: every pass used the registered active prompt.
     Any ``override`` pass marks an experiment (variant-only, never canonical)."""
@@ -52,13 +66,13 @@ def variant_path(
     return (
         digests_root
         / "variants"
-        / friendly_name
+        / _de_version(friendly_name)
         / f"{_safe(model)}.{prompt_sha8(prompt_provenance)}.yaml"
     )
 
 
 def canonical_path(digests_root: Path, friendly_name: str) -> Path:
-    return digests_root / "records" / f"{friendly_name}.yaml"
+    return digests_root / "records" / f"{_de_version(friendly_name)}.yaml"
 
 
 def write_digest(

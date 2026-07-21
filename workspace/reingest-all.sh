@@ -13,6 +13,17 @@ WORKSPACE_DIR=/home/mark/repos/anomalica/digester/workspace
 
 cd "$WORKSPACE_DIR"
 
+# The container mounts the operator's ~/.claude for the subscription credential,
+# then stitches empty files over CLAUDE.md and settings.json so the extraction
+# model never reads the operator's personal dev guidelines (which it would obey -
+# "British English everywhere" once wrote "Defence Intelligence Agency" for a US
+# agency - and which cost ~7k tokens a call). These stubs live in /tmp, which
+# clears on reboot, so create them here rather than assuming a prior process did.
+SANDBOX=/tmp/digester-sandbox
+mkdir -p "$SANDBOX"
+: >"$SANDBOX/empty-CLAUDE.md"
+printf '{}\n' >"$SANDBOX/empty-settings.json"
+
 # Max attempts per record. The Claude CLI subprocess has intermittent
 # empty-stderr failures (~1 in 5 on a multi-doc batch); they succeed on a
 # clean retry. This wraps each extract so a transient hiccup doesn't need a

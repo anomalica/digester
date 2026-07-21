@@ -85,3 +85,21 @@ def test_prompt_tune_preserves_prior_variant(tmp_path):
     # identical model+prompt is a redo: overwrites its own file only
     v1b = ds.write_digest(tmp_path, "rec", "REDO", "haiku", ACTIVE)["variant"]
     assert v1b == v1 and v1.read_text() == "REDO"
+
+
+def test_versioned_symlink_writes_the_de_versioned_dir(tmp_path):
+    """A .vN input names the same record as its unversioned form; both must land
+    in one variant dir, or a record's variants fragment across two."""
+    from digester import digest_store
+
+    prov = [{"pass": "nodes", "version": "v1"}, {"pass": "claims", "version": "v1"}]
+    v = digest_store.variant_path(tmp_path, "jon-stewart.v2", "haiku", prov)
+    c = digest_store.canonical_path(tmp_path, "jon-stewart.v2")
+
+    assert v.parent.name == "jon-stewart"  # not "jon-stewart.v2"
+    assert c.name == "jon-stewart.yaml"
+    # and the unversioned form lands in the identical place
+    assert (
+        digest_store.variant_path(tmp_path, "jon-stewart", "haiku", prov).parent
+        == v.parent
+    )
