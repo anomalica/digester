@@ -99,3 +99,17 @@ def test_no_gold_gives_null_recall():
     r = grade_digest("plain prose with no highlights here", _digest(["plain prose"]))
     assert r["gold_spans"] == 0
     assert r["recall"] is None
+
+
+def test_external_gold_texts_override_in_body_highlights():
+    # gold_texts grades against an external (provisional) gold set, ignoring the
+    # record's own {{highlight}} markers.
+    digest = _digest(["The weather was fine that day and nothing else happened."])
+    r = grade_digest(
+        BODY,
+        digest,
+        gold_texts=["The weather was fine that day and nothing else happened."],
+    )
+    assert r["gold_spans"] == 1  # the one external span, not the body's two highlights
+    assert r["recall"] == 1.0
+    assert r["off_target_count"] == 0
