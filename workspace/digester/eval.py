@@ -142,6 +142,77 @@ def locate(quote: str, search: str, idx: list[int]) -> list[int] | None:
     return [idx[pos], idx[pos + len(q) - 1] + 1]
 
 
+# Coreference proxy (MECHANICAL, confirmed by anomalica/master). A dependent span
+# ("he said...") whose referent lives in an ancestor highlight is coreference-
+# applicable; it PASSES if a covering claim NAMES a referent rather than echoing
+# the bare pronoun. "Named a referent" is mechanical; "named the RIGHT referent" is
+# the human axis - so the grader emits per-passing-unit which name it saw for cheap
+# human spot-checking, and never blends this into a composite score.
+_THIRD_PERSON = re.compile(
+    r"\b(he|she|they|him|her|them|his|their|hers|theirs)\b", re.I
+)
+# Titlecase tokens that are ordinary sentence-openers, not names - so a span that
+# merely STARTS with one is not treated as naming its own referent.
+_CAP_STOPWORDS = frozenset(
+    {
+        "The",
+        "A",
+        "An",
+        "This",
+        "That",
+        "These",
+        "Those",
+        "It",
+        "He",
+        "She",
+        "They",
+        "There",
+        "Here",
+        "When",
+        "Then",
+        "But",
+        "And",
+        "So",
+        "If",
+        "As",
+        "At",
+        "In",
+        "On",
+        "Of",
+        "To",
+        "We",
+        "You",
+        "I",
+        "His",
+        "Her",
+        "Their",
+        "What",
+        "Who",
+        "Why",
+        "How",
+        "Because",
+        "Since",
+        "After",
+        "Before",
+    }
+)
+_PROPER = re.compile(r"\b([A-Z][A-Za-z]+)\b")
+
+
+def _named_referents(text: str) -> list[str]:
+    """Proper-noun tokens that plausibly name someone/something - a mechanical
+    stand-in for 'the claim named a referent'. Sentence-opener capitals are
+    excluded so a bare 'He ...' does not count as naming."""
+    return [t for t in _PROPER.findall(text) if t not in _CAP_STOPWORDS]
+
+
+def _is_dependent(span_text: str) -> bool:
+    """A span is coreference-dependent if it leans on a third-person pronoun and
+    does not already name its own referent (heuristic; the emitted audit lets a
+    human correct the mechanical call)."""
+    return bool(_THIRD_PERSON.search(span_text)) and not _named_referents(span_text)
+
+
 def _overlap(span: list[int], spans: list[tuple[int, int]]) -> int:
     """Characters of `span` covered by the union of `spans`."""
     lo, hi = span
@@ -322,10 +393,13 @@ def grade_digest(
     for c in claims:
         quote = (c.get("quote") or "").strip()
         text = c.get("text") or ""
+        refs = [r.get("name") for r in (c.get("refs") or []) if r.get("name")]
         whole = locate(quote, search, idx) if quote else None
         if whole is not None:
             n_contiguous += 1
-            located.append({"spans": [tuple(whole)], "text": text, "quote": quote})
+            located.append(
+                {"spans": [tuple(whole)], "text": text, "quote": quote, "refs": refs}
+            )
             continue
         fragments = [f.strip() for f in re.split(r"\.\.\.|…", quote) if f.strip()]
         if len(fragments) <= 1:
@@ -343,7 +417,7 @@ def grade_digest(
             cursor = pos + len(matched)
         if status == "ordered":
             n_elided += 1
-            located.append({"spans": spans, "text": text, "quote": quote})
+            located.append({"spans": spans, "text": text, "quote": quote, "refs": refs})
         elif status == "reordered":
             reordered_quotes.append({"quote": quote[:140], "text": text[:140]})
         else:
@@ -391,6 +465,37 @@ def grade_digest(
     # sense is the human grader's call) - report it as "mechanical".
     fidelity = (len(located) / len(claims)) if claims else None
 
+    # Coreference (MECHANICAL proxy, never composited). A recalled unit is
+    # applicable if its span is dependent (bare pronoun, no own name) and it has a
+    # closure; it passes if a covering claim names a referent. Emit per pass the
+    # name seen and the closure hubs it presumably resolves to, so the semantic
+    # axis (RIGHT referent) is cheap to spot-check by sampling.
+    coref_applicable = 0
+    coref_passed = 0
+    coref_audit: list[dict] = []
+    for g in gold:
+        closure = closures.get(g["id"]) or set()
+        if not closure or not _is_dependent(g["text"]):
+            continue
+        gs = (g["span"][0], g["span"][1])
+        covering = [c for c in located if _overlap(list(gs), c["spans"]) > 0]
+        if not covering:
+            continue  # not recalled at all -> a recall miss, not a coref failure
+        coref_applicable += 1
+        named = []
+        for c in covering:
+            named += _named_referents(c["text"]) + c.get("refs", [])
+        if named:
+            coref_passed += 1
+            coref_audit.append(
+                {
+                    "unit": g["id"],
+                    "named": sorted(set(named))[:5],
+                    "closure_hubs": sorted(closure),
+                }
+            )
+    coref_rate = (coref_passed / coref_applicable) if coref_applicable else None
+
     return {
         "claims": len(claims),
         "gold_spans": len(gold),
@@ -408,9 +513,13 @@ def grade_digest(
         "broken": len(broken_quotes),
         "off_target_rate": off_target_rate,
         "off_target_count": len(off_target),
+        "coref_applicable": coref_applicable,
+        "coref_passed": coref_passed,
+        "coref_rate": coref_rate,  # mechanical: named A referent, not the RIGHT one
         "missed": missed,
         "unit_coverage": unit_coverage,
         "off_target": off_target,
         "reordered_quotes": reordered_quotes,
         "broken_quotes": broken_quotes,
+        "coref_audit": coref_audit,  # per pass: name seen + candidate closure hubs
     }

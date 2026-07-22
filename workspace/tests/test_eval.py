@@ -135,6 +135,49 @@ def test_elided_quote_covers_two_separate_gold_spans():
     assert r["broken"] == 0
 
 
+BODY_COREF = "\n".join(
+    [
+        "{{highlight-start: a}}Jon Stewart hosted the show.{{highlight-end: a}}",
+        "{{highlight-start: b}}He later interviewed a whistleblower.{{highlight-end: b}}",
+        "{{highlight-context: [b, a]}}",
+    ]
+)
+
+
+def _digest_qt(pairs):
+    return {"model": "t", "claims": [{"quote": q, "text": t} for q, t in pairs]}
+
+
+def test_coref_pass_when_claim_names_referent():
+    # Dependent span "He later..." (closure {a}) covered by a claim that NAMES the
+    # referent -> mechanical coref PASS, with the name + closure hub emitted.
+    digest = _digest_qt(
+        [
+            (
+                "He later interviewed a whistleblower.",
+                "Jon Stewart interviewed a whistleblower.",
+            )
+        ]
+    )
+    r = grade_digest(BODY_COREF, digest)
+    assert r["coref_applicable"] == 1
+    assert r["coref_passed"] == 1
+    assert r["coref_audit"][0]["closure_hubs"] == ["a"]
+    assert "Stewart" in r["coref_audit"][0]["named"]
+
+
+def test_coref_fail_when_claim_leaves_bare_pronoun():
+    # Same dependent span, but the covering claim echoes the bare pronoun -> the
+    # unresolved-'he' failure: applicable but not passed.
+    digest = _digest_qt(
+        [("He later interviewed a whistleblower.", "He interviewed a whistleblower.")]
+    )
+    r = grade_digest(BODY_COREF, digest)
+    assert r["coref_applicable"] == 1
+    assert r["coref_passed"] == 0
+    assert r["coref_rate"] == 0.0
+
+
 def test_no_gold_gives_null_recall():
     r = grade_digest("plain prose with no highlights here", _digest(["plain prose"]))
     assert r["gold_spans"] == 0

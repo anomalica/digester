@@ -603,27 +603,35 @@ def eval_cmd(
         + ".\n"
     )
     click.echo(
-        f"{'model':20} {'claims':>6} {'recall':>7} {'mech-fid':>8} "
-        f"{'elided':>6} {'reord':>6} {'broken':>6} {'off-tgt':>8}"
+        f"{'model':18} {'claims':>6} {'recall':>7} {'mech-fid':>8} "
+        f"{'e/r/b':>10} {'coref':>7} {'off-tgt':>8}"
     )
     click.echo("-" * 76)
     for r in results:
-        click.echo(
-            f"{str(r['model'])[:20]:20} {r['claims']:>6} {pct(r['recall'])} "
-            f"{pct(r['quote_fidelity'])} {r['elided']:>6} {r.get('reordered', 0):>6} "
-            f"{r['broken']:>6} {pct(r['off_target_rate'])}"
+        erb = f"{r['elided']}/{r.get('reordered', 0)}/{r['broken']}"
+        coref = (
+            f"{r['coref_passed']}/{r['coref_applicable']}"
+            if r["coref_applicable"]
+            else "n/a"
         )
+        click.echo(
+            f"{str(r['model'])[:18]:18} {r['claims']:>6} {pct(r['recall'])} "
+            f"{pct(r['quote_fidelity'])} {erb:>10} {coref:>7} {pct(r['off_target_rate'])}"
+        )
+    gu = results[0]["gold_units"]
     click.echo(
-        "\nrecall + mech-fid are gold-backed; off-target is interpretive "
-        "(relative signal only, ADR 0042).\n"
+        "\nrecall + mech-fid are gold-backed; off-target is INTERPRETIVE "
+        f"(relative signal only, against {gu} gold\nunits - a sparse-gold off-target "
+        "is not comparable to a dense-gold one; ADR 0042).\n"
         "recall = COVERAGE-WEIGHTED mean over gold units (a unit half-covered scores "
-        "50%, never hit/miss).\nEach highlight is its own gold unit = itself + its "
-        "ancestor closure (context for coreference).\nmech-fid (MECHANICAL fidelity) = "
-        "quote is contiguous, or elided from real fragments IN\nSOURCE ORDER. elided = "
-        "ordered '...' join (faithful); reord = fragments stitched OUT of\norder "
-        "(quote-mining) = FAILURE; broken = a fragment absent from source (fabricated) "
-        "= FAILURE.\nSemantic inversion (an elided-away negation) is the human grader's "
-        "axis, not this number."
+        "50%, never hit/miss).\nmech-fid (MECHANICAL) = quote is contiguous or elided "
+        "IN SOURCE ORDER. e/r/b = elided (ordered\n'...' join, faithful) / reordered "
+        "(stitched OUT of order = quote-mining FAILURE) / broken (a\nfragment absent "
+        "= fabricated FAILURE). coref = MECHANICAL coreference: passed/applicable "
+        "dependent\nunits where a covering claim NAMED a referent (not the bare "
+        "pronoun). mech-fid, semantic\ninversion, and the RIGHT-referent check are the "
+        "human grader's axis - not these numbers; see\nthe coref_audit in --json-out "
+        "to spot-check named vs correct referent."
     )
 
     if json_out:
