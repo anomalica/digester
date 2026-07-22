@@ -44,10 +44,15 @@ closure is CONTEXT for the coreference requirement - a faithful extraction of a
 dependent span resolves the referent (names the person a later span only calls
 "he") using its closure. Dangling context refs (an ancestor since deleted) are
 dropped as absent context, never a failure of the citing unit. The loader reports
-the unit structure (units, units-with-context, max closure depth); per-unit
-coreference-resolution SCORING is loaded structurally but not yet scored -
-deliberately absent rather than faked (a fake attribution number would corrupt
-exactly the decision it informs).
+the unit structure (units, units-with-context, max closure depth).
+
+Per-unit coreference is scored as a MECHANICAL proxy ("coref-mech"): a recalled
+dependent unit (bare pronoun, no own name, non-empty closure) PASSES if a covering
+claim NAMES a referent rather than echoing the pronoun. Named-a-referent is
+mechanical; named-the-RIGHT-referent is the human axis - so it is reported as
+passed/applicable (never a bare rate, never composited) and each pass emits the
+name seen plus the candidate closure hubs, making the semantic check cheap to
+spot-check by sampling instead of pretending it is measured.
 """
 
 from __future__ import annotations
