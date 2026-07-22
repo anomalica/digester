@@ -592,14 +592,15 @@ def eval_cmd(
         )
     click.echo(
         f"\nRecord: {Path(record).name}\n"
-        f"Gold: {results[0]['gold_spans']} locatable highlight spans"
-        f" ({results[0]['chain_units']} gold units after context chains)"
+        f"Gold: {results[0]['gold_units']} units (= locatable highlights), "
+        f"{results[0]['units_with_context']} carry context (max closure "
+        f"{results[0]['max_context']})"
         + (
             f", {results[0]['unlocatable_gold']} highlight(s) not locatable in the pre-digest"
             if results[0]["unlocatable_gold"]
             else ""
         )
-        + f".  Recall threshold {thresh:.0%}.\n"
+        + ".\n"
     )
     click.echo(
         f"{'model':20} {'claims':>6} {'recall':>7} {'mech-fid':>8} "
@@ -615,12 +616,14 @@ def eval_cmd(
     click.echo(
         "\nrecall + mech-fid are gold-backed; off-target is interpretive "
         "(relative signal only, ADR 0042).\n"
-        "mech-fid (MECHANICAL fidelity) = quote is contiguous, or elided from real "
-        "fragments IN SOURCE ORDER.\nelided = ordered '...' join (faithful); reord = "
-        "verbatim fragments stitched OUT of order\n(quote-mining) - a FAILURE; broken "
-        "= a fragment is not in the source (fabricated) - a FAILURE.\nSemantic "
-        "inversion (an elided-away negation) is the human grader's axis, not this "
-        "number."
+        "recall = COVERAGE-WEIGHTED mean over gold units (a unit half-covered scores "
+        "50%, never hit/miss).\nEach highlight is its own gold unit = itself + its "
+        "ancestor closure (context for coreference).\nmech-fid (MECHANICAL fidelity) = "
+        "quote is contiguous, or elided from real fragments IN\nSOURCE ORDER. elided = "
+        "ordered '...' join (faithful); reord = fragments stitched OUT of\norder "
+        "(quote-mining) = FAILURE; broken = a fragment absent from source (fabricated) "
+        "= FAILURE.\nSemantic inversion (an elided-away negation) is the human grader's "
+        "axis, not this number."
     )
 
     if json_out:

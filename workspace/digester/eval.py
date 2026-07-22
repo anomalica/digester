@@ -193,28 +193,34 @@ def parse_context_chains(body: str) -> list[list[str]]:
     return chains
 
 
-def _chain_units(highlight_ids: list[str], chains: list[list[str]]) -> list[list[str]]:
-    """Union-find the highlight ids into gold units: any ids joined by a context
-    edge share a unit; an unlinked highlight is a unit of one."""
-    parent = {hid: hid for hid in highlight_ids}
-
-    def find(x: str) -> str:
-        parent.setdefault(x, x)
-        while parent[x] != x:
-            parent[x] = parent[parent[x]]
-            x = parent[x]
-        return x
-
-    def union(a: str, b: str) -> None:
-        parent[find(a)] = find(b)
-
+def ancestor_closures(
+    highlight_ids: list[str], chains: list[list[str]]
+) -> dict[str, set[str]]:
+    """Each highlight's transitive ANCESTOR closure (its context), per anomalica's
+    gold-unit ruling. A context edge ``[dependent, earlier..]`` means the dependent
+    span needs the earlier ones for its referent; the closure follows those edges
+    backwards. Crucially this is NOT union-by-component: EACH highlight is its own
+    gold unit = itself + its closure, and a shared ancestor (a person-intro hub)
+    appears in many units WITHOUT merging them. Dangling refs (an ancestor id that
+    is not a present highlight - a since-deleted span) are dropped as absent
+    context, never a failure of the citing unit. Cycles are broken by a visited set.
+    """
+    parents: dict[str, set[str]] = {}
     for chain in chains:
-        for other in chain[1:]:
-            union(chain[0], other)
-    groups: dict[str, list[str]] = {}
+        parents.setdefault(chain[0], set()).update(chain[1:])
+    present = set(highlight_ids)
+    closures: dict[str, set[str]] = {}
     for hid in highlight_ids:
-        groups.setdefault(find(hid), []).append(hid)
-    return list(groups.values())
+        seen: set[str] = set()
+        stack = list(parents.get(hid, ()))
+        while stack:
+            a = stack.pop()
+            if a in seen:
+                continue
+            seen.add(a)
+            stack.extend(parents.get(a, ()))
+        closures[hid] = {a for a in seen if a in present}  # drop dangling refs
+    return closures
 
 
 def claims_of(digest: dict) -> list[dict]:
@@ -274,7 +280,12 @@ def grade_digest(
         )
     gold_spans = [(g["span"][0], g["span"][1]) for g in gold]
 
-    units = _chain_units([g["id"] for g in gold], chains)
+    # Gold-unit structure (anomalica's ruling): EACH highlight is its own unit =
+    # itself + its ancestor closure (context). A shared ancestor is context to many
+    # units without merging them.
+    closures = ancestor_closures([g["id"] for g in gold], chains)
+    units_with_context = sum(1 for g in gold if closures.get(g["id"]))
+    max_context = max((len(closures.get(g["id"], ())) for g in gold), default=0)
 
     # Claims: locate each quote in the same space. MECHANICAL fidelity (this is
     # not the semantic axis - eliding away a negation that inverts sense is the
@@ -328,17 +339,33 @@ def grade_digest(
             broken_quotes.append({"quote": quote[:140], "text": text[:140]})
     claim_spans = [sp for c in located for sp in c["spans"]]
 
-    # Recall: fraction of gold spans covered past the threshold.
-    covered = 0
+    # Recall is COVERAGE-WEIGHTED, never binary per-highlight (anomalica's pin): a
+    # highlight carrying several facts must score PARTIALLY when claims cover only
+    # some of it - a model extracting 1 of 3 facts reads 33%, not 100%. So recall
+    # is the mean fraction of each gold span's characters that claim spans cover,
+    # NOT a count of highlights past a threshold. highlight!=claim granularity is by
+    # design; atomicity is the extraction's obligation, measured as coverage here.
+    # The threshold survives only to flag near-missed units for inspection.
+    coverage_sum = 0.0
+    unit_coverage: list[dict] = []
     missed = []
     for g in gold:
         s, e = g["span"]
         frac = _overlap([s, e], claim_spans) / max(1, e - s)
-        if frac >= recall_thresh:
-            covered += 1
-        else:
-            missed.append({"id": g["id"], "text": g["text"][:140]})
-    recall = covered / len(gold) if gold else None
+        coverage_sum += frac
+        unit_coverage.append(
+            {
+                "id": g["id"],
+                "coverage": round(frac, 3),
+                "context": sorted(closures.get(g["id"], ())),
+            }
+        )
+        if frac < recall_thresh:
+            missed.append(
+                {"id": g["id"], "coverage": round(frac, 3), "text": g["text"][:120]}
+            )
+    recall = coverage_sum / len(gold) if gold else None
+    covered = sum(1 for u in unit_coverage if u["coverage"] >= recall_thresh)
 
     # Off-target (interpretive): a located claim none of whose fragment spans
     # touch any gold span.
@@ -356,9 +383,12 @@ def grade_digest(
     return {
         "claims": len(claims),
         "gold_spans": len(gold),
+        "gold_units": len(gold),  # each highlight is its own unit (anomalica ruling)
+        "units_with_context": units_with_context,
+        "max_context": max_context,
         "unlocatable_gold": unlocatable_gold,
-        "chain_units": len(units),
-        "recall": recall,
+        "recall": recall,  # coverage-weighted mean, NOT a hit/miss count
+        "fully_covered": covered,  # units at >= recall_thresh coverage (diagnostic only)
         "quote_fidelity": fidelity,
         "fidelity_contiguous": (n_contiguous / len(claims)) if claims else None,
         "contiguous": n_contiguous,
@@ -367,8 +397,8 @@ def grade_digest(
         "broken": len(broken_quotes),
         "off_target_rate": off_target_rate,
         "off_target_count": len(off_target),
-        "covered": covered,
         "missed": missed,
+        "unit_coverage": unit_coverage,
         "off_target": off_target,
         "reordered_quotes": reordered_quotes,
         "broken_quotes": broken_quotes,
