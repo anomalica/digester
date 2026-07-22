@@ -17,7 +17,11 @@ is ignored (it is unreliable and carrier-specific; realign already taught us tha
 
 WHAT IS GOLD-BACKED AND WHAT IS NOT - the honesty line the tuning programme turns on:
   - RECALL (did highlighted spans survive into the digest) is gold-backed: a
-    reviewer asserted these spans matter, so a miss is a real miss.
+    reviewer asserted these spans matter, so a miss is a real miss. It is
+    COVERAGE-WEIGHTED, never binary per-highlight - a highlight carrying several
+    facts scores the fraction of its characters that claims cover (1 of 3 facts
+    reads 33%, not a hit). highlight != claim granularity is by design; atomicity
+    is the extraction's obligation, measured here as coverage.
   - QUOTE FIDELITY (does each claim's quote appear verbatim in the source) is
     gold-backed against the source itself: a quote that does not locate is
     fabricated or paraphrased, independent of any highlight.
@@ -31,12 +35,19 @@ WHAT IS GOLD-BACKED AND WHAT IS NOT - the honesty line the tuning programme turn
     RELATIVE signal between variants (fewer off-target at equal recall is plausibly
     less noisy), never as an absolute precision score. See ADR 0042.
 
-CHAINS. Context-linked highlights (`{{highlight-context: [dependent, earlier..]}}`)
-are one gold unit - the later span depends on the earlier for its referent, and a
-faithful extraction resolves the coreference (names the person a later span only
-calls "he"). v1 reports chain-unit membership and per-span recall; the chain-level
-attribution check is a declared next increment, deliberately absent rather than
-faked (a fake attribution number would corrupt exactly the decision it informs).
+GOLD UNITS AND CONTEXT (anomalica's ruling on Mark's real chains). EACH highlight
+is its own gold unit = itself + its transitive ANCESTOR closure via
+`{{highlight-context: [dependent, earlier..]}}` edges. This is NOT
+union-by-component: a shared person-intro hub is context to many units WITHOUT
+merging them (union would collapse a 39-node web into one unit - wrong). The
+closure is CONTEXT for the coreference requirement - a faithful extraction of a
+dependent span resolves the referent (names the person a later span only calls
+"he") using its closure. Dangling context refs (an ancestor since deleted) are
+dropped as absent context, never a failure of the citing unit. The loader reports
+the unit structure (units, units-with-context, max closure depth); per-unit
+coreference-resolution SCORING is loaded structurally but not yet scored -
+deliberately absent rather than faked (a fake attribution number would corrupt
+exactly the decision it informs).
 """
 
 from __future__ import annotations
