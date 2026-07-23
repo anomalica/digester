@@ -12,6 +12,9 @@ from anomalica_common.llm import (
     estimate_record,
     get_usage,
     get_usage_trace,
+    get_schema_enforcement,
+    is_openrouter_model,
+    reset_schema_enforcement,
     reset_usage,
     resolve_use_api,
     spend_confirmed,
@@ -231,6 +234,7 @@ def _do_extract(
 
     click.echo(f"Extracting (two-pass) from: {parsed.title or path.name}")
     reset_usage()
+    reset_schema_enforcement()
     try:
         result = extract_two_pass(
             parsed.body,
@@ -275,6 +279,12 @@ def _do_extract(
             model=model,
             ai_usage=ai_usage,
             pre_digest={"sha256": pd_sha, "prep_version": PREP_VERSION},
+            # Omitted (None) on the Anthropic paths, which enforce the schema by
+            # construction; set to native/prompt/mixed for an OpenRouter run so a
+            # cross-model comparison can tell enforcement apart from quality.
+            schema_enforcement=(
+                get_schema_enforcement() if is_openrouter_model(model) else None
+            ),
         )
 
         if digests_root is not None:
