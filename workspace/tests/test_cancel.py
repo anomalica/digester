@@ -62,3 +62,23 @@ def test_extract_command_exits_75_on_cancel(tmp_path, monkeypatch):
     result = CliRunner().invoke(main, ["extract", str(rec)])
     assert result.exit_code == 75
     assert "Completed chunks are cached" in result.output
+
+
+def test_extract_command_exits_77_on_rate_limit(tmp_path, monkeypatch):
+    # The scheduler's dispatcher only sees an exit code. On a FLAT plan throttling
+    # is the governor rather than spend, so it must park+retry, never strike toward
+    # skip the way a real extraction failure (exit 1) does.
+    from anomalica_common.llm import OpencodeRateLimited
+
+    rec = tmp_path / "rec.md"
+    rec.write_text("---\ntitle: Test\n---\nSome body text for the record.\n")
+
+    def throttled(*a, **k):
+        raise OpencodeRateLimited("opencode throttled (model=opencode-go/glm-5.2)")
+
+    monkeypatch.setattr(cli, "_do_extract", throttled)
+    result = CliRunner().invoke(
+        main, ["extract", str(rec), "--model", "opencode-go/glm-5.2"]
+    )
+    assert result.exit_code == 77
+    assert "NOT an extraction failure" in result.output

@@ -134,6 +134,15 @@ def extract_cmd(
 
     from digester.extract import ExtractionCancelled, request_cancel
 
+    # Exit-code contract with anomalica/scheduler, whose dispatcher only ever sees
+    # a process exit code: 0 done, 75 clean cancel (cache valid), 77 rate-limited,
+    # 143/137 hard kill, 1 real failure, 2 spend gate refused. 77 is its own code
+    # because on a FLAT plan throttling is the governor rather than spend - it must
+    # park the lane and retry with backoff, never strike toward skip the way a
+    # genuine extraction failure does. Grepping stderr for it would be the fragile
+    # alternative.
+    from anomalica_common.llm import OpencodeRateLimited
+
     signal.signal(signal.SIGTERM, lambda *_: request_cancel())
     try:
         _do_extract(
@@ -153,6 +162,13 @@ def extract_cmd(
             "call the model."
         )
         ctx.exit(75)
+    except OpencodeRateLimited as e:
+        click.echo(
+            f"\nRate-limited by the opencode plan: {e}\nCompleted chunks are cached; "
+            "park this lane and retry with backoff - this is NOT an extraction "
+            "failure."
+        )
+        ctx.exit(77)
 
 
 def _normalise_locations(parsed, claims: list, echo=lambda _: None) -> None:
