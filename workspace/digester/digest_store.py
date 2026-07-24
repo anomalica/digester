@@ -62,13 +62,22 @@ def variant_path(
     friendly_name: str,
     model: str,
     prompt_provenance: list[dict] | None,
+    run_label: str | None = None,
 ) -> Path:
-    return (
-        digests_root
-        / "variants"
-        / _de_version(friendly_name)
-        / f"{_safe(model)}.{prompt_sha8(prompt_provenance)}.yaml"
-    )
+    """Path for a model+prompt variant, optionally widened by a run label.
+
+    Without a label the key is (model, prompt sha) - so a re-run of the same
+    configuration correctly OVERWRITES its own variant. That is right for redo
+    semantics and wrong for a DELIBERATE REPEAT: measuring run-to-run variance
+    needs two artefacts of the identical configuration, and without a label the
+    second silently overwrites the first, leaving one file and nothing to compare
+    after paying for both. `run_label` makes a repeat a first-class artefact rather
+    than a one-off hack run outside the queue.
+    """
+    stem = f"{_safe(model)}.{prompt_sha8(prompt_provenance)}"
+    if run_label:
+        stem += f".{_safe(run_label)}"
+    return digests_root / "variants" / _de_version(friendly_name) / f"{stem}.yaml"
 
 
 def canonical_path(digests_root: Path, friendly_name: str) -> Path:
@@ -82,12 +91,13 @@ def write_digest(
     model: str,
     prompt_provenance: list[dict] | None,
     variant_only: bool = False,
+    run_label: str | None = None,
 ) -> dict:
     """Write the model-variant (always) and, for a production run not marked
     variant-only, update the canonical (latest-written). Returns the paths
     written: ``{"variant": Path, "canonical": Path | None}``.
     """
-    vp = variant_path(digests_root, friendly_name, model, prompt_provenance)
+    vp = variant_path(digests_root, friendly_name, model, prompt_provenance, run_label)
     vp.parent.mkdir(parents=True, exist_ok=True)
     vp.write_text(text)
     written = {"variant": vp, "canonical": None}
@@ -99,6 +109,10 @@ def write_digest(
     from anomalica_common.llm import is_opencode_model
 
     if is_opencode_model(model):
+        variant_only = True
+    # A labelled run is a deliberate repeat for measurement, never the production
+    # artefact - it must not move the canonical even under the active prompt.
+    if run_label:
         variant_only = True
     if not variant_only and is_active_prompt(prompt_provenance):
         cp = canonical_path(digests_root, friendly_name)

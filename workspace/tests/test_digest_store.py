@@ -120,3 +120,21 @@ def test_opencode_model_can_never_write_the_canonical(tmp_path):
     # ... while an ordinary model with the active prompt still does.
     written2 = ds.write_digest(tmp_path, "rec", "text: yes\n", "haiku", prov)
     assert written2["canonical"] is not None
+
+
+def test_run_label_lets_a_deliberate_repeat_land_beside_its_twin(tmp_path):
+    # Without a label two runs of the SAME (model, prompt) collide and the second
+    # silently overwrites the first - leaving one file and nothing to compare after
+    # paying for both runs. That is right for a redo, fatal for measuring variance.
+    prov = [{"version": "v3", "sha256": "abc"}]
+    a = ds.write_digest(tmp_path, "rec", "A\n", "sonnet", prov, run_label="varA")
+    b = ds.write_digest(tmp_path, "rec", "B\n", "sonnet", prov, run_label="varB")
+    assert a["variant"] != b["variant"]
+    assert a["variant"].read_text() == "A\n"
+    assert b["variant"].read_text() == "B\n"
+    # a labelled run is a measurement, never the production artefact
+    assert a["canonical"] is None and b["canonical"] is None
+    # and an unlabelled active-prompt run still writes the canonical
+    assert (
+        ds.write_digest(tmp_path, "rec", "C\n", "sonnet", prov)["canonical"] is not None
+    )

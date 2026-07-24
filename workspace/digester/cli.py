@@ -85,6 +85,14 @@ def main() -> None:
     "the artefact for the workbench's read-only pre-digest tab.",
 )
 @click.option(
+    "--run-label",
+    default=None,
+    help="Label a DELIBERATE REPEAT so it lands beside its twin instead of "
+    "overwriting it. Without one, an identical (model, prompt) re-run overwrites "
+    "its own variant - right for a redo, fatal for measuring run-to-run variance. "
+    "A labelled run is always variant-only.",
+)
+@click.option(
     "--confirm",
     is_flag=True,
     help="Confirm the printed cost estimate and proceed with the metered run "
@@ -99,6 +107,7 @@ def extract_cmd(
     digests_root: str | None,
     variant_only: bool,
     predigests_root: str | None,
+    run_label: str | None,
     confirm: bool,
 ) -> None:
     """Extract knowledge from a record into a reviewable digest YAML file."""
@@ -154,6 +163,7 @@ def extract_cmd(
             Path(digests_root) if digests_root else None,
             variant_only,
             Path(predigests_root) if predigests_root else None,
+            run_label,
         )
     except ExtractionCancelled:
         click.echo(
@@ -214,6 +224,7 @@ def _do_extract(
     digests_root: Path | None = None,
     variant_only: bool = False,
     predigests_root: Path | None = None,
+    run_label: str | None = None,
 ) -> Path:
     """Run the two-pass extraction for one parsed record and write the digest YAML.
 
@@ -320,6 +331,7 @@ def _do_extract(
                 model,
                 result.get("prompt_provenance"),
                 variant_only=variant_only,
+                run_label=run_label,
             )
             click.echo(f"\nVariant: {written['variant']}")
             if written["canonical"]:
