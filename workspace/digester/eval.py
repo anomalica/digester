@@ -212,10 +212,36 @@ def _named_referents(text: str) -> list[str]:
 
 
 def _is_dependent(span_text: str) -> bool:
-    """A span is coreference-dependent if it leans on a third-person pronoun and
-    does not already name its own referent (heuristic; the emitted audit lets a
-    human correct the mechanical call)."""
+    """DEPRECATED heuristic, retained only for callers that still import it.
+
+    Superseded because it second-guessed the human gold. A reviewer who draws a
+    context edge has ALREADY DECLARED that span dependent - that is what the edge
+    means - so inferring dependency from prose is both unnecessary and wrong. On
+    Mark's gold this rule selected 10 of the 104 context-bearing units: the
+    "names no proper noun" clause alone cut 82 to 10, because a span like "Bob
+    Lazar said it was the company that hired him" names Lazar while depending on
+    its ancestors for "it" and "him". Presence of A name does not make a span
+    self-contained.
+    """
     return bool(_THIRD_PERSON.search(span_text)) and not _named_referents(span_text)
+
+
+def _closure_referents(
+    unit_id: str, closures: dict[str, set[str]], gold_by_id: dict[str, dict]
+) -> set[str]:
+    """Proper nouns named in a unit's ANCESTOR spans - the referents a dependent
+    span is expected to resolve to.
+
+    This is what makes the coreference check a real test rather than a proxy: it
+    asks whether the extraction carried the referent FORWARD FROM THE LINKED
+    ANCESTOR, not merely whether it happened to name somebody.
+    """
+    out: set[str] = set()
+    for anc in closures.get(unit_id, ()):
+        g = gold_by_id.get(anc)
+        if g:
+            out.update(_named_referents(g["text"]))
+    return out
 
 
 def _overlap(span: list[int], spans: list[tuple[int, int]]) -> int:
@@ -475,30 +501,53 @@ def grade_digest(
     # closure; it passes if a covering claim names a referent. Emit per pass the
     # name seen and the closure hubs it presumably resolves to, so the semantic
     # axis (RIGHT referent) is cheap to spot-check by sampling.
+    # APPLICABILITY IS THE REVIEWER'S DECLARATION, not our inference: a unit is
+    # coreference-applicable when it has a non-empty ancestor closure, because
+    # drawing that context edge IS the human saying "this span needs the earlier
+    # one to be understood". The previous rule additionally demanded a pronoun and
+    # NO proper noun, which selected 10 of 104 - it was overriding the gold with a
+    # worse guess, and left the chains Mark hand-built almost entirely untested.
+    #
+    # PASSING now means resolving to the RIGHT source: a covering claim must name a
+    # referent that appears in the unit's ANCESTOR spans, not merely name somebody.
+    # A unit whose ancestors name nobody cannot test name-resolution at all, so it
+    # is counted UNTESTABLE rather than silently passed or failed.
+    gold_by_id = {g["id"]: g for g in gold}
     coref_applicable = 0
     coref_passed = 0
+    coref_untestable = 0
     coref_audit: list[dict] = []
     for g in gold:
         closure = closures.get(g["id"]) or set()
-        if not closure or not _is_dependent(g["text"]):
+        if not closure:
             continue
         gs = (g["span"][0], g["span"][1])
         covering = [c for c in located if _overlap(list(gs), c["spans"]) > 0]
         if not covering:
             continue  # not recalled at all -> a recall miss, not a coref failure
+        candidates = _closure_referents(g["id"], closures, gold_by_id)
+        if not candidates:
+            coref_untestable += 1
+            continue
         coref_applicable += 1
-        named = []
+        named: list[str] = []
         for c in covering:
-            named += _named_referents(c["text"]) + c.get("refs", [])
-        if named:
+            named += _named_referents(c["text"]) + list(c.get("refs", []))
+        # A ref name is "Last, First"; an ancestor may name either part.
+        hit = sorted(
+            {cand for cand in candidates for n in named if cand in n or n in cand}
+        )
+        if hit:
             coref_passed += 1
-            coref_audit.append(
-                {
-                    "unit": g["id"],
-                    "named": sorted(set(named))[:5],
-                    "closure_hubs": sorted(closure),
-                }
-            )
+        coref_audit.append(
+            {
+                "unit": g["id"],
+                "resolved": bool(hit),
+                "matched": hit[:5],
+                "expected_from_ancestors": sorted(candidates)[:8],
+                "closure_hubs": sorted(closure),
+            }
+        )
     coref_rate = (coref_passed / coref_applicable) if coref_applicable else None
 
     return {
@@ -520,6 +569,7 @@ def grade_digest(
         "off_target_count": len(off_target),
         "coref_applicable": coref_applicable,
         "coref_passed": coref_passed,
+        "coref_untestable": coref_untestable,  # closure names nobody to resolve to
         "coref_rate": coref_rate,  # mechanical: named A referent, not the RIGHT one
         "missed": missed,
         "unit_coverage": unit_coverage,

@@ -149,8 +149,8 @@ def _digest_qt(pairs):
 
 
 def test_coref_pass_when_claim_names_referent():
-    # Dependent span "He later..." (closure {a}) covered by a claim that NAMES the
-    # referent -> mechanical coref PASS, with the name + closure hub emitted.
+    # Dependent span "He later..." (closure {a}) covered by a claim naming the
+    # referent THAT APPEARS IN THE ANCESTOR -> pass, with the match emitted.
     digest = _digest_qt(
         [
             (
@@ -163,7 +163,8 @@ def test_coref_pass_when_claim_names_referent():
     assert r["coref_applicable"] == 1
     assert r["coref_passed"] == 1
     assert r["coref_audit"][0]["closure_hubs"] == ["a"]
-    assert "Stewart" in r["coref_audit"][0]["named"]
+    assert r["coref_audit"][0]["resolved"] is True
+    assert "Stewart" in r["coref_audit"][0]["matched"]
 
 
 def test_coref_fail_when_claim_leaves_bare_pronoun():
@@ -196,3 +197,41 @@ def test_external_gold_texts_override_in_body_highlights():
     assert r["gold_spans"] == 1  # the one external span, not the body's two highlights
     assert r["recall"] == 1.0
     assert r["off_target_count"] == 0
+
+
+def test_coref_applicability_is_the_reviewers_edge_not_our_guess():
+    # A span that NAMES someone can still depend on its ancestor for a DIFFERENT
+    # referent ("Bob Lazar said it was the company that hired him"). The old rule
+    # discarded exactly those - the cases where attribution actually breaks - and
+    # selected 10 of Mark's 104 context-bearing units. Applicability is now simply:
+    # the reviewer drew a context edge.
+    body = "\n".join(
+        [
+            "{{highlight-start: a}}Jon Stewart hosted the show.{{highlight-end: a}}",
+            "{{highlight-start: b}}Bob Lazar said he hired him.{{highlight-end: b}}",
+            "{{highlight-context: [b, a]}}",
+        ]
+    )
+    digest = _digest_qt(
+        [("Bob Lazar said he hired him.", "Jon Stewart hired Bob Lazar.")]
+    )
+    r = grade_digest(body, digest)
+    assert r["coref_applicable"] == 1  # not filtered out for naming Lazar
+    assert r["coref_passed"] == 1  # resolved to "Stewart", named in the ancestor
+
+
+def test_coref_untestable_when_ancestors_name_nobody():
+    # If the linked ancestor names no proper noun there is nothing to resolve TO,
+    # so the unit cannot test name-resolution - counted untestable, never a pass.
+    body = "\n".join(
+        [
+            "{{highlight-start: a}}the tape was shown that evening.{{highlight-end: a}}",
+            "{{highlight-start: b}}He later described it.{{highlight-end: b}}",
+            "{{highlight-context: [b, a]}}",
+        ]
+    )
+    r = grade_digest(
+        body, _digest_qt([("He later described it.", "Someone described it.")])
+    )
+    assert r["coref_applicable"] == 0
+    assert r["coref_untestable"] == 1
