@@ -91,6 +91,15 @@ def write_digest(
     vp.parent.mkdir(parents=True, exist_ok=True)
     vp.write_text(text)
     written = {"variant": vp, "canonical": None}
+    # An opencode run is COMPARISON-ONLY and can never become canonical, enforced
+    # here rather than left to the caller: opencode cannot enforce an output schema
+    # (prompt-embedded only), so its claims may omit required provenance fields and
+    # may reference nodes outside Pass A's enum. Structurally advisory output must
+    # not reach the graph or the public site no matter which flags a caller passes.
+    from anomalica_common.llm import is_opencode_model
+
+    if is_opencode_model(model):
+        variant_only = True
     if not variant_only and is_active_prompt(prompt_provenance):
         cp = canonical_path(digests_root, friendly_name)
         cp.parent.mkdir(parents=True, exist_ok=True)

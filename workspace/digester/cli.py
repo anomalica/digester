@@ -13,6 +13,8 @@ from anomalica_common.llm import (
     get_usage,
     get_usage_trace,
     get_schema_enforcement,
+    is_metered,
+    is_opencode_model,
     is_openrouter_model,
     reset_schema_enforcement,
     reset_usage,
@@ -109,8 +111,11 @@ def extract_cmd(
     # SPEND GATE (anomalica/CLAUDE.md operating rule): when this run will hit
     # the metered API, print a cost estimate and refuse to proceed without an
     # explicit --confirm. A promise/convention is not enough - this is the gate.
+    # Only price a run that actually costs per-token money. A flat-rate plan
+    # (Claude subscription, opencode) has no price to quote, and asking for one
+    # raises by design - refusing to guess is the GAP-2 behaviour.
     use_api = resolve_use_api(_USE_API_VAR)
-    if not spend_confirmed(
+    if is_metered(model, use_api) and not spend_confirmed(
         estimate_record(len(parsed.body or ""), model),
         model,
         confirm,
@@ -283,7 +288,9 @@ def _do_extract(
             # construction; set to native/prompt/mixed for an OpenRouter run so a
             # cross-model comparison can tell enforcement apart from quality.
             schema_enforcement=(
-                get_schema_enforcement() if is_openrouter_model(model) else None
+                get_schema_enforcement()
+                if (is_openrouter_model(model) or is_opencode_model(model))
+                else None
             ),
         )
 

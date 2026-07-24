@@ -103,3 +103,20 @@ def test_versioned_symlink_writes_the_de_versioned_dir(tmp_path):
         digest_store.variant_path(tmp_path, "jon-stewart", "haiku", prov).parent
         == v.parent
     )
+
+
+def test_opencode_model_can_never_write_the_canonical(tmp_path):
+    # opencode cannot enforce an output schema, so its claims may omit required
+    # provenance fields and reference nodes outside Pass A's enum. Structurally
+    # advisory output must not reach the graph or the public site even if a caller
+    # forgets --variant-only.
+    prov = [{"version": "v3", "sha256": "abc"}]
+    written = ds.write_digest(
+        tmp_path, "rec", "text: yes\n", "opencode-go/glm-5.2", prov, variant_only=False
+    )
+    assert written["canonical"] is None
+    assert written["variant"].exists()
+
+    # ... while an ordinary model with the active prompt still does.
+    written2 = ds.write_digest(tmp_path, "rec", "text: yes\n", "haiku", prov)
+    assert written2["canonical"] is not None
