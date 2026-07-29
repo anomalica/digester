@@ -150,7 +150,7 @@ def extract_cmd(
     # park the lane and retry with backoff, never strike toward skip the way a
     # genuine extraction failure does. Grepping stderr for it would be the fragile
     # alternative.
-    from anomalica_common.llm import OpencodeRateLimited
+    from anomalica_common.llm import OpencodeRateLimited, PlanRateLimited
 
     signal.signal(signal.SIGTERM, lambda *_: request_cancel())
     try:
@@ -177,6 +177,20 @@ def extract_cmd(
             f"\nRate-limited by the opencode plan: {e}\nCompleted chunks are cached; "
             "park this lane and retry with backoff - this is NOT an extraction "
             "failure."
+        )
+        ctx.exit(77)
+    except PlanRateLimited as e:
+        # Same exit code as the opencode case, and for the same reason: on a flat
+        # plan throttling is the governor, not spend. It must park the lane, never
+        # strike toward skip - two strikes and the scheduler unstages a record that
+        # was never broken. This matters more with concurrent workers, since N of
+        # them reach the 5-hour cap N times faster.
+        wait = e.seconds_until_reset()
+        when = f" Window resets in ~{int(wait / 60)} min." if wait else ""
+        click.echo(
+            f"\nRate-limited by the Claude plan: {e}{when}\nCompleted chunks are "
+            "cached; park this lane and retry after the reset - this is NOT an "
+            "extraction failure."
         )
         ctx.exit(77)
 
@@ -213,6 +227,22 @@ def _normalise_locations(parsed, claims: list, echo=lambda _: None) -> None:
         f"  locations -> {axis}: {stats['aligned']}/{stats['total']} aligned"
         f" ({stats['unaligned']} unalignable, {stats['ambiguous']} ambiguous)"
     )
+
+
+def _review_provenance_for(record_md: Path) -> dict:
+    """Review state for the digest stamp, resolved from the record's location.
+
+    Tolerant by design: a stamp is provenance, not a gate, so a record whose
+    ingests root cannot be resolved records "unknown" rather than failing the
+    extraction or - worse - silently claiming the record was unreviewed.
+    """
+    from digester.review_gate import review_provenance
+
+    try:
+        ingests_dir = record_md.resolve().parent.parent
+        return review_provenance(record_md, ingests_dir)
+    except OSError:
+        return {"state": "unknown", "sidecar": "unresolved"}
 
 
 def _do_extract(
@@ -308,6 +338,7 @@ def _do_extract(
             record_processing_version=(parsed.metadata.get("processing") or {}).get(
                 "version"
             ),
+            review=_review_provenance_for(path),
             model=model,
             ai_usage=ai_usage,
             pre_digest={"sha256": pd_sha, "prep_version": PREP_VERSION},
