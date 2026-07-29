@@ -112,6 +112,26 @@ def _candidate_starts(qt: list[str], src: list[str], seed_len: int = 4) -> list[
     return out
 
 
+# "Jon Stewart: he gave me..." - a speaker label the model prepended to an
+# otherwise verbatim quote. The record carries the speaker as a separate
+# annotation, never inline, so the label is not in the word stream: its tokens
+# cannot anchor, the quote falls through to the unbounded global match below, and
+# the span runs from the label's first occurrence anywhere in the record to the
+# real content. Measured on jon-stewart: six haiku claims all pinned to word 703
+# (the first "jon stewart" in the transcript) with ends up to 3h11m later.
+_SPEAKER_PREFIX = re.compile(r"^[A-Z][A-Za-z.'-]+(?: [A-Z][A-Za-z.'-]+){0,3}:\s+")
+
+# How far a globally-matched span may exceed the quote before it is rejected as
+# degenerate. A quote can legitimately span more source words than it has tokens -
+# elision, stripped annotations, normalisation - but not by an order of magnitude.
+_MAX_GLOBAL_SPAN_RATIO = 4.0
+_MIN_GLOBAL_SPAN_SLACK = 40
+
+
+def _strip_speaker_prefix(quote: str) -> str:
+    return _SPEAKER_PREFIX.sub("", quote, count=1)
+
+
 def _score_window(qt: list[str], src: list[str], times: list[float], i: int):
     """Coverage + (start, end) seconds for the quote aligned in a window at i."""
     slack = max(4, len(qt) // 4)
@@ -139,7 +159,7 @@ def align_quote(
     Returns None if the quote is empty, the stream is empty, or no candidate
     clears the minimum coverage (the quote is not verbatim-present).
     """
-    qt = tokenise(quote)
+    qt = tokenise(_strip_speaker_prefix(quote))
     if not qt or not words:
         return None
 
@@ -165,6 +185,18 @@ def align_quote(
         coverage = sum(b.size for b in blocks) / len(qt)
         first = min(blocks, key=lambda b: b.b)
         last = max(blocks, key=lambda b: b.b + b.size)
+        # GUARD. Only this branch can produce a degenerate span: _score_window is
+        # bounded to len(qt) + slack, so a windowed match is proportionate by
+        # construction, while this fallback matches across the WHOLE stream and
+        # will happily join a stray leading token to content an hour away. An
+        # unalignable quote must stay unaligned - the claim then keeps whatever
+        # the model wrote, which is honest - rather than acquire a confident span
+        # covering half the record that no reviewer can check.
+        span_words = (last.a + last.size) - first.a
+        if span_words > max(
+            len(qt) * _MAX_GLOBAL_SPAN_RATIO, len(qt) + _MIN_GLOBAL_SPAN_SLACK
+        ):
+            return None
         scored = [(coverage, times[first.a], times[last.a + last.size - 1])]
 
     scored.sort(key=lambda x: -x[0])
@@ -184,6 +216,33 @@ def align_quote(
         resolution=resolution,
         ambiguous=ambiguous,
     )
+
+
+def _set_location(claim: dict, value: str) -> None:
+    """Write the canonical span to whichever location key this claim stage uses.
+
+    In flight from the extractor the field is `location_in_record`; a written
+    digest calls it `location`. Setting only one is a silent no-op at the other
+    stage - the normaliser reported 10/10 aligned while the digest on disk kept
+    the model's invented string, because the value went into a key the writer
+    does not read. Set whichever exist, defaulting to the in-flight name.
+    """
+    if "location" in claim:
+        claim["location"] = value
+    if "location_in_record" in claim or "location" not in claim:
+        claim["location_in_record"] = value
+
+
+def _quote_of(claim: dict) -> str:
+    """The claim's verbatim quote, whatever stage of the pipeline it is at.
+
+    In-flight from the extractor the field is `original_excerpt`; once written to
+    a digest it is `quote`. Reading only one silently yields "" and every claim
+    reports as unalignable - which is exactly what happened: a normalisation wired
+    into extraction scored 0/12 aligned because it was reading the post-write name
+    of a pre-write field.
+    """
+    return (claim.get("quote") or claim.get("original_excerpt") or "").strip()
 
 
 def seconds_to_timecode(seconds: float) -> str:
@@ -213,12 +272,13 @@ def normalise_claim_locations(
     """
     stats = {"aligned": 0, "unaligned": 0, "ambiguous": 0, "total": len(claims)}
     for claim in claims:
-        result = align_quote(claim.get("quote") or "", words, times, "word")
+        result = align_quote(_quote_of(claim), words, times, "word")
         if result is None:
             stats["unaligned"] += 1
             continue
-        claim["location"] = (
-            f"{seconds_to_timecode(result.start)}-{seconds_to_timecode(result.end)}"
+        _set_location(
+            claim,
+            f"{seconds_to_timecode(result.start)}-{seconds_to_timecode(result.end)}",
         )
         stats["aligned"] += 1
         if result.ambiguous:
@@ -266,11 +326,11 @@ def normalise_untimed_locations(claims: list[dict], body: str) -> dict:
     words, offsets = words_from_text(body)
     stats = {"aligned": 0, "unaligned": 0, "ambiguous": 0, "total": len(claims)}
     for claim in claims:
-        r = align_quote(claim.get("quote") or "", words, offsets, "char")
+        r = align_quote(_quote_of(claim), words, offsets, "char")
         if r is None:
             stats["unaligned"] += 1
             continue
-        claim["location"] = offsets_to_span(r.start, r.end)
+        _set_location(claim, offsets_to_span(r.start, r.end))
         stats["aligned"] += 1
         if r.ambiguous:
             stats["ambiguous"] += 1

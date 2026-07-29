@@ -113,3 +113,45 @@ def test_word_level_alignment_through_record2_adapter():
     assert r.start == 69.27
     assert r.end == 70.58
     assert r.coverage == 1.0
+
+
+def test_speaker_prefix_is_stripped_before_alignment():
+    """A model that prepends "Name: " to an otherwise verbatim quote must still
+    anchor. The label is never in the word stream - the record carries the
+    speaker as a separate annotation - so unstripped it cannot match, the quote
+    falls through to the unbounded global match, and the span runs from the
+    label's first occurrence anywhere in the record to the real content."""
+    from digester.realign import align_quote
+
+    words = "he gave me for five hundred dollars the first name".split()
+    times = [float(i) for i in range(len(words))]
+    plain = align_quote("he gave me for five hundred", words, times, "timecode")
+    prefixed = align_quote(
+        "Jon Stewart: he gave me for five hundred", words, times, "timecode"
+    )
+    assert plain is not None and prefixed is not None
+    assert (prefixed.start, prefixed.end) == (plain.start, plain.end)
+
+
+def test_global_fallback_refuses_a_disproportionate_span():
+    """The windowed path is bounded to the quote's length, so only the global
+    fallback can join a stray token to content far away. A quote that can only be
+    matched across a huge stretch is not verbatim-present; refusing leaves the
+    claim with whatever the model wrote, which is honest, rather than a confident
+    span no reviewer can check."""
+    from digester.realign import align_quote
+
+    # "alpha" at the start, "omega" 400 words later, nothing in between matches.
+    words = ["alpha"] + ["filler"] * 400 + ["omega"]
+    times = [float(i) for i in range(len(words))]
+    assert align_quote("alpha omega", words, times, "timecode") is None
+
+
+def test_short_document_global_fallback_still_aligns():
+    """The guard must not reject ordinary small documents, where a span a few
+    times the quote length is normal rather than degenerate."""
+    from digester.realign import align_quote
+
+    words = "the object was observed by two aircrew over the pacific".split()
+    times = [float(i) for i in range(len(words))]
+    assert align_quote("object observed aircrew", words, times, "char") is not None
