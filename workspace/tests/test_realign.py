@@ -155,3 +155,44 @@ def test_short_document_global_fallback_still_aligns():
     words = "the object was observed by two aircrew over the pacific".split()
     times = [float(i) for i in range(len(words))]
     assert align_quote("object observed aircrew", words, times, "char") is not None
+
+
+def test_chapter_spans_and_relative_locations():
+    """A global character offset only means anything against one exact
+    pre-digest: it moves when the handler re-extracts and again on any
+    PREP_VERSION bump. A chapter label comes from the source's own structure and
+    survives both, so only the within-chapter offset has to be recomputed."""
+    from digester.realign import chapter_spans, offsets_to_span
+
+    body = (
+        "<!-- chapter: 1 -->\nfirst chapter text here\n"
+        "<!-- chapter: 2 -->\nsecond chapter text here\n"
+    )
+    chs = chapter_spans(body)
+    assert [c[0] for c in chs] == ["1", "2"]
+
+    ch2_start = chs[1][1]
+    assert offsets_to_span(ch2_start + 5, ch2_start + 12, chs) == "ch2:5-12"
+    assert offsets_to_span(chs[0][1] + 2, chs[0][1] + 9, chs) == "ch1:2-9"
+
+
+def test_offsets_to_span_falls_back_to_char_without_chapters():
+    """Every record type but ebooks has no chapter markers; those keep the bare
+    pre-digest span rather than acquiring a fabricated chapter."""
+    from digester.realign import chapter_spans, offsets_to_span
+
+    assert chapter_spans("no markers at all") == []
+    assert offsets_to_span(10, 20, []) == "char:10-20"
+    assert offsets_to_span(10, 20, None) == "char:10-20"
+
+
+def test_untimed_locations_are_chapter_relative_when_chapters_exist():
+    from digester.realign import normalise_untimed_locations
+
+    body = (
+        "<!-- chapter: 1 -->\nthe committee met in October to review the matter\n"
+        "<!-- chapter: 2 -->\nthe object was observed by two aircrew over the pacific\n"
+    )
+    claims = [{"location": "?", "quote": "observed by two aircrew"}]
+    normalise_untimed_locations(claims, body)
+    assert claims[0]["location"].startswith("ch2:")

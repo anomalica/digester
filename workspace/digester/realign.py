@@ -310,9 +310,47 @@ def words_from_text(body: str) -> tuple[list[str], list[float]]:
     return words, offsets
 
 
-def offsets_to_span(start: float, end: float) -> str:
-    """The canonical untimed location: a character span in the pre-digest."""
-    return f"char:{int(start)}-{int(end)}"
+_CHAPTER_MARKER = re.compile(r"<!--\s*chapter:\s*([A-Za-z0-9]+)\s*-->")
+
+
+def chapter_spans(body: str) -> list[tuple[str, int, int]]:
+    """(label, start, end) for each chapter region in a body, in order.
+
+    Empty when the body has no chapter markers, which is every record type but
+    ebooks (and the occasional structured PDF).
+    """
+    marks = [(m.group(1), m.end()) for m in _CHAPTER_MARKER.finditer(body)]
+    if not marks:
+        return []
+    out = []
+    for i, (label, start) in enumerate(marks):
+        end = marks[i + 1][1] if i + 1 < len(marks) else len(body)
+        out.append((label, start, end))
+    return out
+
+
+def offsets_to_span(
+    start: float, end: float, chapters: list[tuple[str, int, int]] | None = None
+) -> str:
+    """The canonical untimed location.
+
+    CHAPTER-RELATIVE where the record has chapters (``ch3:1240-1310``), a bare
+    pre-digest character span otherwise (``char:1240-1310``).
+
+    A global character offset is only meaningful against one exact pre-digest: it
+    shifts if the handler re-extracts the source, and it shifts again on any
+    PREP_VERSION bump, because both change the text the offsets index into. For a
+    600KB book that is the whole location scheme dying at the next prep change.
+    A chapter label survives both - it comes from the source's own structure, not
+    from our processing - so only the offset WITHIN the chapter has to be
+    recomputed, and a reviewer looking for the quote has a chapter to open rather
+    than a character count into an 800KB file.
+    """
+    s, e = int(start), int(end)
+    for label, c_start, c_end in chapters or []:
+        if c_start <= s < c_end:
+            return f"ch{label}:{s - c_start}-{max(e - c_start, s - c_start)}"
+    return f"char:{s}-{e}"
 
 
 def normalise_untimed_locations(claims: list[dict], body: str) -> dict:
@@ -324,13 +362,14 @@ def normalise_untimed_locations(claims: list[dict], body: str) -> dict:
     original location rather than getting a fabricated one.
     """
     words, offsets = words_from_text(body)
+    chapters = chapter_spans(body)
     stats = {"aligned": 0, "unaligned": 0, "ambiguous": 0, "total": len(claims)}
     for claim in claims:
         r = align_quote(_quote_of(claim), words, offsets, "char")
         if r is None:
             stats["unaligned"] += 1
             continue
-        _set_location(claim, offsets_to_span(r.start, r.end))
+        _set_location(claim, offsets_to_span(r.start, r.end, chapters))
         stats["aligned"] += 1
         if r.ambiguous:
             stats["ambiguous"] += 1
