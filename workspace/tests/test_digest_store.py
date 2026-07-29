@@ -57,9 +57,9 @@ def test_variant_path_carries_model_and_prompt(tmp_path):
 
 def test_active_run_writes_variant_and_canonical(tmp_path):
     w = ds.write_digest(tmp_path, "rec", "DIGEST", "haiku", ACTIVE)
-    assert w["variant"].read_text() == "DIGEST"
+    assert w["variant"].read_text() == "run_kind: production\nDIGEST"
     assert w["canonical"] == tmp_path / "records" / "rec.yaml"
-    assert w["canonical"].read_text() == "DIGEST"
+    assert w["canonical"].read_text() == "run_kind: production\nDIGEST"
 
 
 def test_override_run_writes_variant_only(tmp_path):
@@ -81,10 +81,10 @@ def test_prompt_tune_preserves_prior_variant(tmp_path):
     tuned = [dict(ACTIVE[0], sha256="zzz"), ACTIVE[1]]
     v2 = ds.write_digest(tmp_path, "rec", "NEW", "haiku", tuned)["variant"]
     assert v1 != v2
-    assert v1.read_text() == "OLD" and v2.read_text() == "NEW"
+    assert v1.read_text().endswith("OLD") and v2.read_text().endswith("NEW")
     # identical model+prompt is a redo: overwrites its own file only
     v1b = ds.write_digest(tmp_path, "rec", "REDO", "haiku", ACTIVE)["variant"]
-    assert v1b == v1 and v1.read_text() == "REDO"
+    assert v1b == v1 and v1.read_text().endswith("REDO")
 
 
 def test_versioned_symlink_writes_the_de_versioned_dir(tmp_path):
@@ -130,11 +130,28 @@ def test_run_label_lets_a_deliberate_repeat_land_beside_its_twin(tmp_path):
     a = ds.write_digest(tmp_path, "rec", "A\n", "sonnet", prov, run_label="varA")
     b = ds.write_digest(tmp_path, "rec", "B\n", "sonnet", prov, run_label="varB")
     assert a["variant"] != b["variant"]
-    assert a["variant"].read_text() == "A\n"
-    assert b["variant"].read_text() == "B\n"
+    assert a["variant"].read_text().endswith("A\n")
+    assert b["variant"].read_text().endswith("B\n")
     # a labelled run is a measurement, never the production artefact
     assert a["canonical"] is None and b["canonical"] is None
     # and an unlabelled active-prompt run still writes the canonical
     assert (
         ds.write_digest(tmp_path, "rec", "C\n", "sonnet", prov)["canonical"] is not None
     )
+
+
+def test_run_kind_distinguishes_a_production_run_from_a_comparison_run(tmp_path):
+    """A production run's artefact lands in BOTH trees, byte-identical. Without a
+    marker, any cost figure summed over variants/ counts production work as
+    comparison work - which inflated a per-book measurement by ~2x before anyone
+    noticed, because a 12.6M-token book digest read as variant-lane consumption."""
+    from digester.digest_store import write_digest
+
+    prov = [{"name": "claims", "version": "abc12345"}]
+    prod = write_digest(tmp_path, "rec", "BODY", "sonnet", prov)
+    assert prod["variant"].read_text().startswith("run_kind: production\n")
+    assert prod["canonical"] is not None
+
+    comp = write_digest(tmp_path, "rec", "BODY", "sonnet", prov, run_label="repeat")
+    assert comp["variant"].read_text().startswith("run_kind: comparison\n")
+    assert comp["canonical"] is None

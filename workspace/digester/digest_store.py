@@ -99,7 +99,6 @@ def write_digest(
     """
     vp = variant_path(digests_root, friendly_name, model, prompt_provenance, run_label)
     vp.parent.mkdir(parents=True, exist_ok=True)
-    vp.write_text(text)
     written = {"variant": vp, "canonical": None}
     # An opencode run is COMPARISON-ONLY and can never become canonical, enforced
     # here rather than left to the caller: opencode cannot enforce an output schema
@@ -114,9 +113,22 @@ def write_digest(
     # artefact - it must not move the canonical even under the active prompt.
     if run_label:
         variant_only = True
-    if not variant_only and is_active_prompt(prompt_provenance):
+    # A production run's artefact lands in BOTH trees - the variant store records
+    # what this (model, prompt) produced, the canonical names the chosen one - and
+    # the two copies were byte-identical with nothing saying which was which. Any
+    # cost figure summed over variants/ therefore counted production runs as
+    # comparison work, silently: a 12.6M-token book digest read as variant-lane
+    # consumption and inflated a per-book cost measurement by ~2x before anyone
+    # noticed. Stamping the KIND of run makes the artefact answer that on its own,
+    # rather than requiring every consumer to cross-reference records/ and
+    # remember why.
+    is_production = not variant_only and is_active_prompt(prompt_provenance)
+    kind = "production" if is_production else "comparison"
+    stamped = f"run_kind: {kind}\n{text}"
+    vp.write_text(stamped)
+    if is_production:
         cp = canonical_path(digests_root, friendly_name)
         cp.parent.mkdir(parents=True, exist_ok=True)
-        cp.write_text(text)
+        cp.write_text(stamped)
         written["canonical"] = cp
     return written
