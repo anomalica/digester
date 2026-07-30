@@ -196,3 +196,39 @@ def test_untimed_locations_are_chapter_relative_when_chapters_exist():
     claims = [{"location": "?", "quote": "observed by two aircrew"}]
     normalise_untimed_locations(claims, body)
     assert claims[0]["location"].startswith("ch2:")
+
+
+def test_cache_collapse_canary_flags_a_broken_prefix_not_a_weak_one(tmp_path):
+    """Prompt caching only pays when the stable part of a call precedes the
+    variable part. If that order is ever reversed, every call rewrites what it
+    used to read - the extraction stays correct, every test passes, and only the
+    cost characteristic moves. The read/write ratio is the one signal that does."""
+    import yaml
+    from digester.cache_health import collapsed, ratios
+
+    def write(name, read, write_, calls):
+        (tmp_path / f"{name}.yaml").write_text(
+            yaml.safe_dump(
+                {
+                    "ai_usage": [
+                        {
+                            "stage": "digest",
+                            "tokens": {
+                                "cache_read": read,
+                                "cache_write": write_,
+                                "calls": calls,
+                            },
+                        }
+                    ]
+                }
+            )
+        )
+
+    write("healthy", 9_245_292, 9_170_506, 100)  # Imminent, measured
+    write("weakest_real", 815_483, 1_011_281, 40)  # Hair of the Alien, measured
+    write("collapsed", 12_000, 4_000_000, 40)  # prefix lost
+    write("single_call", 0, 188_848, 1)  # nothing to read back, legitimately
+
+    assert len(ratios(tmp_path)) == 4
+    flagged = {r["digest"] for r in collapsed(tmp_path)}
+    assert flagged == {"collapsed"}, flagged
