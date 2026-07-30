@@ -116,7 +116,7 @@ def parse_record(text: str) -> ParsedRecord:
         line = body_lines[i]
         if line.strip() == "---":
             end = _find_fence_end(body_lines, i + 1)
-            if end is not None:
+            if end is not None and _is_annotation_block(body_lines[i + 1 : end]):
                 annotation_text = "\n".join(body_lines[i + 1 : end])
                 try:
                     annotation = yaml.safe_load(annotation_text)
@@ -136,6 +136,34 @@ def parse_record(text: str) -> ParsedRecord:
 
     record.body = "\n".join(content_parts).strip()
     return record
+
+
+# Annotation keys that may appear in a fenced block in the body. A fence is only
+# an annotation if what follows actually looks like one.
+_ANNOTATION_KEYS = ("file_page", "printed_page", "chapter", "speaker", "image")
+
+
+def _is_annotation_block(lines: list[str]) -> bool:
+    """Whether a fenced region is an annotation rather than ordinary prose.
+
+    A bare `---` is legal prose - a section break, a horizontal rule - and books
+    use it. Treating every fence as an annotation opener made the parser swallow
+    everything up to the next one: Hair of the Alien carries 12 fences, and its
+    620KB body was silently reduced to 88KB with no error, no warning, and a
+    digest that looked complete. Nine claims from a book, and three sessions
+    hunting the loss in the wrong places.
+
+    So the fence must be CORROBORATED by its content before anything is dropped.
+    Prose that happens to sit between two horizontal rules is prose.
+    """
+    text = "\n".join(lines).strip()
+    if not text or len(lines) > 40:
+        return False
+    try:
+        parsed = yaml.safe_load(text)
+    except yaml.YAMLError:
+        return False
+    return isinstance(parsed, dict) and any(k in parsed for k in _ANNOTATION_KEYS)
 
 
 def _find_fence_end(lines: list[str], start: int) -> int | None:
