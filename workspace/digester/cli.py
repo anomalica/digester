@@ -71,7 +71,10 @@ def main() -> None:
     default=None,
     help="Write into a digests repo with the variant layout (ADR 0039): a "
     "model+prompt variant under variants/, and the canonical under records/ for "
-    "a production run. Re-digests never overwrite prior ones.",
+    "a production run. A variant is keyed by (model, prompt sha), so re-running "
+    "under a DIFFERENT prompt writes a new variant and leaves the old one. The "
+    "CANONICAL is a pointer to the chosen extraction and IS replaced by any "
+    "production run - that is what makes a re-digest take effect.",
 )
 @click.option(
     "--variant-only",
