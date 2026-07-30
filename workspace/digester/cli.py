@@ -20,6 +20,7 @@ from anomalica_common.llm import (
     reset_usage,
     resolve_use_api,
     check_allowance,
+    headroom_for,
     spend_confirmed,
     usage_entry,
 )
@@ -138,7 +139,13 @@ def extract_cmd(
     # hard-throttles the plan, which stops every component AND any supervising
     # session, since they share it - and then nothing is left to restart anything.
     if not use_api:
-        allowance = check_allowance()
+        # Headroom scales with the job: the ceiling governs whether a run STARTS,
+        # so the peak is the ceiling plus whatever an admitted job goes on to
+        # draw. A book admitted at 85% drew ten more points and was killed at the
+        # wall with no artefact written.
+        allowance = check_allowance(
+            session_headroom=headroom_for(len(parsed.body or ""))
+        )
         if not allowance.ok:
             click.echo(f"Allowance ceiling: {allowance.reason}")
             if allowance.resets_at:
