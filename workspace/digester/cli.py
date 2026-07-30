@@ -21,6 +21,7 @@ from anomalica_common.llm import (
     resolve_use_api,
     check_allowance,
     headroom_for,
+    weekly_reserve_for,
     spend_confirmed,
     usage_entry,
 )
@@ -143,8 +144,10 @@ def extract_cmd(
         # so the peak is the ceiling plus whatever an admitted job goes on to
         # draw. A book admitted at 85% drew ten more points and was killed at the
         # wall with no artefact written.
+        _body_chars = len(parsed.body or "")
         allowance = check_allowance(
-            session_headroom=headroom_for(len(parsed.body or ""))
+            session_headroom=headroom_for(_body_chars),
+            weekly_headroom=weekly_reserve_for(_body_chars),
         )
         if not allowance.ok:
             click.echo(f"Allowance ceiling: {allowance.reason}")
