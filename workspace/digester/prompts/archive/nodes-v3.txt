@@ -6,7 +6,7 @@ Your ONLY job in this call is to identify every distinct named entity in the chu
 NODE TYPES (eight - choose one per node)
 ================================================================
 
-- "person": a named human individual. Format the person's NATURAL-ORDER name as it would be written or spoken ("Luis Elizondo", "David Fravor", "J. Allen Hynek") - NOT surname-first. No titles/ranks/honourifics. Pseudonyms and single-name historical figures stay as-is. Do NOT create person nodes for redacted/anonymous actors ("USS Louisville Officer (redacted)") - attribute to the relevant organisation instead.
+- "person": a named human individual. Format "Last, First Middle". No titles/ranks/honourifics. Pseudonyms and single-name historical figures stay as-is. Do NOT create person nodes for redacted/anonymous actors ("USS Louisville Officer (redacted)") - attribute to the relevant organisation instead.
 
 - "organisation": a named acting BODY - government agencies, military units, companies, research institutes, publications, news outlets, committees, standing offices, foundations. Distinguished from project: an organisation is the BODY; a project is the WORK it runs.
 
@@ -91,78 +91,6 @@ ALSO RETURN with the nodes list
   - acronyms: every domain-specific acronym, with its expansion. Helps the claims pass expand on first use.
 
 ================================================================
-SOURCES - who the assertions in this document ultimately come from
-================================================================
-
-Alongside the nodes, enumerate every SOURCE the document leans on: every party whose
-assertions the record carries. This is a CAST LIST for the whole record - build it once, and the
-claims pass will reference these by id rather than re-describing them.
-
-Give each an id of the form SRC1, SRC2, SRC3... . These are OUR internal labels, nothing to do
-with any name in the document - note this record itself talks about a facility called "S4", so
-never reuse a name from the record as an id. SRC1 is ALWAYS the speaker/author of the document itself.
-
-  "sources": [
-    {{
-      "id": "SRC1",
-      "origin_kind": "speaker",
-      "origin": "Jon Stewart",
-      "relay": []
-    }},
-    {{
-      "id": "SRC2",
-      "origin_kind": "anonymous",
-      "origin": "a person claiming to work inside the Defense Intelligence Agency",
-      "relay": ["an email", "an intermediary known to the speaker"]
-    }},
-    {{
-      "id": "SRC3",
-      "origin_kind": "named",
-      "origin": "Whitley Strieber",
-      "relay": ["a 2014 conference talk"]
-    }}
-  ]
-
-origin_kind:
-  - "speaker"      - the document's own speaker/author, asserting from their own knowledge.
-  - "named"        - an identifiable person, organisation, or document. It must ALSO be a node.
-  - "anonymous"    - an unnamed or unidentifiable source. It CANNOT be a node, so this list is
-                     the ONLY place it survives. Describe the CLAIMED identity without granting
-                     it: "a person claiming to work inside the Defense Intelligence Agency" -
-                     NEVER "the Defense Intelligence Agency". A claimed affiliation is not an
-                     affiliation, and naming the institution converts an anonymous assertion into
-                     an institutional one.
-  - "document"     - a document or record the speaker reads from or cites.
-  - "unattributed" - assertions the document makes with no attribution offered at all.
-
-relay: the ordered path from that origin to the speaker ([] when the speaker IS the origin).
-Its length is the number of removes, and it is what attestation is derived from - so a claim
-reaching the speaker via an intermediary is THIRD-hand, not second-hand, however confidently the
-speaker names the person who passed it on.
-
-ONE ENTRY PER REAL SOURCE. Two distinct anonymous whistleblowers are TWO entries. The same
-anonymous source referred to in three different ways is ONE entry - you are reading the whole
-record at once, so you can see that they are the same person. Getting this right is the entire
-point of resolving sources here rather than per-claim: corroboration is decided by whether two
-claims share a source, and a source split into three by careless naming makes one rumour look
-like three independent confirmations.
-
-================================================================
-NAMES ARE SPELLED HOW THE ENTITY SPELLS THEM
-================================================================
-
-A node name is an IDENTIFIER, not prose. Spell every organisation, agency, programme, place,
-document, vessel and person EXACTLY as that entity spells its own name. Never "correct" a name
-into British English, and never into American English either.
-
-  RIGHT: "Defense Intelligence Agency (DIA)"  - a US agency; that IS its name
-  RIGHT: "Ministry of Defence"                 - a UK department; that IS its name
-  WRONG: "Defence Intelligence Agency"         - anglicising a US federal agency
-
-This matters more here than anywhere else: node names are what the knowledge graph MERGES on.
-Re-spell a name and you do not tidy it, you create a second, separate organisation.
-
-================================================================
 OUTPUT FORMAT - valid JSON only, no markdown fencing
 ================================================================
 
@@ -175,14 +103,9 @@ OUTPUT FORMAT - valid JSON only, no markdown fencing
       "metadata": {{"date_start": "...", "date_end": "..." (events only, optional)}}
     }}
   ],
-  "sources": [
-    {{"id": "SRC1", "origin_kind": "speaker", "origin": "...", "relay": []}}
-  ],
   "codenames_to_resolve": [{{"codename": "X", "refers_to": "canonical name"}}],
   "acronyms": [{{"acronym": "AAV", "expansion": "Anomalous Aerial Vehicle"}}],
   "extraction_complete": true
 }}
 
-You are reading the ENTIRE record, not a fragment. Name each entity ONCE - if you have already
-named the film, use that same name every time it appears; do not invent a second name for it
-later on. Set extraction_complete=true when you have nothing further to add.
+If the model has emitted everything it can from this chunk in this round (no more nodes to add), set extraction_complete=true. The iterative loop reads this and stops asking for more.

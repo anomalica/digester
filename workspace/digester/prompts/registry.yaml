@@ -2,7 +2,7 @@ prompts:
   nodes:
     versions:
       v3:
-        file: nodes.txt
+        file: archive/nodes-v3.txt
         added: '2026-07-05'
         note: meta-vs-verbatim rule for bracket/brace annotations
       v2:
@@ -30,11 +30,15 @@ prompts:
         added: '2026-05-25'
         commit: 2788c43bbf
         note: earlier nodes v2 state
-    active: v3
+      v4:
+        file: nodes.txt
+        added: '2026-07-31'
+        note: person nodes emit natural-order names, not surname-first
+    active: v4
   claims:
     versions:
       v3:
-        file: claims.txt
+        file: archive/claims-v3.txt
         added: '2026-07-05'
         note: meta-vs-verbatim rule for bracket/brace annotations
       v2:
@@ -52,7 +56,11 @@ prompts:
         added: '2026-05-25'
         commit: 2788c43bbf
         note: earlier claims v2 state
-    active: v3
+      v4:
+        file: claims.txt
+        added: '2026-07-31'
+        note: node_references match the directory's natural-order names
+    active: v4
   extraction:
     versions:
       g249b8fd3:
@@ -138,8 +146,12 @@ prompts:
         note: retired pre-V2 terminology prompt
     active: null
   cast:
-    active: v1
+    active: v2
     versions:
       v1:
-        file: cast.txt
+        file: archive/cast-v1.txt
         added: '2026-07-12'
+      v2:
+        file: cast.txt
+        added: '2026-07-31'
+        note: person nodes emit natural-order names, not surname-first

@@ -6,7 +6,7 @@ Your ONLY job in this call is to identify every distinct named entity in the chu
 NODE TYPES (eight - choose one per node)
 ================================================================
 
-- "person": a named human individual. Format "Last, First Middle". No titles/ranks/honourifics. Pseudonyms and single-name historical figures stay as-is. Do NOT create person nodes for redacted/anonymous actors ("USS Louisville Officer (redacted)") - attribute to the relevant organisation instead.
+- "person": a named human individual. Format the person's NATURAL-ORDER name as it would be written or spoken ("Luis Elizondo", "David Fravor", "J. Allen Hynek") - NOT surname-first. No titles/ranks/honourifics. Pseudonyms and single-name historical figures stay as-is. Do NOT create person nodes for redacted/anonymous actors ("USS Louisville Officer (redacted)") - attribute to the relevant organisation instead.
 
 - "organisation": a named acting BODY - government agencies, military units, companies, research institutes, publications, news outlets, committees, standing offices, foundations. Distinguished from project: an organisation is the BODY; a project is the WORK it runs.
 

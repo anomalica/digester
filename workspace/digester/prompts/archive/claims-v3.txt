@@ -69,7 +69,7 @@ When a claim IS specifically about the main subject, you may anchor with the sub
 PERSON REFERENCES IN CLAIM TEXT
 ================================================================
 
-Use the full natural-order name inside claim text ("Luis Elizondo", "David Fravor") - NOT a surname-only shortcut. node_references uses the EXACT node name from the directory, which is now natural order - so the claim text and the reference agree rather than carrying two forms of one name.
+Use the full natural-order name inside claim text ("Luis Elizondo", "David Fravor") - NOT a surname-only shortcut. node_references uses the canonical "Last, First" form from the directory.
 
 ================================================================
 UNIT NORMALISATION - metric only, never leave imperial
