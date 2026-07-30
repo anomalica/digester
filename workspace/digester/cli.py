@@ -19,6 +19,7 @@ from anomalica_common.llm import (
     reset_schema_enforcement,
     reset_usage,
     resolve_use_api,
+    check_allowance,
     spend_confirmed,
     usage_entry,
 )
@@ -124,6 +125,28 @@ def extract_cmd(
     # (Claude subscription, opencode) has no price to quote, and asking for one
     # raises by design - refusing to guess is the GAP-2 behaviour.
     use_api = resolve_use_api(_USE_API_VAR)
+
+    # ALLOWANCE CEILING, distinct from the spend gate below. That one guards
+    # metered DOLLARS and is a no-op on the subscription transport; this guards
+    # plan ALLOWANCE, which is precisely what a subscription run consumes. A
+    # direct invocation had no ceiling of any kind - they lived only in the
+    # scheduler's runner and the nightly script - so anything run outside those
+    # consumed the plan until the provider itself throttled.
+    #
+    # Never BEGIN past the ceiling; an in-flight run finishes. Hitting a soft
+    # ceiling is a pause that self-corrects when the window rolls. Running past it
+    # hard-throttles the plan, which stops every component AND any supervising
+    # session, since they share it - and then nothing is left to restart anything.
+    if not use_api:
+        allowance = check_allowance()
+        if not allowance.ok:
+            click.echo(f"Allowance ceiling: {allowance.reason}")
+            if allowance.resets_at:
+                click.echo(f"  window resets at {allowance.resets_at}")
+            click.echo("  Not starting. Completed chunks are cached; resume is cheap.")
+            ctx.exit(77)
+        click.echo(f"Allowance ok ({allowance.reason})")
+
     if is_metered(model, use_api) and not spend_confirmed(
         estimate_record(len(parsed.body or ""), model),
         model,
