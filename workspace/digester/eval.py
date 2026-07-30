@@ -494,7 +494,19 @@ def grade_digest(
     # MECHANICAL fidelity: contiguous + in-order elided. Reordered and broken are
     # both failures. This is not the semantic axis (a fragment join that inverts
     # sense is the human grader's call) - report it as "mechanical".
-    fidelity = (len(located) / len(claims)) if claims else None
+    # PER DISTINCT QUOTE, not per claim. Verbatimness is a property of a QUOTE;
+    # how many claims cite it is a different fact. Counting per claim charges one
+    # unlocatable passage once for every claim that cites it - measured on the
+    # Papua New Guinea record, three claims sharing one bad quote scored three
+    # broken and dropped fidelity to 83.3% off a single underlying failure. That
+    # structurally penalises any extraction that decomposes a passage into more
+    # claims, so the metric fell as reasoning effort rose with no change in
+    # quoting behaviour required. It was measuring decomposition, not fidelity.
+    def _q(c):
+        return _norm(c.get("quote") or "")
+    all_quotes = {_q(c) for c in claims if _q(c)}
+    located_quotes = {_q(c) for c in located if _q(c)}
+    fidelity = (len(located_quotes) / len(all_quotes)) if all_quotes else None
 
     # Coreference (MECHANICAL proxy, never composited). A recalled unit is
     # applicable if its span is dependent (bare pronoun, no own name) and it has a
@@ -559,7 +571,8 @@ def grade_digest(
         "unlocatable_gold": unlocatable_gold,
         "recall": recall,  # coverage-weighted mean, NOT a hit/miss count
         "fully_covered": covered,  # units at >= recall_thresh coverage (diagnostic only)
-        "quote_fidelity": fidelity,
+        "quote_fidelity": fidelity,  # over DISTINCT quotes
+        "distinct_quotes": len(all_quotes),
         "fidelity_contiguous": (n_contiguous / len(claims)) if claims else None,
         "contiguous": n_contiguous,
         "elided": n_elided,
