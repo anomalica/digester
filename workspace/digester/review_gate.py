@@ -34,6 +34,32 @@ __all__ = [
 _MACHINE_MARKERS = ("anomalica/triage/", "triage_model", "produced_by_model")
 
 
+def _carryover_of(record_md: Path) -> dict | None:
+    """A predecessor record's review, carried forward when this one superseded it.
+
+    A record can show `state: none` - no sidecar of its own - while a HUMAN
+    reviewed the version it replaced and made text edits to it. Read without this,
+    the graph says nobody has ever looked at that material, which is absence being
+    read as a value. Surfaced ALONGSIDE state rather than folded into it: "was this
+    record reviewed" is still `state == "human"`, and "has this material had human
+    attention" is a second, weaker question that now has an answer.
+    """
+    import yaml as _yaml
+
+    try:
+        raw = record_md.resolve().read_text(errors="replace")
+    except OSError:
+        return None
+    if not raw.startswith("---"):
+        return None
+    try:
+        fm = _yaml.safe_load(raw.split("---", 2)[1])
+    except _yaml.YAMLError:
+        return None
+    co = (fm or {}).get("review_carryover") if isinstance(fm, dict) else None
+    return co if isinstance(co, dict) else None
+
+
 def review_provenance(record_md: Path, ingests_dir: Path) -> dict:
     """What is known about who observed this record, for stamping into a digest.
 
@@ -45,13 +71,19 @@ def review_provenance(record_md: Path, ingests_dir: Path) -> dict:
     ``machine`` when the sidecar identifies an automated writer, ``human`` when a
     sidecar exists without one, ``none`` when there is no sidecar at all.
     """
+    carryover = _carryover_of(record_md)
     sidecar = load_sidecar(record_md, ingests_dir)
     if sidecar is None:
-        return {"state": "none", "sidecar": "absent"}
+        out = {"state": "none", "sidecar": "absent"}
+        if carryover:
+            out["carryover"] = carryover
+        return out
     blob = json.dumps(sidecar).lower()
     state = "machine" if any(m in blob for m in _MACHINE_MARKERS) else "human"
     cov = sidecar.get("observed_coverage")
     out = {"state": state, "sidecar": "present"}
+    if carryover:
+        out["carryover"] = carryover
     if cov is not None:
         out["observed_coverage"] = round(float(cov), 4)
     return out

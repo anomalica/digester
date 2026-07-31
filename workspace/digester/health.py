@@ -227,6 +227,17 @@ MAPPED_RECORD_FIELDS = frozenset(
         "supersedes",
         "source_id",
         "source_url",
+        # Ruled in 2026-08-01 after the detector's first run named eight
+        # unmapped fields. speakers is the SOURCE's own roster, independent of
+        # what the extractor found - a claim attributed to someone absent from
+        # it, or a roster member yielding nothing, is a quality signal that
+        # cannot be computed at all without it. pages bounds location validity.
+        # review_carryover records human attention to a superseded version.
+        "speakers",
+        "pages",
+        "fetched_url",
+        "description",
+        "review_carryover",
     }
 )
 
@@ -248,6 +259,14 @@ UNWANTED_RECORD_FIELDS = frozenset(
         "copyright",
         "superseded_by",
         "superseded_reason",
+        # media is storage accounting and says nothing about claims. copyright is
+        # access-control state whose authority is the ingest record - a copy in a
+        # public artefact would be a staler second source of truth for an access
+        # decision, so it deliberately has one home. document_type and email are
+        # single-record and not worth schema surface.
+        "media",
+        "document_type",
+        "email",
     }
 )
 

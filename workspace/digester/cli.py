@@ -377,7 +377,16 @@ def _do_extract(
             review=_review_provenance_for(path),
             record_extra={
                 k: v
-                for k in ("release", "provenance", "classification", "supersedes")
+                for k in (
+                    "release",
+                    "provenance",
+                    "classification",
+                    "supersedes",
+                    "speakers",
+                    "pages",
+                    "fetched_url",
+                    "description",
+                )
                 if (v := parsed.metadata.get(k))
             },
             model=model,
