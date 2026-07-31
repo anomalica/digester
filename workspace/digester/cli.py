@@ -856,6 +856,14 @@ def health_cmd(digests: str, store: str, records: str) -> None:
             findings += 1
             click.echo(f"  {fmt(x)}")
 
+    stale = health.pre_digest_freshness(d, r, loaded)
+    click.echo(
+        f"\nSTALE PRE-DIGEST (digest no longer matches its source): {len(stale)}"
+    )
+    for x in stale:
+        findings += 1
+        click.echo(f"  {x['digest']}: {x['issue']} - {x['detail']}")
+
     unmapped = health.unmapped_record_fields(r) if r.exists() else {}
     click.echo(f"\nUNMAPPED RECORD FIELDS (upstream added something): {len(unmapped)}")
     for k, n in unmapped.items():

@@ -469,3 +469,107 @@ def unmapped_record_fields(records_dir: Path) -> dict[str, int]:
                 continue
             counts[k] = counts.get(k, 0) + 1
     return dict(sorted(counts.items(), key=lambda kv: -kv[1]))
+
+
+# --- PRE-DIGEST FRESHNESS ---
+#
+# A digest records the sha256 of the exact pre-digest text the model was given
+# (ADR 0042), so the input is reproducible. Nothing compared it back.
+#
+# Two ways a digest silently stops matching its source. The record is EDITED after
+# digestion - a reviewer fixes a transcript, an ingest is re-run - and the digest
+# still describes the old text while pointing at the new. Or PREP_VERSION moves,
+# which changes what materialise produces, so every claim `location` is an offset
+# into a frame that no longer exists: spans resolve to the wrong text rather than
+# failing to resolve, which is the worse outcome because it looks like it worked.
+#
+# Neither shows up in the digest, the record, or an exit code. The corpus is
+# currently 78 digests at prep 6 with 2 predating the block, so version drift is
+# clean today - and it stays clean only if something checks.
+
+
+def pre_digest_freshness(
+    digests_dir: Path, records_dir: Path, loaded: list | None = None
+) -> list[dict]:
+    """Digests whose recorded pre-digest no longer matches the record."""
+    from anomalica_common.pre_digest import PREP_VERSION, materialise, pre_digest_hash
+
+    from digester.record_parser import parse_record
+
+    # Index on the record's DECLARED content_hash, not on its filename. Most
+    # records are symlinks into the content-addressed store, so the resolved stem
+    # IS the hash - but not all of them are: two web records are regular files
+    # whose stem is the slug. Keying on the path shape reported both as orphaned
+    # when both were present, which is a check inventing its own failure.
+    by_hash: dict[str, Path] = {}
+    for rec in records_dir.glob("*.md"):
+        t = rec.resolve()
+        if not t.exists():
+            continue
+        by_hash.setdefault(t.stem.removesuffix(".v2"), t)
+        try:
+            raw = t.read_text(errors="replace")
+        except OSError:
+            continue
+        if not raw.startswith("---"):
+            continue
+        try:
+            fm = yaml.load(raw.split("---", 2)[1], Loader=_Loader)
+        except (yaml.YAMLError, IndexError):
+            continue
+        if isinstance(fm, dict) and fm.get("content_hash"):
+            by_hash[str(fm["content_hash"]).split(":")[-1]] = t
+
+    cache = _cache_load()
+    out = []
+    for stem, d in loaded if loaded is not None else load_digests(digests_dir):
+        pd = d.get("pre_digest") or {}
+        recorded, version = pd.get("sha256"), pd.get("prep_version")
+        if not recorded:
+            continue
+        if version is not None and version != PREP_VERSION:
+            out.append(
+                {
+                    "digest": stem,
+                    "issue": "prep_version",
+                    "detail": f"built under prep {version}, current is {PREP_VERSION}",
+                }
+            )
+            continue
+        h = ((d.get("record") or {}).get("content_hash") or "").split(":")[-1]
+        rec = by_hash.get(h)
+        if rec is None:
+            # ORPHANED: the digest names a source that is no longer in the record
+            # tree, so its freshness can never be evaluated. Reported rather than
+            # skipped - a check that silently declines to examine something is
+            # indistinguishable from one that examined it and found nothing.
+            out.append(
+                {
+                    "digest": stem,
+                    "issue": "orphaned",
+                    "detail": f"no record for content_hash {h[:12] or '(absent)'}",
+                }
+            )
+            continue
+        try:
+            raw = rec.read_text(errors="replace")
+        except OSError:
+            continue
+        key = f"pdsha:{PREP_VERSION}:{hashlib.sha256(raw.encode()).hexdigest()}"
+        actual = cache.get(key)
+        if actual is None:
+            try:
+                actual = pre_digest_hash(materialise(parse_record(raw).body))
+            except ValueError:
+                continue
+            cache[key] = actual
+        if actual != recorded:
+            out.append(
+                {
+                    "digest": stem,
+                    "issue": "record_changed",
+                    "detail": f"recorded {recorded[:12]}, record now yields {actual[:12]}",
+                }
+            )
+    _cache_save(cache)
+    return out
