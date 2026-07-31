@@ -820,6 +820,7 @@ def health_cmd(digests: str, store: str, records: str) -> None:
         raise SystemExit(1)
 
     loaded = health.load_digests(d)
+    _sc = health._cache_load()
     rows = health.claim_yields(d, s, loaded)
     by_type: dict[str, list[float]] = {}
     for row in rows:
@@ -855,6 +856,18 @@ def health_cmd(digests: str, store: str, records: str) -> None:
         for x in hits:
             findings += 1
             click.echo(f"  {fmt(x)}")
+
+    surv = [
+        f
+        for f in (health.pre_digest_survival(p, _sc) for p in sorted(r.glob("*.md")))
+        if f is not None
+    ]
+    if surv:
+        click.echo(
+            f"\nPre-digest survival ({len(surv)} records): "
+            f"min {min(surv):.3f}  median {statistics.median(surv):.3f}  "
+            f"floor {health.SURVIVAL_FLOOR}"
+        )
 
     stale = health.pre_digest_freshness(d, r, loaded)
     click.echo(

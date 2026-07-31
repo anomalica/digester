@@ -282,10 +282,26 @@ def low_yield(
 # The yield floor catches that case only because it is extreme. A book marked 40%
 # irrelevant would produce a plausible claim count and never trip it, while
 # silently omitting two fifths of the source. This measures the thing directly:
-# how much of the body survives materialise. Across 17 books the marked ones sit
-# at 93.5-97% and the unmarked at 98-100%, so a real apparatus pass is visible
-# and harmless here; anything below half is not apparatus.
-SURVIVAL_FLOOR = 0.5
+# how much of the body survives materialise.
+#
+# UNLIKE the yield floor and the cache ratio, this one is genuinely uniform across
+# media and a single threshold is correct. Measured over all 181 records:
+#
+#     audio  n= 15   0.822 is the lowest value ANYWHERE (web); every medium's
+#     ebook  n= 17   min sits between 0.822 and 0.929, median 0.99-1.00, and
+#     pdf    n= 26   the distributions overlap almost completely. There is no
+#     video  n=113   3.5x split here of the kind that broke the other two.
+#     web    n= 10
+#
+# (A ratio slightly above 1.0 is expected, not a fault: prep 6 renders span notes
+# INTO the pre-digest, so it can carry more characters than the stripped baseline.)
+#
+# Tightened 0.5 -> 0.65 on that evidence. 0.5 was set before the distribution was
+# known and sits so far below every observed record that it only ever catches the
+# extreme case that prompted it; a record losing 40% of its body scored 0.60 and
+# passed. 0.65 leaves 26% margin under the lowest of 181 observations while
+# catching a 35% loss. Raise the floor further only with the distribution in hand.
+SURVIVAL_FLOOR = 0.65
 
 
 # Survival is a pure function of (record bytes, prep version), so it is cached
