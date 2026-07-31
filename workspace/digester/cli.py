@@ -375,6 +375,11 @@ def _do_extract(
                 "version"
             ),
             review=_review_provenance_for(path),
+            record_extra={
+                k: v
+                for k in ("release", "provenance", "classification", "supersedes")
+                if (v := parsed.metadata.get(k))
+            },
             model=model,
             ai_usage=ai_usage,
             pre_digest={"sha256": pd_sha, "prep_version": PREP_VERSION},

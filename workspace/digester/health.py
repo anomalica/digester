@@ -192,3 +192,90 @@ def over_marked(records_dir: Path, floor: float = SURVIVAL_FLOOR) -> list[dict]:
         if frac is not None and frac < floor:
             out.append({"record": p.name, "survives": round(frac, 4)})
     return out
+
+
+# --- UNMAPPED RECORD FIELDS ---
+#
+# The digest's record block is an ALLOW-LIST, and correctly so: the digest is a
+# locked interchange schema, and passing a record's whole frontmatter through
+# would publish unspecified fields into it - some large, some copyright-bearing.
+#
+# But an allow-list drops a NEW upstream field silently. That has now happened at
+# three boundaries in one day: the assimilator's parser dropped five record-block
+# fields, the ingester's chunked merge dropped document-level markings, and this
+# emitter dropped `release` hours after the ingester built it. Each looked like an
+# empty column from a producer that had not started emitting yet.
+#
+# So the fix for an allow-list is not a longer list - it is knowing when the list
+# has fallen behind. This reports frontmatter a record carries that no digest
+# field maps, which turns the next omission into a visible condition.
+MAPPED_RECORD_FIELDS = frozenset(
+    {
+        "title",
+        "publisher",
+        "date_published",
+        "date",
+        "source_type",
+        "duration",
+        "content_hash",
+        "processing",
+        "creators",
+        "authors",
+        "release",
+        "provenance",
+        "classification",
+        "supersedes",
+        "source_id",
+        "source_url",
+    }
+)
+
+# Deliberately NOT carried: acquisition detail, storage detail, or overlay state
+# that a digest consumer has no use for. Listed rather than merely absent, so the
+# report distinguishes "decided against" from "nobody has looked".
+UNWANTED_RECORD_FIELDS = frozenset(
+    {
+        "schema",
+        "archived_ext",
+        "quality",
+        "word_timestamps",
+        "overlay_next_id",
+        "source_file",
+        "date_accessed",
+        "date_extracted",
+        "snapshots",
+        "source_hash",
+        "copyright",
+        "superseded_by",
+        "superseded_reason",
+    }
+)
+
+
+def unmapped_record_fields(records_dir: Path) -> dict[str, int]:
+    """Frontmatter keys carried by records that no digest field maps.
+
+    Excludes those explicitly decided against. A non-empty result means an
+    upstream producer has added something the digest does not yet carry.
+    """
+    import yaml
+
+    counts: dict[str, int] = {}
+    for p in sorted(records_dir.glob("*.md")):
+        t = p.resolve()
+        if not t.exists():
+            continue
+        raw = t.read_text(errors="replace")
+        if not raw.startswith("---"):
+            continue
+        try:
+            fm = yaml.safe_load(raw.split("---", 2)[1])
+        except yaml.YAMLError:
+            continue
+        if not isinstance(fm, dict):
+            continue
+        for k in fm:
+            if k in MAPPED_RECORD_FIELDS or k in UNWANTED_RECORD_FIELDS:
+                continue
+            counts[k] = counts.get(k, 0) + 1
+    return dict(sorted(counts.items(), key=lambda kv: -kv[1]))
