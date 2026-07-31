@@ -767,23 +767,32 @@ def eval_cmd(
         click.echo(f"\nFull results (with diagnostics): {json_out}")
 
 
+# Anchored to the repo layout, NOT to the working directory. Relative defaults
+# resolved against cwd, so the same command read the whole corpus from
+# workspace/ and an EMPTY directory from the repo root - where the systemd
+# service runs it. Its first timed run duly reported "No findings" over zero
+# records, in 220ms, exit 0. A guard reporting clean because it found nothing to
+# check is worse than no guard: it actively asserts health.
+_ANOMALICA = Path(__file__).resolve().parents[3]
+
+
 @main.command(name="health")
 @click.option(
     "--digests",
     type=click.Path(),
-    default="../../digests/records",
+    default=str(_ANOMALICA / "digests" / "records"),
     help="Canonical digests directory",
 )
 @click.option(
     "--store",
     type=click.Path(),
-    default="../../ingests/store",
+    default=str(_ANOMALICA / "ingests" / "store"),
     help="Ingest store (source sizes)",
 )
 @click.option(
     "--records",
     type=click.Path(),
-    default="../../ingests/records",
+    default=str(_ANOMALICA / "ingests" / "records"),
     help="Ingest records (annotation survival, frontmatter drift)",
 )
 def health_cmd(digests: str, store: str, records: str) -> None:
@@ -798,7 +807,20 @@ def health_cmd(digests: str, store: str, records: str) -> None:
     d, s, r = Path(digests), Path(store), Path(records)
     findings = 0
 
-    rows = health.claim_yields(d, s)
+    # An EMPTY corpus is a finding, never a pass. Every check below reports zero
+    # when there is nothing to check, which is indistinguishable from a clean
+    # bill of health - the same absence-read-as-a-value error these checks exist
+    # to catch, in the reporting layer rather than the data.
+    for label, path in (("digests", d), ("store", s), ("records", r)):
+        if not path.is_dir() or not any(path.iterdir()):
+            click.echo(f"CANNOT CHECK: {label} directory empty or missing - {path}")
+            findings += 1
+    if findings:
+        click.echo(f"\n{findings} finding(s). No corpus was read.")
+        raise SystemExit(1)
+
+    loaded = health.load_digests(d)
+    rows = health.claim_yields(d, s, loaded)
     by_type: dict[str, list[float]] = {}
     for row in rows:
         by_type.setdefault(row.get("medium") or "?", []).append(row["per_kb"])
@@ -812,7 +834,7 @@ def health_cmd(digests: str, store: str, records: str) -> None:
     for label, hits, fmt in (
         (
             "LOW YIELD (extraction probably failed despite exiting 0)",
-            health.low_yield(d, s),
+            health.low_yield(d, s, loaded),
             lambda x: (
                 f"{x['digest']}: {x['per_kb']:.2f} cl/KB vs "
                 f"{x['floor_basis']} median {x['type_median']}"
@@ -820,7 +842,7 @@ def health_cmd(digests: str, store: str, records: str) -> None:
         ),
         (
             "COLLAPSED CACHE PREFIX (correct output, broken cost characteristic)",
-            health.collapsed(d),
+            health.collapsed(d, loaded=loaded),
             lambda x: f"{x['digest']}: read/write {x['ratio']:.2f} over {x['calls']} calls",
         ),
         (

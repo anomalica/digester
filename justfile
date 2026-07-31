@@ -41,3 +41,14 @@ test:
         -w /home/nonroot/workspace \
         {{IMAGE}} \
         python -m pytest tests/ -v
+
+# Post-digest health checks: conditions a successful exit code cannot see.
+# Runs on the host, not in the container - it reads the digest and ingest trees
+# directly, makes no model calls, and costs no allowance.
+health:
+    #!/usr/bin/env bash
+    set -uo pipefail
+    mkdir -p reports
+    PYTHONPATH="$HOME/repos/anomalica/anomalica-common/src:workspace" \
+        python3 -m digester.cli health 2>&1 | tee reports/health-latest.txt
+    exit "${PIPESTATUS[0]}"

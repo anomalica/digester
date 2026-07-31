@@ -1,6 +1,8 @@
 import pytest
 from click.testing import CliRunner
 
+from anomalica_common.llm.allowance import Allowance
+
 from digester import cli, extract
 from digester.cli import main
 from digester.extract import (
@@ -47,6 +49,23 @@ def test_two_pass_resets_stale_cancel(monkeypatch):
         extract.extract_two_pass("text", model="haiku")
     reset_cancel()
     assert reset_after["cancel_cleared"] is True
+
+
+@pytest.fixture(autouse=True)
+def _allowance_open(monkeypatch):
+    """Isolate the exit-code contract from the live plan meter.
+
+    These tests assert what the command exits WITH; without this they also
+    depend on Mark's actual allowance at the moment they run. The meter is
+    intermittent by design - allowance.py documents roughly one call in three
+    returning nothing - and check_allowance correctly FAILS CLOSED, so a blink
+    makes the command exit 77 (allowance ceiling) and the cancel test reports a
+    75-vs-77 mismatch that has nothing to do with cancelling.
+
+    That is a test coupled to state it does not control and does not mean to
+    exercise. The ceiling has its own tests; this one is about exit codes.
+    """
+    monkeypatch.setattr(cli, "check_allowance", lambda **k: Allowance(True, "test"))
 
 
 def test_extract_command_exits_75_on_cancel(tmp_path, monkeypatch):

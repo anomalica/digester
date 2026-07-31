@@ -34,10 +34,37 @@ COLLAPSE, not to police that weakness.
 
 from __future__ import annotations
 
+import hashlib
+import json
+import os
 import statistics
 from pathlib import Path
 
 import yaml
+
+try:  # libyaml is ~6.6x faster and a digest can reach 3.5MB
+    _Loader = yaml.CSafeLoader
+except AttributeError:  # pragma: no cover - pure-python fallback
+    _Loader = yaml.SafeLoader
+
+
+def load_digests(digests_dir: Path) -> list[tuple[str, dict]]:
+    """Every digest, parsed ONCE.
+
+    claim_yields and collapsed each used to parse the whole corpus separately,
+    so a health run paid for two full passes over the same ~57 files - 75
+    seconds, almost all of it in the YAML parser rather than in any check.
+    """
+    out = []
+    for f in sorted(digests_dir.glob("*.yaml")):
+        try:
+            d = yaml.load(f.read_text(), Loader=_Loader)
+        except (OSError, yaml.YAMLError):
+            continue
+        if isinstance(d, dict):
+            out.append((f.stem, d))
+    return out
+
 
 # A prefix that has genuinely collapsed reads back almost nothing. The observed
 # floor across real books is 0.81, so this sits well below it: it flags a broken
@@ -67,14 +94,10 @@ COLLAPSE_RATIO = 0.30
 MIN_CALLS = 6
 
 
-def ratios(digests_dir: Path) -> list[dict]:
+def ratios(digests_dir: Path, loaded: list | None = None) -> list[dict]:
     """cache read/write ratio per digest, newest field set only."""
     out = []
-    for f in sorted(digests_dir.glob("*.yaml")):
-        try:
-            d = yaml.safe_load(f.read_text())
-        except (OSError, yaml.YAMLError):
-            continue
+    for stem, d in loaded if loaded is not None else load_digests(digests_dir):
         usage = (d.get("ai_usage") or [{}])[0]
         t = usage.get("tokens") or {}
         read, write, calls = (
@@ -86,7 +109,7 @@ def ratios(digests_dir: Path) -> list[dict]:
             continue
         out.append(
             {
-                "digest": f.stem,
+                "digest": stem,
                 "read": read or 0,
                 "write": write,
                 "calls": calls or 0,
@@ -96,11 +119,15 @@ def ratios(digests_dir: Path) -> list[dict]:
     return out
 
 
-def collapsed(digests_dir: Path, threshold: float = COLLAPSE_RATIO) -> list[dict]:
+def collapsed(
+    digests_dir: Path,
+    threshold: float = COLLAPSE_RATIO,
+    loaded: list | None = None,
+) -> list[dict]:
     """Digests whose cacheable prefix looks broken rather than merely small."""
     return [
         r
-        for r in ratios(digests_dir)
+        for r in ratios(digests_dir, loaded)
         if r["ratio"] < threshold and r["calls"] >= MIN_CALLS
     ]
 
@@ -136,14 +163,12 @@ YIELD_FLOOR_FRACTION = 0.35
 YIELD_MIN_KB = 20
 
 
-def claim_yields(digests_dir: Path, store_dir: Path) -> list[dict]:
+def claim_yields(
+    digests_dir: Path, store_dir: Path, loaded: list | None = None
+) -> list[dict]:
     """claims-per-source-KB per digest, for records large enough to judge."""
     out = []
-    for f in sorted(digests_dir.glob("*.yaml")):
-        try:
-            d = yaml.safe_load(f.read_text())
-        except (OSError, yaml.YAMLError):
-            continue
+    for stem, d in loaded if loaded is not None else load_digests(digests_dir):
         h = ((d.get("record") or {}).get("content_hash") or "").split(":")[-1]
         src = 0
         for c in (
@@ -163,7 +188,7 @@ def claim_yields(digests_dir: Path, store_dir: Path) -> list[dict]:
         )
         out.append(
             {
-                "digest": f.stem,
+                "digest": stem,
                 "kb": kb,
                 "claims": n,
                 "per_kb": n / kb,
@@ -200,7 +225,9 @@ MEDIA_FAMILIES = {
 }
 
 
-def low_yield(digests_dir: Path, store_dir: Path) -> list[dict]:
+def low_yield(
+    digests_dir: Path, store_dir: Path, loaded: list | None = None
+) -> list[dict]:
     """Digests whose claim yield is so far below the norm FOR THEIR SOURCE TYPE
     that the extraction probably failed despite exiting successfully.
 
@@ -217,7 +244,7 @@ def low_yield(digests_dir: Path, store_dir: Path) -> list[dict]:
     and one that lost 90% stops being caught once the corpus tilts. That is the
     exact failure this guard exists for.
     """
-    rows = claim_yields(digests_dir, store_dir)
+    rows = claim_yields(digests_dir, store_dir, loaded)
     if len(rows) < 5:
         return []
     corpus_med = statistics.median(r["per_kb"] for r in rows)
@@ -261,17 +288,55 @@ def low_yield(digests_dir: Path, store_dir: Path) -> list[dict]:
 SURVIVAL_FLOOR = 0.5
 
 
-def pre_digest_survival(record_md: Path) -> float | None:
+# Survival is a pure function of (record bytes, prep version), so it is cached
+# rather than recomputed - a full corpus pass materialises every book and takes
+# minutes of CPU. These are processor cycles, not model calls, so they cost no
+# allowance; the cache exists so an independent timer can run this hourly without
+# burning three minutes each time for an answer that cannot have changed.
+#
+# PREP_VERSION IS PART OF THE KEY, not decoration. materialise's behaviour is
+# versioned, so keying on content alone would serve pre-change survival numbers
+# after a prep change - a cached value whose inputs moved underneath it, which is
+# the exact failure this module exists to detect. A prep bump invalidates every
+# entry, which is correct: the answers genuinely changed.
+_SURVIVAL_CACHE = Path.home() / ".cache" / "anomalica" / "pre-digest-survival.json"
+
+
+def _cache_load() -> dict:
+    try:
+        return json.loads(_SURVIVAL_CACHE.read_text())
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def _cache_save(cache: dict) -> None:
+    try:
+        _SURVIVAL_CACHE.parent.mkdir(parents=True, exist_ok=True)
+        tmp = _SURVIVAL_CACHE.with_suffix(f".{os.getpid()}.tmp")
+        tmp.write_text(json.dumps(cache))
+        tmp.replace(_SURVIVAL_CACHE)
+    except OSError:
+        pass
+
+
+def pre_digest_survival(record_md: Path, cache: dict | None = None) -> float | None:
     """Fraction of a record's body that survives into the pre-digest."""
-    from anomalica_common.pre_digest import materialise
+    from anomalica_common.pre_digest import PREP_VERSION, materialise
 
     from digester.record_parser import parse_record
 
     from anomalica_common.pre_digest import strip_word_timestamps
 
     try:
-        body = parse_record(record_md.resolve().read_text(errors="replace")).body
-    except (OSError, ValueError):
+        raw = record_md.resolve().read_text(errors="replace")
+    except OSError:
+        return None
+    key = f"{PREP_VERSION}:{hashlib.sha256(raw.encode()).hexdigest()}"
+    if cache is not None and key in cache:
+        return cache[key]
+    try:
+        body = parse_record(raw).body
+    except ValueError:
         return None
     if not body:
         return None
@@ -280,20 +345,23 @@ def pre_digest_survival(record_md: Path) -> float | None:
     # them correctly - so a raw ratio puts every transcript at ~30% and a flat
     # floor flags 129 records that are all fine. Comparing like with like isolates
     # what the ANNOTATIONS remove from what the transcript FORMAT removes.
-    baseline = strip_word_timestamps(body)
-    if not baseline:
-        return None
-    return len(materialise(body)) / len(baseline)
+    baseline = strip_word_timestamps(body) if body else None
+    frac = len(materialise(body)) / len(baseline) if baseline else None
+    if cache is not None:
+        cache[key] = frac
+    return frac
 
 
 def over_marked(records_dir: Path, floor: float = SURVIVAL_FLOOR) -> list[dict]:
     """Records whose annotations remove so much body that a digest built from
     them would misrepresent the source."""
+    cache = _cache_load()
     out = []
     for p in sorted(records_dir.glob("*.md")):
-        frac = pre_digest_survival(p)
+        frac = pre_digest_survival(p, cache)
         if frac is not None and frac < floor:
             out.append({"record": p.name, "survives": round(frac, 4)})
+    _cache_save(cache)
     return out
 
 
