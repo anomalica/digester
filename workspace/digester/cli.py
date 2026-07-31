@@ -4,6 +4,8 @@ import json
 import re
 from pathlib import Path
 
+import statistics
+
 import click
 
 from anomalica_common.llm import (
@@ -763,6 +765,83 @@ def eval_cmd(
     if json_out:
         Path(json_out).write_text(json.dumps(results, indent=2, ensure_ascii=False))
         click.echo(f"\nFull results (with diagnostics): {json_out}")
+
+
+@main.command(name="health")
+@click.option(
+    "--digests",
+    type=click.Path(),
+    default="../../digests/records",
+    help="Canonical digests directory",
+)
+@click.option(
+    "--store",
+    type=click.Path(),
+    default="../../ingests/store",
+    help="Ingest store (source sizes)",
+)
+@click.option(
+    "--records",
+    type=click.Path(),
+    default="../../ingests/records",
+    help="Ingest records (annotation survival, frontmatter drift)",
+)
+def health_cmd(digests: str, store: str, records: str) -> None:
+    """Report conditions a successful exit code cannot see.
+
+    Every check here turns one silent success into a visible condition. They
+    existed as a library with no caller, which makes them exactly as blind as a
+    guard with a threshold that has drifted.
+    """
+    from digester import health
+
+    d, s, r = Path(digests), Path(store), Path(records)
+    findings = 0
+
+    rows = health.claim_yields(d, s)
+    by_type: dict[str, list[float]] = {}
+    for row in rows:
+        by_type.setdefault(row.get("medium") or "?", []).append(row["per_kb"])
+    click.echo(f"Claim yield ({len(rows)} records >= {health.YIELD_MIN_KB}KB):")
+    for t, v in sorted(by_type.items()):
+        basis = "own" if len(v) >= health.YIELD_MIN_PER_TYPE else "inherited"
+        click.echo(
+            f"  {t:8} n={len(v):3}  median {statistics.median(v):5.2f} cl/KB  ({basis})"
+        )
+
+    for label, hits, fmt in (
+        (
+            "LOW YIELD (extraction probably failed despite exiting 0)",
+            health.low_yield(d, s),
+            lambda x: (
+                f"{x['digest']}: {x['per_kb']:.2f} cl/KB vs "
+                f"{x['floor_basis']} median {x['type_median']}"
+            ),
+        ),
+        (
+            "COLLAPSED CACHE PREFIX (correct output, broken cost characteristic)",
+            health.collapsed(d),
+            lambda x: f"{x['digest']}: read/write {x['ratio']:.2f} over {x['calls']} calls",
+        ),
+        (
+            "OVER-MARKED (annotations remove most of the body before the model sees it)",
+            health.over_marked(r) if r.exists() else [],
+            lambda x: f"{x['record']}: {x['survives'] * 100:.1f}% of body survives",
+        ),
+    ):
+        click.echo(f"\n{label}: {len(hits)}")
+        for x in hits:
+            findings += 1
+            click.echo(f"  {fmt(x)}")
+
+    unmapped = health.unmapped_record_fields(r) if r.exists() else {}
+    click.echo(f"\nUNMAPPED RECORD FIELDS (upstream added something): {len(unmapped)}")
+    for k, n in unmapped.items():
+        findings += 1
+        click.echo(f"  {k}: {n} records")
+
+    click.echo(f"\n{findings} finding(s)." if findings else "\nNo findings.")
+    raise SystemExit(1 if findings else 0)
 
 
 if __name__ == "__main__":

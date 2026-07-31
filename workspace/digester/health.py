@@ -44,9 +44,27 @@ import yaml
 # prefix, never a merely inefficient one.
 COLLAPSE_RATIO = 0.30
 
-# Records that make one call have nothing to read back by construction - the
-# prefix is written and never reused - so their ratio is legitimately 0.
-MIN_CALLS = 3
+# The ratio is STRUCTURALLY bounded by call count, so the check is only diagnostic
+# once the prefix has enough calls to amortise over. Each pass writes its prefix on
+# its first call and reads nothing back, so those writes are a fixed cost divided by
+# however many calls follow. Measured across the corpus:
+#
+#     1 call   median 0.28        6 calls   median 0.65
+#     2 calls  median 0.32       11+ calls  0.85 - 1.23
+#     3 calls  median 0.37 (range 0.03 - 1.20)
+#
+# The 0.30 threshold was measured on BOOKS, which run 34-120 calls, and set below
+# their observed floor of 0.81. Applied to a 3-call video it sits inside the normal
+# distribution rather than below it, and duly flagged 5 of 15 three-call records as
+# broken when their population median is 0.37. Same error as the corpus-wide yield
+# median: a threshold calibrated on one population applied to another.
+#
+# Raised to 6, where the observed minimum is 0.54 and the threshold is once again
+# below every genuine record. Nothing is lost by not checking short records: a
+# collapsed prefix is a code-level fault that affects EVERY record, so the ~25 with
+# enough calls to judge will show it. This is a corpus canary, not a per-record
+# verdict.
+MIN_CALLS = 6
 
 
 def ratios(digests_dir: Path) -> list[dict]:
@@ -96,10 +114,25 @@ def collapsed(digests_dir: Path, threshold: float = COLLAPSE_RATIO) -> list[dict
 #
 # Claim density varies legitimately by medium - spoken-word video runs 0.54-0.63
 # claims/KB against 4.39 for a dense book - so an absolute floor would either miss
-# the failure or condemn every transcript. A floor RELATIVE to the corpus median
-# separates them: on 22 digests >=20KB the median is 2.37 claims/KB, the lowest
-# genuine record is 0.54, and the failure is 0.00.
-YIELD_FLOOR_FRACTION = 0.2
+# the failure or condemn every transcript.
+#
+# The factor was 0.2 for as long as ONE median spanned both populations, and it had
+# to be: a single floor cannot exceed 0.23 of the corpus median without condemning
+# real video, because the sparsest genuine record anywhere sits at 0.55 claims/KB
+# against a corpus median of 2.40. That ceiling was imposed by the 3.5x gap between
+# documents and spoken media, not by anything about how far a book can fall.
+#
+# So the guard tolerated a book losing FOUR FIFTHS of its content. Grouping the
+# median per type removes the constraint that forced it: each floor is now bounded
+# only by its OWN population's spread, which is far tighter - the sparsest real
+# record of each type sits at 0.68 (ebook), 0.74 (pdf), 0.80 (video) of its median.
+#
+# Measured across 42 records, no genuine record is flagged at any factor up to
+# 0.60; the first false positive appears at 0.68. 0.35 is set well inside that:
+# it catches a 65% content loss instead of an 80% one, while every real record
+# still sits 1.9-2.3x above its own floor. Deliberately conservative while video
+# is only n=17 and the medians are still firming up.
+YIELD_FLOOR_FRACTION = 0.35
 YIELD_MIN_KB = 20
 
 
@@ -128,18 +161,88 @@ def claim_yields(digests_dir: Path, store_dir: Path) -> list[dict]:
         n = len((d.get("domain_claims") or [])) + len(
             (d.get("infrastructure_claims") or [])
         )
-        out.append({"digest": f.stem, "kb": kb, "claims": n, "per_kb": n / kb})
+        out.append(
+            {
+                "digest": f.stem,
+                "kb": kb,
+                "claims": n,
+                "per_kb": n / kb,
+                "medium": (d.get("record") or {}).get("medium"),
+            }
+        )
     return out
 
 
+# Minimum records of a type before that type gets its own median. Below it the
+# type inherits a broader figure rather than being judged on a sample too small
+# to have a norm.
+YIELD_MIN_PER_TYPE = 5
+
+# What a thin type inherits FROM. Not the corpus: the corpus is a mix of these two
+# populations, so falling back to it reintroduces the exact averaging the per-type
+# split exists to remove - and reintroduces it precisely for the types with too
+# little data to notice. Measured, the split is clean at ~3.5x: documents run
+# ~2.85 claims/KB, spoken media ~0.80, because transcripts carry filler,
+# repetition and back-and-forth where documents are dense with assertions.
+#
+# It matters in BOTH directions. With audio at n=2 the corpus fallback judges a
+# transcript against a document-weighted floor - roughly 3x too strict, so a
+# perfectly normal audio record reads as a failed extraction. With web at n=2 it
+# judges a dense document against a floor being dragged down by video - too
+# lenient, and lenience is the failure this guard exists to prevent.
+MEDIA_FAMILIES = {
+    "video": "spoken",
+    "audio": "spoken",
+    "ebook": "document",
+    "pdf": "document",
+    "web": "document",
+    "email": "document",
+}
+
+
 def low_yield(digests_dir: Path, store_dir: Path) -> list[dict]:
-    """Digests whose claim yield is so far below the corpus norm that the
-    extraction probably failed despite exiting successfully."""
+    """Digests whose claim yield is so far below the norm FOR THEIR SOURCE TYPE
+    that the extraction probably failed despite exiting successfully.
+
+    Per type, not corpus-wide, because the two populations differ 3.5x: documents
+    run ~2.85 claims/KB and spoken media ~0.80, since transcripts carry filler and
+    repetition where documents are dense with assertions. That is source type, not
+    quality - old-prompt videos sit inside the new-prompt video range, so it is not
+    a prompt effect either.
+
+    A single median over both is a weighted average, so it MIGRATES as the mix
+    changes - and with 108 video records queued it migrates downward, taking the
+    floor with it. A guard that gets less sensitive as more data arrives is the
+    wrong shape: an ebook that lost 80% of its content is already missed today,
+    and one that lost 90% stops being caught once the corpus tilts. That is the
+    exact failure this guard exists for.
+    """
     rows = claim_yields(digests_dir, store_dir)
     if len(rows) < 5:
         return []
-    med = statistics.median(r["per_kb"] for r in rows)
-    return [r for r in rows if r["per_kb"] < med * YIELD_FLOOR_FRACTION]
+    corpus_med = statistics.median(r["per_kb"] for r in rows)
+    by_type: dict[str, list[float]] = {}
+    by_family: dict[str, list[float]] = {}
+    for r in rows:
+        t = r.get("medium") or "?"
+        by_type.setdefault(t, []).append(r["per_kb"])
+        fam = MEDIA_FAMILIES.get(t)
+        if fam:
+            by_family.setdefault(fam, []).append(r["per_kb"])
+    out = []
+    for r in rows:
+        t = r.get("medium") or "?"
+        for vals, basis in (
+            (by_type.get(t, []), t),
+            (by_family.get(MEDIA_FAMILIES.get(t) or "", []), MEDIA_FAMILIES.get(t)),
+            ([corpus_med], "corpus"),
+        ):
+            if len(vals) >= YIELD_MIN_PER_TYPE or basis == "corpus":
+                med = statistics.median(vals)
+                break
+        if r["per_kb"] < med * YIELD_FLOOR_FRACTION:
+            out.append({**r, "floor_basis": basis, "type_median": round(med, 2)})
+    return out
 
 
 # --- PRE-DIGEST SURVIVAL ---
