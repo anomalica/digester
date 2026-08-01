@@ -10,6 +10,8 @@ import datetime as _dt
 import re
 from dataclasses import dataclass, field
 
+from pathlib import Path
+
 import yaml
 
 # A date-only publication date that arrived as a midnight ISO timestamp (e.g.
@@ -58,7 +60,30 @@ class PageBreak:
 
 
 def parse_record(text: str) -> ParsedRecord:
-    """Parse a record interchange format file into structured data."""
+    """Parse a record interchange format file into structured data.
+
+    Takes the file's CONTENTS. Passing a path is the obvious mistake and the
+    signature cannot prevent it - a path is a `str` - so it is rejected here.
+    Without this the parser happily treats the filename as a record body and
+    returns a 108-character ParsedRecord for a 778KB book: no exception, a
+    plausible object, and every downstream number quietly wrong. That cost a
+    session an afternoon of chasing 78 unreproducible hashes.
+
+    The test is deliberately narrow. A record always has either frontmatter or
+    body text spanning more than one line; a path has neither, and nothing that
+    is genuinely a record looks like a single short line naming an existing file.
+    """
+    if "\n" not in text and len(text) < 4096:
+        stripped = text.strip()
+        if stripped.endswith((".md", ".txt", ".yaml", ".yml", ".json")) or (
+            "/" in stripped and Path(stripped).exists()
+        ):
+            raise ValueError(
+                "parse_record takes the record's CONTENTS, not a path - got "
+                f"{stripped[:120]!r}. Read the file first: "
+                "parse_record(Path(p).read_text())"
+            )
+
     lines = text.split("\n")
     record = ParsedRecord()
 

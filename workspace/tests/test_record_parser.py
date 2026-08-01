@@ -113,3 +113,18 @@ def test_parse_no_frontmatter():
     result = parse_record(text)
     assert result.title == ""
     assert "Just some text" in result.body
+
+
+def test_parse_record_rejects_a_path_instead_of_contents():
+    # A path is a str, so the signature cannot catch this. Unguarded, the parser
+    # treats the filename as a record body and returns a plausible 108-character
+    # result for a 778KB book - no exception, every downstream number wrong.
+    import pytest
+
+    with pytest.raises(ValueError, match="CONTENTS, not a path"):
+        parse_record("/home/mark/repos/anomalica/ingests/records/some-record.md")
+
+
+def test_parse_record_still_accepts_a_short_real_record():
+    r = parse_record("---\ntitle: Short\n---\nA body.\n")
+    assert r.title == "Short" and "A body." in r.body
