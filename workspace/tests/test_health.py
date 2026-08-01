@@ -127,3 +127,35 @@ def test_short_records_are_not_judged_by_a_book_calibrated_ratio(tmp_path):
             )
         )
     assert {r["digest"] for r in collapsed(d)} == {"real_collapse"}
+
+
+def test_yield_is_measured_against_what_the_model_SAW(tmp_path, monkeypatch):
+    # The divisor is materialised size, not the file on disk. A transcript is
+    # ~65-70% word-timestamp tokens by byte, so the raw file overstates the
+    # denominator and understates yield - a 900KB video record reaches the model
+    # as 260KB. Review does the same thing and grows: a reviewer marks irrelevant
+    # regions, materialise drops them, and the record's measured yield falls by
+    # exactly that fraction, so legitimately-reviewed work reads as failed
+    # extraction. Dividing by what was sent makes the metric review-invariant.
+    from digester import health
+
+    d, s = tmp_path / "d", tmp_path / "s"
+    r = tmp_path / "records"
+    for p in (d, s, r):
+        p.mkdir()
+    h = f"{1:064x}"
+    (s / f"{h}.md").write_text("x" * 400_000)  # raw file: 400KB
+    (r / "rec.md").write_text(f"---\ncontent_hash: sha256:{h}\n---\nbody\n")
+    (d / "rec.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "record": {"content_hash": f"sha256:{h}", "medium": "video"},
+                "domain_claims": [{"c": n} for n in range(200)],
+            }
+        )
+    )
+    # only 100KB of that 400KB survives to the model
+    monkeypatch.setattr(health, "materialised_size", lambda p, cache=None: 100_000)
+    row = health.claim_yields(d, s, records_dir=r)[0]
+    assert row["basis"] == "materialised"
+    assert row["per_kb"] == 2.0, "measured against the raw 400KB, not the sent 100KB"

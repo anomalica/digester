@@ -143,44 +143,136 @@ def collapsed(
 # claims/KB against 4.39 for a dense book - so an absolute floor would either miss
 # the failure or condemn every transcript.
 #
-# The factor was 0.2 for as long as ONE median spanned both populations, and it had
-# to be: a single floor cannot exceed 0.23 of the corpus median without condemning
-# real video, because the sparsest genuine record anywhere sits at 0.55 claims/KB
-# against a corpus median of 2.40. That ceiling was imposed by the 3.5x gap between
-# documents and spoken media, not by anything about how far a book can fall.
+# The factor was 0.2 for as long as ONE median spanned populations that appeared
+# to differ 4.3x, and it had to be: a single floor could not exceed 0.23 of the
+# corpus median without condemning real video.
 #
-# So the guard tolerated a book losing FOUR FIFTHS of its content. Grouping the
-# median per type removes the constraint that forced it: each floor is now bounded
-# only by its OWN population's spread, which is far tighter - the sparsest real
-# record of each type sits at 0.68 (ebook), 0.74 (pdf), 0.80 (video) of its median.
+# Most of that apparent gap was the DIVISOR, not the sources. Dividing by
+# materialised size instead of the raw file drops the document-vs-spoken gap from
+# 4.30x to 1.35x, and the ceiling on a single floor rises from 0.23 to 0.57. The
+# per-type split still earns its place - web runs 4.81 against video's 2.23 - but
+# it is now correcting a real 2x difference rather than a measurement artefact.
 #
-# Measured across 42 records, no genuine record is flagged at any factor up to
-# 0.60; the first false positive appears at 0.68. 0.35 is set well inside that:
-# it catches a 65% content loss instead of an 80% one, while every real record
-# still sits 1.9-2.3x above its own floor. Deliberately conservative while video
-# is only n=17 and the medians are still firming up.
+# Held at 0.35 rather than tightened again. On the corrected basis the sparsest
+# record of each type sits at 0.62-0.93 of its type median, so 0.35 leaves every
+# real record 1.8-2.2x clear, and a factor near 0.6 would be the first false
+# positive. The restraint is deliberate: SURVIVAL_FLOOR was tightened this
+# morning on 181 records and had to be reverted within two hours when the
+# population moved, and this corpus is 44 records with 97 more queued. Tighten
+# when the medians have stopped moving, not before.
+#
+# Unlike SURVIVAL_FLOOR, this metric does NOT drift as review lands - that is the
+# point of the materialised divisor. Review removes body from both the numerator's
+# source and the denominator, so the ratio holds.
 YIELD_FLOOR_FRACTION = 0.35
 YIELD_MIN_KB = 20
 
 
+def _records_by_hash(records_dir: Path) -> dict[str, Path]:
+    """Record paths keyed by DECLARED content_hash.
+
+    Not by filename: most records are symlinks into the content-addressed store
+    so the resolved stem IS the hash, but not all are - two web records are
+    regular files whose stem is the slug, and keying on path shape reported both
+    as orphaned when both were present. Maps to the RECORD path rather than its
+    resolved target, so a digest is still named from the record slug.
+    """
+    by_hash: dict[str, Path] = {}
+    for rec in records_dir.glob("*.md"):
+        t = rec.resolve()
+        if not t.exists():
+            continue
+        by_hash.setdefault(t.stem.removesuffix(".v2"), rec)
+        try:
+            raw = rec.read_text(errors="replace")
+        except OSError:
+            continue
+        if not raw.startswith("---"):
+            continue
+        try:
+            fm = yaml.load(raw.split("---", 2)[1], Loader=_Loader)
+        except (yaml.YAMLError, IndexError):
+            continue
+        if isinstance(fm, dict) and fm.get("content_hash"):
+            by_hash[str(fm["content_hash"]).split(":")[-1]] = rec
+    return by_hash
+
+
+def materialised_size(record_md: Path, cache: dict | None = None) -> int | None:
+    """Characters of the record that actually reach the model."""
+    from anomalica_common.pre_digest import PREP_VERSION, materialise
+
+    from digester.record_parser import parse_record
+
+    try:
+        raw = record_md.read_text(errors="replace")
+    except OSError:
+        return None
+    key = f"matlen:{PREP_VERSION}:{hashlib.sha256(raw.encode()).hexdigest()}"
+    if cache is not None and key in cache:
+        return cache[key]
+    try:
+        n = len(materialise(parse_record(raw).body))
+    except ValueError:
+        return None
+    if cache is not None:
+        cache[key] = n
+    return n
+
+
 def claim_yields(
-    digests_dir: Path, store_dir: Path, loaded: list | None = None
+    digests_dir: Path,
+    store_dir: Path,
+    loaded: list | None = None,
+    records_dir: Path | None = None,
 ) -> list[dict]:
-    """claims-per-source-KB per digest, for records large enough to judge."""
+    """claims-per-MATERIALISED-KB per digest, for records large enough to judge.
+
+    The divisor is what the model SAW, not the file on disk. Claims come from the
+    materialised pre-digest, so dividing by the raw record counts text that was
+    never sent - and the error is exactly the fraction materialise removed.
+
+    That fraction is not small and it is not uniform. Word timestamps are ~65-70%
+    of a transcript's bytes, so a 900KB video record reaches the model as 260KB
+    and its raw yield understates by 246%. Measured across the corpus, the
+    document-vs-spoken gap is 4.30x on the raw divisor and 1.35x on this one:
+    most of the "transcripts are less dense than documents" effect was the
+    denominator, not the sources.
+
+    Review is the second contributor and the one that grows. A reviewer marks
+    irrelevant regions, materialise correctly drops them, and the record's
+    measured yield falls by exactly that fraction - so a record that legitimately
+    sheds half its body reads as half-yield, i.e. as a failed extraction. Today
+    the corpus is ~99% unreviewed and this is nearly invisible; it arrives with
+    the review programme. Dividing by materialised size makes the metric
+    review-invariant, so no threshold above it needs recalibrating as review
+    lands.
+    """
+    records_dir = records_dir or (store_dir.parent / "records")
+    by_hash = _records_by_hash(records_dir) if records_dir.is_dir() else {}
+    cache = _cache_load()
     out = []
     for stem, d in loaded if loaded is not None else load_digests(digests_dir):
         h = ((d.get("record") or {}).get("content_hash") or "").split(":")[-1]
-        src = 0
-        for c in (
-            store_dir / f"{h}.v2.md",
-            store_dir / f"{h}.md",
-            store_dir / "v1" / f"{h}.v2.md",
-            store_dir / "v1" / f"{h}.md",
-        ):
-            if c.exists():
-                src = c.stat().st_size
-                break
-        kb = src / 1000
+        basis = "materialised"
+        size = materialised_size(by_hash[h], cache) if h in by_hash else None
+        if not size:
+            # FALL BACK to the raw file, and say so. A record whose materialised
+            # size cannot be computed still gets measured, but on a divisor known
+            # to be wrong for transcripts - so the basis travels with the number
+            # rather than being silently mixed in.
+            basis = "raw"
+            size = 0
+            for c in (
+                store_dir / f"{h}.v2.md",
+                store_dir / f"{h}.md",
+                store_dir / "v1" / f"{h}.v2.md",
+                store_dir / "v1" / f"{h}.md",
+            ):
+                if c.exists():
+                    size = c.stat().st_size
+                    break
+        kb = size / 1000
         if kb < YIELD_MIN_KB:
             continue
         n = len((d.get("domain_claims") or [])) + len(
@@ -192,9 +284,11 @@ def claim_yields(
                 "kb": kb,
                 "claims": n,
                 "per_kb": n / kb,
+                "basis": basis,
                 "medium": (d.get("record") or {}).get("medium"),
             }
         )
+    _cache_save(cache)
     return out
 
 
@@ -231,18 +325,21 @@ def low_yield(
     """Digests whose claim yield is so far below the norm FOR THEIR SOURCE TYPE
     that the extraction probably failed despite exiting successfully.
 
-    Per type, not corpus-wide, because the two populations differ 3.5x: documents
-    run ~2.85 claims/KB and spoken media ~0.80, since transcripts carry filler and
-    repetition where documents are dense with assertions. That is source type, not
-    quality - old-prompt videos sit inside the new-prompt video range, so it is not
-    a prompt effect either.
+    Per type, because a single median over several populations is a weighted
+    average and MIGRATES as the mix changes - and with ~97 records queued it
+    migrates, taking the floor with it. A guard that gets less sensitive as more
+    data arrives is the wrong shape.
 
-    A single median over both is a weighted average, so it MIGRATES as the mix
-    changes - and with 108 video records queued it migrates downward, taking the
-    floor with it. A guard that gets less sensitive as more data arrives is the
-    wrong shape: an ebook that lost 80% of its content is already missed today,
-    and one that lost 90% stops being caught once the corpus tilts. That is the
-    exact failure this guard exists for.
+    The populations differ far less than they first appeared. On the raw divisor
+    documents ran ~2.85 claims/KB against spoken media's ~0.80, a 4.3x gap that
+    looked like a property of the sources - transcripts carrying filler where
+    documents are dense with assertions. Most of it was word timestamps inflating
+    the denominator: on materialised size the gap is 1.35x. The split still
+    matters (web 4.81, video 2.23) but for a real 2x difference, not a 4x one.
+
+    A worked example of why the grouping is still needed: an ebook that lost 80%
+    of its content is missed by a corpus-wide floor today and missed harder once
+    the mix tilts, having changed not at all.
     """
     rows = claim_yields(digests_dir, store_dir, loaded)
     if len(rows) < 5:
@@ -547,33 +644,7 @@ def pre_digest_freshness(
 
     from digester.record_parser import parse_record
 
-    # Index on the record's DECLARED content_hash, not on its filename. Most
-    # records are symlinks into the content-addressed store, so the resolved stem
-    # IS the hash - but not all of them are: two web records are regular files
-    # whose stem is the slug. Keying on the path shape reported both as orphaned
-    # when both were present, which is a check inventing its own failure.
-    # Maps to the RECORD path, not its resolved store target. Most records are
-    # symlinks; handing the store path downstream would name a digest from the
-    # content hash instead of the record slug. Reading through the symlink gets
-    # the same bytes either way.
-    by_hash: dict[str, Path] = {}
-    for rec in records_dir.glob("*.md"):
-        t = rec.resolve()
-        if not t.exists():
-            continue
-        by_hash.setdefault(t.stem.removesuffix(".v2"), rec)
-        try:
-            raw = rec.read_text(errors="replace")
-        except OSError:
-            continue
-        if not raw.startswith("---"):
-            continue
-        try:
-            fm = yaml.load(raw.split("---", 2)[1], Loader=_Loader)
-        except (yaml.YAMLError, IndexError):
-            continue
-        if isinstance(fm, dict) and fm.get("content_hash"):
-            by_hash[str(fm["content_hash"]).split(":")[-1]] = rec
+    by_hash = _records_by_hash(records_dir)
 
     cache = _cache_load()
     out = []
