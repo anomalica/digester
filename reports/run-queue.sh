@@ -116,6 +116,19 @@ while :; do
 		# the gate is size-dependent, so a record behind it may still be eligible.
 		deferred[$next]=1
 		echo "    deferred (allowance): $next" >>"$LOG"
+		# ...but the NON-BOOK line is the most permissive one there is. If a record
+		# under BOOK_SCALE_CHARS was refused, nothing smaller can pass either, so
+		# probing the rest of the queue cannot find work - it only costs a gate call
+		# per record, and each of those SSHes to Forest against an endpoint already
+		# answering in 8-29s. At the stop line that is ~96 polls every pass, for the
+		# four days until the window rolls. Defer the remainder in one go instead.
+		body=$(wc -c <"$RECORDS/$next" 2>/dev/null || echo 0)
+		if [ "$body" -lt 200000 ]; then
+			echo "    non-book refused - nothing smaller can pass; parking early" >>"$LOG"
+			for rest in "${QUEUE[@]}"; do
+				[ -n "$rest" ] && deferred[$rest]=1
+			done
+		fi
 		continue
 	fi
 
