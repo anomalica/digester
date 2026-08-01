@@ -204,7 +204,7 @@ def test_cache_collapse_canary_flags_a_broken_prefix_not_a_weak_one(tmp_path):
     used to read - the extraction stays correct, every test passes, and only the
     cost characteristic moves. The read/write ratio is the one signal that does."""
     import yaml
-    from digester.cache_health import collapsed, ratios
+    from digester.health import collapsed, ratios
 
     def write(name, read, write_, calls):
         (tmp_path / f"{name}.yaml").write_text(
