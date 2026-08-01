@@ -296,12 +296,28 @@ def low_yield(
 # (A ratio slightly above 1.0 is expected, not a fault: prep 6 renders span notes
 # INTO the pre-digest, so it can carry more characters than the stripped baseline.)
 #
-# Tightened 0.5 -> 0.65 on that evidence. 0.5 was set before the distribution was
-# known and sits so far below every observed record that it only ever catches the
-# extreme case that prompted it; a record losing 40% of its body scored 0.60 and
-# passed. 0.65 leaves 26% margin under the lowest of 181 observations while
-# catching a 35% loss. Raise the floor further only with the distribution in hand.
-SURVIVAL_FLOOR = 0.65
+# Tightened to 0.65 on that evidence and REVERTED to 0.5 within two hours, which
+# is the more useful record of the two.
+#
+# The 181 records measured were almost entirely UNREVIEWED, and human review is
+# precisely the process that legitimately removes body - a reviewer marks
+# irrelevant regions and the pre-digest correctly drops them. Within two hours
+# project-serpo was repointed from its pre-review copy to its reviewed one and
+# landed at 0.676, against a floor of 0.65: 2.6% of margin on a record that is
+# working exactly as intended. The reviewed population barely existed when the
+# distribution was taken, and it is the population that will grow.
+#
+# That is the same error this module spent the day finding in other thresholds -
+# a floor calibrated on one population while a different one arrives - committed
+# here by the code that found it. Both other cases were caught by grouping the
+# populations; that fix is not available yet at n=1 reviewed record, so the floor
+# goes back to catching the disaster case only.
+#
+# The proper fix, once enough records carry review sidecars to have a norm: split
+# reviewed from unreviewed and floor each on its own distribution, exactly as
+# low_yield does by medium. Until then a loose floor that never lies beats a tight
+# one that condemns good work.
+SURVIVAL_FLOOR = 0.5
 
 
 # Survival is a pure function of (record bytes, prep version), so it is cached
@@ -504,6 +520,25 @@ def unmapped_record_fields(records_dir: Path) -> dict[str, int]:
 # clean today - and it stays clean only if something checks.
 
 
+def stale_record_paths(
+    digests_dir: Path, records_dir: Path, loaded: list | None = None
+) -> list[Path]:
+    """Record files whose digest was built from text the record no longer has.
+
+    DERIVED from the artefacts rather than remembered in a list. The queue's
+    normal skip is "has a digest" and FORCE's is "has a provenance_chain";
+    neither is the right test for a record whose SOURCE moved underneath a
+    perfectly complete digest, so re-digestion work kept having to be tracked by
+    hand - and three separate hand-built lists this week is the signal that the
+    fact was recoverable from the data all along.
+    """
+    out = []
+    for f in pre_digest_freshness(digests_dir, records_dir, loaded):
+        if f["issue"] in ("record_changed", "prep_version") and f.get("record"):
+            out.append(f["record"])
+    return out
+
+
 def pre_digest_freshness(
     digests_dir: Path, records_dir: Path, loaded: list | None = None
 ) -> list[dict]:
@@ -517,14 +552,18 @@ def pre_digest_freshness(
     # IS the hash - but not all of them are: two web records are regular files
     # whose stem is the slug. Keying on the path shape reported both as orphaned
     # when both were present, which is a check inventing its own failure.
+    # Maps to the RECORD path, not its resolved store target. Most records are
+    # symlinks; handing the store path downstream would name a digest from the
+    # content hash instead of the record slug. Reading through the symlink gets
+    # the same bytes either way.
     by_hash: dict[str, Path] = {}
     for rec in records_dir.glob("*.md"):
         t = rec.resolve()
         if not t.exists():
             continue
-        by_hash.setdefault(t.stem.removesuffix(".v2"), t)
+        by_hash.setdefault(t.stem.removesuffix(".v2"), rec)
         try:
-            raw = t.read_text(errors="replace")
+            raw = rec.read_text(errors="replace")
         except OSError:
             continue
         if not raw.startswith("---"):
@@ -534,7 +573,7 @@ def pre_digest_freshness(
         except (yaml.YAMLError, IndexError):
             continue
         if isinstance(fm, dict) and fm.get("content_hash"):
-            by_hash[str(fm["content_hash"]).split(":")[-1]] = t
+            by_hash[str(fm["content_hash"]).split(":")[-1]] = rec
 
     cache = _cache_load()
     out = []
@@ -549,6 +588,11 @@ def pre_digest_freshness(
                     "digest": stem,
                     "issue": "prep_version",
                     "detail": f"built under prep {version}, current is {PREP_VERSION}",
+                    "record": by_hash.get(
+                        ((d.get("record") or {}).get("content_hash") or "").split(":")[
+                            -1
+                        ]
+                    ),
                 }
             )
             continue
@@ -585,6 +629,7 @@ def pre_digest_freshness(
                     "digest": stem,
                     "issue": "record_changed",
                     "detail": f"recorded {recorded[:12]}, record now yields {actual[:12]}",
+                    "record": rec,
                 }
             )
     _cache_save(cache)

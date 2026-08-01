@@ -887,5 +887,36 @@ def health_cmd(digests: str, store: str, records: str) -> None:
     raise SystemExit(1 if findings else 0)
 
 
+@main.command(name="stale-records")
+@click.option(
+    "--digests",
+    type=click.Path(),
+    default=str(_ANOMALICA / "digests" / "records"),
+    help="Canonical digests directory",
+)
+@click.option(
+    "--records",
+    type=click.Path(),
+    default=str(_ANOMALICA / "ingests" / "records"),
+    help="Ingest records directory",
+)
+def stale_records_cmd(digests: str, records: str) -> None:
+    """Print records whose digest was built from text they no longer have.
+
+    Composes with batch-extract:
+
+        digester stale-records | xargs -r digester batch-extract --digests-root ...
+
+    The queue's normal skip is "has a digest" and FORCE's is "has a
+    provenance_chain". Neither is the right test for a record whose SOURCE moved
+    underneath an otherwise complete digest, so that work kept being tracked in
+    hand-maintained lists. This derives it from the artefacts instead.
+    """
+    from digester import health
+
+    for p in health.stale_record_paths(Path(digests), Path(records)):
+        click.echo(str(p))
+
+
 if __name__ == "__main__":
     main()
