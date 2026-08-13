@@ -18,7 +18,7 @@ def _make_store(tmp_path: Path, sidecar_at_root: bool) -> Path:
     sidecar at the store root or colocated. Returns the records-dir record path."""
     h = "a" * 64
     (tmp_path / "store" / "v1").mkdir(parents=True)
-    (tmp_path / "records").mkdir()
+    (tmp_path / "by-name").mkdir()
     (tmp_path / "store" / "v1" / f"{h}.md").write_text(RECORD_BODY)
     sidecar = {
         "schema": "anomalica/review-coverage/1",
@@ -31,7 +31,7 @@ def _make_store(tmp_path: Path, sidecar_at_root: bool) -> Path:
 
     sidecar_dir = tmp_path / "store" if sidecar_at_root else tmp_path / "store" / "v1"
     (sidecar_dir / f"{h}.review.json").write_text(json.dumps(sidecar))
-    link = tmp_path / "records" / "rec.md"
+    link = tmp_path / "by-name" / "rec.md"
     link.symlink_to(Path("..") / "store" / "v1" / f"{h}.md")
     return link
 
@@ -81,10 +81,10 @@ def test_load_sidecar_resolves_v2_body_to_bare_hash_sidecar(tmp_path):
 
 def test_assess_record_no_sidecar_not_digestible(tmp_path):
     (tmp_path / "store" / "v1").mkdir(parents=True)
-    (tmp_path / "records").mkdir()
+    (tmp_path / "by-name").mkdir()
     h = "b" * 64
     (tmp_path / "store" / "v1" / f"{h}.md").write_text(RECORD_BODY)
-    link = tmp_path / "records" / "rec.md"
+    link = tmp_path / "by-name" / "rec.md"
     link.symlink_to(Path("..") / "store" / "v1" / f"{h}.md")
     d = assess_record(link, tmp_path)
     assert not d.digestible

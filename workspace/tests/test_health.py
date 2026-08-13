@@ -140,7 +140,7 @@ def test_yield_is_measured_against_what_the_model_SAW(tmp_path, monkeypatch):
     from digester import health
 
     d, s = tmp_path / "d", tmp_path / "s"
-    r = tmp_path / "records"
+    r = tmp_path / "by-name"
     for p in (d, s, r):
         p.mkdir()
     h = f"{1:064x}"

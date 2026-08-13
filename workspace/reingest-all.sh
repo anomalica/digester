@@ -92,7 +92,7 @@ if [ -n "${RECORD_LIST:-}" ]; then
 		while IFS= read -r rname; do
 			rname=${rname%.md}
 			[ -z "$rname" ] && continue
-			f="$INGESTS_DIR/records/${rname}.md"
+			f="$INGESTS_DIR/by-name/${rname}.md"
 			if [ -e "$f" ]; then
 				printf '%s %s\n' "$(stat -L -c%s "$f" 2>/dev/null || echo 0)" "$f"
 			else
@@ -103,7 +103,7 @@ if [ -n "${RECORD_LIST:-}" ]; then
 	echo "scoped to RECORD_LIST: $RECORD_LIST"
 else
 	mapfile -t files < <(
-		find -L "$INGESTS_DIR/records" -maxdepth 1 -name '*.md' -printf '%s %p\n' |
+		find -L "$INGESTS_DIR/by-name" -maxdepth 1 -name '*.md' -printf '%s %p\n' |
 			sort -n |
 			awk '{print $2}'
 	)
@@ -120,7 +120,7 @@ for ingest in "${files[@]}"; do
 	# This --output path bypasses digest_store (which de-versions its own paths),
 	# so the strip has to happen here too or canonicals fragment the same way.
 	name=$(printf '%s' "$name" | sed -E 's/\.v[0-9]+$//')
-	output_host="$DIGESTS_DIR/records/${name}.yaml"
+	output_host="$DIGESTS_DIR/${name}.yaml"
 	output_container="/home/nonroot/digests/${name}.yaml"
 	ingest_container="/home/nonroot/ingests/by-name/${name}.md"
 
@@ -155,6 +155,6 @@ fi
 #     python -m assimilator.cli rebuild <digests-root>
 echo
 echo "Digests written. Graph build is the assimilator's job now:"
-echo "    (in the assimilator) python -m assimilator.cli rebuild $DIGESTS_DIR/records"
+echo "    (in the assimilator) python -m assimilator.cli rebuild $DIGESTS_DIR"
 
 exit $([ ${#failed[@]} -eq 0 ] && echo 0 || echo 1)

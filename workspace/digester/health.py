@@ -248,7 +248,7 @@ def claim_yields(
     review-invariant, so no threshold above it needs recalibrating as review
     lands.
     """
-    records_dir = records_dir or (store_dir.parent / "records")
+    records_dir = records_dir or (store_dir.parent / "by-name")
     by_hash = _records_by_hash(records_dir) if records_dir.is_dir() else {}
     cache = _cache_load()
     out = []

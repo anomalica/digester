@@ -26,7 +26,7 @@ def test_producer_none_when_no_real_creator():
 def _ingests_tree(tmp_path: Path, *, digestible: bool):
     h = "c" * 64
     (tmp_path / "store" / "v1").mkdir(parents=True)
-    (tmp_path / "records").mkdir()
+    (tmp_path / "by-name").mkdir()
     body = "---\nschema: anomalica/record/1\ntitle: T\n---\n00:00:01.0 A sentence.\n"
     (tmp_path / "store" / "v1" / f"{h}.md").write_text(body)
     sidecar = {
@@ -37,10 +37,10 @@ def _ingests_tree(tmp_path: Path, *, digestible: bool):
         "reviews": [],
     }
     (tmp_path / "store" / f"{h}.review.json").write_text(json.dumps(sidecar))
-    (tmp_path / "records" / "rec.md").symlink_to(
+    (tmp_path / "by-name" / "rec.md").symlink_to(
         Path("..") / "store" / "v1" / f"{h}.md"
     )
-    return tmp_path / "records"
+    return tmp_path / "by-name"
 
 
 def test_coverage_command_reports_digestible(tmp_path):
