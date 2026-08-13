@@ -1,0 +1,222 @@
+schema: anomalica/digest/1
+extracted_at: '2026-07-02T05:56:15.365873+00:00'
+model: openai/gpt-5-nano
+ai_usage:
+  - stage: digest
+    model: openai/gpt-5-nano
+    tokens:
+      input: 6377
+      output: 26471
+    notional_cost_usd: 0.0109
+    price_basis: anthropic-list-2026-06
+record:
+  id: 6ecb66ff-77cf-4d8e-b3db-b203280395a3
+  title: Navy pilots describe encounters with UFOs
+  publisher: 60 Minutes
+  date: '2021-05-17'
+  medium: video
+  duration: 825
+  content_hash: sha256:1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44
+  processing_version: 5b1406d
+  reference: https://www.youtube.com/watch?v=ZBtMbBPzqHY
+terminology:
+  main_subject: Navy pilots describe encounters with UFOs (segment 1)
+  acronyms:
+    - acronym: AATIP
+      expansion: Advanced Aerospace Threat Identification Program (AATIP)
+    - acronym: UAP
+      expansion: Unidentified Aerial Phenomena (UAP)
+    - acronym: UFO
+      expansion: Unidentified Flying Object (UFO)
+nodes:
+  - id: b4e712d4-e451-4fa7-b451-a57a3b27695c
+    type: document
+    name: Navy pilots describe encounters with UFOs (segment 1)
+  - id: 3cfede23-67f8-40b9-8676-2b37f41d3e26
+    type: person
+    name: Elizondo, Luis
+  - id: ac11063a-c7aa-4173-8370-762caae810df
+    type: person
+    name: Whitaker, Bill
+  - id: 4bcddb6e-0f3a-4549-9408-3c613d097611
+    type: person
+    name: Reid, Harry
+  - id: beaf789a-8a64-4abb-8b1e-e920154903b7
+    type: organisation
+    name: United States Navy
+  - id: 4368fdc9-95c4-4439-8946-b64db4ef75ab
+    type: place
+    name: USA, Virginia, The Pentagon
+  - id: 730a80bd-3b3c-4a4c-9da8-2ee1791d82a9
+    type: project
+    name: Advanced Aerospace Threat Identification Program (AATIP)
+  - id: 22b6c15d-4a8e-4605-9e9e-4a1b4a3445e8
+    type: organisation
+    name: 60 Minutes
+  - id: 0f03df68-2335-4816-a6ba-38fbea7ca821
+    type: organisation
+    name: United States Senate
+  - id: 266def5d-ccee-418d-8abe-bf9bb3369af2
+    type: organisation
+    name: United States Senate Intelligence Committee
+  - id: 46e99df2-c80a-4f16-ba08-541c15a122ca
+    type: topic
+    name: Unidentified Aerial Phenomena (UAP)
+  - id: 6ed77f1a-2a16-4284-a544-37b72c0d9a75
+    type: topic
+    name: Anomalous Aerial Vehicle (AAV)
+domain_claims:
+  - id: 240ff176-f040-4193-a15c-f776a8d3acf0
+    type: testimony
+    location: 00:00:44.4-00:00:59.6
+    refs:
+      - id: b4e712d4-e451-4fa7-b451-a57a3b27695c
+        name: Navy pilots describe encounters with UFOs (segment 1)
+      - id: 46e99df2-c80a-4f16-ba08-541c15a122ca
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: So what you're telling me is that UFOs, unidentified flying objects, are real.
+    text: |-
+      Navy pilots describe encounters with UFOs (segment 1): Unidentified Flying Objects (UFOs) are real.
+  - id: f0186a2f-81b2-471a-92a3-7afca94afa2e
+    type: testimony
+    location: 00:00:56.3-00:00:59.6
+    refs:
+      - id: b4e712d4-e451-4fa7-b451-a57a3b27695c
+        name: Navy pilots describe encounters with UFOs (segment 1)
+      - id: 46e99df2-c80a-4f16-ba08-541c15a122ca
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: The government has already stated for the record that they're real.
+    text: |-
+      The United States government has stated for the record that Unidentified Aerial Phenomena (UAP) are real.
+  - id: 5cee0809-3a7e-4d29-846b-516e8cf27a98
+    type: testimony
+    speaker:
+      id: 3cfede23-67f8-40b9-8676-2b37f41d3e26
+      name: Elizondo, Luis
+    location: 00:01:02.4-00:01:11.5
+    refs:
+      - id: b4e712d4-e451-4fa7-b451-a57a3b27695c
+        name: Navy pilots describe encounters with UFOs (segment 1)
+      - id: 3cfede23-67f8-40b9-8676-2b37f41d3e26
+        name: Elizondo, Luis
+    quote: |-
+      Luis Elizondo spent 20 years running military intelligence operations worldwide in Afghanistan, the Middle East, and Guantanamo.
+    text: |-
+      Luis Elizondo spent twenty years running military intelligence operations worldwide in Afghanistan, the Middle East, and Guantanamo.
+  - id: e75459dc-dd2c-469c-99f5-e7a47e93a8b7
+    type: testimony
+    speaker:
+      id: 3cfede23-67f8-40b9-8676-2b37f41d3e26
+      name: Elizondo, Luis
+    location: 00:01:11.5-00:01:15.6
+    refs:
+      - id: b4e712d4-e451-4fa7-b451-a57a3b27695c
+        name: Navy pilots describe encounters with UFOs (segment 1)
+      - id: 3cfede23-67f8-40b9-8676-2b37f41d3e26
+        name: Elizondo, Luis
+    quote: He hadn't given UFOs a second thought until 2008.
+    text: |-
+      Luis Elizondo had not given Unidentified Flying Objects (UFOs) a second thought until 2008.
+  - id: 4d414380-1094-4571-af5b-314f3dbd83a5
+    type: testimony
+    speaker:
+      id: 3cfede23-67f8-40b9-8676-2b37f41d3e26
+      name: Elizondo, Luis
+    location: 00:01:15.6-00:01:24.1
+    refs:
+      - id: b4e712d4-e451-4fa7-b451-a57a3b27695c
+        name: Navy pilots describe encounters with UFOs (segment 1)
+      - id: 730a80bd-3b3c-4a4c-9da8-2ee1791d82a9
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - name: The Pentagon
+    quote: |-
+      That's when he was asked to join something at the Pentagon called the Advanced Aerospace Threat Identification Program, or AATIP.
+    text: |-
+      Luis Elizondo was asked to join the Advanced Aerospace Threat Identification Program (AATIP) at the Pentagon.
+  - id: 056e1519-e199-4c0e-9a5a-2b454c79cf65
+    type: testimony
+    speaker:
+      id: 3cfede23-67f8-40b9-8676-2b37f41d3e26
+      name: Elizondo, Luis
+    location: 00:01:24.1-00:01:34.3
+    refs:
+      - id: b4e712d4-e451-4fa7-b451-a57a3b27695c
+        name: Navy pilots describe encounters with UFOs (segment 1)
+      - id: 730a80bd-3b3c-4a4c-9da8-2ee1791d82a9
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: 46e99df2-c80a-4f16-ba08-541c15a122ca
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      The mission of AATIP was quite simple. It was to collect and analyze information involving anomalous aerial vehicles, what I guess in the vernacular you call them UFOs.
+    text: |-
+      The mission of Advanced Aerospace Threat Identification Program (AATIP) was to collect and analyse information involving anomalous aerial vehicles (UFOs).
+  - id: bc19e481-db2a-4581-a0f6-884e4548980e
+    type: opinion
+    speaker:
+      id: 3cfede23-67f8-40b9-8676-2b37f41d3e26
+      name: Elizondo, Luis
+    location: 00:01:37.5-00:01:44.1
+    refs:
+      - id: b4e712d4-e451-4fa7-b451-a57a3b27695c
+        name: Navy pilots describe encounters with UFOs (segment 1)
+      - id: 46e99df2-c80a-4f16-ba08-541c15a122ca
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: It sounds nutty, wacky.
+    text: Luis Elizondo thinks Unidentified Aerial Phenomena (UAP) sound nutty.
+  - id: 6a8b2f28-e489-450c-a1de-374629ee9ef8
+    type: testimony
+    speaker:
+      id: 3cfede23-67f8-40b9-8676-2b37f41d3e26
+      name: Elizondo, Luis
+    location: 00:01:44.1-00:01:45.6
+    refs:
+      - id: b4e712d4-e451-4fa7-b451-a57a3b27695c
+        name: Navy pilots describe encounters with UFOs (segment 1)
+      - id: 46e99df2-c80a-4f16-ba08-541c15a122ca
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: What I'm telling you is real.
+    text: Unidentified Aerial Phenomena (UAP) are real.
+  - id: 52069373-1123-4db3-b5c5-ed64b7ad009f
+    type: testimony
+    speaker:
+      id: 3cfede23-67f8-40b9-8676-2b37f41d3e26
+      name: Elizondo, Luis
+    location: 00:01:50.3-00:02:01.6
+    refs:
+      - id: b4e712d4-e451-4fa7-b451-a57a3b27695c
+        name: Navy pilots describe encounters with UFOs (segment 1)
+      - id: 730a80bd-3b3c-4a4c-9da8-2ee1791d82a9
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: 4bcddb6e-0f3a-4549-9408-3c613d097611
+        name: Reid, Harry
+    quote: |-
+      Buried away in the Pentagon, AATIP was part of a $22 million program sponsored by then Senate Majority Leader Harry Reid to investigate UFOs.
+    text: |-
+      AATIP was part of a US$22 million programme sponsored by then Senate Majority Leader Harry Reid to investigate Unidentified Flying Objects (UFOs).
+  - id: a4cb1f6e-d6f8-475a-b2cd-82caeff2f67d
+    type: testimony
+    speaker:
+      id: 3cfede23-67f8-40b9-8676-2b37f41d3e26
+      name: Elizondo, Luis
+    location: 00:02:01.6-00:02:10.8
+    refs:
+      - id: b4e712d4-e451-4fa7-b451-a57a3b27695c
+        name: Navy pilots describe encounters with UFOs (segment 1)
+      - id: 3cfede23-67f8-40b9-8676-2b37f41d3e26
+        name: Elizondo, Luis
+    quote: |-
+      When Elizondo took over in 2010, he focused on the national security implications of unidentified aerial phenomena documented by U.S. service members.
+    text: |-
+      When Luis Elizondo took over in 2010, he focused on the national security implications of Unidentified Aerial Phenomena (UAP) documented by United States service members.
+  - id: 53f74528-305e-470a-b312-2cf593c8a1e9
+    type: administrative
+    location: 00:00:07.6-00:00:14.9
+    refs:
+      - id: b4e712d4-e451-4fa7-b451-a57a3b27695c
+        name: Navy pilots describe encounters with UFOs (segment 1)
+      - id: 266def5d-ccee-418d-8abe-bf9bb3369af2
+        name: United States Senate Intelligence Committee
+    quote: |-
+      The intelligence committee has ordered the director of national intelligence and the secretary of defense to deliver a report on the mysterious sightings by next month
+    text: |-
+      The United States Senate Intelligence Committee ordered a report on Unidentified Aerial Phenomena sightings by next month.

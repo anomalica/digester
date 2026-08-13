@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Provenance: what changed, and what I got wrong</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body,h1,h2,h3,p,ul,ol,pre,table{margin:0}
+  ul,ol{padding:0}
+  :root{
+    --ink:#14171b; --soft:#4a525c; --faint:#7c8590;
+    --paper:#f5f6f4; --panel:#fff; --rule:#dcdfda;
+    --steel:#3d5a80; --bad:#a8362a; --bad-bg:#fbecea;
+    --good:#2c6a52; --good-bg:#e8f2ec; --warn:#8a6212; --warn-bg:#fbf1dd;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:ui-sans-serif,system-ui,"Segoe UI",Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --ink:#e6e9ec; --soft:#a2acb6; --faint:#6d7885;
+    --paper:#101317; --panel:#171b21; --rule:#2a3138;
+    --steel:#8ba9d0; --bad:#e08578; --bad-bg:#2a1815;
+    --good:#79c2a1; --good-bg:#13241d; --warn:#d6a94e; --warn-bg:#251d0f;
+  }}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1200px;margin:0 auto;padding:3rem 1.25rem 6rem;display:flex;flex-direction:column;gap:3rem}
+  .eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.5rem}
+  h1{font-size:clamp(1.8rem,3.3vw,2.5rem);line-height:1.13;letter-spacing:-.02em;font-weight:640;margin-bottom:.8rem;text-wrap:balance}
+  h2{font-size:1.3rem;font-weight:640;letter-spacing:-.01em}
+  h3{font-size:.98rem;font-weight:640}
+  p{color:var(--soft);max-width:74ch;margin-bottom:.8rem}
+  p:last-child{margin-bottom:0}
+  p.lede{color:var(--ink);font-size:1.05rem}
+  strong{color:var(--ink);font-weight:620}
+  section{display:flex;flex-direction:column;gap:1rem}
+  .sec-head{border-top:2px solid var(--ink);padding-top:.8rem}
+
+  .transcript{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--steel);
+    padding:1.1rem 1.3rem;font-family:var(--mono);font-size:.82rem;line-height:1.8;color:var(--soft);overflow-x:auto}
+  .transcript .t{color:var(--faint)}
+  .transcript mark{background:transparent;color:var(--ink);font-weight:600;border-bottom:2px solid var(--steel)}
+  .transcript .claim{color:var(--bad);font-weight:620}
+
+  .grid4{display:grid;grid-template-columns:1fr;gap:1rem}
+  @media(min-width:820px){.grid4{grid-template-columns:1fr 1fr}}
+  .card{border:1px solid var(--rule);background:var(--panel);display:flex;flex-direction:column;overflow:hidden}
+  .card-h{padding:.65rem .9rem;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:baseline;gap:.6rem}
+  .card.bad .card-h{background:var(--bad-bg)} .card.bad h3{color:var(--bad)}
+  .card.good .card-h{background:var(--good-bg)} .card.good h3{color:var(--good)}
+  .tag{font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+  pre{padding:.9rem 1rem;font-family:var(--mono);font-size:.76rem;line-height:1.6;overflow-x:auto;color:var(--soft)}
+  pre .k{color:var(--steel)} pre .bad{color:var(--bad);font-weight:620}
+  pre .good{color:var(--good);font-weight:620} pre .miss{color:var(--faint);font-style:italic}
+  .verdict{padding:.75rem 1rem;border-top:1px solid var(--rule);font-size:.85rem;margin-top:auto}
+  .card.bad .verdict{color:var(--bad)} .card.good .verdict{color:var(--good)}
+
+  .tw{overflow-x:auto;border:1px solid var(--rule);background:var(--panel)}
+  table{border-collapse:collapse;width:100%;font-size:.86rem}
+  th,td{text-align:left;padding:.6rem .85rem;border-bottom:1px solid var(--rule);white-space:nowrap}
+  th{font-family:var(--mono);font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);font-weight:500}
+  td{color:var(--soft)}
+  td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+  td.m{font-weight:620;color:var(--ink)}
+  td.ok{color:var(--good);font-weight:600} td.no{color:var(--bad);font-weight:600}
+  tbody tr:last-child td{border-bottom:none}
+  tr.sep td{border-top:2px solid var(--ink)}
+
+  .box{padding:1rem 1.2rem;border-left:3px solid}
+  .box.good{border-color:var(--good);background:var(--good-bg)}
+  .box.bad{border-color:var(--bad);background:var(--bad-bg)}
+  .box.warn{border-color:var(--warn);background:var(--warn-bg)}
+  .box h3{margin-bottom:.4rem}
+  .box.good h3{color:var(--good)} .box.bad h3{color:var(--bad)} .box.warn h3{color:var(--warn)}
+  .box p,.box li{color:var(--soft);font-size:.9rem}
+  .box ol,.box ul{padding-left:1.2rem;margin:.4rem 0 0}
+  .box li{margin-bottom:.45rem}
+  .box li:last-child{margin-bottom:0}
+  .box li b{color:var(--ink)}
+
+  .cache{display:grid;grid-template-columns:1fr;gap:.8rem}
+  @media(min-width:820px){.cache{grid-template-columns:1fr 1fr}}
+  .cbox{border:1px solid var(--rule);background:var(--panel);padding:1rem 1.1rem}
+  .cbox .flow{font-family:var(--mono);font-size:.78rem;line-height:1.85;color:var(--soft)}
+  .cbox .flow b{color:var(--ink)}
+  .cbox .res{margin-top:.6rem;font-size:.86rem;font-weight:620}
+  .cbox.a{border-top:3px solid var(--bad)} .cbox.a .res{color:var(--bad)}
+  .cbox.b{border-top:3px solid var(--bad)} .cbox.b .res{color:var(--bad)}
+
+  code{font-family:var(--mono);font-size:.86em;background:rgba(61,90,128,.12);padding:.06em .3em;border-radius:2px;color:var(--ink)}
+  @media(prefers-color-scheme:dark){code{background:rgba(139,169,208,.16)}}
+  ul.plain{padding-left:1.15rem;color:var(--soft);font-size:.92rem}
+  ul.plain li{margin-bottom:.4rem}
+  ul.plain li b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Anomalica &middot; digester &middot; audit</p>
+  <h1>What actually changed &mdash; and the three things I got wrong</h1>
+  <p class="lede">One claim, from one podcast. Everything below is copied from real files. Where I
+    claimed something and the data later contradicted me, that is marked as such rather than quietly
+    dropped.</p>
+</header>
+
+<!-- 1. INPUT -->
+<section>
+  <div class="sec-head"><p class="eyebrow">1 &mdash; The input</p><h2>The test passage</h2></div>
+  <p>All four runs below read the <strong>same 20 minutes</strong> of the Jon Stewart transcript
+    (t:5700&ndash;6900, 19,183 characters), chosen because it contains a claim that is four people
+    removed from anyone real.</p>
+  <div class="transcript">
+    <span class="t">01:42:03</span>&nbsp; <mark>What he did was forwarded me an email that was sent to him from someone he knew inside the DIA.</mark><br>
+    <span class="t">01:42:11</span>&nbsp; He's obviously an old, older person in his 70s, not technically savvy.<br>
+    <span class="t">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; &hellip;<br>
+    <span class="t">01:45:29</span>&nbsp; <span class="claim">He said it was a clone extraterrestrial biological entity type two from the Tau Ceti star system.</span>
+  </div>
+  <p>The chain is: <strong>an anonymous person claiming DIA affiliation &rarr; an email &rarr; an
+    intermediary in his 70s &rarr; Jon Stewart &rarr; the podcast.</strong> Nothing in it is a fact. The
+    only fact is that someone asserted it.</p>
+</section>
+
+<!-- 2. THE ONE THING THAT MATTERS -->
+<section>
+  <div class="sec-head"><p class="eyebrow">2 &mdash; The claim, before and after</p><h2>This is the real result</h2></div>
+
+  <div class="grid4">
+    <div class="card bad">
+      <div class="card-h"><h3>BEFORE &mdash; what is in the graph today</h3><span class="tag">opus &middot; shipped</span></div>
+<pre><span class="k">type</span>:        <span class="bad">testimony</span>
+<span class="k">attestation</span>: <span class="bad">second_hand</span>
+<span class="k">refs</span>:        Alien Interview tape, Tau Ceti star system
+<span class="miss">             # the anonymous source appears NOWHERE</span>
+
+<span class="k">text</span>: <span class="bad">The being in the Alien Interview tape WAS a
+      cloned extraterrestrial biological entity type
+      two from the Tau Ceti star system.</span></pre>
+      <div class="verdict"><strong>The <code>text</code> field is what gets published.</strong> It states
+        it as fact. The only surviving reference is "DIA" &mdash; indistinguishable from the agency
+        having said it officially.</div>
+    </div>
+
+    <div class="card good">
+      <div class="card-h"><h3>AFTER &mdash; every model, including the cheapest</h3><span class="tag">haiku &middot; opus &middot; sonnet</span></div>
+<pre><span class="k">claim_type</span>:  <span class="good">hearsay</span>
+<span class="k">attestation</span>: <span class="good">third_hand</span> <span class="miss"># derived from chain depth</span>
+<span class="k">origin_kind</span>: <span class="good">anonymous</span>
+<span class="k">origin</span>:      a person claiming to work inside the
+             Defense Intelligence Agency
+<span class="k">relay</span>:       [an email, an intermediary]
+
+<span class="k">text</span>: <span class="good">An anonymous source claiming to work inside the
+      Defense Intelligence Agency, in an email forwarded
+      to Jon Stewart, said the being filmed was a cloned
+      ... from the Tau Ceti star system.</span></pre>
+      <div class="verdict"><strong>The sentence is now honest read on its own.</strong> This held on all
+        four runs and on all three Claude models. It is the thing that was actually broken, and it is
+        now fixed.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. THE FOUR RUNS -->
+<section>
+  <div class="sec-head"><p class="eyebrow">3 &mdash; The four runs</p><h2>Same 20 minutes, two architectures, two models</h2></div>
+  <p><strong>"Chunked"</strong> = the record is cut into ~20,000-character pieces and the model works
+    through them one at a time. <strong>"Whole-record"</strong> = the model is handed the entire 20
+    minutes at once and asked to keep going until it says it is finished.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr>
+        <th>architecture</th><th>model</th><th>claims found</th><th>sources resolved</th>
+        <th>Tau Ceti handled</th><th>cost</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>chunked</td><td class="m">haiku</td><td class="n">49</td><td class="n">&mdash;</td><td class="ok">correct</td><td class="n">$0.458</td></tr>
+        <tr><td>chunked</td><td class="m">opus</td><td class="n">78</td><td class="n">&mdash;</td><td class="ok">correct</td><td class="n">$1.116</td></tr>
+        <tr class="sep"><td>whole-record</td><td class="m">haiku</td><td class="n">51</td><td class="n">10</td><td class="ok">correct</td><td class="n">$0.554</td></tr>
+        <tr><td>whole-record</td><td class="m">opus</td><td class="n">72</td><td class="n">18</td><td class="ok">correct</td><td class="n">$2.694</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>Read the last two columns together.</strong> The whole-record architecture found
+    <em>fewer</em> claims and cost <em>more</em>. Opus dropped from 78 claims to 72 and its bill went
+    from $1.12 to $2.69. That is the opposite of what I predicted.</p>
+
+  <div class="box good">
+    <h3>But it did buy one genuinely new thing: a source list</h3>
+    <p>The whole-record pass resolves every source in the record <em>once</em>, up front. Opus found
+      <strong>18 sources, 7 of them distinct anonymous people</strong> &mdash; and told them apart:</p>
+<pre style="padding:.7rem 0 0"><span class="k">SRC3</span>: a man in his 70s known in ufology, claims knowledge of but not
+      membership in classified programmes   <span class="miss">via monthly emails to Jon Stewart</span>
+<span class="k">SRC4</span>: a person claiming to work inside the Defense Intelligence Agency,
+      whose email about the 1991 film was forwarded on
+      <span class="miss">via [an email to SRC3, SRC3 forwarding it to Jon Stewart]</span>
+<span class="k">SRC5</span>: an emailer who asserted the green box detects grey-being vibrations
+<span class="k">SRC6</span>: an emailer who asserted Bell Labs built the monitor</pre>
+    <p style="margin-top:.6rem">Each claim then cites a source <em>by id</em>, and a deterministic
+      step expands it back to the full chain &mdash; so every claim from the DIA source gets a
+      <strong>byte-identical</strong> description. That is what stops one rumour being counted as
+      several. Haiku is much weaker here: 2 anonymous sources against opus's 7, and it blurred the DIA
+      source into a generic one.</p>
+  </div>
+</section>
+
+<!-- 4. THE CACHING THING, PLAINLY -->
+<section>
+  <div class="sec-head"><p class="eyebrow">4 &mdash; The caching, explained properly</p><h2>Why it didn't work &mdash; you were right to query it</h2></div>
+
+  <p><strong>What caching is:</strong> a discount for sending the <em>same text again</em>. The first
+    send costs 1.25&times; normal. Every <em>re-send of identical text</em> costs 0.1&times; &mdash; a
+    90% discount. It only ever pays off if you send the same thing more than once.</p>
+
+  <div class="cache">
+    <div class="cbox a">
+      <p class="eyebrow">The old design</p>
+      <div class="flow">
+        call 1 &rarr; <b>piece 1</b> of the transcript<br>
+        call 2 &rarr; <b>piece 2</b> &nbsp;<span class="miss">(different text!)</span><br>
+        call 3 &rarr; <b>piece 3</b> &nbsp;<span class="miss">(different again)</span>
+      </div>
+      <p class="res">Every call is new text, so nothing is ever a re-send. It paid the 1.25&times;
+        premium over and over and never once collected the discount. Measured: 390k charged at the
+        premium, 139k at the discount.</p>
+    </div>
+    <div class="cbox b">
+      <p class="eyebrow">My fix &mdash; and why it failed</p>
+      <div class="flow">
+        call 1 &rarr; <b>the whole record</b><br>
+        <span class="miss">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model replies: "extraction_complete"</span><br>
+        <span class="miss">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&hellip; so there is no call 2</span>
+      </div>
+      <p class="res">Yes, the loop asks again until the model says it's finished &mdash; but it said
+        finished <strong>on the first try</strong>. One call means no re-send, so no discount.
+        Haiku's discounted tokens: <strong>zero</strong>.</p>
+    </div>
+  </div>
+
+  <div class="box warn">
+    <h3>And the same premature "I'm finished" is why recall dropped</h3>
+    <p>It is one bug, not two. The model reads the whole record, extracts 72 claims, declares itself
+      done, and exits &mdash; where the chunked version was <em>forced</em> through every part of the
+      record and found 78. The early exit costs us the claims <em>and</em> the caching at the same
+      time. Fixing that one behaviour would recover both.</p>
+  </div>
+</section>
+
+<!-- 5. WRONG -->
+<section>
+  <div class="sec-head"><p class="eyebrow">5 &mdash; Where I was wrong</p><h2>Three claims I made that the data killed</h2></div>
+  <div class="box bad">
+    <ol>
+      <li><b>"Deduplication threw away the good claim."</b> Said it twice, with confidence. Both times
+        wrong. The model had extracted the right passage all along; it just failed to record who said
+        it. I built a causal story on a corrupted <code>location</code> field.</li>
+      <li><b>"The same film fragments into several nodes and breaks merging."</b> Wrong. Checking the
+        node <em>types</em> shows it is a <code>document</code> node (the film) and an
+        <code>event</code> node (the filming of it). Those are different things and both should exist.
+        There was no fragmentation bug. I argued for a whole architecture on the back of it.</li>
+      <li><b>"Whole-record caching saves 3.2&times;."</b> Wrong. It cost <em>more</em> &mdash; opus
+        went from $1.12 to $2.69. My arithmetic assumed ~15 calls sharing one cached prefix; the
+        redesign collapsed it to one call, so there was nothing to discount.</li>
+    </ol>
+  </div>
+  <div class="box bad" style="margin-top:.2rem">
+    <h3>And one you caught</h3>
+    <p>I labelled sources <code>S1, S2, S3, S4</code>. <strong>"S4" is a real place in this transcript</strong>
+      &mdash; the alleged facility at Papoose Lake &mdash; and it appears 87 times. Haiku even wrote
+      "S4" <em>inside</em> a source description. The labels are now <code>SRC1&hellip;</code>, with an
+      explicit warning in the prompt never to reuse a name from the record as an id.</p>
+  </div>
+</section>
+
+<!-- 6. ASSESSMENT -->
+<section>
+  <div class="sec-head"><p class="eyebrow">6 &mdash; So have we improved anything?</p><h2>Honest assessment</h2></div>
+
+  <div class="box good">
+    <h3>Yes &mdash; four things, and they are real</h3>
+    <ul class="plain" style="margin-top:.5rem">
+      <li><b>The attribution is fixed.</b> The claim that was stored as fact is now stored as an
+        anonymous third-hand assertion, with the chain, and the hedge inside the published sentence.
+        Every model does this, haiku included. This was the actual problem.</li>
+      <li><b>A live bug was found and killed.</b> Corroboration counted ten podcasts relaying one
+        anonymous email as <em>ten independent confirmations</em>. It was in the code; it hadn't run
+        yet only by luck.</li>
+      <li><b>Timestamps.</b> 42% of claims recorded their position on the wrong axis (raw seconds, even
+        transcript line numbers). They are now recovered deterministically from the verbatim quote, no
+        model involved. 96% resolve.</li>
+      <li><b>The source list.</b> Genuinely new, and the one thing the rewrite bought: seven distinct
+        anonymous sources told apart, each with its own chain, described once and cited by id.</li>
+    </ul>
+  </div>
+
+  <div class="box warn" style="margin-top:.2rem">
+    <h3>Not yet &mdash; and one thing got worse</h3>
+    <ul class="plain" style="margin-top:.5rem">
+      <li><b>Recall.</b> Haiku finds roughly 65% of the claims opus does. That is the real question for
+        picking a model, and it is unchanged by any of this.</li>
+      <li><b>The whole-record claims pass is worse than the chunked one</b> &mdash; fewer claims, higher
+        cost &mdash; because it declares itself finished too early. The fix is to keep the new
+        <em>source list</em> (which works) and put the <em>claims</em> pass back on chunks (which
+        covered the record properly).</li>
+      <li><b>Was I confused from the beginning?</b> Partly, yes. The provenance problem was real and I
+        found it. But I then invented two mechanisms for it that didn't exist, and an architecture to
+        solve a fragmentation bug that wasn't there. What kept catching me was measurement, never
+        reasoning &mdash; and that is the strongest argument for not letting me grade my own work.</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

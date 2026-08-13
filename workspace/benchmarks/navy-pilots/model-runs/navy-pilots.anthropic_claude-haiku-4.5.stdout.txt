@@ -1,0 +1,20 @@
+Parsing record: 1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44.md
+COST ESTIMATE (rough, +/-40%):
+  16,668 source chars
+  model: anthropic/claude-haiku-4.5  ($3/$15 per million input/output tokens)
+  est tokens: ~56,668 in + ~6,250 out
+  est cost: ~$0.26  (range $0.16 - $0.37)
+  This spends real money on the metered Anthropic API.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Navy pilots describe encounters with UFOs
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +54 nodes (total 54) [model: complete]
+  54 nodes, 11 acronyms, main_subject='2004 USS Nimitz Carrier Strike Group UAP Encounter'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +87 claims (chunk total 87, doc total 87) [model: complete]
+  87 claims total: 85 domain, 2 infrastructure
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/navy-pilots/model-runs/navy-pilots.anthropic_claude-haiku-4.5.yaml
+Usage: 2 calls, in=16672 out=17094 cache_read=0 cost_equiv=$0.1021
+USAGE_JSON: {"input_tokens": 16672, "output_tokens": 17094, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.102142, "calls": 2}
+TRACE_JSON: [{"input_tokens": 7315, "output_tokens": 2237, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.0185}, {"input_tokens": 9357, "output_tokens": 14857, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.083642}]

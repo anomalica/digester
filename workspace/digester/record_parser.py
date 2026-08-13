@@ -99,7 +99,7 @@ def parse_record(text: str) -> ParsedRecord:
                 fm = yaml.safe_load(frontmatter_text)
                 if isinstance(fm, dict):
                     record.title = fm.get("title", "")
-                    # Canonical frontmatter is `date_published` (record-format
+                    # Canonical frontmatter is `date_published` (ingest-format
                     # spec); `date` is a legacy fallback. Without this every
                     # digest carried a null date.
                     record.date = _normalise_date(

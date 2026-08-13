@@ -1,0 +1,24 @@
+Claim yield (44 records >= 20KB):
+  audio    n=  2  median  3.79 cl/KB  (inherited)
+  ebook    n= 13  median  3.06 cl/KB  (own)
+  pdf      n=  8  median  3.52 cl/KB  (own)
+  video    n= 19  median  2.23 cl/KB  (own)
+  web      n=  2  median  4.81 cl/KB  (inherited)
+
+LOW YIELD (extraction probably failed despite exiting 0): 0
+
+COLLAPSED CACHE PREFIX (correct output, broken cost characteristic): 0
+
+OVER-MARKED (annotations remove most of the body before the model sees it): 0
+
+Pre-digest survival (180 records): min 0.676  median 1.000  floor 0.5
+
+STALE PRE-DIGEST (digest no longer matches its source): 4
+  1975-pdf-the-recognition-of-extraterrestrial-intelligence: record_changed - recorded d96bb02bc531, record now yields c946cf9fa7d3
+  2007-06-20-web-project-serpo: record_changed - recorded cded59c005f8, record now yields a1998aa6a332
+  2012-05-pdf-conference-report-cultural-and-linguistic-advancement-for: record_changed - recorded 493d1157798e, record now yields dc9cb06e2df9
+  2023-07-26-pdf-unidentified-anomalous-phenomena-implications-on-national-security-public-safety: record_changed - recorded 66b710fe7cdf, record now yields 76aab4cc75b7
+
+UNMAPPED RECORD FIELDS (upstream added something): 0
+
+4 finding(s).

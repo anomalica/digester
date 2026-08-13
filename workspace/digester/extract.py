@@ -402,9 +402,9 @@ def _chunk_text(
 
 
 def _split_at_chapters(text: str) -> list[str] | None:
-    """Split on Anomalica record-format chapter markers.
+    """Split on Anomalica ingest-format chapter markers.
 
-    The canonical chapter boundary in the record-format spec is
+    The canonical chapter boundary in the ingest-format spec is
     `<!-- chapter: N -->` (primarily on ebooks). Returns None if the document
     has no chapter annotations, in which case the caller falls back to
     char-window chunking. We trust the annotation - no minimum size check.

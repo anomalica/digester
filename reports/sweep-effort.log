@@ -1,0 +1,154 @@
+=== 2026-07-30T22:55:33+09:00 rec=1986-05-20-pdf-pajarito-astronomers-meeting-notice-may-1986.md effort=low
+Parsing record: 1986-05-20-pdf-pajarito-astronomers-meeting-notice-may-1986.md
+Extracting (two-pass) from: Pajarito Astronomers Meeting Notice - May 1986
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +7 nodes (total 7) [model: complete]
+  7 nodes, 1 acronyms, main_subject='Pajarito Astronomers'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +6 claims (chunk total 6, doc total 6) [model: complete]
+  6 claims total: 6 domain, 0 infrastructure
+  locations -> char offset: 6/6 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/1986-05-20-pdf-pajarito-astronomers-meeting-notice-may-1986/sonnet.d161b1ed.eff-low.yaml
+Canonical: unchanged (prompt override / experimental, or --variant-only)
+Usage: 2 calls, in=8 out=2470 cache_read=0 cost_equiv=$1.3212
+USAGE_JSON: {"input_tokens": 8, "output_tokens": 2470, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 214022, "cost_equiv_usd": 1.321206, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 458, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 97752, "cost_usd": 0.593394, "duration_s": 8.3}, {"input_tokens": 4, "output_tokens": 2012, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 116270, "cost_usd": 0.7278120000000001, "duration_s": 23.3}]
+--- rc=0 elapsed=32s
+=== 2026-07-30T22:56:05+09:00 rec=1986-05-20-pdf-pajarito-astronomers-meeting-notice-may-1986.md effort=high
+Parsing record: 1986-05-20-pdf-pajarito-astronomers-meeting-notice-may-1986.md
+Extracting (two-pass) from: Pajarito Astronomers Meeting Notice - May 1986
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +7 nodes (total 7) [model: complete]
+  7 nodes, 1 acronyms, main_subject='Pajarito Astronomers'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +8 claims (chunk total 8, doc total 8) [model: complete]
+  8 claims total: 8 domain, 0 infrastructure
+  locations -> char offset: 8/8 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/1986-05-20-pdf-pajarito-astronomers-meeting-notice-may-1986/sonnet.d161b1ed.eff-high.yaml
+Canonical: unchanged (prompt override / experimental, or --variant-only)
+Usage: 1 calls, in=4 out=4454 cache_read=0 cost_equiv=$0.7233
+USAGE_JSON: {"input_tokens": 4, "output_tokens": 4454, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 109417, "cost_equiv_usd": 0.723324, "calls": 1}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 4454, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 109417, "cost_usd": 0.723324, "duration_s": 39.8}]
+--- rc=0 elapsed=40s
+=== 2026-07-30T22:56:45+09:00 rec=1986-05-20-pdf-pajarito-astronomers-meeting-notice-may-1986.md effort=xhigh
+Parsing record: 1986-05-20-pdf-pajarito-astronomers-meeting-notice-may-1986.md
+Extracting (two-pass) from: Pajarito Astronomers Meeting Notice - May 1986
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +7 nodes (total 7) [model: complete]
+  7 nodes, 1 acronyms, main_subject='Pajarito Astronomers'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +11 claims (chunk total 11, doc total 11) [model: complete]
+  11 claims total: 11 domain, 0 infrastructure
+  locations -> char offset: 11/11 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/1986-05-20-pdf-pajarito-astronomers-meeting-notice-may-1986/sonnet.d161b1ed.eff-xhigh.yaml
+Canonical: unchanged (prompt override / experimental, or --variant-only)
+Usage: 1 calls, in=4 out=6238 cache_read=0 cost_equiv=$0.7913
+USAGE_JSON: {"input_tokens": 4, "output_tokens": 6238, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 116281, "cost_equiv_usd": 0.7912680000000001, "calls": 1}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 6238, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 116281, "cost_usd": 0.7912680000000001, "duration_s": 55.0}]
+--- rc=0 elapsed=55s
+=== 2026-07-30T22:57:40+09:00 rec=undated-pdf-uap-sighting-report.md effort=low
+Parsing record: undated-pdf-uap-sighting-report.md
+Extracting (two-pass) from: UAP Sighting Report
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +3 nodes (total 3) [model: complete]
+  3 nodes, 5 acronyms, main_subject='Unidentified Aerial Phenomena (UAP)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +4 claims (chunk total 4, doc total 4) [model: complete]
+  4 claims total: 3 domain, 1 infrastructure
+  locations -> char offset: 4/4 aligned (0 unalignable, 2 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/undated-pdf-uap-sighting-report/sonnet.d161b1ed.eff-low.yaml
+Canonical: unchanged (prompt override / experimental, or --variant-only)
+Usage: 2 calls, in=10 out=3185 cache_read=12319 cost_equiv=$1.6963
+USAGE_JSON: {"input_tokens": 10, "output_tokens": 3185, "cache_read_input_tokens": 12319, "cache_creation_input_tokens": 274138, "cost_equiv_usd": 1.6963287, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 626, "cache_read_input_tokens": 12319, "cache_creation_input_tokens": 87481, "cost_usd": 0.5379837000000001, "duration_s": 13.3}, {"input_tokens": 6, "output_tokens": 2559, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 186657, "cost_usd": 1.158345, "duration_s": 25.5}]
+--- rc=0 elapsed=39s
+=== 2026-07-30T22:58:19+09:00 rec=undated-pdf-uap-sighting-report.md effort=high
+Parsing record: undated-pdf-uap-sighting-report.md
+Extracting (two-pass) from: UAP Sighting Report
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +3 nodes (total 3) [model: complete]
+  3 nodes, 5 acronyms, main_subject='Unidentified Aerial Phenomena (UAP)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +4 claims (chunk total 4, doc total 4) [model: complete]
+  4 claims total: 4 domain, 0 infrastructure
+  locations -> char offset: 4/4 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/undated-pdf-uap-sighting-report/sonnet.d161b1ed.eff-high.yaml
+Canonical: unchanged (prompt override / experimental, or --variant-only)
+Usage: 1 calls, in=4 out=4986 cache_read=0 cost_equiv=$0.7437
+USAGE_JSON: {"input_tokens": 4, "output_tokens": 4986, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 111489, "cost_equiv_usd": 0.743736, "calls": 1}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 4986, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 111489, "cost_usd": 0.743736, "duration_s": 52.4}]
+--- rc=0 elapsed=53s
+=== 2026-07-30T22:59:12+09:00 rec=undated-pdf-uap-sighting-report.md effort=xhigh
+Parsing record: undated-pdf-uap-sighting-report.md
+Extracting (two-pass) from: UAP Sighting Report
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +3 nodes (total 3) [model: complete]
+  3 nodes, 5 acronyms, main_subject='Unidentified Aerial Phenomena (UAP)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +5 claims (chunk total 5, doc total 5) [model: complete]
+  5 claims total: 5 domain, 0 infrastructure
+  locations -> char offset: 5/5 aligned (0 unalignable, 3 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/undated-pdf-uap-sighting-report/sonnet.d161b1ed.eff-xhigh.yaml
+Canonical: unchanged (prompt override / experimental, or --variant-only)
+Usage: 1 calls, in=4 out=11292 cache_read=0 cost_equiv=$0.8698
+USAGE_JSON: {"input_tokens": 4, "output_tokens": 11292, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 116736, "cost_equiv_usd": 0.8698079999999999, "calls": 1}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 11292, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 116736, "cost_usd": 0.8698079999999999, "duration_s": 117.4}]
+--- rc=0 elapsed=118s
+=== 2026-07-30T23:01:10+09:00 rec=1985-01-28-pdf-papua-new-guinea-inquiry-re-overflights.md effort=low
+Parsing record: 1985-01-28-pdf-papua-new-guinea-inquiry-re-overflights.md
+Extracting (two-pass) from: Papua New Guinea Inquiry Re Overflights
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +18 nodes (total 18) [model: complete]
+  18 nodes, 7 acronyms, main_subject='1985 Papua New Guinea overflight sightings'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +15 claims (chunk total 15, doc total 15) [model: complete]
+  15 claims total: 11 domain, 4 infrastructure
+  locations -> char offset: 15/15 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/1985-01-28-pdf-papua-new-guinea-inquiry-re-overflights/sonnet.d161b1ed.eff-low.yaml
+Canonical: unchanged (prompt override / experimental, or --variant-only)
+Usage: 2 calls, in=8 out=6636 cache_read=48839 cost_equiv=$1.1118
+USAGE_JSON: {"input_tokens": 8, "output_tokens": 6636, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 166266, "cost_equiv_usd": 1.1118117, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1170, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 52140, "cost_usd": 0.3450537, "duration_s": 14.3}, {"input_tokens": 4, "output_tokens": 5466, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 114126, "cost_usd": 0.7667579999999999, "duration_s": 42.1}]
+--- rc=0 elapsed=56s
+=== 2026-07-30T23:02:06+09:00 rec=1985-01-28-pdf-papua-new-guinea-inquiry-re-overflights.md effort=high
+Parsing record: 1985-01-28-pdf-papua-new-guinea-inquiry-re-overflights.md
+Extracting (two-pass) from: Papua New Guinea Inquiry Re Overflights
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +18 nodes (total 18) [model: complete]
+  18 nodes, 7 acronyms, main_subject='1985 Papua New Guinea overflight sightings'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +18 claims (chunk total 18, doc total 18) [model: complete]
+  18 claims total: 15 domain, 3 infrastructure
+  locations -> char offset: 18/18 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/1985-01-28-pdf-papua-new-guinea-inquiry-re-overflights/sonnet.d161b1ed.eff-high.yaml
+Canonical: unchanged (prompt override / experimental, or --variant-only)
+Usage: 1 calls, in=4 out=13818 cache_read=0 cost_equiv=$0.8922
+USAGE_JSON: {"input_tokens": 4, "output_tokens": 13818, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 114160, "cost_equiv_usd": 0.892242, "calls": 1}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 13818, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 114160, "cost_usd": 0.892242, "duration_s": 119.3}]
+--- rc=0 elapsed=120s
+=== 2026-07-30T23:04:06+09:00 rec=1985-01-28-pdf-papua-new-guinea-inquiry-re-overflights.md effort=xhigh
+Parsing record: 1985-01-28-pdf-papua-new-guinea-inquiry-re-overflights.md
+Extracting (two-pass) from: Papua New Guinea Inquiry Re Overflights
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +18 nodes (total 18) [model: complete]
+  18 nodes, 7 acronyms, main_subject='1985 Papua New Guinea overflight sightings'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +27 claims (chunk total 27, doc total 27) [model: complete]
+  27 claims total: 19 domain, 8 infrastructure
+  locations -> char offset: 27/27 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/1985-01-28-pdf-papua-new-guinea-inquiry-re-overflights/sonnet.d161b1ed.eff-xhigh.yaml
+Canonical: unchanged (prompt override / experimental, or --variant-only)
+Usage: 1 calls, in=4 out=38405 cache_read=0 cost_equiv=$1.2512
+USAGE_JSON: {"input_tokens": 4, "output_tokens": 38405, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 112522, "cost_equiv_usd": 1.2512189999999999, "calls": 1}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 38405, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 112522, "cost_usd": 1.2512189999999999, "duration_s": 333.7}]
+--- rc=0 elapsed=334s
+SWEEP COMPLETE 2026-07-30T23:09:40+09:00

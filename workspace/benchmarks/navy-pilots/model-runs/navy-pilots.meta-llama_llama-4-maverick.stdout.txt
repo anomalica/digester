@@ -1,0 +1,20 @@
+Parsing record: 1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44.md
+COST ESTIMATE (rough, +/-40%):
+  16,668 source chars
+  model: meta-llama/llama-4-maverick  ($3/$15 per million input/output tokens)
+  est tokens: ~56,668 in + ~6,250 out
+  est cost: ~$0.26  (range $0.16 - $0.37)
+  This spends real money on the metered Anthropic API.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Navy pilots describe encounters with UFOs
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +32 nodes (total 32) [model: complete]
+  32 nodes, 8 acronyms, main_subject='Unidentified Aerial Phenomena (UAP)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +31 claims (chunk total 31, doc total 31) [model: complete]
+  31 claims total: 31 domain, 0 infrastructure
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/navy-pilots/model-runs/navy-pilots.meta-llama_llama-4-maverick.yaml
+Usage: 2 calls, in=14310 out=6985 cache_read=0 cost_equiv=$0.0081
+USAGE_JSON: {"input_tokens": 14310, "output_tokens": 6985, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.0081037, "calls": 2}
+TRACE_JSON: [{"input_tokens": 6433, "output_tokens": 1199, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.00345055}, {"input_tokens": 7877, "output_tokens": 5786, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.00465315}]

@@ -1,0 +1,20 @@
+Parsing record: 1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44.md
+COST ESTIMATE (rough, +/-40%):
+  16,668 source chars
+  model: google/gemini-3.1-pro-preview  ($3/$15 per million input/output tokens)
+  est tokens: ~56,668 in + ~6,250 out
+  est cost: ~$0.26  (range $0.16 - $0.37)
+  This spends real money on the metered Anthropic API.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Navy pilots describe encounters with UFOs
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +47 nodes (total 47) [model: complete]
+  47 nodes, 5 acronyms, main_subject='Unidentified Aerial Phenomena (UAP)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +81 claims (chunk total 81, doc total 81) [model: complete]
+  81 claims total: 80 domain, 1 infrastructure
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/navy-pilots/model-runs/navy-pilots.google_gemini-3.1-pro-preview.yaml
+Usage: 2 calls, in=16603 out=27572 cache_read=0 cost_equiv=$0.3641
+USAGE_JSON: {"input_tokens": 16603, "output_tokens": 27572, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.36407, "calls": 2}
+TRACE_JSON: [{"input_tokens": 7415, "output_tokens": 5107, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.076114}, {"input_tokens": 9188, "output_tokens": 22465, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.287956}]

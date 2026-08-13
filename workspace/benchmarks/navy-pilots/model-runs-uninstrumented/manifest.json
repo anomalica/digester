@@ -1,0 +1,16 @@
+{
+  "record": "1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44.md",
+  "rows": [
+    {
+      "model": "deepseek/deepseek-v4-flash",
+      "wall_seconds": 329.8,
+      "out": "navy-pilots.deepseek_deepseek-v4-flash.yaml",
+      "cost_usd": 0.006428,
+      "input_tokens": 14705,
+      "output_tokens": 28906,
+      "claims": 69,
+      "nodes": 38
+    }
+  ],
+  "total_cost_usd": 0.0064
+}

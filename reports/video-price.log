@@ -1,0 +1,38 @@
+=== 2026-07-31T20:00:50+09:00 2025-10-17-video-ufo-witness-reveals-chilling-daytime-alien-encounter-peter.v2.md
+Parsing record: 2025-10-17-video-ufo-witness-reveals-chilling-daytime-alien-encounter-peter.v2.md
+Allowance ok (session 9%, weekly 59%)
+Extracting (two-pass) from: UFO Witness Reveals CHILLING Daytime Alien Encounter - Peter Khoury - DEBRIEFED ep. 58
+Pass A: nodes (with iteration + chunking)
+  nodes chunk 1/3 (49,266 chars)
+    nodes iter 1: +21 nodes (total 21) [model: complete]
+  nodes chunk 2/3 (49,914 chars)
+    nodes iter 1: +24 nodes (total 45) [model: complete]
+  nodes chunk 3/3 (43,593 chars)
+    nodes iter 1: +25 nodes (total 70) [model: complete]
+  70 nodes, 7 acronyms, main_subject='Peter Khoury'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/8 (20,000 chars)
+    claims iter 1: +36 claims (chunk total 36, doc total 36) [model: complete]
+  claims chunk 2/8 (20,000 chars)
+    claims iter 1: +43 claims (chunk total 43, doc total 79) [model: complete]
+  claims chunk 3/8 (20,000 chars)
+    claims iter 1: +52 claims (chunk total 52, doc total 131) [model: complete]
+  claims chunk 4/8 (20,000 chars)
+    claims iter 1: +65 claims (chunk total 65, doc total 196) [model: complete]
+  claims chunk 5/8 (20,000 chars)
+    claims iter 1: +44 claims (chunk total 44, doc total 240) [model: complete]
+  claims chunk 6/8 (20,000 chars)
+    claims iter 1: +40 claims (chunk total 40, doc total 280) [model: complete]
+  claims chunk 7/8 (20,000 chars)
+    claims iter 1: +31 claims (chunk total 31, doc total 311) [model: complete]
+  claims chunk 8/8 (2,773 chars)
+    claims iter 1: +7 claims (chunk total 7, doc total 318) [model: complete]
+  318 claims total: 302 domain, 16 infrastructure
+  locations -> timecode: 302/318 aligned (16 unalignable, 1 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2025-10-17-video-ufo-witness-reveals-chilling-daytime-alien-encounter-peter/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2025-10-17-video-ufo-witness-reveals-chilling-daytime-alien-encounter-peter.yaml
+Usage: 11 calls, in=64 out=193804 cache_read=1067743 cost_equiv=$10.7505
+USAGE_JSON: {"input_tokens": 64, "output_tokens": 193804, "cache_read_input_tokens": 1067743, "cache_creation_input_tokens": 1253822, "cost_equiv_usd": 10.750506900000001, "calls": 11}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 2171, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 124439, "cost_usd": 0.7792109999999999, "duration_s": 27.0}, {"input_tokens": 4, "output_tokens": 1382, "cache_read_input_tokens": 12319, "cache_creation_input_tokens": 112705, "cost_usd": 0.7006676999999999, "duration_s": 18.1}, {"input_tokens": 4, "output_tokens": 2071, "cache_read_input_tokens": 54076, "cache_creation_input_tokens": 70725, "cost_usd": 0.4716498, "duration_s": 25.9}, {"input_tokens": 6, "output_tokens": 20801, "cache_read_input_tokens": 82905, "cache_creation_input_tokens": 139908, "cost_usd": 1.1763525000000001, "duration_s": 158.3}, {"input_tokens": 8, "output_tokens": 27132, "cache_read_input_tokens": 224161, "cache_creation_input_tokens": 89968, "cost_usd": 1.0140603000000001, "duration_s": 214.6}, {"input_tokens": 8, "output_tokens": 40894, "cache_read_input_tokens": 127640, "cache_creation_input_tokens": 180752, "cost_usd": 1.7362380000000002, "duration_s": 293.7}, {"input_tokens": 6, "output_tokens": 33311, "cache_read_input_tokens": 139787, "cache_creation_input_tokens": 90562, "cost_usd": 1.0849911, "duration_s": 241.5}, {"input_tokens": 6, "output_tokens": 26113, "cache_read_input_tokens": 140373, "cache_creation_input_tokens": 87458, "cost_usd": 0.9585729000000001, "duration_s": 193.2}, {"input_tokens": 6, "output_tokens": 21065, "cache_read_input_tokens": 56358, "cache_creation_input_tokens": 166681, "cost_usd": 1.3329864, "duration_s": 171.2}, {"input_tokens": 6, "output_tokens": 14437, "cache_read_input_tokens": 97635, "cache_creation_input_tokens": 122528, "cost_usd": 0.9810315000000001, "duration_s": 110.5}, {"input_tokens": 6, "output_tokens": 4427, "cache_read_input_tokens": 132489, "cache_creation_input_tokens": 68096, "cost_usd": 0.5147457000000001, "duration_s": 38.4}]
+--- rc=0 elapsed=1501s

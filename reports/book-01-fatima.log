@@ -1,0 +1,133 @@
+=== 2026-07-30T23:43:10+09:00 The Fatima Secret / sonnet / effort=low
+Parsing record: 2000-11-28-ebook-the-fatima-secret.md
+Extracting (two-pass) from: The Fatima Secret
+Pass A: nodes (with iteration + chunking)
+  nodes chunk 1/27 (19 chars)
+    nodes iter 1: +0 nodes (total 0) [model: complete]
+  nodes chunk 2/27 (19 chars)
+    nodes iter 1: +0 nodes (total 0) [model: complete]
+  nodes chunk 3/27 (27,113 chars)
+    nodes iter 1: +47 nodes (total 47) [model: complete]
+  nodes chunk 4/27 (6,149 chars)
+    nodes iter 1: +16 nodes (total 63) [model: complete]
+  nodes chunk 5/27 (19 chars)
+    nodes iter 1: +0 nodes (total 63) [model: complete]
+  nodes chunk 6/27 (10,711 chars)
+    nodes iter 1: +21 nodes (total 84) [model: complete]
+  nodes chunk 7/27 (16,022 chars)
+    nodes iter 1: +26 nodes (total 110) [model: complete]
+  nodes chunk 8/27 (18,800 chars)
+    nodes iter 1: +12 nodes (total 122) [model: complete]
+  nodes chunk 9/27 (20,631 chars)
+    nodes iter 1: +9 nodes (total 131) [model: complete]
+  nodes chunk 10/27 (15,532 chars)
+    nodes iter 1: +7 nodes (total 138) [model: complete]
+  nodes chunk 11/27 (19,341 chars)
+    nodes iter 1: +14 nodes (total 152) [model: complete]
+  nodes chunk 12/27 (16,631 chars)
+    nodes iter 1: +24 nodes (total 176) [model: complete]
+  nodes chunk 13/27 (15,948 chars)
+    nodes iter 1: +30 nodes (total 206) [model: complete]
+  nodes chunk 14/27 (19,434 chars)
+    nodes iter 1: +52 nodes (total 258) [model: complete]
+  nodes chunk 15/27 (14,249 chars)
+    nodes iter 1: +26 nodes (total 284) [model: complete]
+  nodes chunk 16/27 (15,102 chars)
+    nodes iter 1: +26 nodes (total 310) [model: complete]
+  nodes chunk 17/27 (16,008 chars)
+    nodes iter 1: +31 nodes (total 341) [model: complete]
+  nodes chunk 18/27 (24,674 chars)
+    nodes iter 1: +49 nodes (total 390) [model: complete]
+  nodes chunk 19/27 (23,720 chars)
+    nodes iter 1: +41 nodes (total 431) [model: complete]
+  nodes chunk 20/27 (13,475 chars)
+    nodes iter 1: +47 nodes (total 478) [model: complete]
+  nodes chunk 21/27 (18,474 chars)
+    nodes iter 1: +49 nodes (total 527) [model: complete]
+  nodes chunk 22/27 (14,109 chars)
+    nodes iter 1: +39 nodes (total 566) [model: complete]
+  nodes chunk 23/27 (33,894 chars)
+    nodes iter 1: +42 nodes (total 608) [model: complete]
+  nodes chunk 24/27 (1,572 chars)
+    nodes iter 1: +8 nodes (total 616) [model: complete]
+  nodes chunk 25/27 (20 chars)
+    nodes iter 1: +0 nodes (total 616) [model: complete]
+  nodes chunk 26/27 (846 chars)
+    nodes iter 1: +0 nodes (total 616) [model: complete]
+  nodes chunk 27/27 (795 chars)
+    nodes iter 1: +0 nodes (total 616) [model: complete]
+  616 nodes, 6 acronyms, main_subject='The Fatima Secret (Michael Hesemann)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/32 (19 chars)
+    claims iter 1: +0 claims (chunk total 0, doc total 0) [model: complete]
+  claims chunk 2/32 (19 chars)
+    claims iter 1: +0 claims (chunk total 0, doc total 0) [model: complete]
+  claims chunk 3/32 (20,000 chars)
+    claims iter 1: +73 claims (chunk total 73, doc total 73) [model: complete]
+  claims chunk 4/32 (7,113 chars)
+    claims iter 1: +37 claims (chunk total 37, doc total 110) [model: complete]
+  claims chunk 5/32 (6,149 chars)
+    claims iter 1: +12 claims (chunk total 12, doc total 122) [model: complete]
+  claims chunk 6/32 (19 chars)
+    claims iter 1: +0 claims (chunk total 0, doc total 122) [model: complete]
+  claims chunk 7/32 (10,711 chars)
+    claims iter 1: +46 claims (chunk total 46, doc total 168) [model: complete]
+  claims chunk 8/32 (16,022 chars)
+    claims iter 1: +35 claims (chunk total 35, doc total 203) [model: complete]
+  claims chunk 9/32 (18,800 chars)
+    claims iter 1: +62 claims (chunk total 62, doc total 265) [model: complete]
+  claims chunk 10/32 (20,000 chars)
+    claims iter 1: +83 claims (chunk total 83, doc total 348) [model: complete]
+  claims chunk 11/32 (631 chars)
+    claims iter 1: +5 claims (chunk total 5, doc total 353) [model: complete]
+  claims chunk 12/32 (15,532 chars)
+    claims iter 1: +72 claims (chunk total 72, doc total 425) [model: complete]
+  claims chunk 13/32 (19,341 chars)
+    claims iter 1: +44 claims (chunk total 44, doc total 469) [model: complete]
+  claims chunk 14/32 (16,631 chars)
+    claims iter 1: +84 claims (chunk total 84, doc total 553) [model: complete]
+  claims chunk 15/32 (15,948 chars)
+    claims iter 1: +68 claims (chunk total 68, doc total 621) [model: complete]
+  claims chunk 16/32 (19,434 chars)
+    claims iter 1: +99 claims (chunk total 99, doc total 720) [model: complete]
+  claims chunk 17/32 (14,249 chars)
+    claims iter 1: +70 claims (chunk total 70, doc total 790) [model: complete]
+  claims chunk 18/32 (15,102 chars)
+    claims iter 1: +69 claims (chunk total 69, doc total 859) [model: complete]
+  claims chunk 19/32 (16,008 chars)
+    claims iter 1: +91 claims (chunk total 91, doc total 950) [model: complete]
+  claims chunk 20/32 (20,000 chars)
+    claims iter 1: +103 claims (chunk total 103, doc total 1053) [model: complete]
+  claims chunk 21/32 (4,674 chars)
+    claims iter 1: +30 claims (chunk total 30, doc total 1083) [model: complete]
+  claims chunk 22/32 (20,000 chars)
+    claims iter 1: +81 claims (chunk total 81, doc total 1164) [model: complete]
+  claims chunk 23/32 (3,720 chars)
+    claims iter 1: +38 claims (chunk total 38, doc total 1202) [model: complete]
+  claims chunk 24/32 (13,475 chars)
+    claims iter 1: +92 claims (chunk total 92, doc total 1294) [model: complete]
+  claims chunk 25/32 (18,474 chars)
+    claims iter 1: +99 claims (chunk total 99, doc total 1393) [model: complete]
+  claims chunk 26/32 (14,109 chars)
+    claims iter 1: +77 claims (chunk total 77, doc total 1470) [model: complete]
+  claims chunk 27/32 (20,000 chars)
+    claims iter 1: +94 claims (chunk total 94, doc total 1564) [model: complete]
+  claims chunk 28/32 (13,894 chars)
+    claims iter 1: +61 claims (chunk total 61, doc total 1625) [model: complete]
+  claims chunk 29/32 (1,572 chars)
+    claims iter 1: +18 claims (chunk total 18, doc total 1643) [model: complete]
+  claims chunk 30/32 (20 chars)
+    claims iter 1: +0 claims (chunk total 0, doc total 1643) [model: complete]
+  claims chunk 31/32 (846 chars)
+    claims iter 1: +0 claims (chunk total 0, doc total 1643) [model: complete]
+  claims chunk 32/32 (795 chars)
+    claims iter 1: +0 claims (chunk total 0, doc total 1643) [model: complete]
+  1643 claims total: 1606 domain, 37 infrastructure
+  locations -> char offset: 1639/1643 aligned (4 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2000-11-28-ebook-the-fatima-secret/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2000-11-28-ebook-the-fatima-secret.yaml
+Usage: 59 calls, in=298 out=814251 cache_read=5389391 cost_equiv=$52.5114
+USAGE_JSON: {"input_tokens": 298, "output_tokens": 814251, "cache_read_input_tokens": 5389391, "cache_creation_input_tokens": 6446652, "cost_equiv_usd": 52.5113883, "calls": 59}
+TRACE_JSON: [{"input_tokens": 6, "output_tokens": 379, "cache_read_input_tokens": 47218, "cache_creation_input_tokens": 117098, "cost_usd": 0.7224564, "duration_s": 9.6}, {"input_tokens": 6, "output_tokens": 394, "cache_read_input_tokens": 83738, "cache_creation_input_tokens": 75366, "cost_usd": 0.48324539999999994, "duration_s": 15.0}, {"input_tokens": 4, "output_tokens": 1688, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 59024, "cost_usd": 0.39412769999999997, "duration_s": 18.5}, {"input_tokens": 4, "output_tokens": 1720, "cache_read_input_tokens": 54076, "cache_creation_input_tokens": 53827, "cost_usd": 0.3649968, "duration_s": 20.6}, {"input_tokens": 6, "output_tokens": 381, "cache_read_input_tokens": 111538, "cache_creation_input_tokens": 52687, "cost_usd": 0.35531640000000003, "duration_s": 8.9}, {"input_tokens": 4, "output_tokens": 1389, "cache_read_input_tokens": 47218, "cache_creation_input_tokens": 55909, "cost_usd": 0.3704664, "duration_s": 18.3}, {"input_tokens": 4, "output_tokens": 1668, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 58311, "cost_usd": 0.3895497, "duration_s": 19.5}, {"input_tokens": 4, "output_tokens": 1616, "cache_read_input_tokens": 47218, "cache_creation_input_tokens": 60666, "cost_usd": 0.40241340000000003, "duration_s": 20.2}, {"input_tokens": 4, "output_tokens": 1255, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 61598, "cost_usd": 0.40307669999999995, "duration_s": 16.2}, {"input_tokens": 6, "output_tokens": 1544, "cache_read_input_tokens": 90596, "cache_creation_input_tokens": 95487, "cost_usd": 0.6232788, "duration_s": 19.5}, {"input_tokens": 4, "output_tokens": 1102, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 61786, "cost_usd": 0.4019097, "duration_s": 16.0}, {"input_tokens": 4, "output_tokens": 2295, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 61306, "cost_usd": 0.41692470000000004, "duration_s": 25.7}, {"input_tokens": 4, "output_tokens": 2766, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 62112, "cost_usd": 0.4288257, "duration_s": 28.4}, {"input_tokens": 4, "output_tokens": 2525, "cache_read_input_tokens": 54076, "cache_creation_input_tokens": 64742, "cost_usd": 0.4425618, "duration_s": 26.2}, {"input_tokens": 4, "output_tokens": 1939, "cache_read_input_tokens": 47218, "cache_creation_input_tokens": 65325, "cost_usd": 0.4352124, "duration_s": 22.1}, {"input_tokens": 4, "output_tokens": 1125, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 66608, "cost_usd": 0.43118670000000003, "duration_s": 13.8}, {"input_tokens": 4, "output_tokens": 1877, "cache_read_input_tokens": 36520, "cache_creation_input_tokens": 79927, "cost_usd": 0.5186850000000001, "duration_s": 19.6}, {"input_tokens": 4, "output_tokens": 3472, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 72586, "cost_usd": 0.5022597, "duration_s": 33.6}, {"input_tokens": 4, "output_tokens": 3216, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 74285, "cost_usd": 0.5086137, "duration_s": 31.3}, {"input_tokens": 4, "output_tokens": 2085, "cache_read_input_tokens": 54076, "cache_creation_input_tokens": 72430, "cost_usd": 0.4820898, "duration_s": 20.6}, {"input_tokens": 4, "output_tokens": 1978, "cache_read_input_tokens": 47218, "cache_creation_input_tokens": 75996, "cost_usd": 0.49982340000000003, "duration_s": 18.9}, {"input_tokens": 4, "output_tokens": 1552, "cache_read_input_tokens": 41757, "cache_creation_input_tokens": 87077, "cost_usd": 0.5582811, "duration_s": 17.5}, {"input_tokens": 4, "output_tokens": 3311, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 84739, "cost_usd": 0.5727627000000001, "duration_s": 33.8}, {"input_tokens": 4, "output_tokens": 1340, "cache_read_input_tokens": 47218, "cache_creation_input_tokens": 75801, "cost_usd": 0.48908340000000006, "duration_s": 15.5}, {"input_tokens": 4, "output_tokens": 319, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 75406, "cost_usd": 0.4718847, "duration_s": 9.5}, {"input_tokens": 4, "output_tokens": 269, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 75946, "cost_usd": 0.47437470000000004, "duration_s": 7.9}, {"input_tokens": 4, "output_tokens": 250, "cache_read_input_tokens": 48839, "cache_creation_input_tokens": 75902, "cost_usd": 0.4738257, "duration_s": 7.3}, {"input_tokens": 6, "output_tokens": 276, "cache_read_input_tokens": 93522, "cache_creation_input_tokens": 163147, "cost_usd": 1.0110966, "duration_s": 10.1}, {"input_tokens": 4, "output_tokens": 179, "cache_read_input_tokens": 69215, "cache_creation_input_tokens": 93550, "cost_usd": 0.5847614999999999, "duration_s": 8.0}, {"input_tokens": 4, "output_tokens": 18731, "cache_read_input_tokens": 69215, "cache_creation_input_tokens": 100044, "cost_usd": 0.9020054999999999, "duration_s": 134.5}, {"input_tokens": 6, "output_tokens": 20052, "cache_read_input_tokens": 123680, "cache_creation_input_tokens": 158469, "cost_usd": 1.288716, "duration_s": 149.7}, {"input_tokens": 6, "output_tokens": 5737, "cache_read_input_tokens": 175247, "cache_creation_input_tokens": 98855, "cost_usd": 0.7317771000000001, "duration_s": 50.3}, {"input_tokens": 6, "output_tokens": 293, "cache_read_input_tokens": 69215, "cache_creation_input_tokens": 185593, "cost_usd": 1.1387355000000001, "duration_s": 9.7}, {"input_tokens": 4, "output_tokens": 11004, "cache_read_input_tokens": 22507, "cache_creation_input_tokens": 147495, "cost_usd": 1.0567941, "duration_s": 78.0}, {"input_tokens": 6, "output_tokens": 19562, "cache_read_input_tokens": 156055, "cache_creation_input_tokens": 131721, "cost_usd": 1.1305905, "duration_s": 139.0}, {"input_tokens": 6, "output_tokens": 38093, "cache_read_input_tokens": 121160, "cache_creation_input_tokens": 174537, "cost_usd": 1.654983, "duration_s": 264.8}, {"input_tokens": 6, "output_tokens": 30848, "cache_read_input_tokens": 180139, "cache_creation_input_tokens": 100899, "cost_usd": 1.1221737, "duration_s": 241.5}, {"input_tokens": 6, "output_tokens": 2245, "cache_read_input_tokens": 121160, "cache_creation_input_tokens": 142215, "cost_usd": 0.923331, "duration_s": 34.7}, {"input_tokens": 6, "output_tokens": 45684, "cache_read_input_tokens": 121160, "cache_creation_input_tokens": 180125, "cost_usd": 1.802376, "duration_s": 334.3}, {"input_tokens": 6, "output_tokens": 26953, "cache_read_input_tokens": 121160, "cache_creation_input_tokens": 168532, "cost_usd": 1.4518529999999998, "duration_s": 197.2}, {"input_tokens": 4, "output_tokens": 22967, "cache_read_input_tokens": 72831, "cache_creation_input_tokens": 99277, "cost_usd": 0.9620283000000001, "duration_s": 156.0}, {"input_tokens": 8, "output_tokens": 36996, "cache_read_input_tokens": 225788, "cache_creation_input_tokens": 171734, "cost_usd": 1.6531044, "duration_s": 253.2}, {"input_tokens": 6, "output_tokens": 53917, "cache_read_input_tokens": 121160, "cache_creation_input_tokens": 182881, "cost_usd": 1.942407, "duration_s": 358.9}, {"input_tokens": 6, "output_tokens": 38723, "cache_read_input_tokens": 121160, "cache_creation_input_tokens": 170902, "cost_usd": 1.642623, "duration_s": 265.9}, {"input_tokens": 6, "output_tokens": 41118, "cache_read_input_tokens": 121160, "cache_creation_input_tokens": 172692, "cost_usd": 1.689288, "duration_s": 273.8}, {"input_tokens": 6, "output_tokens": 45416, "cache_read_input_tokens": 178710, "cache_creation_input_tokens": 124011, "cost_usd": 1.478937, "duration_s": 302.1}, {"input_tokens": 8, "output_tokens": 55150, "cache_read_input_tokens": 286245, "cache_creation_input_tokens": 102314, "cost_usd": 1.5270315, "duration_s": 372.0}, {"input_tokens": 6, "output_tokens": 16990, "cache_read_input_tokens": 114302, "cache_creation_input_tokens": 152664, "cost_usd": 1.2051426, "duration_s": 117.4}, {"input_tokens": 6, "output_tokens": 20378, "cache_read_input_tokens": 119539, "cache_creation_input_tokens": 154242, "cost_usd": 1.2670017, "duration_s": 145.3}, {"input_tokens": 4, "output_tokens": 7997, "cache_read_input_tokens": 67594, "cache_creation_input_tokens": 94797, "cost_usd": 0.7090272, "duration_s": 55.4}, {"input_tokens": 6, "output_tokens": 44540, "cache_read_input_tokens": 121160, "cache_creation_input_tokens": 174153, "cost_usd": 1.749384, "duration_s": 298.6}, {"input_tokens": 6, "output_tokens": 51204, "cache_read_input_tokens": 121160, "cache_creation_input_tokens": 179714, "cost_usd": 1.8827099999999999, "duration_s": 342.5}, {"input_tokens": 4, "output_tokens": 18418, "cache_read_input_tokens": 45087, "cache_creation_input_tokens": 120226, "cost_usd": 1.0111641, "duration_s": 125.5}, {"input_tokens": 8, "output_tokens": 54020, "cache_read_input_tokens": 225465, "cache_creation_input_tokens": 183804, "cost_usd": 1.9807875, "duration_s": 363.1}, {"input_tokens": 6, "output_tokens": 35195, "cache_read_input_tokens": 121160, "cache_creation_input_tokens": 168546, "cost_usd": 1.575567, "duration_s": 237.2}, {"input_tokens": 6, "output_tokens": 7458, "cache_read_input_tokens": 174016, "cache_creation_input_tokens": 98669, "cost_usd": 0.7561068, "duration_s": 61.2}, {"input_tokens": 6, "output_tokens": 314, "cache_read_input_tokens": 121160, "cache_creation_input_tokens": 140784, "cost_usd": 0.88578, "duration_s": 9.7}, {"input_tokens": 4, "output_tokens": 164, "cache_read_input_tokens": 69215, "cache_creation_input_tokens": 94067, "cost_usd": 0.5876385000000001, "duration_s": 7.6}, {"input_tokens": 4, "output_tokens": 174, "cache_read_input_tokens": 74452, "cache_creation_input_tokens": 94046, "cost_usd": 0.5892336, "duration_s": 8.5}]
+--- rc=0 elapsed=5986s

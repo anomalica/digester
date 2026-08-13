@@ -1,0 +1,56 @@
+[
+  {
+    "claims": 9,
+    "recall": 0.875,
+    "precision": 0.8888888888888888,
+    "f1": 0.8818897637795274,
+    "missed": [
+      "after decades of public denial the pentagon now admits there's something out there"
+    ],
+    "off_target": ["He hadn't given UFOs a second thought until 2008."],
+    "model": "deepseek/deepseek-v4-flash"
+  },
+  {
+    "claims": 11,
+    "recall": 0.875,
+    "precision": 0.6363636363636364,
+    "f1": 0.7368421052631579,
+    "missed": [
+      "after decades of public denial the pentagon now admits there's something out there"
+    ],
+    "off_target": [
+      "So what you're telling me is that UFOs, unidentified flying objects, are real.",
+      "He hadn't given UFOs a second thought until 2008.",
+      "It sounds nutty, wacky.",
+      "What I'm telling you is real."
+    ],
+    "model": "openai/gpt-5-nano"
+  },
+  {
+    "claims": 11,
+    "recall": 1.0,
+    "precision": 0.9090909090909091,
+    "f1": 0.9523809523809523,
+    "missed": [],
+    "off_target": [
+      "Luis Elizondo: The question is, what is it? What are its intentions? What are its capabilities?"
+    ],
+    "model": "anthropic/claude-haiku-4.5"
+  },
+  {
+    "claims": 9,
+    "recall": 0.625,
+    "precision": 0.7777777777777778,
+    "f1": 0.6930693069306931,
+    "missed": [
+      "the intelligence committee has ordered the director of national intelligence and the secretary of defense to deliver a report on the mysterious sightings by next month",
+      "after decades of public denial the pentagon now admits there's something out there",
+      "The government has already stated for the record that they're real."
+    ],
+    "off_target": [
+      "The United States government is telling you that.",
+      "He hadn't given UFOs a second thought until 2008."
+    ],
+    "model": "qwen/qwen3-235b-a22b-2507"
+  }
+]

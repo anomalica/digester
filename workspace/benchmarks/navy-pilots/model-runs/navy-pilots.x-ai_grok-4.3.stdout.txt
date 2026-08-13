@@ -1,0 +1,20 @@
+Parsing record: 1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44.md
+COST ESTIMATE (rough, +/-40%):
+  16,668 source chars
+  model: x-ai/grok-4.3  ($3/$15 per million input/output tokens)
+  est tokens: ~56,668 in + ~6,250 out
+  est cost: ~$0.26  (range $0.16 - $0.37)
+  This spends real money on the metered Anthropic API.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Navy pilots describe encounters with UFOs
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +30 nodes (total 30) [model: complete]
+  30 nodes, 5 acronyms, main_subject='2004 USS Nimitz UAP encounter'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +17 claims (chunk total 17, doc total 17) [model: complete]
+  17 claims total: 17 domain, 0 infrastructure
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/navy-pilots/model-runs/navy-pilots.x-ai_grok-4.3.yaml
+Usage: 2 calls, in=14269 out=4161 cache_read=0 cost_equiv=$0.0280
+USAGE_JSON: {"input_tokens": 14269, "output_tokens": 4161, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.02796995, "calls": 2}
+TRACE_JSON: [{"input_tokens": 6452, "output_tokens": 1186, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.0108956}, {"input_tokens": 7817, "output_tokens": 2975, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.01707435}]

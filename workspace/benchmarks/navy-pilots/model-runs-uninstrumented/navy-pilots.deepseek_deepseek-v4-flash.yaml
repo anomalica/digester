@@ -1,0 +1,1453 @@
+schema: anomalica/digest/1
+extracted_at: '2026-06-30T13:18:27.881411+00:00'
+model: deepseek/deepseek-v4-flash
+ai_usage:
+  - stage: digest
+    model: deepseek/deepseek-v4-flash
+    tokens:
+      input: 14705
+      output: 28906
+    notional_cost_usd: 0.0064
+    price_basis: anthropic-list-2026-06
+record:
+  id: 7923b074-3749-4300-b00c-f4e61a17845f
+  title: Navy pilots describe encounters with UFOs
+  publisher: 60 Minutes
+  date: '2021-05-17'
+  medium: video
+  duration: 825
+  content_hash: sha256:1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44
+  processing_version: 5b1406d
+  reference: https://www.youtube.com/watch?v=ZBtMbBPzqHY
+terminology:
+  main_subject: Navy pilots describe encounters with UFOs
+  codenames:
+    - codename: Tic Tac
+      refers_to: anomalous aerial vehicle (AAV)
+    - codename: Skipper
+      refers_to: David Fravor
+  acronyms:
+    - acronym: UAP
+      expansion: Unidentified Aerial Phenomena
+    - acronym: UFO
+      expansion: Unidentified Flying Object
+    - acronym: AATIP
+      expansion: Advanced Aerospace Threat Identification Program
+    - acronym: AAV
+      expansion: Anomalous Aerial Vehicle
+    - acronym: DoD
+      expansion: Department of Defense
+    - acronym: ODNI
+      expansion: Office of the Director of National Intelligence
+    - acronym: F/A-18
+      expansion: F/A-18 Hornet
+nodes:
+  - id: 774ecf0c-f766-48cd-8161-21a4d037783c
+    type: person
+    name: Bill Whitaker
+  - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+    type: person
+    name: Luis Elizondo
+  - id: 70d3a460-13ac-4279-9184-6705f836d60b
+    type: person
+    name: Ryan Graves
+  - id: 0c3871c1-b561-4ecb-9173-771f492c027f
+    type: person
+    name: David Fravor
+  - id: 3273fc9c-31ee-469f-badb-0206af6bf770
+    type: person
+    name: Alex Dietrich
+  - id: db8bd2ca-496d-49ab-adf4-fbc02428f11d
+    type: person
+    name: Christopher Mellon
+  - id: a3e8208e-3c2d-458c-b650-751223f04332
+    type: person
+    name: Marco Rubio
+  - id: 5560cf45-8234-4b9c-a190-d1a5f4eef250
+    type: person
+    name: Harry Reid
+  - id: dc4a052e-a370-4906-b601-dc783810ff2d
+    type: organisation
+    name: 60 Minutes
+  - id: 8890f314-91bc-4ba6-a1a6-869191344816
+    type: organisation
+    name: United States Navy
+  - id: 3b13ebe8-7015-416f-90ee-fa21d8e3182f
+    type: organisation
+    name: United States Department of Defense (DoD)
+  - id: cfd86602-4af4-4885-8afd-9ced4dc4695e
+    type: organisation
+    name: United States Senate Select Committee on Intelligence
+  - id: 2b8991ed-8c94-4fc2-b3ae-cdf9d8dbea24
+    type: organisation
+    name: United States Congress
+  - id: a5e3493a-c7ea-47bf-8e27-f5d5bd1764f8
+    type: organisation
+    name: Office of the Director of National Intelligence (ODNI)
+  - id: 4421cf8f-3fd5-453b-9f42-2ac30aa29ac0
+    type: organisation
+    name: The Pentagon
+  - id: 9780e4e4-edf6-411f-bdfe-29c648042fc3
+    type: organisation
+    name: Strike Fighter Squadron 41 (VFA-41)
+  - id: a789ff1f-3e2e-48dd-85b4-60cb4a28241e
+    type: organisation
+    name: Carrier Strike Group 11 (CSG-11)
+  - id: dc0ef5be-da39-4da4-a6bb-7a66928222da
+    type: organisation
+    name: Top Gun Naval Flight School
+  - id: 1eb45436-2c83-4fd9-b59d-987f2850f94e
+    type: organisation
+    name: The New York Times
+  - id: 2fb6e5de-d40e-4aae-863f-e8a2eb10bcb5
+    type: organisation
+    name: History Channel
+  - id: e7df0667-c003-41b5-aea3-4cba0869561c
+    type: project
+    name: Advanced Aerospace Threat Identification Program (AATIP)
+    metadata:
+      date_start: '2007'
+      date_end: '2012'
+  - id: ce244df4-00d0-4c98-a0ec-4ad69c96b733
+    type: project
+    name: UAP Task Force
+    metadata:
+      date_start: '2020'
+      date_end: '2021'
+  - id: dbdcce02-473f-4f74-87e0-1c00658e1800
+    type: project
+    name: Project Blue Book
+    metadata:
+      date_start: '1952'
+      date_end: '1969'
+  - id: 16b83a70-ce82-49f3-a4fc-a32362af764f
+    type: place
+    name: USA, California, San Diego
+  - id: 039be6f0-2c1c-4448-acb2-300e1a7bcd42
+    type: place
+    name: USA, Virginia, Virginia Beach
+  - id: b47f444b-1466-46c7-9929-3202c5541578
+    type: place
+    name: USA, Florida, Jacksonville
+  - id: bd1b22b6-66af-4031-9ba0-ba07620f8d38
+    type: place
+    name: USA, Atlantic coast
+  - id: fccb0da4-1b48-482c-9b9b-7958b4c46c25
+    type: place
+    name: Afghanistan
+  - id: 0271a5ea-27c6-4435-a401-bf6b827a6270
+    type: place
+    name: Guantanamo Bay Naval Base
+  - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+    type: event
+    name: 2004 USS Nimitz UAP encounter
+    metadata:
+      date_start: '2004-11-10'
+      date_end: '2004-11-16'
+  - id: 9b04223e-e674-44ba-ab97-4a4e48fd918d
+    type: event
+    name: 2015 Atlantic coast UAP encounter
+    metadata:
+      date_start: '2015'
+  - id: e530471d-40d7-435e-91d6-dc14e9ed0752
+    type: object
+    name: USS Nimitz (CVN-68)
+  - id: 250009d5-f700-47e5-9d2c-a85fcb3b096c
+    type: object
+    name: USS Princeton (CG-59)
+  - id: 76562fc6-179f-40b4-87c9-2f8ea8976ecd
+    type: object
+    name: F/A-18
+  - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+    type: document
+    name: Navy pilots describe encounters with UFOs
+    metadata:
+      date_start: '2021-05-17'
+  - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+    type: topic
+    name: Unidentified Aerial Phenomena (UAP)
+  - id: b348f4e6-d338-4bce-b07c-5b8569fb0461
+    type: topic
+    name: Unidentified Flying Object (UFO)
+  - id: 26d25aea-fa49-46dc-9ae5-633959d0004a
+    type: topic
+    name: anomalous aerial vehicle (AAV)
+domain_claims:
+  - id: 0c1b0b15-797b-48d0-a2bb-780c790791f7
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:00:07.6-00:00:14.9
+    date: '2021-05-17'
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - name: United States government
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: b348f4e6-d338-4bce-b07c-5b8569fb0461
+        name: Unidentified Flying Object (UFO)
+      - id: 4421cf8f-3fd5-453b-9f42-2ac30aa29ac0
+        name: The Pentagon
+    quote: |-
+      It's the story of the U.S. government's grudging acknowledgement of Unidentified Aerial Phenomena, UAP, more commonly known as ufos after decades of public denial the pentagon now admits there's something out there
+    text: |-
+      The document 'Navy pilots describe encounters with UFOs' states that the United States government has grudgingly acknowledged Unidentified Aerial Phenomena (UAP), more commonly known as UFOs, and the Pentagon now admits there is something out there.
+  - id: f64d163e-895e-458d-a1b5-d1bf90e0e662
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:00:14.9-00:00:44.4
+    date: '2021-05-17'
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: cfd86602-4af4-4885-8afd-9ced4dc4695e
+        name: United States Senate Select Committee on Intelligence
+      - id: a5e3493a-c7ea-47bf-8e27-f5d5bd1764f8
+        name: Office of the Director of National Intelligence (ODNI)
+      - id: 3b13ebe8-7015-416f-90ee-fa21d8e3182f
+        name: United States Department of Defense (DoD)
+    quote: |-
+      the u.s senate wants to know what it is the intelligence committee has ordered the director of national intelligence and the secretary of defense to deliver a report on the mysterious sightings by next month
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that the United States Senate Select Committee on Intelligence has ordered the Director of National Intelligence and the Secretary of Defense to deliver a report on mysterious sightings by next month.
+  - id: d8525cf0-b2ec-4118-b1ae-81fa45d378f0
+    type: testimony
+    attestation: second_hand
+    speaker:
+      id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+      name: Luis Elizondo
+    location: 00:00:54.6-00:00:59.6
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - name: United States government
+      - id: b348f4e6-d338-4bce-b07c-5b8569fb0461
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      Bill, I think we're beyond that already. The government has already stated for the record that they're real. I'm not telling you that. The United States government is telling you that.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Luis Elizondo states that the United States government has already stated for the record that Unidentified Flying Objects (UFOs) are real.
+  - id: 75363cd9-ec22-4c15-b201-e694553af1de
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:01:02.4-00:01:11.5
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - id: fccb0da4-1b48-482c-9b9b-7958b4c46c25
+        name: Afghanistan
+      - id: 0271a5ea-27c6-4435-a401-bf6b827a6270
+        name: Guantanamo Bay Naval Base
+    quote: |-
+      Luis Elizondo spent 20 years running military intelligence operations worldwide in Afghanistan, the Middle East, and Guantanamo.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that Luis Elizondo spent 20 years running military intelligence operations worldwide in Afghanistan, the Middle East, and Guantanamo Bay Naval Base.
+  - id: 0f346a1c-6b78-45f2-a34b-f548ff048db2
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:01:02.4-00:01:15.6
+    date: '2008'
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - id: b348f4e6-d338-4bce-b07c-5b8569fb0461
+        name: Unidentified Flying Object (UFO)
+    quote: He hadn't given UFOs a second thought until 2008.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that Luis Elizondo had not given UFOs a second thought until 2008.
+  - id: 472b6522-684e-4aea-8628-31600e68389d
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:01:02.4-00:01:15.6
+    date: '2008'
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - id: 4421cf8f-3fd5-453b-9f42-2ac30aa29ac0
+        name: The Pentagon
+      - id: e7df0667-c003-41b5-aea3-4cba0869561c
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+    quote: |-
+      That's when he was asked to join something at the Pentagon called the Advanced Aerospace Threat Identification Program, or AATIP.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that in 2008, Luis Elizondo was asked to join something at The Pentagon called the Advanced Aerospace Threat Identification Program (AATIP).
+  - id: 154fd8e6-3456-4634-a93b-7cd44c1dc32d
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+      name: Luis Elizondo
+    location: 00:01:24.1-00:01:34.3
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - id: e7df0667-c003-41b5-aea3-4cba0869561c
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: 26d25aea-fa49-46dc-9ae5-633959d0004a
+        name: anomalous aerial vehicle (AAV)
+      - id: b348f4e6-d338-4bce-b07c-5b8569fb0461
+        name: Unidentified Flying Object (UFO)
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      The mission of AATIP was quite simple. It was to collect and analyze information involving anomalous aerial vehicles, what I guess in the vernacular you call them UFOs. We call them UAPs.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Luis Elizondo states that the mission of the Advanced Aerospace Threat Identification Program (AATIP) was to collect and analyze information involving anomalous aerial vehicles (AAVs), which in the vernacular are called UFOs, but they call them Unidentified Aerial Phenomena (UAP).
+  - id: 6f186f71-dc19-43d1-8c95-b4dea234375f
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:01:50.3-00:02:01.6
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: e7df0667-c003-41b5-aea3-4cba0869561c
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: 4421cf8f-3fd5-453b-9f42-2ac30aa29ac0
+        name: The Pentagon
+      - id: 5560cf45-8234-4b9c-a190-d1a5f4eef250
+        name: Harry Reid
+      - id: b348f4e6-d338-4bce-b07c-5b8569fb0461
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      Buried away in the Pentagon, AATIP was part of a $22 million program sponsored by then Senate Majority Leader Harry Reid to investigate UFOs.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that the Advanced Aerospace Threat Identification Program (AATIP) was buried away in The Pentagon and was part of a $22 million program sponsored by then Senate Majority Leader Harry Reid to investigate UFOs.
+  - id: 90c4cb6e-d7e3-4f1b-8a53-7fe009d32dd6
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:01:50.3-00:02:10.8
+    date: '2010'
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - id: e7df0667-c003-41b5-aea3-4cba0869561c
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      When Elizondo took over in 2010, he focused on the national security implications of unidentified aerial phenomena documented by U.S. service members.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that when Luis Elizondo took over the Advanced Aerospace Threat Identification Program (AATIP) in 2010, he focused on the national security implications of Unidentified Aerial Phenomena (UAP) documented by US service members.
+  - id: ed0affcb-5055-4592-ae1c-5a9d50714278
+    type: testimony
+    attestation: second_hand
+    speaker:
+      id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+      name: Luis Elizondo
+    location: 00:02:12.6-00:02:35.2
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - id: 26d25aea-fa49-46dc-9ae5-633959d0004a
+        name: anomalous aerial vehicle (AAV)
+    quote: |-
+      Imagine a technology that can do 600 to 700 G-forces, that can fly at 13,000 miles an hour, that can evade radar, and that can fly through air and water and possibly space, and oh, by the way, has no obvious signs of propulsion, no wings, no control surfaces, and yet still can defy the natural effects of Earth's gravity.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Luis Elizondo describes a technology that can do 600 to 700 G-forces, fly at approximately 21,000 kilometres per hour, evade radar, fly through air and water and possibly space, has no obvious signs of propulsion, no wings, no control surfaces, and can still defy the natural effects of Earth's gravity.
+  - id: 6df66e22-8fb8-4dfa-913e-69d4e2fd1d79
+    type: testimony
+    attestation: second_hand
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:02:37.0-00:02:47.7
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - id: e7df0667-c003-41b5-aea3-4cba0869561c
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+    quote: |-
+      Elizondo tells us AATIP was a loose-knit mix of scientists, electro-optical engineers, avionics, and intelligence experts, often working part-time.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that Luis Elizondo says the Advanced Aerospace Threat Identification Program (AATIP) was a loose-knit mix of scientists, electro-optical engineers, avionics, and intelligence experts, often working part-time.
+  - id: d14c0c9b-55d7-4c00-8621-24995eab15d8
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:02:37.0-00:03:02.1
+    date: '2015'
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: e7df0667-c003-41b5-aea3-4cba0869561c
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: 8890f314-91bc-4ba6-a1a6-869191344816
+        name: United States Navy
+      - id: bd1b22b6-66af-4031-9ba0-ba07620f8d38
+        name: USA, Atlantic coast
+      - id: 9b04223e-e674-44ba-ab97-4a4e48fd918d
+        name: 2015 Atlantic coast UAP encounter
+    quote: |-
+      They combed through data and records and analyzed videos like this. A Navy aircrew struggles to lock onto a fast-moving object off the U.S. Atlantic coast in 2015.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that the Advanced Aerospace Threat Identification Program (AATIP) combed through data and records and analyzed videos like this: a Navy aircrew struggles to lock onto a fast-moving object off the US Atlantic coast in 2015.
+  - id: 990218e3-8f57-4148-bc18-93ed4d9b6f48
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:03:02.1-00:03:20.4
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: b348f4e6-d338-4bce-b07c-5b8569fb0461
+        name: Unidentified Flying Object (UFO)
+      - id: 4421cf8f-3fd5-453b-9f42-2ac30aa29ac0
+        name: The Pentagon
+    quote: |-
+      Recently released images may not convince UFO skeptics, but the Pentagon admits it doesn't know what in the world this is, or this, or this.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that recently released images may not convince UFO skeptics, but The Pentagon admits it doesn't know what these images are.
+  - id: ef16cd44-3607-4e0e-afeb-68f4838fe00b
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+      name: Luis Elizondo
+    location: 00:03:30.4-00:03:52.6
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      In some cases, there are simple explanations for what people are witnessing, but there are some that that are not. We're not just simply jumping to a conclusion that's saying, oh, that's a UAP out there. We're going through our due diligence. Is it some sort of new type of cruise missile technology that China has developed? Is it some sort of high-altitude balloon that's conducting reconnaissance? Ultimately, when you have exhausted all those what-ifs and you're still left with the fact that this is in our airspace and it's real, that's when it becomes compelling and that's when it becomes problematic.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Luis Elizondo states that in some cases there are simple explanations for what people are witnessing, but there are some that are not, and that after exhausting all conventional explanations and still being left with the fact that it is in US airspace and is real, that becomes compelling and problematic.
+  - id: d16c3f66-3ef1-4731-9879-dd180025d47b
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:04:06.2-00:04:12.9
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 70d3a460-13ac-4279-9184-6705f836d60b
+        name: Ryan Graves
+    quote: |-
+      Former Navy pilot Lieutenant Ryan Graves calls whatever is out there a security risk.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that former Navy pilot Lieutenant Ryan Graves calls whatever is out there a security risk.
+  - id: 2735801c-533d-4aac-95eb-2a6bee385c1a
+    type: testimony
+    attestation: second_hand
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:04:06.2-00:04:29.7
+    date: '2014'
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 70d3a460-13ac-4279-9184-6705f836d60b
+        name: Ryan Graves
+      - id: 76562fc6-179f-40b4-87c9-2f8ea8976ecd
+        name: F/A-18
+      - id: 039be6f0-2c1c-4448-acb2-300e1a7bcd42
+        name: USA, Virginia, Virginia Beach
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      He told us his F-18 squadron began seeing UAPs hovering over restricted airspace southeast of Virginia Beach in 2014 when they updated their jet's radar, making it possible to zero in with infrared targeting cameras.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that Ryan Graves told him his F-18 squadron began seeing Unidentified Aerial Phenomena (UAP) hovering over restricted airspace southeast of Virginia Beach in 2014 when they updated their jet's radar, making it possible to zero in with infrared targeting cameras.
+  - id: 5c41452d-44d0-471b-bc04-d91ab694bcf6
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 70d3a460-13ac-4279-9184-6705f836d60b
+      name: Ryan Graves
+    location: 00:04:37.1-00:04:37.1
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 70d3a460-13ac-4279-9184-6705f836d60b
+        name: Ryan Graves
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: Pretty hard to spoof that.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Ryan Graves states that the dual radar-and-infrared detection of Unidentified Aerial Phenomena (UAP) is hard to spoof.
+  - id: 3bdcaba8-604b-44c4-aceb-ff647ea54159
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:04:38.6-00:04:48.2
+    date: '2019'
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 4421cf8f-3fd5-453b-9f42-2ac30aa29ac0
+        name: The Pentagon
+    quote: |-
+      These photographs were taken in 2019 in the same area. The Pentagon confirms these are images of objects it can't identify.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that these photographs were taken in 2019 in the same area, and The Pentagon confirms these are images of objects it cannot identify.
+  - id: 7378d5b1-6d44-487d-8302-6b8c0d697946
+    type: testimony
+    attestation: second_hand
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:04:38.6-00:04:48.2
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 70d3a460-13ac-4279-9184-6705f836d60b
+        name: Ryan Graves
+      - id: bd1b22b6-66af-4031-9ba0-ba07620f8d38
+        name: USA, Atlantic coast
+    quote: |-
+      Lieutenant Graves told us pilots training off the Atlantic coast see things like that all the time.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that Lieutenant Ryan Graves told him pilots training off the Atlantic coast see things like that all the time.
+  - id: 61503f81-5d7d-49e7-bed8-9bbfe10c2aca
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 70d3a460-13ac-4279-9184-6705f836d60b
+      name: Ryan Graves
+    location: 00:04:55.3-00:05:01.2
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 70d3a460-13ac-4279-9184-6705f836d60b
+        name: Ryan Graves
+      - id: bd1b22b6-66af-4031-9ba0-ba07620f8d38
+        name: USA, Atlantic coast
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: Every day. Every day for at least a couple of years.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Ryan Graves states that pilots saw Unidentified Aerial Phenomena (UAP) off the Atlantic coast every day for at least a couple of years.
+  - id: ed3c2e63-2be2-4767-94c6-ac77e589ae1c
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 70d3a460-13ac-4279-9184-6705f836d60b
+      name: Ryan Graves
+    location: 00:05:01.2-00:05:02.5
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 70d3a460-13ac-4279-9184-6705f836d60b
+        name: Ryan Graves
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: I don't see an exhaust plume.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Ryan Graves observed no exhaust plume on the Unidentified Aerial Phenomena (UAP).
+  - id: 1b88e13e-ebb1-405a-b42d-83e5a14edd8b
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:05:04.3-00:05:12.8
+    date: '2015'
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: b47f444b-1466-46c7-9929-3202c5541578
+        name: USA, Florida, Jacksonville
+      - id: 70d3a460-13ac-4279-9184-6705f836d60b
+        name: Ryan Graves
+      - id: 9780e4e4-edf6-411f-bdfe-29c648042fc3
+        name: Strike Fighter Squadron 41 (VFA-41)
+    quote: |-
+      including this one, off the coast of Jacksonville, Florida in 2015, captured on a targeting camera by members of Graves' squadron.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that a video was captured off the coast of Jacksonville, Florida in 2015 on a targeting camera by members of Ryan Graves' squadron.
+  - id: ba23bbe3-0188-4994-8415-6075ca0f6bcc
+    type: observation
+    attestation: first_hand
+    location: 00:05:12.8-00:05:23.8
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 26d25aea-fa49-46dc-9ae5-633959d0004a
+        name: anomalous aerial vehicle (AAV)
+    quote: |-
+      Look at that thing! It's rotating. My gosh! They're all going against the wind. The wind's 120 knots far west. Look at that thing, dude.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', external footage shows a rotating object and the speakers express surprise, saying it is rotating, going against the wind, and the wind is 120 knots far west (approximately 220 kilometres per hour).
+  - id: 469aa206-dbfa-4aa7-9cd5-c86dcb815ec6
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 70d3a460-13ac-4279-9184-6705f836d60b
+      name: Ryan Graves
+    location: 00:05:27.3-00:05:32.0
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 70d3a460-13ac-4279-9184-6705f836d60b
+        name: Ryan Graves
+    quote: |-
+      They seem to have broke character a bit, and were just kind of amazed at what they were seeing.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Ryan Graves states that the pilots in the video seem to have broken character and were amazed at what they were seeing.
+  - id: ee8e665d-62f2-42ed-aa67-b437d84f2db8
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 70d3a460-13ac-4279-9184-6705f836d60b
+      name: Ryan Graves
+    location: 00:05:35.8-00:05:42.8
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 70d3a460-13ac-4279-9184-6705f836d60b
+        name: Ryan Graves
+      - id: b47f444b-1466-46c7-9929-3202c5541578
+        name: USA, Florida, Jacksonville
+    quote: |-
+      This is a difficult one to explain. You have rotation, you have high altitudes, you have propulsion, right? I don't know. I don't know what it is, frankly.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Ryan Graves states that the object in the video from 2015 off Jacksonville is difficult to explain, noting it has rotation, high altitudes, and propulsion, and that he does not know what it is.
+  - id: f821e91a-5c50-4c84-b1b1-4ba899fb58da
+    type: testimony
+    attestation: second_hand
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:05:44.9-00:05:50.0
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 70d3a460-13ac-4279-9184-6705f836d60b
+        name: Ryan Graves
+    quote: |-
+      He told us pilots speculate they are one of three things, secret U.S. technology, an adversary spy vehicle, or something otherworldly.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that Ryan Graves told him pilots speculate they are one of three things: secret US technology, an adversary spy vehicle, or something otherworldly.
+  - id: 223a58db-ea3a-4c78-aaad-2f72c1bde318
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 70d3a460-13ac-4279-9184-6705f836d60b
+      name: Ryan Graves
+    location: 00:05:56.0-00:06:00.5
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 70d3a460-13ac-4279-9184-6705f836d60b
+        name: Ryan Graves
+    quote: I'd say, you know, the highest probability is it's a threat observation program.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Ryan Graves states that the highest probability is that the objects are a threat observation program.
+  - id: 7640a8c4-4490-4079-b6b0-386d7f65ea20
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 70d3a460-13ac-4279-9184-6705f836d60b
+      name: Ryan Graves
+    location: 00:06:04.1-00:06:04.1
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 70d3a460-13ac-4279-9184-6705f836d60b
+        name: Ryan Graves
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: I don't see why not.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Ryan Graves states that he does not see why the observed Unidentified Aerial Phenomena (UAP) could not be Russian or Chinese technology.
+  - id: 33f8963b-7e7b-4850-b5eb-a547d421181d
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 70d3a460-13ac-4279-9184-6705f836d60b
+      name: Ryan Graves
+    location: 00:06:07.0-00:06:18.5
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 70d3a460-13ac-4279-9184-6705f836d60b
+        name: Ryan Graves
+    quote: |-
+      I am worried, frankly. You know, if these were tactical jets from another country that were hanging out up there, it would be a massive issue. But because it looks slightly different, we're not willing to actually look at the problem in the face. We're happy to just ignore the fact that these are out there watching us every day.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Ryan Graves states he is worried, and that if these were tactical jets from another country that were hanging out up there, it would be a massive issue, but because it looks slightly different, people are not willing to look at the problem and are happy to ignore the fact that these are out there watching every day.
+  - id: 8f22312b-401f-44a3-8f59-3ec6509177c4
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:06:23.4-00:06:30.3
+    date: '1969'
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: dbdcce02-473f-4f74-87e0-1c00658e1800
+        name: Project Blue Book
+      - name: United States government
+    quote: |-
+      The government has ignored it, at least publicly, since closing its Project Blue Book investigation in 1969.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that the United States government has ignored the issue since closing Project Blue Book in 1969.
+  - id: 883c1921-72f7-460b-9685-18a8ef7035d1
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:06:30.3-00:06:40.8
+    date: '2004'
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+      - id: 16b83a70-ce82-49f3-a4fc-a32362af764f
+        name: USA, California, San Diego
+    quote: |-
+      But that began to change after an incident off Southern California in 2004, which was documented by radar, by camera, and four naval aviators.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that this began to change after the 2004 USS Nimitz UAP encounter off Southern California, which was documented by radar, camera, and four naval aviators.
+  - id: bbb6229c-2eb3-4ac5-8f27-d029547f3b81
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:06:40.8-00:06:57.3
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 0c3871c1-b561-4ecb-9173-771f492c027f
+        name: David Fravor
+      - id: dc0ef5be-da39-4da4-a6bb-7a66928222da
+        name: Top Gun Naval Flight School
+      - id: 76562fc6-179f-40b4-87c9-2f8ea8976ecd
+        name: F/A-18
+      - id: e530471d-40d7-435e-91d6-dc14e9ed0752
+        name: USS Nimitz (CVN-68)
+    quote: |-
+      David Fravor, a graduate of the Top Gun Naval Flight School and commander of the F-18 squadron on the USS Nimitz
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that David Fravor is a graduate of the Top Gun Naval Flight School and commander of the F-18 squadron on the USS Nimitz.
+  - id: f5b72ed9-c400-49ea-b521-012302d71fd7
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:06:40.8-00:06:57.3
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3273fc9c-31ee-469f-badb-0206af6bf770
+        name: Alex Dietrich
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: |-
+      flying at his wing, Lieutenant Alex Dietrich, who has never spoken publicly about the encounter.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that Alex Dietrich was flying at David Fravor's wing and has never spoken publicly about the 2004 USS Nimitz UAP encounter before this interview.
+  - id: c5b497ac-aad0-45eb-8329-8e91f3046445
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 3273fc9c-31ee-469f-badb-0206af6bf770
+      name: Alex Dietrich
+    location: 00:07:01.1-00:07:14.4
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3273fc9c-31ee-469f-badb-0206af6bf770
+        name: Alex Dietrich
+    quote: |-
+      Because I was in a government aircraft, because I was on the clock, and so I feel a responsibility to share what I can, and it is unclassified.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Alex Dietrich states she never wanted to be on national television, but feels a responsibility to share what she can because she was in a government aircraft and on the clock, and the information is unclassified.
+  - id: f990cea3-ba96-4da7-ab90-d934a064884f
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:07:14.4-00:07:23.1
+    date: 2004-11
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: e530471d-40d7-435e-91d6-dc14e9ed0752
+        name: USS Nimitz (CVN-68)
+      - id: a789ff1f-3e2e-48dd-85b4-60cb4a28241e
+        name: Carrier Strike Group 11 (CSG-11)
+      - id: 16b83a70-ce82-49f3-a4fc-a32362af764f
+        name: USA, California, San Diego
+    quote: |-
+      It was November 2004, and the USS Nimitz Carrier Strike Group was training about 100 miles southwest of San Diego.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that in November 2004, the USS Nimitz Carrier Strike Group was training about 160 kilometres southwest of San Diego.
+  - id: bb6ffc7d-e6a4-4d24-abca-ab6f400c6405
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:07:14.4-00:07:39.3
+    date: 2004-11
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 250009d5-f700-47e5-9d2c-a85fcb3b096c
+        name: USS Princeton (CG-59)
+      - id: 26d25aea-fa49-46dc-9ae5-633959d0004a
+        name: anomalous aerial vehicle (AAV)
+    quote: |-
+      For a week, the advanced new radar on a nearby ship, the USS Princeton, had detected what operators called multiple anomalous aerial vehicles over the horizon, descending 80,000 feet in less than a second.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that for a week, the advanced new radar on the USS Princeton had detected what operators called multiple anomalous aerial vehicles over the horizon, descending approximately 24,000 metres in less than a second.
+  - id: 005f5dad-99bf-49c2-9b8e-d03a99a6d055
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:07:39.3-00:07:47.8
+    date: '2004-11-14'
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 0c3871c1-b561-4ecb-9173-771f492c027f
+        name: David Fravor
+      - id: 3273fc9c-31ee-469f-badb-0206af6bf770
+        name: Alex Dietrich
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: |-
+      On November 14, Fravor and Dietrich, each with a weapons system officer in the backseat, were diverted to investigate.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that on 2004-11-14, David Fravor and Alex Dietrich, each with a weapons system officer in the backseat, were diverted to investigate the anomalous aerial vehicles.
+  - id: b6e3016b-4f3a-4404-ad70-96e7714fc43b
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:07:39.3-00:07:55.9
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 0c3871c1-b561-4ecb-9173-771f492c027f
+        name: David Fravor
+      - id: 3273fc9c-31ee-469f-badb-0206af6bf770
+        name: Alex Dietrich
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: |-
+      They found an area of roiling white water the size of a 737 in an otherwise calm blue sea.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that David Fravor and Alex Dietrich found an area of roiling white water the size of a Boeing 737 in an otherwise calm blue sea.
+  - id: 0bc47de7-e463-4012-8688-4f2b44fe7bdb
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 0c3871c1-b561-4ecb-9173-771f492c027f
+      name: David Fravor
+    location: 00:08:02.4-00:08:09.7
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 0c3871c1-b561-4ecb-9173-771f492c027f
+        name: David Fravor
+      - id: 26d25aea-fa49-46dc-9ae5-633959d0004a
+        name: anomalous aerial vehicle (AAV)
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: |-
+      And we saw this little white tic-tac-looking object. And it's just kind of moving above the whitewater area.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', David Fravor states that he and his backseater saw a little white tic-tac-looking object moving above the whitewater area.
+  - id: f0adfd6b-5545-4cac-9b24-aa42b9c081ea
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 0c3871c1-b561-4ecb-9173-771f492c027f
+      name: David Fravor
+    location: 00:08:17.9-00:08:24.5
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 0c3871c1-b561-4ecb-9173-771f492c027f
+        name: David Fravor
+      - id: 26d25aea-fa49-46dc-9ae5-633959d0004a
+        name: anomalous aerial vehicle (AAV)
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: |-
+      The tic-tac's still pointing north-south. It goes and just turns abruptly and starts mirroring me. So as I'm coming down, it starts coming up.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', David Fravor states that the tic-tac object was pointing north-south, then turned abruptly and started mirroring him as he descended.
+  - id: 07e5c571-7201-4a48-9d49-5a3296cc6298
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 0c3871c1-b561-4ecb-9173-771f492c027f
+      name: David Fravor
+    location: 00:08:28.9-00:08:28.9
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 0c3871c1-b561-4ecb-9173-771f492c027f
+        name: David Fravor
+      - id: 26d25aea-fa49-46dc-9ae5-633959d0004a
+        name: anomalous aerial vehicle (AAV)
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: Yeah, it was aware we were there.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', David Fravor states the object was aware of his presence because it was mimicking his moves.
+  - id: 8dc4ad32-c685-4dce-b623-1007fc910307
+    type: testimony
+    attestation: second_hand
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:08:30.5-00:08:37.0
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 0c3871c1-b561-4ecb-9173-771f492c027f
+        name: David Fravor
+      - id: 76562fc6-179f-40b4-87c9-2f8ea8976ecd
+        name: F/A-18
+      - id: 26d25aea-fa49-46dc-9ae5-633959d0004a
+        name: anomalous aerial vehicle (AAV)
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: |-
+      He said it was about the size of his F-18, with no markings, no wings, no exhaust plumes.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that David Fravor said the object was about the size of his F-18, with no markings, no wings, and no exhaust plumes.
+  - id: 1658b313-6035-48a2-9089-c0e1a6354d6b
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 0c3871c1-b561-4ecb-9173-771f492c027f
+      name: David Fravor
+    location: 00:08:37.0-00:08:47.8
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 0c3871c1-b561-4ecb-9173-771f492c027f
+        name: David Fravor
+      - id: 26d25aea-fa49-46dc-9ae5-633959d0004a
+        name: anomalous aerial vehicle (AAV)
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: |-
+      I want to see how close I can get. So I go like this, and it's climbing still. And when it gets right in front of me, it just disappears. Disappears, like gone. It had sped off.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', David Fravor states he tried to get closer to the object, but when it got right in front of him, it just disappeared, sped off.
+  - id: 188f2dd9-5bb8-4244-a814-3aebbad7e9cd
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 3273fc9c-31ee-469f-badb-0206af6bf770
+      name: Alex Dietrich
+    location: 00:08:50.9-00:08:58.3
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3273fc9c-31ee-469f-badb-0206af6bf770
+        name: Alex Dietrich
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: |-
+      So your mind tries to make sense of it. I'm going to categorize this as maybe a helicopter or maybe a drone. And when it disappeared, I mean, it was just...
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Alex Dietrich states that her mind tried to make sense of what she saw, categorising it as maybe a helicopter or a drone, but when it disappeared, it was just...
+  - id: b3d20235-1fdc-48b7-a125-bdaaa21a8c9a
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 3273fc9c-31ee-469f-badb-0206af6bf770
+      name: Alex Dietrich
+    location: 00:09:03.3-00:09:03.3
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3273fc9c-31ee-469f-badb-0206af6bf770
+        name: Alex Dietrich
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: Yeah.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Alex Dietrich confirms that her backseater saw the object too.
+  - id: 60d67393-e72e-4c0a-9a1f-1648ebafed3c
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 0c3871c1-b561-4ecb-9173-771f492c027f
+      name: David Fravor
+    location: 00:09:03.5-00:09:08.9
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 0c3871c1-b561-4ecb-9173-771f492c027f
+        name: David Fravor
+      - id: 26d25aea-fa49-46dc-9ae5-633959d0004a
+        name: anomalous aerial vehicle (AAV)
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: |-
+      There was four of us in the airplanes literally watching this thing for roughly about five minutes.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', David Fravor states that there were four of them in the airplanes watching the object for roughly about five minutes.
+  - id: 1a24542a-ec5a-4c29-aee5-9f11cf4a44cd
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:09:08.9-00:09:14.4
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 250009d5-f700-47e5-9d2c-a85fcb3b096c
+        name: USS Princeton (CG-59)
+      - id: 26d25aea-fa49-46dc-9ae5-633959d0004a
+        name: anomalous aerial vehicle (AAV)
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: Seconds later, the Princeton reacquired the target, 60 miles away.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that seconds later, the USS Princeton reacquired the target approximately 97 kilometres away.
+  - id: e1b4a6e5-28b4-496d-bbcf-4c895238fc36
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:09:14.4-00:09:20.8
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: |-
+      Another crew managed to briefly lock onto it with a targeting camera before it zipped off again.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that another crew managed to briefly lock onto it with a targeting camera before it zipped off again.
+  - id: 9f540e9c-dfbf-40d1-bab0-1c9da0e5bde3
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 3273fc9c-31ee-469f-badb-0206af6bf770
+      name: Alex Dietrich
+    location: 00:09:20.8-00:09:31.1
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3273fc9c-31ee-469f-badb-0206af6bf770
+        name: Alex Dietrich
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: |-
+      I think that over beers, we've sort of said, hey, man, if I saw this solo, I don't know that I would have come back and said anything because it sounds so crazy when I say it.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Alex Dietrich states that over beers, she and others have said that if she had seen the object solo, she might not have come back and said anything because it sounds so crazy.
+  - id: 0ebf504f-1bb7-486c-a611-0c51c059f1df
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 0c3871c1-b561-4ecb-9173-771f492c027f
+      name: David Fravor
+    location: 00:09:37.4-00:09:45.8
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 0c3871c1-b561-4ecb-9173-771f492c027f
+        name: David Fravor
+      - id: 26d25aea-fa49-46dc-9ae5-633959d0004a
+        name: anomalous aerial vehicle (AAV)
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: |-
+      I'm not a UFO guy. There's definitely something that, I don't know who's building it, who's got the technology, who's got the brains, but there's something out there that was better than our airplane.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', David Fravor states that he is not a UFO guy, but there is definitely something out there that was better than his airplane, though he does not know who is building it, who has the technology, or who has the brains.
+  - id: 14a5ccca-385c-45d5-9d34-7bad2423661a
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:09:56.5-00:10:04.2
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: |-
+      The air crew filed reports. Then, like the mysterious flying object, the Nimitz encounter disappeared. Nothing was said or done officially for five years until Lou Elizondo came across the story and investigated.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that the aircrew filed reports, then nothing was said or done officially for five years until Luis Elizondo came across the story and investigated.
+  - id: 21a00660-dbdd-4ea8-ba75-c4485cfe6860
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+      name: Luis Elizondo
+    location: 00:10:13.2-00:10:25.3
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - id: 8890f314-91bc-4ba6-a1a6-869191344816
+        name: United States Navy
+    quote: |-
+      We spend millions of dollars in training these pilots, and they are seeing something that they can't explain. Furthermore, that information's being backed up on electro-optical data, like gun camera footage, and by radar data. Now, to me, that's compelling.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Luis Elizondo states that the United States Navy spends millions of dollars training pilots, and they are seeing something they cannot explain, backed up by electro-optical data like gun camera footage and radar data, and that is compelling.
+  - id: c4387bd2-bc8c-44b7-a512-7dfa22d54d60
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:10:27.7-00:10:48.8
+    date: '2017'
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - id: e7df0667-c003-41b5-aea3-4cba0869561c
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: 4421cf8f-3fd5-453b-9f42-2ac30aa29ac0
+        name: The Pentagon
+    quote: |-
+      Inside the Pentagon, his findings were met with skepticism. AATIP's funding was eliminated in 2012, but Elizondo says he and a handful of others kept the mission alive. until finally, frustrated, he quit the Pentagon in 2017, but not before getting these three videos declassified.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that Luis Elizondo's findings inside The Pentagon were met with skepticism, that the Advanced Aerospace Threat Identification Program (AATIP) funding was eliminated in 2012, but Elizondo and a handful of others kept the mission alive until he quit the Pentagon in 2017, but not before getting three videos declassified.
+  - id: d9370524-1fb0-440a-a260-75979fa6fb5d
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: db8bd2ca-496d-49ab-adf4-fbc02428f11d
+      name: Christopher Mellon
+    location: 00:10:51.9-00:10:57.5
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: db8bd2ca-496d-49ab-adf4-fbc02428f11d
+        name: Christopher Mellon
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - id: 3b13ebe8-7015-416f-90ee-fa21d8e3182f
+        name: United States Department of Defense (DoD)
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      I tried to help my colleague, Lou Elizondo, elevate the issue in the department and actually get it to the Secretary of Defense.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Christopher Mellon states he tried to help his colleague Luis Elizondo elevate the Unidentified Aerial Phenomena (UAP) issue in the department and get it to the Secretary of Defense.
+  - id: f8c4338e-43b8-421b-838d-6238d4a54822
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:10:57.5-00:11:04.3
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: db8bd2ca-496d-49ab-adf4-fbc02428f11d
+        name: Christopher Mellon
+      - id: 3b13ebe8-7015-416f-90ee-fa21d8e3182f
+        name: United States Department of Defense (DoD)
+    quote: |-
+      Christopher Mellon served as Deputy Assistant Secretary of Defense for Intelligence for Presidents Clinton and George W. Bush, and had access to top-secret government programs.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that Christopher Mellon served as Deputy Assistant Secretary of Defense for Intelligence for Presidents Clinton and George W. Bush, and had access to top-secret government programs.
+  - id: 5177a5ba-ae51-4a44-926a-4eb032b9bb95
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: db8bd2ca-496d-49ab-adf4-fbc02428f11d
+      name: Christopher Mellon
+    location: 00:11:08.4-00:11:17.7
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: db8bd2ca-496d-49ab-adf4-fbc02428f11d
+        name: Christopher Mellon
+      - id: 3b13ebe8-7015-416f-90ee-fa21d8e3182f
+        name: United States Department of Defense (DoD)
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      So it's not us, that's one thing we know. I could say that with a very high degree of confidence, in part because of the positions I held in the department, and I know the process.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Christopher Mellon states that he can say with a very high degree of confidence that the Unidentified Aerial Phenomena (UAP) are not US technology, because of the positions he held in the department and his knowledge of the process.
+  - id: a1741b18-bf6a-46f9-a755-b985611bb351
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:11:18.7-00:11:37.0
+    date: '2017'
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: db8bd2ca-496d-49ab-adf4-fbc02428f11d
+        name: Christopher Mellon
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - id: 8890f314-91bc-4ba6-a1a6-869191344816
+        name: United States Navy
+      - id: 1eb45436-2c83-4fd9-b59d-987f2850f94e
+        name: The New York Times
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Mellon says he grew concerned nothing was being done about UAPs, so he decided to do something. In 2017, as a private citizen, he surreptitiously acquired the three Navy videos Elizondo had declassified and leaked them to The New York Times.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that Christopher Mellon grew concerned nothing was being done about Unidentified Aerial Phenomena (UAP), so as a private citizen in 2017, he surreptitiously acquired the three Navy videos Luis Elizondo had declassified and leaked them to The New York Times.
+  - id: 594dd77c-6e6e-4583-9ae7-c1eaa3200f80
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: db8bd2ca-496d-49ab-adf4-fbc02428f11d
+      name: Christopher Mellon
+    location: 00:11:37.0-00:11:46.1
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: db8bd2ca-496d-49ab-adf4-fbc02428f11d
+        name: Christopher Mellon
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      It's bizarre and unfortunate that someone like myself has to do something like that to get a national security issue like this on the agenda.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Christopher Mellon states it is bizarre and unfortunate that someone like himself has to leak videos to get a national security issue like Unidentified Aerial Phenomena (UAP) on the agenda.
+  - id: 4056207a-b233-46a9-b377-a9d334e2e209
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: db8bd2ca-496d-49ab-adf4-fbc02428f11d
+      name: Christopher Mellon
+    location: 00:11:57.6-00:12:07.2
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: db8bd2ca-496d-49ab-adf4-fbc02428f11d
+        name: Christopher Mellon
+      - id: 3b13ebe8-7015-416f-90ee-fa21d8e3182f
+        name: United States Department of Defense (DoD)
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      We knew and understood that you had to go to the public, get the public interested to get Congress interested, to then circle back to the Defense Department and get them to start taking a look at it.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Christopher Mellon states that they understood they had to go to the public to get the public interested, to get Congress interested, to then circle back to the Defense Department to get them to start looking at Unidentified Aerial Phenomena (UAP).
+  - id: 7ddd7bd4-8da4-4e1a-ac53-6b2ee5627887
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:12:07.2-00:12:15.6
+    date: 2020-08
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 4421cf8f-3fd5-453b-9f42-2ac30aa29ac0
+        name: The Pentagon
+      - id: e7df0667-c003-41b5-aea3-4cba0869561c
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: ce244df4-00d0-4c98-a0ec-4ad69c96b733
+        name: UAP Task Force
+    quote: |-
+      This past August, the Pentagon resurrected AATIP. It's now called the UAP Task Force.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that in August 2020, The Pentagon resurrected the Advanced Aerospace Threat Identification Program (AATIP) as the UAP Task Force.
+  - id: 3208a88e-8924-4011-a6c3-1b8bc2290b5c
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:12:15.6-00:12:20.1
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+    quote: Service members now are encouraged to report strange encounters.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that service members are now encouraged to report strange encounters.
+  - id: 06d59946-6e50-4398-82e8-bd2ccc451590
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: a3e8208e-3c2d-458c-b650-751223f04332
+      name: Marco Rubio
+    location: 00:12:22.6-00:12:26.5
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: a3e8208e-3c2d-458c-b650-751223f04332
+        name: Marco Rubio
+    quote: Anything that enters an airspace that's not supposed to be there is a threat.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Marco Rubio states that anything that enters an airspace that is not supposed to be there is a threat.
+  - id: 2689d722-879f-40b7-9940-f89ea6f58699
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:12:26.5-00:12:34.0
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: a3e8208e-3c2d-458c-b650-751223f04332
+        name: Marco Rubio
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      After receiving classified briefings on UAPs, Senator Marco Rubio called for a detailed analysis.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that after receiving classified briefings on Unidentified Aerial Phenomena (UAP), Senator Marco Rubio called for a detailed analysis.
+  - id: f9d0f545-a18a-44d6-b478-fefed04e155f
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:12:34.0-00:12:46.3
+    date: 2020-12
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: a3e8208e-3c2d-458c-b650-751223f04332
+        name: Marco Rubio
+      - id: cfd86602-4af4-4885-8afd-9ced4dc4695e
+        name: United States Senate Select Committee on Intelligence
+      - id: a5e3493a-c7ea-47bf-8e27-f5d5bd1764f8
+        name: Office of the Director of National Intelligence (ODNI)
+      - id: 4421cf8f-3fd5-453b-9f42-2ac30aa29ac0
+        name: The Pentagon
+      - id: 2b8991ed-8c94-4fc2-b3ae-cdf9d8dbea24
+        name: United States Congress
+    quote: |-
+      This past December, while he was still head of the Intelligence Committee, he asked the Director of National Intelligence and the Pentagon to present Congress an unclassified report by next month.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that in December 2020, while Marco Rubio was still head of the Senate Select Committee on Intelligence, he asked the Director of National Intelligence and The Pentagon to present Congress an unclassified report by the next month (January 2021).
+  - id: 37c4b5f7-9348-4579-8bc3-ff11394d8a4f
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: a3e8208e-3c2d-458c-b650-751223f04332
+      name: Marco Rubio
+    location: 00:12:56.2-00:13:06.9
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: a3e8208e-3c2d-458c-b650-751223f04332
+        name: Marco Rubio
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      There's a stigma on Capitol Hill. I mean, some of my colleagues are very interested in this topic and some kind of, you know, giggle when you bring it up. But I don't think we can allow the stigma to keep us from having an answer to a very fundamental question.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Marco Rubio states that there is a stigma on Capitol Hill about Unidentified Aerial Phenomena (UAP), with some colleagues giggling when it is brought up, but the stigma should not prevent getting an answer to a fundamental question.
+  - id: a4062c6a-4b8d-4002-a894-900ff5bd9535
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: a3e8208e-3c2d-458c-b650-751223f04332
+      name: Marco Rubio
+    location: 00:13:14.1-00:13:28.3
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: a3e8208e-3c2d-458c-b650-751223f04332
+        name: Marco Rubio
+      - id: b3579530-5ed9-4cc6-8d06-9d8bbbadb4e6
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      I want us to take it seriously and have a process to take it seriously. I want us to have a process to analyze the data. every time it comes in, that there be a place where this is cataloged and constantly analyzed until we get some answers. Maybe it has a very simple answer. Maybe it doesn't.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Marco Rubio states he wants the United States to take Unidentified Aerial Phenomena (UAP) seriously, have a process to take it seriously, analyze the data every time it comes in, and have a place where it is cataloged and constantly analyzed until there are answers, which may have a simple answer or may not.
+  - id: b5e711b5-7dbd-497e-89c8-ac507978e628
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 3273fc9c-31ee-469f-badb-0206af6bf770
+      name: Alex Dietrich
+    location: 00:13:37.3-00:13:41.7
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: 3273fc9c-31ee-469f-badb-0206af6bf770
+        name: Alex Dietrich
+      - id: 4e5719cd-c73b-4ef0-93c1-c6a3e62556f4
+        name: 2004 USS Nimitz UAP encounter
+    quote: I felt the vulnerability of not having anything to defend ourselves.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Alex Dietrich states that during the 2004 USS Nimitz UAP encounter, she felt the vulnerability of not having anything to defend themselves.
+infrastructure_claims:
+  - id: 7f6630f5-cc7b-49ca-8b36-248770128983
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:00:01.8-00:00:07.6
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: dc4a052e-a370-4906-b601-dc783810ff2d
+        name: 60 Minutes
+      - id: 774ecf0c-f766-48cd-8161-21a4d037783c
+        name: Bill Whitaker
+    quote: We have tackled many strange stories on 60 Minutes, but perhaps none like this.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker narrates that 60 Minutes has tackled many strange stories but perhaps none like this.
+  - id: 16819b00-07b9-42a2-b4af-be7414e1376f
+    type: administrative
+    speaker:
+      id: 774ecf0c-f766-48cd-8161-21a4d037783c
+      name: Bill Whitaker
+    location: 00:11:46.1-00:11:57.6
+    refs:
+      - id: a9d0d25d-da08-4d29-8c19-7f3e4ee9ac62
+        name: Navy pilots describe encounters with UFOs
+      - id: db8bd2ca-496d-49ab-adf4-fbc02428f11d
+        name: Christopher Mellon
+      - id: 3f61ce44-4ff7-4c11-816f-9a0caf592abc
+        name: Luis Elizondo
+      - id: 2fb6e5de-d40e-4aae-863f-e8a2eb10bcb5
+        name: History Channel
+      - id: 2b8991ed-8c94-4fc2-b3ae-cdf9d8dbea24
+        name: United States Congress
+    quote: |-
+      He joined forces with now civilian Lou Elizondo, and they started to tell their story to anybody who would listen, to newspapers, the History Channel, to members of Congress.
+    text: |-
+      In the document 'Navy pilots describe encounters with UFOs', Bill Whitaker reports that Christopher Mellon joined forces with Luis Elizondo and they started to tell their story to newspapers, the History Channel, and members of Congress.

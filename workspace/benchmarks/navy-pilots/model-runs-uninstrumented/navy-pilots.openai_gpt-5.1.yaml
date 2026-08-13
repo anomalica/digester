@@ -1,0 +1,2353 @@
+schema: anomalica/digest/1
+extracted_at: '2026-06-30T12:44:45.174565+00:00'
+model: openai/gpt-5.1
+ai_usage:
+  - stage: digest
+    model: openai/gpt-5.1
+    tokens:
+      input: 14448
+      output: 23441
+    notional_cost_usd: 0.2525
+    price_basis: anthropic-list-2026-06
+record:
+  id: 32322e0c-e6ee-4ed6-9a13-e627d22073dc
+  title: Navy pilots describe encounters with UFOs
+  publisher: 60 Minutes
+  date: '2021-05-17'
+  medium: video
+  duration: 825
+  content_hash: sha256:1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44
+  processing_version: 5b1406d
+  reference: https://www.youtube.com/watch?v=ZBtMbBPzqHY
+terminology:
+  main_subject: Navy pilots describe encounters with UFOs (60 Minutes segment, 2021-05-17)
+  codenames:
+    - codename: Tic Tac
+      refers_to: Nimitz UAP encounter 2004-11-14
+  acronyms:
+    - acronym: UAP
+      expansion: Unidentified Aerial Phenomena
+    - acronym: UFO
+      expansion: unidentified flying object
+    - acronym: AATIP
+      expansion: Advanced Aerospace Threat Identification Program
+    - acronym: AAV
+      expansion: anomalous aerial vehicle
+    - acronym: F-18
+      expansion: F/A-18 Hornet
+    - acronym: UAP Task Force
+      expansion: Unidentified Aerial Phenomena Task Force
+    - acronym: DoD
+      expansion: United States Department of Defense
+    - acronym: ODNI
+      expansion: Office of the Director of National Intelligence
+nodes:
+  - id: c9a7c6da-460b-4f0e-af46-cc67164c9c29
+    type: document
+    name: Navy pilots describe encounters with UFOs (60 Minutes segment, 2021-05-17)
+    metadata:
+      date_start: '2021-05-17'
+  - id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+    type: person
+    name: Whitaker, Bill
+  - id: dd393f52-1869-4daa-9b86-60ca87e53548
+    type: person
+    name: Elizondo, Luis
+  - id: 12291f75-adcd-49a4-9103-7337ca63182b
+    type: person
+    name: Graves, Ryan
+  - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+    type: person
+    name: Fravor, David
+  - id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+    type: person
+    name: Dietrich, Alex
+  - id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+    type: person
+    name: Mellon, Christopher
+  - id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+    type: person
+    name: Rubio, Marco
+  - id: 2f509334-e521-461c-addf-7b71464a6d52
+    type: person
+    name: Reid, Harry
+  - id: df0bcb26-64b0-4dc5-a57c-9d4c68eea36e
+    type: organisation
+    name: United States government
+  - id: 6effef7b-2d84-4b20-885e-b64010aefb32
+    type: organisation
+    name: United States Senate
+  - id: 955e764b-4159-494e-94aa-71be62e81d1a
+    type: organisation
+    name: United States Senate Intelligence Committee
+  - id: 8f30668d-b83f-4b8e-9391-96c238e14df2
+    type: organisation
+    name: United States Senate Majority Leader
+  - id: 5efbf2ea-430b-48c3-a91f-a962af0ac88f
+    type: organisation
+    name: United States Congress
+  - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+    type: organisation
+    name: United States Department of Defense (DoD)
+  - id: c73b24c2-497e-4972-9be1-3772d848891c
+    type: organisation
+    name: Office of the Secretary of Defense
+  - id: 58ad45db-9841-4d94-8e77-4cf3922ece96
+    type: organisation
+    name: Office of the Director of National Intelligence (ODNI)
+  - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+    type: organisation
+    name: United States Navy
+  - id: 781c56f6-5a7f-43b2-a420-dd40fd48168a
+    type: organisation
+    name: United States Air Force
+  - id: 1798ff73-b5eb-4339-ad70-33e8dfaa3333
+    type: organisation
+    name: United States Marine Corps
+  - id: c148189e-d0ba-4da0-86bd-80a0635a5069
+    type: project
+    name: UAP Task Force
+  - id: 022da978-3243-4a86-ace9-d60032b14fed
+    type: project
+    name: Advanced Aerospace Threat Identification Program (AATIP)
+  - id: cc15ec57-8a67-4920-a113-2f5798a7e299
+    type: project
+    name: Project Blue Book
+  - id: e2414ddd-14be-44e8-972a-6115d447d830
+    type: event
+    name: Nimitz UAP encounter 2004-11-14
+    metadata:
+      date_start: '2004-11-14'
+      date_end: '2004-11-14'
+  - id: 387f4114-c77d-43d6-a70a-829cfe08e101
+    type: event
+    name: USS Nimitz Carrier Strike Group training exercise 2004-11
+    metadata:
+      date_start: '2004-11-01'
+      date_end: '2004-11-30'
+  - id: db5a1c08-21ca-42fe-abf7-15ed5b5d4535
+    type: place
+    name: USA, California, San Diego
+  - id: 06568129-a31a-4d5f-894f-3913f3aa9fee
+    type: place
+    name: USA, Florida, Jacksonville
+  - id: 1caa4f3f-0d72-48da-a6cf-aa12d0bfe71b
+    type: place
+    name: USA, Virginia, Virginia Beach
+  - id: f0d7ebed-b8db-4d63-ac16-049f9fb08ebd
+    type: place
+    name: Guantanamo Bay detention camp
+  - id: 034b9f2e-8b15-49f5-8f05-4e3313e1dd61
+    type: place
+    name: Afghanistan
+  - id: 2687a0fb-3381-4941-a8e5-deb712accd76
+    type: place
+    name: Middle East
+  - id: 80ecd854-edfc-46e8-b0f1-996ff3522f32
+    type: object
+    name: USS Nimitz (CVN-68)
+  - id: 7df4a547-ab0d-4cf5-982d-71053e887eb5
+    type: object
+    name: USS Princeton (CG-59)
+  - id: ff0cc2dc-6f88-40c7-99db-4dedd614d3d5
+    type: object
+    name: F/A-18 Hornet
+  - id: 8ea08b59-fbfa-4bc3-8b5e-5b33a4eb4617
+    type: object
+    name: Boeing 737
+  - id: 74d37cdc-8405-4539-89fd-4b994ea3142c
+    type: topic
+    name: unidentified flying object (UFO)
+  - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+    type: topic
+    name: Unidentified Aerial Phenomena (UAP)
+  - id: ba44e2ac-e661-43cc-9b62-47ea4c28379a
+    type: topic
+    name: anomalous aerial vehicle (AAV)
+  - id: 1f15ed4c-9484-4164-9b2b-f233b27ac3b9
+    type: organisation
+    name: The New York Times
+  - id: 92020b85-fec1-47ed-a1c9-bd33afd44bf1
+    type: organisation
+    name: History Channel
+  - id: 77fb6acb-1de3-44f5-b1ad-2ff80f959116
+    type: organisation
+    name: 60 Minutes
+  - id: c69e45ba-a95d-43d9-940d-ab3e6549b753
+    type: document
+    name: 60MinutesOvertime.com
+  - id: 81a3c69d-2494-437e-bd3a-d4c383c06f3c
+    type: organisation
+    name: Kologuard
+domain_claims:
+  - id: 878f0a25-87ba-436b-9d36-7a71a1f63437
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:00:07.6-00:00:14.9
+    refs:
+      - id: df0bcb26-64b0-4dc5-a57c-9d4c68eea36e
+        name: United States government
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      It's the story of the U.S.
+      00:00:09.1 government's grudging acknowledgement of Unidentified Aerial Phenomena, UAP,
+    text: |-
+      The United States government has given a grudging acknowledgement of Unidentified Aerial Phenomena.
+  - id: f2fc037e-e7c9-4db4-b9bf-b8b0e2565e02
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:00:09.1-00:00:14.9
+    refs:
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 74d37cdc-8405-4539-89fd-4b994ea3142c
+        name: unidentified flying object (UFO)
+    quote: |-
+      Unidentified Aerial Phenomena, UAP,
+      00:00:14.9 more commonly known as ufos
+    text: |-
+      Unidentified Aerial Phenomena are more commonly known as unidentified flying objects.
+  - id: 7bbd2b37-6d81-4cd6-b01c-6758b364d01b
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:00:14.9-00:00:26.0
+    refs:
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+    quote: |-
+      after decades of public denial the pentagon now admits there's something out there
+    text: |-
+      After decades of public denial, the United States Department of Defense now admits that there is something unidentified in the sky.
+  - id: fbbc7cf8-a916-4cc0-8fc7-f3bf3e9b9fac
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:00:14.9-00:00:26.0
+    refs:
+      - id: 6effef7b-2d84-4b20-885e-b64010aefb32
+        name: United States Senate
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+    quote: and the u.s senate wants to know what it is
+    text: |-
+      The United States Senate wants to know what the unidentified phenomena admitted by the Pentagon are.
+  - id: 4e288c38-6083-4a64-a21f-6fce23651002
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:00:14.9-00:00:26.0
+    refs:
+      - id: 955e764b-4159-494e-94aa-71be62e81d1a
+        name: United States Senate Intelligence Committee
+      - id: 58ad45db-9841-4d94-8e77-4cf3922ece96
+        name: Office of the Director of National Intelligence (ODNI)
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+    quote: |-
+      the intelligence committee has ordered the director of national intelligence and the secretary of defense to deliver a report on the mysterious sightings by next month
+    text: |-
+      The United States Senate Intelligence Committee has ordered the Office of the Director of National Intelligence and the United States Department of Defense to deliver a report on mysterious Unidentified Aerial Phenomena sightings by approximately one month after the segment’s opening narration.
+  - id: 54b3f12f-084a-4574-ae7f-0f61e34c956b
+    type: testimony
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:00:44.4-00:01:02.4
+    refs:
+      - id: df0bcb26-64b0-4dc5-a57c-9d4c68eea36e
+        name: United States government
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      The government has already stated for the record that they're real.
+      00:00:58.7 I'm not telling you that.
+      00:00:59.6 The United States government is telling you that.
+    text: |-
+      The United States government has officially stated for the record that Unidentified Aerial Phenomena are real.
+  - id: 7463faa9-ceec-4179-9408-32af95d021e9
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:01:02.4-00:01:11.5
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: 034b9f2e-8b15-49f5-8f05-4e3313e1dd61
+        name: Afghanistan
+      - id: 2687a0fb-3381-4941-a8e5-deb712accd76
+        name: Middle East
+      - id: f0d7ebed-b8db-4d63-ac16-049f9fb08ebd
+        name: Guantanamo Bay detention camp
+    quote: |-
+      Luis Elizondo spent 20 years running military intelligence operations worldwide in Afghanistan, the Middle East, and Guantanamo.
+    text: |-
+      Luis Elizondo spent 20 years running military intelligence operations worldwide in Afghanistan, the Middle East, and Guantanamo.
+  - id: a7950b60-e0f2-4b0f-a8bc-f0f545a9f09c
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:01:11.5-00:01:15.6
+    date: '2008-01-01'
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: 74d37cdc-8405-4539-89fd-4b994ea3142c
+        name: unidentified flying object (UFO)
+    quote: He hadn't given UFOs a second thought until 2008.
+    text: |-
+      Luis Elizondo had not given unidentified flying objects a second thought until 2008.
+  - id: 80573c52-5a57-41c7-91d7-6d32b593e011
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:01:11.5-00:01:15.6
+    date: '2008-01-01'
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: 022da978-3243-4a86-ace9-d60032b14fed
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+    quote: |-
+      That's when he was asked to join something at the Pentagon called the Advanced Aerospace Threat Identification Program, or AATIP.
+    text: |-
+      In 2008, Luis Elizondo was asked to join a Pentagon effort called the Advanced Aerospace Threat Identification Program.
+  - id: 03f9acd8-8098-4614-8fed-0c5188ce9caf
+    type: administrative
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:01:24.1-00:01:34.3
+    refs:
+      - id: 022da978-3243-4a86-ace9-d60032b14fed
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: ba44e2ac-e661-43cc-9b62-47ea4c28379a
+        name: anomalous aerial vehicle (AAV)
+    quote: |-
+      The mission of AATIP was quite simple.
+      00:01:25.8 It was to collect and analyze information involving anomalous aerial vehicles,
+    text: |-
+      The mission of the Advanced Aerospace Threat Identification Program was to collect and analyse information involving Anomalous Aerial Vehicles.
+  - id: 3608a4b9-85af-4b43-88df-c2fd799b0f35
+    type: administrative
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:01:24.1-00:01:34.3
+    refs:
+      - id: 022da978-3243-4a86-ace9-d60032b14fed
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: ba44e2ac-e661-43cc-9b62-47ea4c28379a
+        name: anomalous aerial vehicle (AAV)
+      - id: 74d37cdc-8405-4539-89fd-4b994ea3142c
+        name: unidentified flying object (UFO)
+    quote: what I guess in the vernacular you call them UFOs.
+    text: |-
+      In common language, the Anomalous Aerial Vehicles that AATIP studied are called unidentified flying objects.
+  - id: a6f30778-09e9-4921-977e-83303943363c
+    type: administrative
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:01:24.1-00:01:34.3
+    refs:
+      - id: 022da978-3243-4a86-ace9-d60032b14fed
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: ba44e2ac-e661-43cc-9b62-47ea4c28379a
+        name: anomalous aerial vehicle (AAV)
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: We call them UAPs.
+    text: |-
+      Within the Advanced Aerospace Threat Identification Program, Anomalous Aerial Vehicles were referred to as Unidentified Aerial Phenomena.
+  - id: 4b25f7e8-795a-4dd5-a9ea-e9db93b7b8cd
+    type: opinion
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:01:35.9-00:01:48.4
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Look, Bill, I'm not telling you that it doesn't sound wacky.
+      00:01:44.1 What I'm telling you is real.
+    text: |-
+      Luis Elizondo considers the Unidentified Aerial Phenomena being observed to be real, even though the topic may sound "wacky".
+  - id: c0953d5f-f7e3-41d4-bfe2-c4667416fbf7
+    type: opinion
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:01:44.1-00:01:48.4
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      The question is, what is it?
+      00:01:47.2 What are its intentions?
+      00:01:48.4 What are its capabilities?
+    text: |-
+      Luis Elizondo considers the key questions about the observed Unidentified Aerial Phenomena to be what they are, what their intentions are, and what their capabilities are.
+  - id: 7c2a1b24-46f7-481d-ac1a-8c48c7090002
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:01:50.3-00:02:01.6
+    refs:
+      - id: 022da978-3243-4a86-ace9-d60032b14fed
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+      - id: 8f30668d-b83f-4b8e-9391-96c238e14df2
+        name: United States Senate Majority Leader
+      - id: 2f509334-e521-461c-addf-7b71464a6d52
+        name: Reid, Harry
+      - id: 74d37cdc-8405-4539-89fd-4b994ea3142c
+        name: unidentified flying object (UFO)
+    quote: |-
+      Buried away in the Pentagon, AATIP was part of a $22 million program sponsored by then Senate Majority Leader Harry Reid to investigate UFOs.
+    text: |-
+      Within the Pentagon, the Advanced Aerospace Threat Identification Program was part of a 22 million United States dollar programme sponsored by then United States Senate Majority Leader Harry Reid to investigate unidentified flying objects.
+  - id: 2e352664-2508-4f9c-9b56-5b9ee5559cd5
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:01:50.3-00:02:12.6
+    date: '2010-01-01'
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: 022da978-3243-4a86-ace9-d60032b14fed
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: df0bcb26-64b0-4dc5-a57c-9d4c68eea36e
+        name: United States government
+    quote: |-
+      When Elizondo took over in 2010, he focused on the national security implications of unidentified aerial phenomena documented by U.S.
+      00:02:10.8 service members.
+    text: |-
+      When Luis Elizondo took over the Advanced Aerospace Threat Identification Program in 2010, he focused on the national security implications of Unidentified Aerial Phenomena documented by United States service members.
+  - id: 30c24733-25d1-422a-94a0-fc791ea580cb
+    type: measurement
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:02:12.6-00:02:35.2
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: Imagine a technology that can do 600 to 700 G-forces,
+    text: |-
+      Luis Elizondo describes the observed Unidentified Aerial Phenomena as technology capable of withstanding approximately 600 to 700 times the acceleration due to gravity.
+  - id: 81f1e970-cb22-40ff-9b3c-79f6de258f96
+    type: measurement
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:02:12.6-00:02:35.2
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: that can fly at 13,000 miles an hour,
+    text: |-
+      Luis Elizondo describes the observed Unidentified Aerial Phenomena as technology capable of flying at approximately 21,000 kilometres per hour.
+  - id: e541785e-dcda-40e6-936c-0d3e609d3d89
+    type: testimony
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:02:12.6-00:02:35.2
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: that can evade radar,
+    text: |-
+      Luis Elizondo states that the Unidentified Aerial Phenomena he studied can evade radar.
+  - id: d2b7d008-5257-4e35-a526-004bf4e47e31
+    type: testimony
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:02:12.6-00:02:35.2
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: and that can fly through air and water and possibly space,
+    text: |-
+      Luis Elizondo states that the observed Unidentified Aerial Phenomena can fly through air and water and possibly space.
+  - id: 930a4054-e559-4f7e-99c8-666fd22e3d02
+    type: testimony
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:02:12.6-00:02:35.2
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: and oh, by the way, has no obvious signs of propulsion,
+    text: |-
+      Luis Elizondo states that the observed Unidentified Aerial Phenomena show no obvious signs of propulsion.
+  - id: 8fc77431-eeac-4a56-a913-4d9182fb42f7
+    type: testimony
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:02:12.6-00:02:35.2
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: no wings,
+    text: |-
+      Luis Elizondo states that the observed Unidentified Aerial Phenomena have no wings.
+  - id: 1eb4e450-fc8d-40db-a44c-8d2ae0f3baef
+    type: testimony
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:02:12.6-00:02:35.2
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: no control surfaces,
+    text: |-
+      Luis Elizondo states that the observed Unidentified Aerial Phenomena have no control surfaces.
+  - id: 35071909-2d69-481b-8ba5-0a8987c67006
+    type: testimony
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:02:12.6-00:02:35.2
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      and yet still can defy the natural effects of Earth's gravity.
+      00:02:35.2 That's precisely what we're seeing.
+    text: |-
+      Luis Elizondo states that the observed Unidentified Aerial Phenomena can defy the natural effects of Earth's gravity.
+  - id: 0f1d73a1-39bb-4b1e-9df6-7218a7419a5c
+    type: testimony
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:02:12.6-00:02:35.2
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: 022da978-3243-4a86-ace9-d60032b14fed
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: That's precisely what we're seeing.
+    text: |-
+      Luis Elizondo asserts that the extreme performance characteristics he listed are precisely what AATIP investigators are observing in Unidentified Aerial Phenomena.
+  - id: 6c878486-c115-4d64-882e-fe2739021208
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:02:37.0-00:02:47.7
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: 022da978-3243-4a86-ace9-d60032b14fed
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+    quote: |-
+      Elizondo tells us AATIP was a loose-knit mix of scientists, electro-optical engineers, avionics, and intelligence experts, often working part-time.
+    text: |-
+      Luis Elizondo describes the Advanced Aerospace Threat Identification Program team as a loose-knit mix of scientists, electro-optical engineers, avionics experts, and intelligence experts.
+  - id: 07538635-f387-4f51-b5c1-8387840dc1f2
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:02:37.0-00:02:47.7
+    refs:
+      - id: 022da978-3243-4a86-ace9-d60032b14fed
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+    quote: often working part-time.
+    text: |-
+      Many members of the Advanced Aerospace Threat Identification Program team worked on the programme part-time.
+  - id: 77e87768-4e1c-4e7d-8b41-a7fd4c4429a3
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:02:37.0-00:02:57.7
+    refs:
+      - id: 022da978-3243-4a86-ace9-d60032b14fed
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: They combed through data and records and analyzed videos like this.
+    text: |-
+      Advanced Aerospace Threat Identification Program personnel combed through data and records and analysed videos of Unidentified Aerial Phenomena.
+  - id: 3502ddff-7505-42f3-aa6a-a94bd90ea6b8
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:02:47.7-00:03:07.3
+    date: '2015-01-01'
+    refs:
+      - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+        name: United States Navy
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      A Navy aircrew struggles to lock onto a fast-moving object off the U.S.
+      00:03:02.1 Atlantic coast in 2015.
+    text: |-
+      A United States Navy aircrew struggled to lock onto a fast-moving object off the United States Atlantic coast in 2015 using a targeting system.
+  - id: f1b3aa7f-475d-41ca-b3a4-bda43ccefe77
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:03:07.3-00:03:20.4
+    refs:
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+      - id: 74d37cdc-8405-4539-89fd-4b994ea3142c
+        name: unidentified flying object (UFO)
+    quote: |-
+      Recently released images may not convince UFO skeptics, but the Pentagon admits it doesn't know what in the world this is, or this, or this.
+    text: |-
+      The Pentagon admits it does not know what the unidentified objects shown in several recently released images are.
+  - id: df039aa1-6fcd-4360-a271-5a8b9e8035d9
+    type: testimony
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:03:20.4-00:03:38.6
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: In some cases, there are simple explanations for what people are witnessing,
+    text: |-
+      Luis Elizondo states that in some cases there are simple explanations for what people are witnessing in the sky.
+  - id: fc7b451c-65d9-467c-a8f3-1a3ebebd8280
+    type: testimony
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:03:20.4-00:03:38.6
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      but there are some that
+      00:03:37.4 that are not.
+    text: |-
+      Luis Elizondo states that some witnessed aerial events do not have simple explanations.
+  - id: d10d1766-4be0-4a4b-b286-8efe74c1395c
+    type: testimony
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:03:30.4-00:03:44.3
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: 022da978-3243-4a86-ace9-d60032b14fed
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      We're not just simply jumping to a conclusion that's saying, oh, that's a UAP out there.
+      00:03:42.7 We're going through our due diligence.
+    text: |-
+      Luis Elizondo states that AATIP investigators conduct due diligence and do not simply jump to the conclusion that an observed phenomenon is Unidentified Aerial Phenomena.
+  - id: c8540bcf-bb7c-46dd-930d-3d1c74d896a8
+    type: opinion
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:03:42.7-00:03:52.6
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+    quote: |-
+      Is it some sort of new type of cruise missile technology that China has developed?
+    text: |-
+      Luis Elizondo considers the possibility that some observed phenomena might be a new type of cruise missile technology developed by China.
+  - id: 9be00fa7-0cea-48d1-aedd-038eac822567
+    type: opinion
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:03:42.7-00:03:52.6
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+    quote: Is it some sort of high-altitude balloon that's conducting reconnaissance?
+    text: |-
+      Luis Elizondo considers the possibility that some observed phenomena might be some sort of high-altitude reconnaissance balloon.
+  - id: 3e3c3ec0-0563-4f1a-bde2-d52fe2029973
+    type: opinion
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:03:42.7-00:04:06.2
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: df0bcb26-64b0-4dc5-a57c-9d4c68eea36e
+        name: United States government
+    quote: |-
+      Ultimately, when you have exhausted all those what-ifs and you're still left with the fact that this is in our airspace and it's real, that's when it becomes compelling and that's when it becomes problematic.
+    text: |-
+      Luis Elizondo states that when conventional explanations are exhausted and an object is still in United States airspace and real, the situation becomes compelling and problematic.
+  - id: 3a73969f-4953-4137-b908-3ade188400ac
+    type: opinion
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:04:06.2-00:04:12.9
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+        name: United States Navy
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Former Navy pilot Lieutenant Ryan Graves calls whatever is out there a security risk.
+    text: |-
+      Former United States Navy pilot Lieutenant Ryan Graves considers whatever is out there in the observed Unidentified Aerial Phenomena to be a security risk.
+  - id: 33239e6b-7c43-4052-8ed8-dadf3553790b
+    type: testimony
+    attestation: second_hand
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:04:06.2-00:04:20.1
+    date: '2014-01-01'
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ff0cc2dc-6f88-40c7-99db-4dedd614d3d5
+        name: F/A-18 Hornet
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 1caa4f3f-0d72-48da-a6cf-aa12d0bfe71b
+        name: USA, Virginia, Virginia Beach
+      - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+        name: United States Navy
+    quote: |-
+      He told us his F-18 squadron began seeing UAPs hovering over restricted airspace southeast of Virginia Beach in 2014
+    text: |-
+      Ryan Graves reports that his F/A-18 Hornet squadron began seeing Unidentified Aerial Phenomena hovering over restricted airspace southeast of Virginia Beach in 2014.
+  - id: 4edeaa01-caf9-4337-89ca-3adff8ee4af5
+    type: testimony
+    attestation: second_hand
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:04:12.9-00:04:20.1
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ff0cc2dc-6f88-40c7-99db-4dedd614d3d5
+        name: F/A-18 Hornet
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: when they updated their jet's radar,
+    text: |-
+      Ryan Graves reports that his squadron began seeing Unidentified Aerial Phenomena after they updated their jets' radar.
+  - id: fec9317a-9349-4b33-b4e3-4ebcd150c94c
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:04:12.9-00:04:20.1
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ff0cc2dc-6f88-40c7-99db-4dedd614d3d5
+        name: F/A-18 Hornet
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      when they updated their jet's radar, making it possible to zero in with infrared targeting cameras.
+    text: |-
+      The radar updates on Ryan Graves' squadron jets made it possible to zero in on Unidentified Aerial Phenomena with infrared targeting cameras.
+  - id: 6dc87fe7-5fa8-4a1b-806e-42a97b0a1fd4
+    type: opinion
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:04:29.7-00:04:37.1
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Bill Whitaker: So you're seeing it both with the radar and with the infrared, and that tells you that there is something out there.
+      00:04:37.1 Ryan Graves: Pretty hard to spoof that.
+    text: |-
+      Ryan Graves considers the combination of radar and infrared detection of Unidentified Aerial Phenomena to be hard to spoof.
+  - id: 476cb5d9-eb04-47f4-98f0-cf44b025213b
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:04:38.6-00:04:48.2
+    date: '2019-01-01'
+    refs:
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 1caa4f3f-0d72-48da-a6cf-aa12d0bfe71b
+        name: USA, Virginia, Virginia Beach
+    quote: These photographs were taken in 2019 in the same area.
+    text: |-
+      Photographs taken in 2019 in the same area southeast of Virginia Beach show unidentified objects.
+  - id: 27757dad-fd34-4225-b146-f61bd5041812
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:04:38.6-00:04:48.2
+    date: '2019-01-01'
+    refs:
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: The Pentagon confirms these are images of objects it can't identify.
+    text: |-
+      The Pentagon confirms that the 2019 photographs from the area southeast of Virginia Beach are images of objects it cannot identify.
+  - id: 86f24d8b-0089-4fd1-8e39-f4d0d7158dd0
+    type: testimony
+    attestation: second_hand
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:04:38.6-00:04:55.3
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Lieutenant Graves told us pilots training off the Atlantic coast see things like that all the time.
+    text: |-
+      Ryan Graves reports that pilots training off the Atlantic coast see Unidentified Aerial Phenomena like those in the 2019 photographs all the time.
+  - id: 21127544-4f46-4836-bc4a-259d502891c8
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:04:55.3-00:05:01.2
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Ryan Graves: Every day.
+      00:04:56.6 Every day for at least a couple of years.
+    text: |-
+      Ryan Graves states that pilots in his context were seeing Unidentified Aerial Phenomena every day.
+  - id: 6fca3a7f-6743-4cc4-9086-7a46bac7f6b4
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:04:55.3-00:05:01.2
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: Every day for at least a couple of years.
+    text: |-
+      Ryan Graves states that Unidentified Aerial Phenomena were being seen every day for at least a couple of years.
+  - id: 44b31e8b-8247-480d-bf1b-f2edb0db0b21
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:04:58.7-00:05:04.3
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Mm-hmm.
+      00:05:02.5 You know, I don't see an exhaust plume.
+    text: |-
+      Ryan Graves observed no exhaust plume on at least one Unidentified Aerial Phenomenon off the Atlantic coast.
+  - id: f64b11ec-eeb5-4f02-a67e-e56feab53f35
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:05:04.3-00:05:12.8
+    date: '2015-01-01'
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 06568129-a31a-4d5f-894f-3913f3aa9fee
+        name: USA, Florida, Jacksonville
+      - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+        name: United States Navy
+    quote: |-
+      including this one, off the coast of Jacksonville, Florida in 2015, captured on a targeting camera by members of Graves' squadron.
+    text: |-
+      An Unidentified Aerial Phenomenon off the coast of Jacksonville, Florida in 2015 was captured on a targeting camera by members of Ryan Graves' squadron.
+  - id: bc701893-c5a4-4edb-94c4-deeb7348803e
+    type: observation
+    location: 00:05:12.8-00:05:17.1
+    date: '2015-01-01'
+    refs:
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 06568129-a31a-4d5f-894f-3913f3aa9fee
+        name: USA, Florida, Jacksonville
+    quote: |-
+      Look at that thing!
+      00:05:15.1 It's rotating.
+    text: |-
+      In the 2015 Jacksonville Unidentified Aerial Phenomenon video, aircrew can be heard remarking that the object is rotating.
+  - id: 7da5a7b3-88a3-4755-9a83-d9760346e44b
+    type: observation
+    location: 00:05:12.8-00:05:21.6
+    date: '2015-01-01'
+    refs:
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 06568129-a31a-4d5f-894f-3913f3aa9fee
+        name: USA, Florida, Jacksonville
+    quote: |-
+      My gosh!
+      00:05:17.9 They're all going against the wind.
+    text: |-
+      In the 2015 Jacksonville Unidentified Aerial Phenomenon video, aircrew can be heard stating that the objects are all going against the wind.
+  - id: b1be4331-0ad8-4db8-a46d-3286f58ec795
+    type: measurement
+    location: 00:05:17.9-00:05:23.8
+    date: '2015-01-01'
+    refs:
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 06568129-a31a-4d5f-894f-3913f3aa9fee
+        name: USA, Florida, Jacksonville
+    quote: The wind's 120 knots far west.
+    text: |-
+      In the 2015 Jacksonville Unidentified Aerial Phenomenon video, the aircrew report that the wind is approximately 220 kilometres per hour from the west.
+  - id: 69073178-1251-4e89-9190-49aea92cab57
+    type: opinion
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:05:25.4-00:05:27.9
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Bill Whitaker: You can sort of hear the surprise in their voices.
+      00:05:27.3 Ryan Graves: You certainly can.
+      00:05:27.9 They seem to have broke character a bit, and were just kind of amazed at what they were seeing.
+    text: |-
+      Ryan Graves agrees that the 2015 Jacksonville aircrew seemed surprised and broke character, appearing amazed at what they were seeing.
+  - id: fe94b9de-11ac-41ed-91a6-909278501440
+    type: opinion
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:05:33.2-00:05:42.8
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 06568129-a31a-4d5f-894f-3913f3aa9fee
+        name: USA, Florida, Jacksonville
+    quote: |-
+      This is a difficult one to explain.
+      00:05:37.8 You have rotation,
+    text: |-
+      Ryan Graves considers the 2015 Jacksonville Unidentified Aerial Phenomenon difficult to explain because it involves rotation.
+  - id: 8e86a21e-3dec-43ac-b010-e12e24e322ba
+    type: opinion
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:05:33.2-00:05:42.8
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 06568129-a31a-4d5f-894f-3913f3aa9fee
+        name: USA, Florida, Jacksonville
+    quote: You have rotation, you have high altitudes,
+    text: |-
+      Ryan Graves considers the 2015 Jacksonville Unidentified Aerial Phenomenon difficult to explain because it involves high altitudes.
+  - id: feef3f4a-7d5e-41b1-84f9-ac9e50a704e5
+    type: opinion
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:05:33.2-00:05:42.8
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 06568129-a31a-4d5f-894f-3913f3aa9fee
+        name: USA, Florida, Jacksonville
+    quote: you have propulsion, right?
+    text: |-
+      Ryan Graves considers the 2015 Jacksonville Unidentified Aerial Phenomenon difficult to explain because it appears to involve propulsion.
+  - id: 451da3a7-fb56-40a5-b4df-a55b85d931a9
+    type: opinion
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:05:33.2-00:05:42.8
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 06568129-a31a-4d5f-894f-3913f3aa9fee
+        name: USA, Florida, Jacksonville
+    quote: |-
+      I don't know.
+      00:05:42.8 I don't know what it is, frankly.
+    text: |-
+      Ryan Graves frankly does not know what the 2015 Jacksonville Unidentified Aerial Phenomenon is.
+  - id: 8c5d2244-9569-415e-9c2f-33f184ad5ea8
+    type: testimony
+    attestation: second_hand
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:05:44.9-00:05:56.0
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: df0bcb26-64b0-4dc5-a57c-9d4c68eea36e
+        name: United States government
+    quote: |-
+      He told us pilots speculate they are one of three things, secret U.S.
+      00:05:50.0 technology, an adversary spy vehicle, or something otherworldly.
+    text: |-
+      Ryan Graves reports that pilots speculate Unidentified Aerial Phenomena are either secret United States technology, an adversary spy vehicle, or something otherworldly.
+  - id: bdf8b8d3-5a51-4cbd-bed8-1512f5eedfd9
+    type: opinion
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:05:44.9-00:06:00.5
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Ryan Graves: I'd say, you know, the highest probability is it's a threat observation program.
+    text: |-
+      Ryan Graves considers the highest probability explanation for Unidentified Aerial Phenomena to be that they are part of a threat observation programme.
+  - id: 4c06fed7-8743-40a0-a121-d5b94f3b6443
+    type: opinion
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:06:00.5-00:06:04.1
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Bill Whitaker: Could it be Russian or Chinese technology?
+      00:06:04.1 Ryan Graves: I don't see why not.
+    text: |-
+      Ryan Graves considers Russian or Chinese technology a possible explanation for the observed Unidentified Aerial Phenomena.
+  - id: aa0e6047-1858-4581-b21e-a56cbf4403ed
+    type: opinion
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:06:05.4-00:06:08.8
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Bill Whitaker: Are you alarmed?
+      00:06:07.0 Ryan Graves: I am worried, frankly.
+    text: |-
+      Ryan Graves states that he is worried about the observed Unidentified Aerial Phenomena.
+  - id: a21f9020-ba34-4fcb-af07-486363ff2d5e
+    type: opinion
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:06:07.0-00:06:13.6
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: df0bcb26-64b0-4dc5-a57c-9d4c68eea36e
+        name: United States government
+    quote: |-
+      You know, if these were tactical jets from another country that were hanging out up there, it would be a massive issue.
+    text: |-
+      Ryan Graves states that if tactical jets from another country were hanging out in United States airspace in the same way, it would be considered a massive issue.
+  - id: 50be752d-77f7-4bb0-904f-b1f7aff11b58
+    type: opinion
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:06:07.0-00:06:18.5
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      But because it looks slightly different, we're not willing to actually look at the problem in the face.
+    text: |-
+      Ryan Graves believes that because Unidentified Aerial Phenomena look slightly different from conventional aircraft, people are unwilling to address the problem directly.
+  - id: e681a880-47ce-4a28-b881-a668baca15da
+    type: opinion
+    speaker:
+      id: 12291f75-adcd-49a4-9103-7337ca63182b
+      name: Graves, Ryan
+    location: 00:06:07.0-00:06:18.5
+    refs:
+      - id: 12291f75-adcd-49a4-9103-7337ca63182b
+        name: Graves, Ryan
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      We're happy to just ignore the fact that these are out there watching us every day.
+    text: |-
+      Ryan Graves believes that people are happy to ignore the fact that Unidentified Aerial Phenomena are out there watching pilots every day.
+  - id: 465b7ce2-df8e-43f0-90cc-9d7377d5c9f6
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:06:23.4-00:06:30.3
+    date: '1969-01-01'
+    refs:
+      - id: df0bcb26-64b0-4dc5-a57c-9d4c68eea36e
+        name: United States government
+      - id: cc15ec57-8a67-4920-a113-2f5798a7e299
+        name: Project Blue Book
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      The government has ignored it, at least publicly, since closing its Project Blue Book investigation in 1969.
+    text: |-
+      The United States government has publicly ignored Unidentified Aerial Phenomena at least since closing Project Blue Book in 1969.
+  - id: 6d64fc4d-6ada-42b8-8424-75a1415e7e85
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:06:23.4-00:06:40.8
+    date: '2004-01-01'
+    refs:
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+        name: United States Navy
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      But that began to change after an incident off Southern California in 2004, which was documented by radar, by camera, and four naval aviators.
+    text: |-
+      The shift in government attitude toward Unidentified Aerial Phenomena began after an incident off Southern California in 2004 documented by radar, by camera, and by four naval aviators.
+  - id: 717d487e-e890-4c5c-8dce-fe632ad8db9c
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:06:30.3-00:06:40.8
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+        name: United States Navy
+    quote: |-
+      We spoke to two of them, David Fravor, a graduate of the Top Gun Naval Flight School
+    text: David Fravor is a graduate of the Top Gun Naval Flight School.
+  - id: 44c98eaa-e3d3-4dd5-88f0-74fa3adfd5f4
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:06:30.3-00:06:40.8
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: ff0cc2dc-6f88-40c7-99db-4dedd614d3d5
+        name: F/A-18 Hornet
+      - id: 80ecd854-edfc-46e8-b0f1-996ff3522f32
+        name: USS Nimitz (CVN-68)
+    quote: and commander of the F-18 squadron on the USS Nimitz,
+    text: David Fravor was commander of the F/A-18 Hornet squadron on the USS Nimitz.
+  - id: ee9f91e3-d304-4983-9d6a-cd42e6baf95c
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:06:30.3-00:06:40.8
+    refs:
+      - id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+        name: Dietrich, Alex
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      and flying at his wing, Lieutenant Alex Dietrich, who has never spoken publicly about the encounter.
+    text: |-
+      Lieutenant Alex Dietrich flew on David Fravor’s wing during the 2004 incident and had never spoken publicly about the encounter before this segment.
+  - id: e59ffbdf-10bd-4565-a3ea-6049af5be5d2
+    type: opinion
+    speaker:
+      id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+      name: Dietrich, Alex
+    location: 00:06:57.3-00:07:14.4
+    refs:
+      - id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+        name: Dietrich, Alex
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+      - id: df0bcb26-64b0-4dc5-a57c-9d4c68eea36e
+        name: United States government
+    quote: |-
+      Because I was in a government aircraft, because I was on the clock, and so I feel a responsibility to share what I can, and it is unclassified.
+    text: |-
+      Alex Dietrich states that she felt a responsibility to share what she could about the 2004 encounter because she was in a government aircraft and on duty and the information is unclassified.
+  - id: 58936d56-ec28-401c-9a2c-88550acce6e2
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:07:14.4-00:07:23.1
+    date: '2004-11-01'
+    refs:
+      - id: 387f4114-c77d-43d6-a70a-829cfe08e101
+        name: USS Nimitz Carrier Strike Group training exercise 2004-11
+      - id: 80ecd854-edfc-46e8-b0f1-996ff3522f32
+        name: USS Nimitz (CVN-68)
+      - id: db5a1c08-21ca-42fe-abf7-15ed5b5d4535
+        name: USA, California, San Diego
+    quote: |-
+      It was November 2004, and the USS Nimitz Carrier Strike Group was training about 100 miles southwest of San Diego.
+    text: |-
+      In November 2004, the USS Nimitz Carrier Strike Group was training about 160 kilometres southwest of San Diego.
+  - id: dfb6bf12-1e84-4a5a-8f4f-bf33b5f85ece
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:07:14.4-00:07:39.3
+    date: '2004-11-01'
+    refs:
+      - id: 387f4114-c77d-43d6-a70a-829cfe08e101
+        name: USS Nimitz Carrier Strike Group training exercise 2004-11
+      - id: 7df4a547-ab0d-4cf5-982d-71053e887eb5
+        name: USS Princeton (CG-59)
+      - id: ba44e2ac-e661-43cc-9b62-47ea4c28379a
+        name: anomalous aerial vehicle (AAV)
+    quote: |-
+      For a week, the advanced new radar on a nearby ship, the USS Princeton, had detected what operators called multiple anomalous aerial vehicles over the horizon,
+    text: |-
+      For about a week in November 2004, the advanced new radar on the USS Princeton detected multiple Anomalous Aerial Vehicles over the horizon off Southern California.
+  - id: dc4a3284-ad62-4613-801a-cbb6712ec04c
+    type: measurement
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:07:14.4-00:07:39.3
+    date: '2004-11-01'
+    refs:
+      - id: 7df4a547-ab0d-4cf5-982d-71053e887eb5
+        name: USS Princeton (CG-59)
+      - id: ba44e2ac-e661-43cc-9b62-47ea4c28379a
+        name: anomalous aerial vehicle (AAV)
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: descending 80,000 feet in less than a second.
+    text: |-
+      Radar operators on the USS Princeton reported that the Anomalous Aerial Vehicles were descending approximately 24,000 metres in less than a second.
+  - id: b0d0124c-61e0-4f77-b52b-9a71b2e78659
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:07:23.1-00:07:47.8
+    date: '2004-11-14'
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+        name: Dietrich, Alex
+      - id: ff0cc2dc-6f88-40c7-99db-4dedd614d3d5
+        name: F/A-18 Hornet
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      On November 14, Fravor and Dietrich, each with a weapons system officer in the backseat, were diverted to investigate.
+    text: |-
+      On 2004-11-14, David Fravor and Alex Dietrich, each with a weapons system officer in the back seat, were diverted from training to investigate the radar contacts.
+  - id: c77154f4-b71f-4b93-aa82-1b1959908799
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:07:23.1-00:07:47.8
+    date: '2004-11-14'
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+        name: Dietrich, Alex
+      - id: 8ea08b59-fbfa-4bc3-8b5e-5b33a4eb4617
+        name: Boeing 737
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      They found an area of roiling white water the size of a 737 in an otherwise calm blue sea.
+    text: |-
+      During the 2004 Nimitz encounter, David Fravor and Alex Dietrich found an area of roiling white water the size of a Boeing 737 in an otherwise calm blue sea.
+  - id: 94225d7e-c0e8-46a0-9a12-424a26da14ca
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 73568e57-caaf-44cf-aef7-960668d3ffea
+      name: Fravor, David
+    location: 00:07:55.9-00:08:09.7
+    date: '2004-11-14'
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+        name: Dietrich, Alex
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      And about that got out, I said, dude, do you see that thing down there?
+      00:08:06.3 And we saw this little white tic-tac-looking object.
+      00:08:09.7 And it's just kind of moving above the whitewater area.
+    text: |-
+      David Fravor states that during the 2004 Nimitz encounter he and Alex Dietrich saw a small white object resembling a tic-tac above the white-water area.
+  - id: 2df51e2f-0db9-4117-9ab8-a36bd359ecda
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 73568e57-caaf-44cf-aef7-960668d3ffea
+      name: Fravor, David
+    location: 00:08:12.3-00:08:24.5
+    date: '2004-11-14'
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      The tic-tac's still pointing north-south.
+      00:08:20.2 It goes and just turns abruptly and starts mirroring me.
+      00:08:24.5 So as I'm coming down, it starts coming up.
+    text: |-
+      David Fravor reports that as he spiralled down for a closer look at the 2004 Nimitz object, the object abruptly turned from a north–south orientation and started mirroring his manoeuvres.
+  - id: fd4642d3-a694-455d-9d5d-afcb806a900f
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 73568e57-caaf-44cf-aef7-960668d3ffea
+      name: Fravor, David
+    location: 00:08:24.5-00:08:28.9
+    date: '2004-11-14'
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      Bill Whitaker: So it's mimicking your moves.
+      00:08:28.9 David Fravor: Yeah, it was aware we were there.
+    text: |-
+      David Fravor states that during the 2004 Nimitz encounter the object appeared to mimic his moves.
+  - id: 26aeecbc-170e-47d7-bb9f-24eb594eeb14
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 73568e57-caaf-44cf-aef7-960668d3ffea
+      name: Fravor, David
+    location: 00:08:24.5-00:08:28.9
+    date: '2004-11-14'
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: Yeah, it was aware we were there.
+    text: |-
+      David Fravor believes the 2004 Nimitz object was aware of the presence of his aircraft.
+  - id: 7ca80363-6600-4af4-9b1c-356bea316b08
+    type: measurement
+    attestation: second_hand
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:08:27.0-00:08:37.0
+    date: '2004-11-14'
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: ff0cc2dc-6f88-40c7-99db-4dedd614d3d5
+        name: F/A-18 Hornet
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: He said it was about the size of his F-18,
+    text: |-
+      David Fravor estimates that the 2004 Nimitz object was about the size of his F/A-18 Hornet.
+  - id: 0bc3a382-f08c-41c0-b556-bb1f3297cf31
+    type: observation
+    attestation: second_hand
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:08:27.0-00:08:37.0
+    date: '2004-11-14'
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: with no markings, no wings, no exhaust plumes.
+    text: |-
+      David Fravor reports that the 2004 Nimitz object had no markings, no wings, and no exhaust plumes.
+  - id: e88f1c52-032c-4a72-8462-b679ab3ab68f
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 73568e57-caaf-44cf-aef7-960668d3ffea
+      name: Fravor, David
+    location: 00:08:37.0-00:08:44.8
+    date: '2004-11-14'
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      I want to see how close I can get.
+      00:08:39.0 So I go like this, and it's climbing still.
+      00:08:40.9 And when it gets right in front of me, it just disappears.
+    text: |-
+      David Fravor reports that as he attempted to get closer to the 2004 Nimitz object, when it reached a position right in front of him it suddenly disappeared.
+  - id: 1c9e0daa-28be-44ed-9614-4f014990bb3d
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 73568e57-caaf-44cf-aef7-960668d3ffea
+      name: Fravor, David
+    location: 00:08:44.8-00:08:47.8
+    date: '2004-11-14'
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      Disappears, like gone.
+      00:08:47.8 It had sped off.
+    text: David Fravor states that the 2004 Nimitz object disappeared by speeding off.
+  - id: 0ee2905c-f813-457c-8985-76268ef648f2
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+      name: Dietrich, Alex
+    location: 00:08:49.4-00:08:58.3
+    date: '2004-11-14'
+    refs:
+      - id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+        name: Dietrich, Alex
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      So your mind tries to make sense of it.
+      00:08:53.0 I'm going to categorize this as maybe a helicopter or maybe a drone.
+    text: |-
+      Alex Dietrich recalls that during the 2004 Nimitz encounter her mind initially tried to categorise the object as maybe a helicopter or maybe a drone.
+  - id: 60f910a2-2c87-48cf-b0b6-5ad01ff2afb7
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+      name: Dietrich, Alex
+    location: 00:09:00.9-00:09:03.3
+    date: '2004-11-14'
+    refs:
+      - id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+        name: Dietrich, Alex
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      Bill Whitaker: Did your back seaters see this too?
+      00:09:03.3 Alex Dietrich: Yeah.
+    text: |-
+      Alex Dietrich confirms that her back seat weapons system officer also saw the 2004 Nimitz object.
+  - id: 0747dd72-6db6-4a36-87c6-74043e2a5309
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 73568e57-caaf-44cf-aef7-960668d3ffea
+      name: Fravor, David
+    location: 00:09:03.5-00:09:08.9
+    date: '2004-11-14'
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+        name: Dietrich, Alex
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      Oh, yeah.
+      00:09:04.2 There was four of us in the airplanes literally watching this thing for roughly about five minutes.
+    text: |-
+      David Fravor states that four people in the two aeroplanes watched the 2004 Nimitz object for roughly about five minutes.
+  - id: bd15ef5b-f42d-43c1-b197-9b93b6a880a5
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:09:08.9-00:09:14.4
+    date: '2004-11-14'
+    refs:
+      - id: 7df4a547-ab0d-4cf5-982d-71053e887eb5
+        name: USS Princeton (CG-59)
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: Seconds later, the Princeton reacquired the target, 60 miles away.
+    text: |-
+      Seconds after David Fravor lost visual contact with the 2004 Nimitz object, the USS Princeton reacquired the target 60 miles away.
+  - id: be797096-1230-4308-9ad7-4d08bf9dfe6e
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:09:08.9-00:09:20.8
+    date: '2004-11-14'
+    refs:
+      - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+        name: United States Navy
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      Another crew managed to briefly lock onto it with a targeting camera before it zipped off again.
+    text: |-
+      Another aircrew briefly locked onto the 2004 Nimitz object with a targeting camera before it zipped off again.
+  - id: f3dcd614-9c12-421e-8dc5-abcadc69d6d8
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+      name: Dietrich, Alex
+    location: 00:09:20.8-00:09:31.1
+    refs:
+      - id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+        name: Dietrich, Alex
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      You know, I think that over beers, we've sort of said, hey, man, if I saw this solo, I don't know that I would have come back and said anything because it sounds so crazy when I say it.
+    text: |-
+      Alex Dietrich notes that over informal conversations she and others have said that if they had seen the 2004 Nimitz object solo, they might not have reported it because it sounds so crazy.
+  - id: 5df110d7-eaf3-48d2-a5af-1082b974392b
+    type: hearsay
+    attestation: first_hand
+    speaker:
+      id: 73568e57-caaf-44cf-aef7-960668d3ffea
+      name: Fravor, David
+    location: 00:09:31.1-00:09:37.9
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: I've had some people tell me, you know, when you say that, you can sound crazy.
+    text: |-
+      David Fravor reports that some people have told him he can sound crazy when he describes the 2004 Nimitz encounter.
+  - id: 89f97414-8f07-48ef-9829-02736c103641
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 73568e57-caaf-44cf-aef7-960668d3ffea
+      name: Fravor, David
+    location: 00:09:31.1-00:09:39.8
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: 74d37cdc-8405-4539-89fd-4b994ea3142c
+        name: unidentified flying object (UFO)
+    quote: |-
+      I'll be honest.
+      00:09:37.9 I'm not a UFO guy.
+    text: David Fravor states that he is not a UFO enthusiast.
+  - id: 8f83c9d4-c999-4135-b30c-dfaf8a567ae9
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 73568e57-caaf-44cf-aef7-960668d3ffea
+      name: Fravor, David
+    location: 00:09:39.8-00:09:56.5
+    date: '2004-11-14'
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: ff0cc2dc-6f88-40c7-99db-4dedd614d3d5
+        name: F/A-18 Hornet
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: |-
+      Yes.
+      00:09:45.8 There's definitely something that, I don't know who's building it, who's got the technology, who's got the brains, but there's something out there that was better than our airplane.
+    text: |-
+      David Fravor asserts that there is definitely something out there that was better than their aeroplane during the 2004 Nimitz encounter.
+  - id: ddb7b89e-a678-46d9-ac45-63b7f3014dac
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:09:56.5-00:09:58.7
+    date: '2004-11-14'
+    refs:
+      - id: 73568e57-caaf-44cf-aef7-960668d3ffea
+        name: Fravor, David
+      - id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+        name: Dietrich, Alex
+      - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+        name: United States Navy
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: The air crew filed reports.
+    text: After the 2004 Nimitz encounter, the aircrew filed reports.
+  - id: 77e3c025-5eb7-4ed1-858a-49c4926695a2
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:09:56.5-00:10:13.2
+    refs:
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+    quote: |-
+      Then, like the mysterious flying object, the Nimitz encounter disappeared.
+      00:10:04.2 Nothing was said or done officially for five years until Lou Elizondo came across the story and investigated.
+    text: |-
+      Nothing was said or done officially about the Nimitz encounter for five years after 2004.
+  - id: f9e40b70-bc1a-4eaf-8764-c431a2f1cb15
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:10:04.2-00:10:13.2
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: until Lou Elizondo came across the story and investigated.
+    text: Luis Elizondo later came across the Nimitz encounter story and investigated it.
+  - id: a40fe72e-eec5-4fb5-847a-4832fac18736
+    type: opinion
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:10:13.2-00:10:19.1
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: df0bcb26-64b0-4dc5-a57c-9d4c68eea36e
+        name: United States government
+      - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+        name: United States Navy
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      We spend millions of dollars in training these pilots, and they are seeing something that they can't explain.
+    text: |-
+      Luis Elizondo notes that the United States spends millions of dollars training pilots who are seeing things they cannot explain.
+  - id: 660b083a-27c3-4b3a-b0fb-3a0418cb1bb5
+    type: testimony
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:10:13.2-00:10:25.3
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+        name: United States Navy
+    quote: |-
+      Furthermore, that information's being backed up on electro-optical data, like gun camera footage, and by radar data.
+    text: |-
+      Luis Elizondo states that pilot observations of Unidentified Aerial Phenomena are being backed up by electro-optical data such as gun camera footage and by radar data.
+  - id: 82191218-e5dd-4741-8414-2880b54eb61d
+    type: opinion
+    speaker:
+      id: dd393f52-1869-4daa-9b86-60ca87e53548
+      name: Elizondo, Luis
+    location: 00:10:19.1-00:10:25.3
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: Now, to me, that's compelling.
+    text: |-
+      Luis Elizondo considers the combination of pilot accounts, electro-optical data, and radar data about Unidentified Aerial Phenomena to be compelling.
+  - id: 80686d49-cc5b-41e0-b4e6-b8606b0309dd
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:10:27.7-00:10:31.7
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: Inside the Pentagon, his findings were met with skepticism.
+    text: |-
+      Inside the Pentagon, Luis Elizondo's findings on Unidentified Aerial Phenomena were met with scepticism.
+  - id: 193e784a-8fbf-4895-8e8c-7afe6ca9fd80
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:10:27.7-00:10:39.5
+    date: '2012-01-01'
+    refs:
+      - id: 022da978-3243-4a86-ace9-d60032b14fed
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+    quote: AATIP's funding was eliminated in 2012,
+    text: |-
+      Funding for the Advanced Aerospace Threat Identification Program was eliminated in 2012.
+  - id: 8c62b978-420e-42ca-adb3-258fc32e9758
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:10:27.7-00:10:39.5
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: 022da978-3243-4a86-ace9-d60032b14fed
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+    quote: but Elizondo says he and a handful of others kept the mission alive.
+    text: |-
+      Luis Elizondo states that he and a handful of others kept the Advanced Aerospace Threat Identification Program mission alive after its funding ended.
+  - id: baf2ff8a-5385-4682-94f8-7ba980ce574b
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:10:27.7-00:10:48.8
+    date: '2017-01-01'
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+    quote: until finally, frustrated, he quit the Pentagon in 2017,
+    text: Luis Elizondo quit the Pentagon in 2017 after becoming frustrated.
+  - id: 719163ed-f792-4c25-a464-c67bba42eefc
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:10:39.5-00:10:48.8
+    date: '2017-01-01'
+    refs:
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+        name: United States Navy
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: but not before getting these three videos declassified.
+    text: |-
+      Before leaving the Pentagon in 2017, Luis Elizondo obtained the declassification of three United States Navy videos of Unidentified Aerial Phenomena.
+  - id: be288969-a116-4adb-a958-11cb708a390f
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:10:51.9-00:11:04.3
+    refs:
+      - id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+        name: Mellon, Christopher
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+    quote: |-
+      Christopher Mellon served as Deputy Assistant Secretary of Defense for Intelligence for Presidents Clinton and George W.
+      00:11:04.3 Bush,
+    text: |-
+      Christopher Mellon served as Deputy Assistant Secretary of Defense for Intelligence for Presidents Bill Clinton and George W. Bush.
+  - id: 6739ace1-a324-4269-a346-a77cc7ea9196
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:10:57.5-00:11:08.4
+    refs:
+      - id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+        name: Mellon, Christopher
+      - id: df0bcb26-64b0-4dc5-a57c-9d4c68eea36e
+        name: United States government
+    quote: and had access to top-secret government programs.
+    text: |-
+      Christopher Mellon had access to top-secret United States government programmes during his service.
+  - id: e1ff22bc-f82c-429b-a675-8dba6692b7e6
+    type: opinion
+    speaker:
+      id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+      name: Mellon, Christopher
+    location: 00:11:08.4-00:11:11.7
+    refs:
+      - id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+        name: Mellon, Christopher
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+    quote: |-
+      So it's not us, that's one thing we know.
+      00:11:11.7 I could say that with a very high degree of confidence, in part because of the positions I held in the department, and I know the process.
+    text: |-
+      Christopher Mellon states with a very high degree of confidence that the Unidentified Aerial Phenomena in question are not United States technology.
+  - id: 47ed5027-6f64-410e-b67c-bf45c48de6fa
+    type: opinion
+    speaker:
+      id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+      name: Mellon, Christopher
+    location: 00:11:08.4-00:11:18.7
+    refs:
+      - id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+        name: Mellon, Christopher
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      I could say that with a very high degree of confidence, in part because of the positions I held in the department, and I know the process.
+    text: |-
+      Christopher Mellon attributes his confidence that the Unidentified Aerial Phenomena are not United States technology in part to the positions he held in the Department of Defense and his knowledge of the process.
+  - id: f9e39bfa-9a7f-4237-a6bb-c629fd3a878f
+    type: testimony
+    speaker:
+      id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+      name: Mellon, Christopher
+    location: 00:10:51.9-00:10:57.5
+    refs:
+      - id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+        name: Mellon, Christopher
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      I tried to help my colleague, Lou Elizondo, elevate the issue in the department and actually get it to the Secretary of Defense.
+    text: |-
+      Christopher Mellon reports that he tried to help Luis Elizondo elevate the Unidentified Aerial Phenomena issue within the Department of Defense up to the Secretary of Defense.
+  - id: 57aa4e6f-fd0a-45d7-9f2a-273a3d4a9ba2
+    type: opinion
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:11:18.7-00:11:26.2
+    refs:
+      - id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+        name: Mellon, Christopher
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+    quote: |-
+      Mellon says he grew concerned nothing was being done about UAPs, so he decided to do something.
+    text: |-
+      Christopher Mellon says he grew concerned that nothing was being done about Unidentified Aerial Phenomena.
+  - id: 3ad219e2-44d9-4a1e-a719-ee20df52a403
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:11:18.7-00:11:37.0
+    date: '2017-01-01'
+    refs:
+      - id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+        name: Mellon, Christopher
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+        name: United States Navy
+      - id: 1f15ed4c-9484-4164-9b2b-f233b27ac3b9
+        name: The New York Times
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      In 2017, as a private citizen, he surreptitiously acquired the three Navy videos Elizondo had declassified and leaked them to The New York Times.
+    text: |-
+      In 2017, as a private citizen, Christopher Mellon surreptitiously acquired the three United States Navy videos that Luis Elizondo had declassified and leaked them to The New York Times.
+  - id: 47833981-b321-4b88-a124-b4ebc6b0fa02
+    type: opinion
+    speaker:
+      id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+      name: Mellon, Christopher
+    location: 00:11:37.0-00:11:46.1
+    refs:
+      - id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+        name: Mellon, Christopher
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+        name: United States Navy
+    quote: |-
+      It's bizarre and unfortunate that someone like myself has to do something like that to get a national security issue like this on the agenda.
+    text: |-
+      Christopher Mellon considers it bizarre and unfortunate that someone like him had to leak the Navy Unidentified Aerial Phenomena videos to get a national security issue onto the agenda.
+  - id: 10fcdae9-3d7c-4f0e-8c66-6b66e46b73de
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:11:46.1-00:11:57.6
+    date: '2017-01-01'
+    refs:
+      - id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+        name: Mellon, Christopher
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+    quote: He joined forces with now civilian Lou Elizondo,
+    text: |-
+      Christopher Mellon joined forces with Luis Elizondo after both had left government service.
+  - id: 9d10568c-5751-4107-b109-7d181cc684af
+    type: opinion
+    speaker:
+      id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+      name: Mellon, Christopher
+    location: 00:11:57.6-00:12:07.2
+    refs:
+      - id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+        name: Mellon, Christopher
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: 5efbf2ea-430b-48c3-a91f-a962af0ac88f
+        name: United States Congress
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      We knew and understood that you had to go to the public, get the public interested to get Congress interested, to then circle back to the Defense Department and get them to start taking a look at it.
+    text: |-
+      Christopher Mellon and Luis Elizondo believed they had to engage the public to get the public interested, in order to get the United States Congress interested, and then to prompt the Department of Defense to start examining Unidentified Aerial Phenomena.
+  - id: d1adefd1-e810-4068-b24c-3b3c9c14b08e
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:12:07.2-00:12:15.6
+    date: '2020-08-01'
+    refs:
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+      - id: 022da978-3243-4a86-ace9-d60032b14fed
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: c148189e-d0ba-4da0-86bd-80a0635a5069
+        name: UAP Task Force
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      This past August, the Pentagon resurrected AATIP.
+      00:12:12.6 It's now called the UAP Task Force.
+    text: |-
+      In August of the year before the 2021 broadcast, the Pentagon resurrected the Advanced Aerospace Threat Identification Program concept as the Unidentified Aerial Phenomena Task Force.
+  - id: 01a51be7-95e1-4513-96dd-d28c7dbc7abf
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:12:12.6-00:12:20.1
+    refs:
+      - id: c148189e-d0ba-4da0-86bd-80a0635a5069
+        name: UAP Task Force
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: Service members now are encouraged to report strange encounters.
+    text: |-
+      The new Unidentified Aerial Phenomena Task Force encourages service members to report strange encounters.
+  - id: f9aedc16-7006-4879-9a35-98a50c4f2f99
+    type: testimony
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:12:15.6-00:12:22.6
+    refs:
+      - id: 6effef7b-2d84-4b20-885e-b64010aefb32
+        name: United States Senate
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: And the Senate wants answers.
+    text: The United States Senate wants answers regarding Unidentified Aerial Phenomena.
+  - id: a3e8daf7-b51f-4e96-8f55-26a8ed9e13f4
+    type: opinion
+    speaker:
+      id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+      name: Rubio, Marco
+    location: 00:12:20.1-00:12:26.5
+    refs:
+      - id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+        name: Rubio, Marco
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: Anything that enters an airspace that's not supposed to be there is a threat.
+    text: |-
+      Senator Marco Rubio states that anything entering an airspace that is not supposed to be there is a threat.
+  - id: 1442854b-f9f7-452f-871b-71def21b5fb6
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:12:26.5-00:12:34.0
+    refs:
+      - id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+        name: Rubio, Marco
+      - id: 955e764b-4159-494e-94aa-71be62e81d1a
+        name: United States Senate Intelligence Committee
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      After receiving classified briefings on UAPs, Senator Marco Rubio called for a detailed analysis.
+    text: |-
+      After receiving classified briefings on Unidentified Aerial Phenomena, Senator Marco Rubio called for a detailed analysis.
+  - id: f8261159-06c4-41ed-8dc8-3edbc101689c
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:12:26.5-00:12:46.3
+    date: '2020-12-01'
+    refs:
+      - id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+        name: Rubio, Marco
+      - id: 955e764b-4159-494e-94aa-71be62e81d1a
+        name: United States Senate Intelligence Committee
+      - id: 58ad45db-9841-4d94-8e77-4cf3922ece96
+        name: Office of the Director of National Intelligence (ODNI)
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+      - id: 5efbf2ea-430b-48c3-a91f-a962af0ac88f
+        name: United States Congress
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      This past December, while he was still head of the Intelligence Committee, he asked the Director of National Intelligence and the Pentagon to present Congress an unclassified report by next month.
+    text: |-
+      In December of the year before the 2021 broadcast, while he was still head of the United States Senate Intelligence Committee, Marco Rubio asked the Director of National Intelligence and the Pentagon to present Congress with an unclassified report on Unidentified Aerial Phenomena by mid-2021.
+  - id: 5ecb33ff-0d55-49ee-868d-e20b0e4eeb7c
+    type: opinion
+    speaker:
+      id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+      name: Rubio, Marco
+    location: 00:12:46.3-00:12:47.9
+    refs:
+      - id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+        name: Rubio, Marco
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: This is a bizarre issue.
+    text: Marco Rubio describes the Unidentified Aerial Phenomena issue as bizarre.
+  - id: fcf7c690-2a26-409b-9b5a-4d4f90eb42a1
+    type: opinion
+    speaker:
+      id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+      name: Rubio, Marco
+    location: 00:12:46.3-00:12:54.5
+    refs:
+      - id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+        name: Rubio, Marco
+      - id: de198506-1afb-4bb2-a9eb-983779f1af9d
+        name: United States Department of Defense (DoD)
+      - id: 781c56f6-5a7f-43b2-a420-dd40fd48168a
+        name: United States Air Force
+      - id: f85a53ab-32ab-482e-bf71-4e57882f83d2
+        name: United States Navy
+      - id: 1798ff73-b5eb-4339-ad70-33e8dfaa3333
+        name: United States Marine Corps
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      The Pentagon and other branches of the military have a long history of sort of dismissing this.
+    text: |-
+      Marco Rubio notes that the Pentagon and other branches of the United States military have a long history of dismissing Unidentified Aerial Phenomena.
+  - id: 28f467af-8938-45ca-87cc-d7d7afa58135
+    type: opinion
+    speaker:
+      id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+      name: Rubio, Marco
+    location: 00:12:54.5-00:13:00.8
+    refs:
+      - id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+        name: Rubio, Marco
+      - id: 5efbf2ea-430b-48c3-a91f-a962af0ac88f
+        name: United States Congress
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: You know, there's a stigma on Capitol Hill.
+    text: |-
+      Marco Rubio states that there is a stigma on Capitol Hill surrounding Unidentified Aerial Phenomena.
+  - id: 5397c689-ba03-469c-8096-db2d0ed0f296
+    type: opinion
+    speaker:
+      id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+      name: Rubio, Marco
+    location: 00:12:59.0-00:13:06.9
+    refs:
+      - id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+        name: Rubio, Marco
+      - id: 5efbf2ea-430b-48c3-a91f-a962af0ac88f
+        name: United States Congress
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      I mean, some of my colleagues are very interested in this topic and some kind of, you know, giggle when you bring it up.
+    text: |-
+      Marco Rubio notes that some of his colleagues in Congress are very interested in Unidentified Aerial Phenomena, while others giggle when the topic is brought up.
+  - id: 5772fa1c-5e71-4db6-9f56-91b52d7c0e6e
+    type: opinion
+    speaker:
+      id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+      name: Rubio, Marco
+    location: 00:13:00.8-00:13:12.2
+    refs:
+      - id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+        name: Rubio, Marco
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      But I don't think we can allow the stigma to keep us from having an answer to a very fundamental question.
+    text: |-
+      Marco Rubio believes that stigma should not prevent obtaining an answer to the fundamental question posed by Unidentified Aerial Phenomena.
+  - id: fec64496-5ba0-4c5d-8453-8fa433a2c3d6
+    type: opinion
+    speaker:
+      id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+      name: Rubio, Marco
+    location: 00:13:12.2-00:13:17.3
+    refs:
+      - id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+        name: Rubio, Marco
+      - id: df0bcb26-64b0-4dc5-a57c-9d4c68eea36e
+        name: United States government
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: I want us to take it seriously and have a process to take it seriously.
+    text: |-
+      Marco Rubio wants the United States government to take Unidentified Aerial Phenomena seriously and to have a process to treat the issue seriously.
+  - id: f746c793-5147-4c44-ba68-3af4285589f2
+    type: opinion
+    speaker:
+      id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+      name: Rubio, Marco
+    location: 00:13:14.1-00:13:19.7
+    refs:
+      - id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+        name: Rubio, Marco
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      I want us to have a process to analyze the data.
+      00:13:19.7 every time it comes in,
+    text: |-
+      Marco Rubio wants a process to analyse data on Unidentified Aerial Phenomena every time it comes in.
+  - id: 4d9e2654-cb52-4fd2-b47e-f2da41199895
+    type: opinion
+    speaker:
+      id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+      name: Rubio, Marco
+    location: 00:13:17.3-00:13:25.9
+    refs:
+      - id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+        name: Rubio, Marco
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      that there be a place where this is cataloged and constantly analyzed until we get some answers.
+    text: |-
+      Marco Rubio wants there to be a place where Unidentified Aerial Phenomena data is catalogued and constantly analysed until answers are obtained.
+  - id: 2c88aaab-4b7d-46bc-9e95-a3da82a7b0c4
+    type: opinion
+    speaker:
+      id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+      name: Rubio, Marco
+    location: 00:13:25.9-00:13:28.3
+    refs:
+      - id: 7edd17c2-36b0-4759-b6bb-ee9a736fac2f
+        name: Rubio, Marco
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Maybe it has a very simple answer.
+      00:13:28.3 Maybe it doesn't.
+    text: |-
+      Marco Rubio acknowledges that Unidentified Aerial Phenomena may have a very simple explanation or may not.
+  - id: cc39fb83-4687-4ec6-813c-d42c11621c50
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+      name: Dietrich, Alex
+    location: 00:13:35.4-00:13:37.3
+    date: '2004-11-14'
+    refs:
+      - id: fac0d9bb-2a22-4f98-9d4b-4f17333f7af2
+        name: Dietrich, Alex
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+    quote: I felt the vulnerability of not having anything to defend ourselves.
+    text: |-
+      Alex Dietrich states that during the Nimitz encounter she felt the vulnerability of not having anything to defend herself and the other aviators.
+infrastructure_claims:
+  - id: 5a72c8a1-7eda-46d1-a15f-79dbbf6e29ba
+    type: administrative
+    location: 00:00:01.8-00:00:01.8
+    date: '2021-05-17'
+    refs:
+      - id: 77fb6acb-1de3-44f5-b1ad-2ff80f959116
+        name: 60 Minutes
+      - id: c9a7c6da-460b-4f0e-af46-cc67164c9c29
+        name: Navy pilots describe encounters with UFOs (60 Minutes segment, 2021-05-17)
+    quote: '*Published 2021-05-17T00:00:00.000Z*'
+    text: |-
+      The television segment "Navy pilots describe encounters with UFOs (60 Minutes segment, 2021-05-17)" was published on 2021-05-17.
+  - id: 980bfddf-d21d-487f-a259-f433c61d3c3c
+    type: administrative
+    speaker:
+      id: 655ecde2-6bb2-4d3e-a7b4-52bfcc866721
+      name: Whitaker, Bill
+    location: 00:11:46.1-00:11:57.6
+    refs:
+      - id: 69f11024-ace0-42a3-95e6-deda6fae88a0
+        name: Mellon, Christopher
+      - id: dd393f52-1869-4daa-9b86-60ca87e53548
+        name: Elizondo, Luis
+      - id: 92020b85-fec1-47ed-a1c9-bd33afd44bf1
+        name: History Channel
+      - id: 5efbf2ea-430b-48c3-a91f-a962af0ac88f
+        name: United States Congress
+      - id: ef8d10fa-7a08-40e5-80c8-f86be0a55b42
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      and they started to tell their story to anybody who would listen, to newspapers, the History Channel, to members of Congress.
+    text: |-
+      Christopher Mellon and Luis Elizondo began telling their Unidentified Aerial Phenomena story to newspapers, the History Channel, and members of the United States Congress.
+  - id: 3a9bb53e-b721-40ad-b7b4-91197779b4ee
+    type: administrative
+    location: 00:13:35.4-00:13:44.3
+    refs:
+      - id: e2414ddd-14be-44e8-972a-6115d447d830
+        name: Nimitz UAP encounter 2004-11-14
+      - id: c69e45ba-a95d-43d9-940d-ab3e6549b753
+        name: 60MinutesOvertime.com
+      - id: 77fb6acb-1de3-44f5-b1ad-2ff80f959116
+        name: 60 Minutes
+    quote: |-
+      For more on the Nimitz encounter...
+      00:13:41.7 Go to 60MinutesOvertime.com.
+    text: |-
+      Viewers are directed to 60MinutesOvertime.com for more information on the Nimitz encounter.
+  - id: 2f8923fb-d20d-4192-930f-33ff45e9d61b
+    type: administrative
+    location: 00:13:41.7-00:13:44.3
+    refs:
+      - id: 81a3c69d-2494-437e-bd3a-d4c383c06f3c
+        name: Kologuard
+      - id: 77fb6acb-1de3-44f5-b1ad-2ff80f959116
+        name: 60 Minutes
+    quote: Sponsored by Kologuard.
+    text: |-
+      The segment listing identifies Kologuard as the sponsor of the related 60 Minutes overtime content.

@@ -1,0 +1,20 @@
+Parsing record: 1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44.md
+COST ESTIMATE (rough, +/-40%):
+  16,668 source chars
+  model: x-ai/grok-4.20  ($3/$15 per million input/output tokens)
+  est tokens: ~56,668 in + ~6,250 out
+  est cost: ~$0.26  (range $0.16 - $0.37)
+  This spends real money on the metered Anthropic API.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Navy pilots describe encounters with UFOs
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +30 nodes (total 30) [model: complete]
+  30 nodes, 4 acronyms, main_subject='60 Minutes (CBS) 2021-05-17 Navy pilots describe encounters with UFOs'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +82 claims (chunk total 82, doc total 82) [model: complete]
+  82 claims total: 79 domain, 3 infrastructure
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/navy-pilots/model-runs/navy-pilots.x-ai_grok-4.20.yaml
+Usage: 2 calls, in=14269 out=17666 cache_read=0 cost_equiv=$0.0619
+USAGE_JSON: {"input_tokens": 14269, "output_tokens": 17666, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.06186685, "calls": 2}
+TRACE_JSON: [{"input_tokens": 6444, "output_tokens": 1079, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.0106853}, {"input_tokens": 7825, "output_tokens": 16587, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.05118155}]

@@ -259,7 +259,7 @@ def parse_highlights(body: str) -> list[dict]:
     """Every highlight in the body as ``{id, text}`` (source order of the open).
 
     Ids match starts to ends so overlapping and nested highlights are told apart
-    (record-format spec). Orphan handling per spec: a start with no matching end
+    (ingest-format spec). Orphan handling per spec: a start with no matching end
     auto-closes at end of body; an end with no live open is dropped.
     """
     events = []
@@ -504,6 +504,7 @@ def grade_digest(
     # quoting behaviour required. It was measuring decomposition, not fidelity.
     def _q(c):
         return _norm(c.get("quote") or "")
+
     all_quotes = {_q(c) for c in claims if _q(c)}
     located_quotes = {_q(c) for c in located if _q(c)}
     fidelity = (len(located_quotes) / len(all_quotes)) if all_quotes else None

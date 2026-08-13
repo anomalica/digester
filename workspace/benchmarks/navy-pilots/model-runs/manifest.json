@@ -1,0 +1,13 @@
+{
+  "record": "1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44.md",
+  "rows": [
+    {
+      "model": "qwen/qwen3.5-plus-20260420",
+      "wall_seconds": 151.7,
+      "out": "navy-pilots.qwen_qwen3.5-plus-20260420.yaml",
+      "error": "ms, main_subject='Unidentified Aerial Phenomena (UAP)'\nPass B: claims (constrained to locked nodes, with iteration + chunking)\nUsage: 1 calls, in=7394 out=8196 cache_read=0 cost_equiv=$0.0170\nUSAGE_JSON: {\"input_tokens\": 7394, \"output_tokens\": 8196, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_equiv_usd\": 0.016971, \"calls\": 1}\nTRACE_JSON: [{\"input_tokens\": 7394, \"output_tokens\": 8196, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_usd\": 0.016971}]\n\nparent.error(\n        'http', request, response, code, msg, hdrs)\n  File \"/usr/lib64/python3.13/urllib/request.py\", line 533, in error\n    return self._call_chain(*args)\n           ~~~~~~~~~~~~~~~~^^^^^^^\n  File \"/usr/lib64/python3.13/urllib/request.py\", line 466, in _call_chain\n    result = func(*args)\n  File \"/usr/lib64/python3.13/urllib/request.py\", line 613, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 429: Too Many Requests",
+      "cost_usd": 0.016971
+    }
+  ],
+  "total_cost_usd": 0.017
+}

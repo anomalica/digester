@@ -1,0 +1,274 @@
+schema: anomalica/digest/1
+extracted_at: '2026-07-02T05:56:38.889664+00:00'
+model: anthropic/claude-haiku-4.5
+ai_usage:
+  - stage: digest
+    model: anthropic/claude-haiku-4.5
+    tokens:
+      input: 15022
+      output: 3871
+    notional_cost_usd: 0.0344
+    price_basis: anthropic-list-2026-06
+record:
+  id: 5d9bdec3-6db1-44c3-a285-b80382cc91f5
+  title: Navy pilots describe encounters with UFOs
+  publisher: 60 Minutes
+  date: '2021-05-17'
+  medium: video
+  duration: 825
+  content_hash: sha256:1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44
+  processing_version: 5b1406d
+  reference: https://www.youtube.com/watch?v=ZBtMbBPzqHY
+terminology:
+  main_subject: 2004 USS Nimitz UAP encounter
+  acronyms:
+    - acronym: UAP
+      expansion: Unidentified Aerial Phenomena
+    - acronym: UFO
+      expansion: Unidentified Flying Objects
+    - acronym: AATIP
+      expansion: Advanced Aerospace Threat Identification Program
+    - acronym: AAV
+      expansion: Anomalous Aerial Vehicles
+    - acronym: DoD
+      expansion: Department of Defense
+    - acronym: ODNI
+      expansion: Office of the Director of National Intelligence
+nodes:
+  - id: 6b0a7e7d-235d-4509-b4f9-ff11b96aab3b
+    type: person
+    name: Luis Elizondo
+  - id: 24678a3e-c08b-4041-ad2d-07378b859aa6
+    type: person
+    name: Bill Whitaker
+  - id: dfe26ae2-8f07-4e71-ab64-af25862978f0
+    type: person
+    name: Harry Reid
+  - id: 17518f4e-7efc-40ca-87d2-dd220f4b1bab
+    type: organisation
+    name: United States Navy
+  - id: fb8afff4-a94d-4103-a34f-2c9e2328a01f
+    type: organisation
+    name: United States Department of Defense (DoD)
+  - id: d0095f77-ec13-4a3c-a6ca-c9b6acb94b5a
+    type: organisation
+    name: United States Senate
+  - id: 337f888a-7a91-4bad-b47c-aa1ca07b3edb
+    type: organisation
+    name: US Senate Select Committee on Intelligence
+  - id: 8661c92d-8d0d-4244-97e2-420e3967aa4b
+    type: organisation
+    name: Office of the Director of National Intelligence (ODNI)
+  - id: 829d8ad3-690b-42bb-b39f-d14439233c3c
+    type: project
+    name: Advanced Aerospace Threat Identification Program (AATIP)
+  - id: 8eb9679b-aad1-48b8-8ac4-fced2c53ff8b
+    type: place
+    name: USA, Afghanistan
+  - id: 773cec3a-eb8b-4f65-b304-b2d5fe73d3aa
+    type: place
+    name: USA, Guantanamo Bay, Cuba
+  - id: e6b25233-6dfb-4565-a118-935217762bc0
+    type: place
+    name: Middle East
+  - id: 0c4f0c92-6285-47ec-80c4-d581d81bce26
+    type: place
+    name: Pentagon
+  - id: 7358994e-5e4f-43b1-b2ea-0b811970e3b5
+    type: topic
+    name: Unidentified Aerial Phenomena (UAP)
+  - id: df7d97d6-53d2-4fed-8242-78a54f0b2b3f
+    type: topic
+    name: Unidentified Flying Objects (UFO)
+  - id: 8ff6af02-d121-4c99-9453-3cafbf110d49
+    type: topic
+    name: Anomalous Aerial Vehicles (AAV)
+  - id: 7585401d-070c-4d92-bd0f-a266ebd89074
+    type: document
+    name: Navy pilots describe encounters with UFOs
+    metadata:
+      date_start: '2021-05-17'
+  - id: c54b75d8-06cc-48a4-aaaf-abec3fc3e4f0
+    type: person
+    name: Elizondo, Luis
+  - id: f8c33242-a59f-4634-b01d-4e68ce4866b5
+    type: person
+    name: Whitaker, Bill
+  - id: 6440f1a8-5b98-4806-a6c9-638847eb5d3f
+    type: person
+    name: Reid, Harry
+domain_claims:
+  - id: 53747f02-5b4a-4a0a-878e-32304dd3ce11
+    type: testimony
+    speaker:
+      id: 6b0a7e7d-235d-4509-b4f9-ff11b96aab3b
+      name: Luis Elizondo
+    location: 00:00:56.3-00:00:58.7
+    refs:
+      - id: fb8afff4-a94d-4103-a34f-2c9e2328a01f
+        name: United States Department of Defense (DoD)
+      - id: df7d97d6-53d2-4fed-8242-78a54f0b2b3f
+        name: Unidentified Flying Objects (UFO)
+    quote: The government has already stated for the record that they're real.
+    text: |-
+      The United States government has officially stated for the record that Unidentified Flying Objects (UFO) are real.
+  - id: 05ccef08-3ad9-4bb8-8e38-e2ea29eb0def
+    type: administrative
+    location: 00:01:02.4-00:01:11.5
+    refs:
+      - id: 6b0a7e7d-235d-4509-b4f9-ff11b96aab3b
+        name: Luis Elizondo
+      - id: 8eb9679b-aad1-48b8-8ac4-fced2c53ff8b
+        name: USA, Afghanistan
+      - id: e6b25233-6dfb-4565-a118-935217762bc0
+        name: Middle East
+      - id: 773cec3a-eb8b-4f65-b304-b2d5fe73d3aa
+        name: USA, Guantanamo Bay, Cuba
+    quote: |-
+      Luis Elizondo spent 20 years running military intelligence operations worldwide in Afghanistan, the Middle East, and Guantanamo.
+    text: |-
+      Luis Elizondo spent 20 years running military intelligence operations worldwide in Afghanistan, the Middle East, and Guantanamo Bay, Cuba.
+  - id: d8d77b47-abdb-40c0-aac9-e7617b7827aa
+    type: administrative
+    location: 00:01:11.5-00:01:15.6
+    date: '2008'
+    refs:
+      - id: 6b0a7e7d-235d-4509-b4f9-ff11b96aab3b
+        name: Luis Elizondo
+      - id: 829d8ad3-690b-42bb-b39f-d14439233c3c
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: 0c4f0c92-6285-47ec-80c4-d581d81bce26
+        name: Pentagon
+    quote: |-
+      He hadn't given UFOs a second thought until 2008. That's when he was asked to join something at the Pentagon called the Advanced Aerospace Threat Identification Program, or AATIP.
+    text: |-
+      Luis Elizondo was asked to join the Advanced Aerospace Threat Identification Program (AATIP) at the Pentagon in 2008.
+  - id: 80f1dd06-35e3-4030-8fd4-cfb41c114bcc
+    type: testimony
+    speaker:
+      id: 6b0a7e7d-235d-4509-b4f9-ff11b96aab3b
+      name: Luis Elizondo
+    location: 00:01:24.1-00:01:34.3
+    refs:
+      - id: 829d8ad3-690b-42bb-b39f-d14439233c3c
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: 8ff6af02-d121-4c99-9453-3cafbf110d49
+        name: Anomalous Aerial Vehicles (AAV)
+      - id: df7d97d6-53d2-4fed-8242-78a54f0b2b3f
+        name: Unidentified Flying Objects (UFO)
+    quote: |-
+      The mission of AATIP was quite simple. It was to collect and analyze information involving anomalous aerial vehicles, what I guess in the vernacular you call them UFOs.
+    text: |-
+      The mission of the Advanced Aerospace Threat Identification Program (AATIP) was to collect and analyse information involving Anomalous Aerial Vehicles (AAV), commonly known as Unidentified Flying Objects (UFO).
+  - id: d56af5b6-e7bf-47e2-b9f8-df1029cd5abb
+    type: administrative
+    location: 00:01:50.3-00:02:01.6
+    refs:
+      - id: 829d8ad3-690b-42bb-b39f-d14439233c3c
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: dfe26ae2-8f07-4e71-ab64-af25862978f0
+        name: Harry Reid
+      - id: 0c4f0c92-6285-47ec-80c4-d581d81bce26
+        name: Pentagon
+      - id: df7d97d6-53d2-4fed-8242-78a54f0b2b3f
+        name: Unidentified Flying Objects (UFO)
+    quote: |-
+      Buried away in the Pentagon, AATIP was part of a $22 million program sponsored by then Senate Majority Leader Harry Reid to investigate UFOs.
+    text: |-
+      The Advanced Aerospace Threat Identification Program (AATIP) was part of a programme sponsored by then Senate Majority Leader Harry Reid to investigate Unidentified Flying Objects (UFO), with a budget of 22 million dollars.
+  - id: a100491f-4861-4a0b-b990-ec7c822df550
+    type: administrative
+    location: 00:02:01.6-00:02:10.8
+    date: '2010'
+    refs:
+      - id: 6b0a7e7d-235d-4509-b4f9-ff11b96aab3b
+        name: Luis Elizondo
+      - id: 829d8ad3-690b-42bb-b39f-d14439233c3c
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+    quote: |-
+      When Elizondo took over in 2010, he focused on the national security implications of unidentified aerial phenomena documented by U.S. service members.
+    text: |-
+      Luis Elizondo took over the Advanced Aerospace Threat Identification Program (AATIP) in 2010.
+  - id: f8c11ae0-960c-4eaa-82f9-f4009de9d65c
+    type: administrative
+    location: 00:02:01.6-00:02:10.8
+    refs:
+      - id: 6b0a7e7d-235d-4509-b4f9-ff11b96aab3b
+        name: Luis Elizondo
+      - id: 829d8ad3-690b-42bb-b39f-d14439233c3c
+        name: Advanced Aerospace Threat Identification Program (AATIP)
+      - id: 7358994e-5e4f-43b1-b2ea-0b811970e3b5
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 17518f4e-7efc-40ca-87d2-dd220f4b1bab
+        name: United States Navy
+    quote: |-
+      When Elizondo took over in 2010, he focused on the national security implications of unidentified aerial phenomena documented by U.S. service members.
+    text: |-
+      After taking over the Advanced Aerospace Threat Identification Program (AATIP) in 2010, Luis Elizondo focused on the national security implications of Unidentified Aerial Phenomena (UAP) documented by United States service members.
+  - id: 40bd88ba-a045-4b1e-86b2-9dbfe55622c4
+    type: administrative
+    location: 00:00:14.9-00:00:23.4
+    refs:
+      - id: 337f888a-7a91-4bad-b47c-aa1ca07b3edb
+        name: US Senate Select Committee on Intelligence
+      - id: 8661c92d-8d0d-4244-97e2-420e3967aa4b
+        name: Office of the Director of National Intelligence (ODNI)
+      - id: fb8afff4-a94d-4103-a34f-2c9e2328a01f
+        name: United States Department of Defense (DoD)
+      - id: 7358994e-5e4f-43b1-b2ea-0b811970e3b5
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      the intelligence committee has ordered the director of national intelligence and the secretary of defense to deliver a report on the mysterious sightings by next month
+    text: |-
+      The United States Senate Select Committee on Intelligence has ordered the Office of the Director of National Intelligence (ODNI) and the Secretary of Defense to deliver a report on mysterious Unidentified Aerial Phenomena (UAP) sightings by the following month.
+  - id: d2ac08a5-a82d-4a46-8a57-1bb7a0bba016
+    type: testimony
+    location: 00:00:17.9-00:00:23.4
+    refs:
+      - id: fb8afff4-a94d-4103-a34f-2c9e2328a01f
+        name: United States Department of Defense (DoD)
+      - id: 7358994e-5e4f-43b1-b2ea-0b811970e3b5
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      after decades of public denial the pentagon now admits there's something out there
+    text: |-
+      The United States Department of Defense (DoD) has acknowledged Unidentified Aerial Phenomena (UAP) after decades of public denial.
+  - id: f9bb0901-0707-4203-9e37-8182a39c8656
+    type: testimony
+    location: '00:00:14.9'
+    refs:
+      - id: 0c4f0c92-6285-47ec-80c4-d581d81bce26
+        name: Pentagon
+    quote: |-
+      after decades of public denial the pentagon now admits there's something out there
+    text: |-
+      The Pentagon has admitted there is something real associated with Unidentified Aerial Phenomena (UAP) sightings.
+  - id: 4b2c197d-38ba-4dc6-b599-f1bbd124323a
+    type: opinion
+    speaker:
+      id: 6b0a7e7d-235d-4509-b4f9-ff11b96aab3b
+      name: Luis Elizondo
+    location: 00:01:45.6-00:01:48.4
+    refs:
+      - id: 6b0a7e7d-235d-4509-b4f9-ff11b96aab3b
+        name: Luis Elizondo
+    quote: |-
+      Luis Elizondo: The question is, what is it? What are its intentions? What are its capabilities?
+    text: |-
+      Luis Elizondo considers the question of Unidentified Aerial Phenomena (UAP) to centre on identifying what the phenomena are, their intentions, and their capabilities.
+infrastructure_claims:
+  - id: ca1f4b6e-16ac-4edd-88d4-f58c91d48a08
+    type: administrative
+    location: 00:00:44.4-00:02:10.8
+    refs:
+      - id: 24678a3e-c08b-4041-ad2d-07378b859aa6
+        name: Bill Whitaker
+    quote: 'Bill Whitaker: [interviewer throughout segment]'
+    text: |-
+      Bill Whitaker is a journalist who conducted interviews about Unidentified Aerial Phenomena (UAP) and the Advanced Aerospace Threat Identification Program (AATIP).
+  - id: aefb7d77-4944-4f04-aa5e-e3463bb9851e
+    type: administrative
+    location: '00:00:01.8'
+    quote: We have tackled many strange stories on 60 Minutes, but perhaps none like this.
+    text: |-
+      60 Minutes is a television programme that has reported on Unidentified Flying Objects (UFO) and Unidentified Aerial Phenomena (UAP).

@@ -1,0 +1,1198 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>20 minutes, every claim</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body,h1,h2,h3,p,ul,pre,table{margin:0}
+  :root{
+    --ink:#14171b; --soft:#4a525c; --faint:#7c8590;
+    --paper:#f5f6f4; --panel:#fff; --rule:#dcdfda;
+    --steel:#3d5a80; --danger:#a8362a; --danger-bg:#fbecea;
+    --safe:#2c6a52; --safe-bg:#e8f2ec; --amber:#8a6212; --amber-bg:#fbf1dd;
+    --anon:#a8362a; --named:#3d5a80; --speaker:#5c5470; --doc:#2c6a52;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:ui-sans-serif,system-ui,"Segoe UI",Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --ink:#e6e9ec; --soft:#a2acb6; --faint:#6d7885;
+    --paper:#101317; --panel:#171b21; --rule:#2a3138;
+    --steel:#8ba9d0; --danger:#e08578; --danger-bg:#2a1815;
+    --safe:#79c2a1; --safe-bg:#13241d; --amber:#d6a94e; --amber-bg:#251d0f;
+    --anon:#e08578; --named:#8ba9d0; --speaker:#b3a8cc; --doc:#79c2a1;
+  }}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1500px;margin:0 auto;padding:3rem 1.25rem 5rem;display:flex;flex-direction:column;gap:2.75rem}
+  .eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.5rem}
+  h1{font-size:clamp(1.7rem,3vw,2.4rem);line-height:1.14;letter-spacing:-.02em;font-weight:640;margin-bottom:.7rem;text-wrap:balance}
+  h2{font-size:1.25rem;font-weight:640;letter-spacing:-.01em}
+  p{color:var(--soft);max-width:74ch;margin-bottom:.75rem} p:last-child{margin-bottom:0}
+  p.lede{color:var(--ink);font-size:1.03rem}
+  strong{color:var(--ink);font-weight:620}
+  section{display:flex;flex-direction:column;gap:1rem}
+  .sec-head{border-top:2px solid var(--ink);padding-top:.8rem}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.65rem}
+  .kpi{background:var(--panel);border:1px solid var(--rule);padding:.8rem .9rem;display:flex;flex-direction:column;gap:.15rem}
+  .kpi .n{font-family:var(--mono);font-size:1.45rem;font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600}
+  .kpi .l{font-size:.74rem;color:var(--faint);font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase}
+  .kpi.good .n{color:var(--safe)} .kpi.bad .n{color:var(--danger)}
+
+  .flag{border-left:3px solid var(--danger);background:var(--danger-bg);padding:1rem 1.15rem}
+  .flag h3{color:var(--danger);font-size:.98rem;margin-bottom:.4rem}
+  .flag ul{margin:.5rem 0 0;padding-left:1.15rem;font-size:.86rem;color:var(--soft)}
+  .flag li{margin-bottom:.25rem}
+  .flag code{font-family:var(--mono);font-size:.82em;color:var(--ink)}
+  .ok{border-left:3px solid var(--safe);background:var(--safe-bg);padding:1rem 1.15rem}
+  .ok h3{color:var(--safe);font-size:.98rem;margin-bottom:.4rem}
+  .ok p{color:var(--soft);font-size:.88rem;margin:0}
+
+  .tabs{display:flex;gap:.4rem;border-bottom:1px solid var(--rule);padding-bottom:0}
+  .tab{font-family:var(--mono);font-size:.8rem;padding:.5rem .95rem;border:1px solid var(--rule);border-bottom:none;background:transparent;color:var(--faint);cursor:pointer}
+  .tab[aria-selected="true"]{background:var(--panel);color:var(--ink);font-weight:600}
+  .tab:focus-visible{outline:2px solid var(--steel);outline-offset:-2px}
+
+  .tw{overflow-x:auto;border:1px solid var(--rule);border-top:none;background:var(--panel)}
+  table{border-collapse:collapse;width:100%;font-size:.83rem}
+  th{text-align:left;padding:.55rem .7rem;font-family:var(--mono);font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);font-weight:500;border-bottom:1px solid var(--rule);position:sticky;top:0;background:var(--panel)}
+  td{padding:.6rem .7rem;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--soft)}
+  tr:last-child td{border-bottom:none}
+  td.tc{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--faint);font-size:.76rem}
+  td.txt{color:var(--ink);min-width:30ch}
+  td.org{font-size:.78rem;min-width:20ch}
+  td.org .relay{display:block;color:var(--faint);font-family:var(--mono);font-size:.72rem;margin-top:.15rem}
+  td.refs{font-family:var(--mono);font-size:.71rem;color:var(--faint);white-space:nowrap}
+  tr.k-anonymous td.txt{border-left:2px solid var(--anon);padding-left:.6rem}
+
+  .pill{display:inline-block;font-family:var(--mono);font-size:.66rem;letter-spacing:.05em;padding:.15rem .4rem;border:1px solid currentColor;white-space:nowrap}
+  .o-anonymous{color:var(--anon)} .o-named{color:var(--named)} .o-speaker{color:var(--speaker)}
+  .o-document{color:var(--doc)} .o-unattributed{color:var(--faint)}
+  .t-hearsay{color:var(--anon)} .t-opinion{color:var(--amber)} .t-testimony{color:var(--steel)}
+  .t-observation{color:var(--doc)} .t-administrative{color:var(--faint)} .t-measurement{color:var(--faint)}
+  code{font-family:var(--mono);font-size:.85em;background:rgba(61,90,128,.12);padding:.06em .3em;border-radius:2px;color:var(--ink)}
+  @media (prefers-color-scheme:dark){code{background:rgba(139,169,208,.16)}}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Anomalica &middot; digester &middot; 20-minute evaluation</p>
+  <h1>Twenty minutes of transcript, every claim, both models</h1>
+  <p class="lede">t:5700&ndash;6900 of the Jon Stewart record (19,183 characters), containing the
+    anonymous-DIA-email passage. Full two-pass run, so the nodes pass actually canonicalises &mdash;
+    unlike the single-claim excerpt, which bypassed it. Nothing filtered; every claim both models
+    produced is below.</p>
+</header>
+
+<section>
+  <div class="sec-head"><p class="eyebrow">The numbers</p><h2>What each model found</h2></div>
+  <div class="kpis">
+    <div class="kpi"><span class="n">49</span><span class="l">haiku claims</span></div>
+    <div class="kpi"><span class="n">78</span><span class="l">opus claims</span></div>
+    <div class="kpi bad"><span class="n">63%</span><span class="l">haiku recall vs opus</span></div>
+    <div class="kpi good"><span class="n">49/49</span><span class="l">haiku with chain</span></div>
+    <div class="kpi good"><span class="n">78/78</span><span class="l">opus with chain</span></div>
+    <div class="kpi"><span class="n">$0.46</span><span class="l">haiku cost</span></div>
+    <div class="kpi"><span class="n">$1.12</span><span class="l">opus cost</span></div>
+  </div>
+
+  <div class="ok">
+    <h3>What works</h3>
+    <p>Every claim from both models carries a provenance chain &mdash; the required schema field is
+      doing its job, 100% on both. The Tau Ceti claim comes out of both as
+      <code>hearsay</code> / <code>anonymous</code> / third-hand, with the attribution inside the
+      text, and both now name the film as well as the source. Timecodes are recovered
+      deterministically from the quote (haiku 48/49, opus 76/78).</p>
+  </div>
+
+  <div class="flag">
+    <h3>What doesn't: the same film becomes several entities</h3>
+    <p style="color:var(--soft);font-size:.88rem;margin:0">Within a <strong>single</strong> run, the
+      nodes pass emitted more than one node for the one film. Merging happens on the node, so this
+      is the thing that breaks it &mdash; and it is separate from provenance.</p>
+    <ul>
+      <li><strong>haiku:</strong></li>
+      <li><code>April 22, 1991 Filming of Alleged Extraterrestrial Being</code></li>
+<li><code>Classified Video of Alleged Extraterrestrial Being, April 22, 1991</code></li>
+<li><code>Classified DIA Memorandum Regarding April 22, 1991 Film</code></li>
+      <li><strong>opus:</strong></li>
+      <li><code>Alleged 1991 Alien Interview Film</code></li>
+<li><code>Filming of the alleged alien interview</code></li>
+      <li>the full-record run called it <code>Alien Interview tape</code></li>
+    </ul>
+  </div>
+
+  <div class="flag">
+    <h3>And the anonymous sources fragment too</h3>
+    <p style="color:var(--soft);font-size:.88rem;margin:0">Distinct <code>origin</code> strings the
+      models wrote for anonymous sources. Some are genuinely different people &mdash; correctly split.
+      Others are the same person, written twice.</p>
+    <ul>
+      <li><strong>haiku &mdash; 3 strings:</strong></li>
+      <li><code>a person claiming knowledge of classified programmes</code></li>
+<li><code>a person claiming to be knowledgeable about classified programmes</code></li>
+<li><code>a person claiming to work inside the Defence Intelligence Agency</code></li>
+      <li><strong>opus &mdash; 9 strings:</strong></li>
+      <li><code>a person claiming to be a ufologist</code></li>
+<li><code>a person claiming to be known in ufology</code></li>
+<li><code>a person claiming to work inside the Defense Intelligence Agency</code></li>
+<li><code>a person identified as Jeff Rense's producer</code></li>
+<li><code>an unnamed member of the public who contacted Jon Stewart</code></li>
+<li><code>an unnamed person who emailed Jon Stewart</code></li>
+<li><code>an unnamed person who told Jon Stewart</code></li>
+<li><code>unnamed abductees</code></li>
+<li><code>unnamed military people</code></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><p class="eyebrow">Every claim</p><h2>Nothing filtered</h2></div>
+  <p>Rows with a red edge are anonymous-origin claims &mdash; the ones that would have been published
+    as bare fact before. <code>origin</code> shows who the claim ultimately came from, and the grey
+    line beneath it is the relay path to the speaker.</p>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" id="t-haiku" onclick="show('haiku')">haiku &middot; 49 claims</button>
+    <button class="tab" role="tab" aria-selected="false" id="t-opus" onclick="show('opus')">opus &middot; 78 claims</button>
+  </div>
+
+  <div class="tw" id="p-haiku">
+    <table><thead><tr><th>timecode</th><th>type</th><th>origin</th><th>claim text</th><th>came from</th><th>linked nodes</th></tr></thead>
+    <tbody><tr class="k-named">
+<td class="tc">01:35:01.4-01:35:06.2</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Whitley Strieber experienced a green blip phenomenon whilst writing Communion that he could not cover or obscure with his hand or thumb.</td>
+<td class="org">Whitley Strieber<span class="relay">Jon Stewart</span></td>
+<td class="refs">Strieber, Whitley<br>Communion</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:35:18.8-01:35:22.8</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Whitley Strieber had never told anyone about the green blip phenomenon prior to this interview.</td>
+<td class="org">Whitley Strieber<span class="relay">Jon Stewart</span></td>
+<td class="refs">Strieber, Whitley</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:35:23.7-01:35:30.3</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">In 1996, Rocket Pictures produced a video containing a green blip phenomenon.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Rocket Pictures</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:36:10.8-01:36:20.5</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming knowledge of classified programmes stated that the device in the classified video is not a heart monitor or physiological monitor but rather a communication device used by grey beings.</td>
+<td class="org">a person claiming knowledge of classified programmes<span class="relay">&mdash;</span></td>
+<td class="refs"></td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:36:26.1-01:36:33.3</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Derrick Hennessey, an S-4 security guard, reported that extraterrestrial beings give off a vibratory resonance causing human skin to vibrate.</td>
+<td class="org">Derrick Hennessey<span class="relay">Jon Stewart</span></td>
+<td class="refs">Hennessey, Derrick</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:36:30.6-01:36:41.0</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Workers at Bob Lazar&#x27;s craft facility applied vaseline to their arms and neck to protect against vibratory resonance emanating from the craft.</td>
+<td class="org">Bob Lazar<span class="relay">Jon Stewart</span></td>
+<td class="refs">Lazar, Bob</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:37:10.0-01:37:18.2</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart found evidence that Tektronix manufactured an oscilloscope producing a similar green blip to the one in the classified video.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Tektronix Oscilloscope</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:37:57.0-01:38:11.5</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart considers the explanation that a government psychological operation (PSYOP) created the green blip device as a plausible explanation for how Hollywood producers in 1996 knew about the phenomenon without Whitley Strieber having disclosed it.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Strieber, Whitley</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:39:19.8-01:39:26.0</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart appeared on the Jeff Rense Program to discuss the classified video.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Rense, Jeff</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:39:29.0-01:39:32.3</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jeff Rense stated that he believed the classified video is authentic.</td>
+<td class="org">Jeff Rense<span class="relay">&mdash;</span></td>
+<td class="refs">Rense, Jeff</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:39:49.8-01:40:03.3</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">On 2022-05-27, Jon Stewart&#x27;s read but not deleted emails disappeared from his mobile telephone whilst he and his wife were driving in the Upper Peninsula of Michigan.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>USA, Michigan, Upper Peninsula</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:40:39.3-01:40:45.6</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jeff Rense informed Jon Stewart that podcasts and radio shows are monitored and such email disappearances happen frequently to his guests.</td>
+<td class="org">Jeff Rense<span class="relay">&mdash;</span></td>
+<td class="refs">Rense, Jeff</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:41:03.1-01:41:22.8</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to be knowledgeable about classified programmes contacted Jon Stewart approximately one week after his appearance on the Jeff Rense Program, stating they knew people working in those programmes and could provide investigative assistance.</td>
+<td class="org">a person claiming to be knowledgeable about classified programmes<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:41:33.1-01:41:49.7</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart received approximately monthly email communications from an anonymous source offering corrections and topical comments on his investigations.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:42:29.8-01:42:54.0</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defence Intelligence Agency (DIA), via email forwarded to Jon Stewart through an intermediary approximately nine months after initial contact, stated that the Defence Intelligence Agency runs all operations relating to extraterrestrial matters, Project Aquarius, located at Papoose Lake and Nellis Test and Training Facility.</td>
+<td class="org">a person claiming to work inside the Defence Intelligence Agency<span class="relay">an intermediary &rarr; Jon Stewart</span></td>
+<td class="refs">Defense Intelligence Agency (DIA)<br>Project Aquarius<br>USA, Nevada, Papoose Lake<br>USA, Nevada, Nellis Test and Training Facility</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:42:55.0-01:43:06.8</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defence Intelligence Agency stated that the DIA operates an umbrella programme encompassing the National Security Agency (NSA), Department of Energy (DOE), Office of the Director of National Intelligence (ODNI), the United States Navy and the United States Air Force.</td>
+<td class="org">a person claiming to work inside the Defence Intelligence Agency<span class="relay">an intermediary &rarr; Jon Stewart</span></td>
+<td class="refs">Defense Intelligence Agency (DIA)<br>National Security Agency (NSA)<br>Department of Energy (DOE)<br>Office of the Director of National Intelligence (ODNI)<br>United States Navy<br>United States Air Force</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:43:11.8-01:43:22.2</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defence Intelligence Agency stated that the Defence Intelligence Agency was created by Senator Barry Goldwater and President John F. Kennedy because the Central Intelligence Agency (CIA) was obfuscating and subverting intelligence operations.</td>
+<td class="org">a person claiming to work inside the Defence Intelligence Agency<span class="relay">an intermediary &rarr; Jon Stewart</span></td>
+<td class="refs">Defense Intelligence Agency (DIA)<br>Goldwater, Barry<br>Kennedy, John F.<br>Central Intelligence Agency (CIA)</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:43:33.2-01:43:38.7</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defence Intelligence Agency stated that the United States Air Force had completed its work on Project Blue extraterrestrial operations and sought to transfer the programme to another agency.</td>
+<td class="org">a person claiming to work inside the Defence Intelligence Agency<span class="relay">an intermediary &rarr; Jon Stewart</span></td>
+<td class="refs">United States Air Force<br>Project Blue</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:43:42.1-01:43:43.1</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Chris Ramsay stated that the Defence Intelligence Agency subsequently assumed control of Project Stargate from the United States Air Force.</td>
+<td class="org">Chris Ramsay<span class="relay">&mdash;</span></td>
+<td class="refs">Defense Intelligence Agency (DIA)<br>Project Stargate<br>United States Air Force</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:44:17.6-01:44:21.3</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defence Intelligence Agency stated that the Classified Video of Alleged Extraterrestrial Being, April 22, 1991 was officially classified as an &#x27;unauthorised viewing&#x27; rather than a theft.</td>
+<td class="org">a person claiming to work inside the Defence Intelligence Agency<span class="relay">an intermediary &rarr; Jon Stewart</span></td>
+<td class="refs">Classified Video of Alleged Extraterrestrial Being, April 22, 1991</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:44:42.0-01:44:56.1</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defence Intelligence Agency stated that the Classified Video of Alleged Extraterrestrial Being, April 22, 1991 was filmed on 1991-04-22 at 15:15 on behalf of the Department of Naval Intelligence, coordinated by the Defence Intelligence Agency.</td>
+<td class="org">a person claiming to work inside the Defence Intelligence Agency<span class="relay">an intermediary &rarr; Jon Stewart</span></td>
+<td class="refs">Classified Video of Alleged Extraterrestrial Being, April 22, 1991<br>Department of Naval Intelligence<br>Defense Intelligence Agency (DIA)</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:45:29.3-01:45:35.3</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defence Intelligence Agency stated that the entity filmed in the Classified Video of Alleged Extraterrestrial Being, April 22, 1991 was a clone extraterrestrial biological entity type two originating from the Tau Ceti star system.</td>
+<td class="org">a person claiming to work inside the Defence Intelligence Agency<span class="relay">an intermediary &rarr; Jon Stewart</span></td>
+<td class="refs">Classified Video of Alleged Extraterrestrial Being, April 22, 1991<br>Tau Ceti</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:45:36.6-01:45:47.9</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defence Intelligence Agency stated that the entity filmed in the Classified Video of Alleged Extraterrestrial Being, April 22, 1991 was a haploid (possessing one sex chromosome) rather than a diploid like humans.</td>
+<td class="org">a person claiming to work inside the Defence Intelligence Agency<span class="relay">an intermediary &rarr; Jon Stewart</span></td>
+<td class="refs">Classified Video of Alleged Extraterrestrial Being, April 22, 1991</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:46:14.1-01:46:15.6</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defence Intelligence Agency stated that the entity filmed in the Classified Video of Alleged Extraterrestrial Being, April 22, 1991 became distressed during the encounter.</td>
+<td class="org">a person claiming to work inside the Defence Intelligence Agency<span class="relay">an intermediary &rarr; Jon Stewart</span></td>
+<td class="refs">Classified Video of Alleged Extraterrestrial Being, April 22, 1991</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:46:28.2-01:46:32.7</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defence Intelligence Agency stated that after the entity was stabilised, the Department of Naval Intelligence resumed questioning.</td>
+<td class="org">a person claiming to work inside the Defence Intelligence Agency<span class="relay">an intermediary &rarr; Jon Stewart</span></td>
+<td class="refs">Department of Naval Intelligence<br>Classified Video of Alleged Extraterrestrial Being, April 22, 1991</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:47:44.8-01:47:54.1</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Rear Admiral Ned Schafer served as head of intelligence and liaison for intelligence to the Joint Chiefs of Staff, reporting to Colin Powell in the early 1990s.</td>
+<td class="org">Ned Schafer<span class="relay">Wikipedia &rarr; Jon Stewart</span></td>
+<td class="refs">Schafer, Ned<br>Powell, Colin<br>Joint Chiefs of Staff</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:48:02.5-01:48:04.4</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Rear Admiral Ned Schafer is deceased.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Schafer, Ned</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:48:12.2-01:48:28.8</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Captain Lowell Jacoby worked in naval intelligence and subsequently became a rear admiral and director of the Defence Intelligence Agency.</td>
+<td class="org">Lowell Jacoby<span class="relay">Wikipedia &rarr; Jon Stewart</span></td>
+<td class="refs">Jacoby, Lowell<br>Defense Intelligence Agency (DIA)</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:48:30.1-01:48:34.0</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Chris Jackson is a police officer and investigator friend of Jon Stewart.</td>
+<td class="org">Chris Jackson<span class="relay">Jon Stewart</span></td>
+<td class="refs">Jackson, Chris</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:49:30.7-01:49:36.0</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Lowell Jacoby responded to Jon Stewart&#x27;s email enquiry stating &#x27;Call me Jake&#x27; and &#x27;I don&#x27;t wear the uniform anymore.&#x27;</td>
+<td class="org">Lowell Jacoby<span class="relay">&mdash;</span></td>
+<td class="refs">Jacoby, Lowell</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:50:12.9-01:50:13.7</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart&#x27;s father served in the United States Navy.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>United States Navy</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:50:15.1-01:50:20.6</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart worked with Senator Mark Kirk to prevent the closure of the North Chicago Veterans Administration facility.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Kirk, Mark<br>USA, Illinois, North Chicago</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:50:21.6-01:50:27.3</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">A 132 million dollar Captain James Lovell Apollo 13 Surgical Centre was subsequently constructed at the North Chicago Veterans Administration facility.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Lovell, James<br>USA, Illinois, North Chicago</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:50:27.7-01:50:30.0</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart was a proponent of the construction of the Captain James Lovell Apollo 13 Surgical Centre.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:50:31.8-01:50:36.4</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart campaigned for Congress with military and veterans issues among his highest priorities.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:50:41.9-01:50:46.8</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">After Jon Stewart sent a list of military personnel from the anonymous Defence Intelligence Agency source to Lowell Jacoby, Jacoby ceased communication.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Jacoby, Lowell</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:51:06.6-01:51:07.9</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Dr. Michael Salla works in the field of ExoPolitics.</td>
+<td class="org">Michael Salla<span class="relay">Jon Stewart</span></td>
+<td class="refs">Salla, Michael</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:51:18.3-01:51:30.5</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Dr. Michael Salla emailed Lowell Jacoby as an international negotiator and mediator, speculating that Jacoby may have been involved in an extraterrestrial programme.</td>
+<td class="org">Michael Salla<span class="relay">&mdash;</span></td>
+<td class="refs">Salla, Michael<br>Jacoby, Lowell</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:51:36.6-01:51:41.4</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Lowell Jacoby responded to Dr. Michael Salla&#x27;s enquiry by respectfully declining to discuss the speculation without explicitly denying it.</td>
+<td class="org">Lowell Jacoby<span class="relay">&mdash;</span></td>
+<td class="refs">Jacoby, Lowell<br>Salla, Michael</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:51:58.9-01:52:05.0</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Dr. Craig McPherson is a cardiologist practising in Connecticut.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">McPherson, Craig</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:52:11.9-01:52:16.0</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Dr. Craig McPherson worked as a pulmonologist prior to his career as a cardiologist.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">McPherson, Craig</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:52:19.2-01:52:19.7</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Dr. Craig McPherson has worked with the Veterans Administration.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">McPherson, Craig</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:53:17.2-01:53:28.9</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Linda Moulton Howe interviewed a Dr. Craig McPherson who stated he was a scientist at Area 51 and worked with alien craft but not with extraterrestrial beings.</td>
+<td class="org">Craig McPherson<span class="relay">Linda Moulton Howe</span></td>
+<td class="refs">Howe, Linda Moulton<br>McPherson, Craig<br>USA, Nevada, Area 51<br>Interview with Dr. Craig McPherson conducted by Linda Moulton Howe</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:53:27.3-01:53:35.3</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defence Intelligence Agency listed Dr. Craig McPherson&#x27;s name in a classified memo regarding the Classified Video of Alleged Extraterrestrial Being, April 22, 1991, with question marks indicating uncertainty about his specific role.</td>
+<td class="org">a person claiming to work inside the Defence Intelligence Agency<span class="relay">an intermediary &rarr; Jon Stewart</span></td>
+<td class="refs">Defense Intelligence Agency (DIA)<br>McPherson, Craig<br>Classified DIA Memorandum Regarding April 22, 1991 Film</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:53:58.9-01:53:59.2</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">William Jacoby is named in the Defence Intelligence Agency source&#x27;s list of military personnel associated with the Classified Video of Alleged Extraterrestrial Being, April 22, 1991.</td>
+<td class="org">a person claiming to work inside the Defence Intelligence Agency<span class="relay">an intermediary &rarr; Jon Stewart</span></td>
+<td class="refs">Jacoby, William<br>Classified DIA Memorandum Regarding April 22, 1991 Film</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:54:06.7-01:54:15.0</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Linda Moulton Howe stated that the names provided by the anonymous Defence Intelligence Agency source were previously unknown to her, contrasting with the &#x27;retread names&#x27; that various sources had brought to her over three decades of investigation.</td>
+<td class="org">Linda Moulton Howe<span class="relay">&mdash;</span></td>
+<td class="refs">Howe, Linda Moulton</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:54:51.6-01:54:53.1</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">Robert Donovan worked in Army intelligence according to the anonymous Defence Intelligence Agency source&#x27;s list of military personnel.</td>
+<td class="org">a person claiming to work inside the Defence Intelligence Agency<span class="relay">an intermediary &rarr; Jon Stewart</span></td>
+<td class="refs">Donovan, Robert</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:54:54.1-01:55:02.1</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart employed private investigators and skip-trace software to verify the identities of individuals named in the anonymous Defence Intelligence Agency source&#x27;s communication.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc"></td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defence Intelligence Agency stated that the entity filmed in the Classified Video of Alleged Extraterrestrial Being, April 22, 1991 was officially classified as &#x27;one of the other greys&#x27; rather than being assigned a specific scientific classification.</td>
+<td class="org">a person claiming to work inside the Defence Intelligence Agency<span class="relay">an intermediary &rarr; Jon Stewart</span></td>
+<td class="refs">Classified Video of Alleged Extraterrestrial Being, April 22, 1991</td>
+</tr></tbody></table>
+  </div>
+  <div class="tw" id="p-opus" hidden>
+    <table><thead><tr><th>timecode</th><th>type</th><th>origin</th><th>claim text</th><th>came from</th><th>linked nodes</th></tr></thead>
+    <tbody><tr class="k-named">
+<td class="tc">01:35:01.4-01:35:09.4</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Whitley Strieber tried to cover a green blip with his hand and thumb and could not make it go away.</td>
+<td class="org">Whitley Strieber<span class="relay">Jon Stewart relaying Whitley Strieber&#x27;s account</span></td>
+<td class="refs">Strieber, Whitley<br>Green blip monitor box</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:35:10.7-01:35:15.2</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Whitley Strieber believes the green blip was the way the grey beings were communicating with him while he was writing the book Communion.</td>
+<td class="org">Whitley Strieber<span class="relay">Jon Stewart relaying Whitley Strieber&#x27;s account</span></td>
+<td class="refs">Strieber, Whitley<br>Communion (book by Whitley Strieber)<br>Green blip monitor box<br>Grey aliens<br>Telepathy</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:35:18.8-01:35:22.8</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Whitley Strieber had never told anyone about the green blip before speaking about it in connection with the Alleged 1991 Alien Interview Film.</td>
+<td class="org">Whitley Strieber<span class="relay">Jon Stewart relaying Whitley Strieber&#x27;s account</span></td>
+<td class="refs">Strieber, Whitley<br>Green blip monitor box<br>Alleged 1991 Alien Interview Film</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:35:23.7-01:35:35.2</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Whitley Strieber questions how a Hollywood producer at Rocket Pictures in 1996 would have known to include the green blip in the Alleged 1991 Alien Interview Film, given the blip&#x27;s association with how grey beings communicate.</td>
+<td class="org">Whitley Strieber<span class="relay">Jon Stewart relaying Whitley Strieber&#x27;s account</span></td>
+<td class="refs">Strieber, Whitley<br>Rocket Pictures<br>Green blip monitor box<br>Alleged 1991 Alien Interview Film<br>Grey aliens</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:35:48.0-01:35:51.3</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart was astonished when he heard Whitley Strieber&#x27;s account of the green blip, saying he almost fell off his chair.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Strieber, Whitley<br>Green blip monitor box</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:35:58.1-01:36:02.4</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An unnamed person who emailed Jon Stewart suggested that Bell Labs built the green blip monitor box seen in the Alleged 1991 Alien Interview Film, and that they turned the modulation.</td>
+<td class="org">an unnamed person who emailed Jon Stewart<span class="relay">an email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Bell Labs<br>Green blip monitor box<br>Alleged 1991 Alien Interview Film</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:36:07.0-01:36:16.4</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous emailer described by Jon Stewart as someone known in ufology said the green blip box in the Alleged 1991 Alien Interview Film was not a heart monitor and not a physiological monitor, but a kind of communication device.</td>
+<td class="org">a person claiming to be known in ufology<span class="relay">an email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Green blip monitor box<br>Alleged 1991 Alien Interview Film<br>Ufology</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:36:21.3-01:36:24.7</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">Accounts of grey beings giving off a vibratory response have also come from abductees, according to Jon Stewart.</td>
+<td class="org">unnamed abductees<span class="relay">accounts reaching Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Grey aliens<br>Alien abduction</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:36:25.4-01:36:43.8</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Derrick Hennessey, described as a security guard at the Nevada facility known as S4, said guards would put Vaseline on the hair of their arms and the back of their necks when they were around the Bob Lazar craft in the hangars, because the craft gave off a vibratory resonance that made their skin vibrate.</td>
+<td class="org">Derrick Hennessey<span class="relay">Derrick Hennessey&#x27;s public account &rarr; Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Hennessey, Derrick<br>Lazar, Bob<br>USA, Nevada, S4</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:36:44.9-01:36:55.3</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous emailer known in ufology told Jon Stewart that grey beings give off a vibratory response, and that the green blip box was built specifically to absorb and detect that vibration.</td>
+<td class="org">a person claiming to be known in ufology<span class="relay">an email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Green blip monitor box<br>Grey aliens</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:37:00.5-01:37:06.5</td>
+<td><span class="pill t-administrative">administrative</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart found that Tektronix was made into a different company.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Tektronix</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:37:10.0-01:37:28.3</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart found that Tektronix made a machine producing a similar-looking vivid green blip that did not stay at the bottom of the machine, but the machine did not look anything like the green blip box in the Alleged 1991 Alien Interview Film.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Tektronix<br>Tektronix oscilloscope<br>Green blip monitor box<br>Alleged 1991 Alien Interview Film</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:37:42.8-01:37:54.9</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Chris Ramsay considers that many aspects of the Alleged 1991 Alien Interview Film raise questions, including how it was filmed, where it was shot, how it came to be, and certain items and potential costumes in the video that do not make sense.</td>
+<td class="org">Chris Ramsay<span class="relay">&mdash;</span></td>
+<td class="refs">Ramsay, Chris<br>Alleged 1991 Alien Interview Film</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:37:57.0-01:38:11.5</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart considers it plausible that the government knew from Whitley Strieber&#x27;s 70 years of dealings with the beings how they communicate and devised the green box accordingly, which leads him to see the Whitley Strieber story as a government psychological operation (PSYOP).</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Strieber, Whitley<br>Green blip monitor box<br>Psychological Operation (PSYOP)</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:38:12.0-01:38:19.5</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Chris Ramsay believes that explaining the green box as a communication device almost negates and replaces telepathy as the beings&#x27; means of communication.</td>
+<td class="org">Chris Ramsay<span class="relay">&mdash;</span></td>
+<td class="refs">Ramsay, Chris<br>Green blip monitor box<br>Telepathy</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:38:21.4-01:38:26.8</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">Jon Stewart was told that the grey beings emanate a different vibration when they are under stress.</td>
+<td class="org">an unnamed person who told Jon Stewart<span class="relay">told to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Grey aliens</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:38:28.5-01:38:38.9</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">A random ufologist told Jon Stewart that the vibration given off by the beings was their way of telling a telepath that they were actively sending something, a claim Jon Stewart does not believe.</td>
+<td class="org">a person claiming to be a ufologist<span class="relay">told to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Telepathy<br>Grey aliens<br>Ufology</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:38:50.4-01:38:54.2</td>
+<td><span class="pill t-observation">observation</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">In the Alleged 1991 Alien Interview Film there were a few people in the foreground and two doctors who approached the being.</td>
+<td class="org">Chris Ramsay<span class="relay">&mdash;</span></td>
+<td class="refs">Ramsay, Chris<br>Alleged 1991 Alien Interview Film</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:39:08.3-01:39:18.5</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart holds that when a person goes public as an author, researcher, investigator or journalist, people in the know sometimes approach them and send them material, as happened with the Majestic 12 (MJ-12) documents.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Majestic 12 (MJ-12)<br>MJ-12 documents</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:39:22.2-01:39:26.0</td>
+<td><span class="pill t-administrative">administrative</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">The Jeff Rense Program is one of the oldest internet programmes in America, pre-dating podcasting.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">The Jeff Rense Program<br>Rense, Jeff</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:39:28.0-01:39:34.8</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Jeff Rense wrote back to Jon Stewart saying he knew the Alleged 1991 Alien Interview Film, believed it to be real, and invited Jon Stewart onto his programme.</td>
+<td class="org">Jeff Rense<span class="relay">an email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Rense, Jeff<br>The Jeff Rense Program<br>Alleged 1991 Alien Interview Film<br>Jon Stewart&#x27;s appearance on the Jeff Rense Program</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:39:35.6-01:39:45.0</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">On the Jeff Rense Program, Jon Stewart recounted the whole green blip monitor story and asked for help with his investigation.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>The Jeff Rense Program<br>Jon Stewart&#x27;s appearance on the Jeff Rense Program<br>Green blip monitor box</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:39:49.8-01:40:13.6</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">On Memorial Day 2022 (2022-05-30), Jon Stewart&#x27;s read-but-not-deleted emails disappeared from his phone while it sat in the cup holder as he and his wife drove in the Upper Peninsula of Michigan, his screen flashing blue, black, white and black.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Disappearance of Jon Stewart&#x27;s emails, Memorial Day 2022<br>USA, Michigan, Upper Peninsula</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:40:24.2-01:40:33.9</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart reported the disappearance of his emails during a standard pre-interview with the Jeff Rense Program.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>The Jeff Rense Program<br>Disappearance of Jon Stewart&#x27;s emails, Memorial Day 2022</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:40:34.4-01:40:50.9</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">Jeff Rense&#x27;s producer told Jon Stewart that email disappearances happen all the time to a lot of the programme&#x27;s guests, that they and many podcasts and radio shows are monitored, and that Jon Stewart must have been on somebody&#x27;s radar after two weeks of emailing back and forth.</td>
+<td class="org">a person identified as Jeff Rense&#x27;s producer<span class="relay">a pre-interview call with Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Rense, Jeff<br>The Jeff Rense Program<br>Disappearance of Jon Stewart&#x27;s emails, Memorial Day 2022</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:40:53.3-01:40:55.2</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart does not consider himself a UFO person.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Unidentified Flying Object (UFO)</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:41:03.1-01:41:31.6</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">About ten days after his appearance on the Jeff Rense Program, in June 2022, Jon Stewart received an unsigned email from a person who said he had caught the interview, that Jon Stewart had some things right and some wrong, that he was knowledgeable of the programmes without being in them, knew people in them, and would give the investigation a nudge if he could.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>The Jeff Rense Program<br>Jon Stewart&#x27;s appearance on the Jeff Rense Program</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:41:35.7-01:41:49.7</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">The unsigned correspondent whom Jon Stewart calls the chairman emailed him roughly once a month with light, topical remarks, including corrections after other podcast appearances.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:41:55.2-01:42:15.4</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">About nine months after first contact, on his birthday, a Friday, Jon Stewart received an email from his unsigned correspondent&#x27;s own email address, forwarding an email that had been sent to the correspondent by someone he knew inside the Defense Intelligence Agency (DIA).</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Defense Intelligence Agency (DIA)<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:42:20.1-01:42:28.4</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart&#x27;s unsigned correspondent is an older person in his seventies who is not technically savvy, and Jon Stewart now knows who he is.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:42:39.8-01:42:54.0</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">Jon Stewart holds that the Defense Intelligence Agency (DIA) runs all things alien and extraterrestrial, including Project Aquarius, at Papoose Lake and the Nellis Test and Training Range.</td>
+<td class="org">a person claiming to work inside the Defense Intelligence Agency<span class="relay">an email to Jon Stewart&#x27;s unsigned correspondent &rarr; the correspondent forwarding the email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Defense Intelligence Agency (DIA)<br>Project Aquarius<br>USA, Nevada, Papoose Lake<br>USA, Nevada, Nellis Test and Training Range</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:42:55.0-01:43:12.9</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">Jon Stewart holds that the Defense Intelligence Agency (DIA) runs the umbrella extraterrestrial programme, under which sit the National Security Agency (NSA), the Department of Energy (DOE), the Office of the Director of National Intelligence (DNI), the Navy and the Air Force, with the DIA acting as the air traffic controller of the programme.</td>
+<td class="org">a person claiming to work inside the Defense Intelligence Agency<span class="relay">an email to Jon Stewart&#x27;s unsigned correspondent &rarr; the correspondent forwarding the email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Defense Intelligence Agency (DIA)<br>National Security Agency (NSA)<br>United States Department of Energy (DOE)<br>Office of the Director of National Intelligence (DNI)<br>United States Navy<br>United States Air Force</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:43:13.5-01:43:29.0</td>
+<td><span class="pill t-administrative">administrative</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart found that the Defense Intelligence Agency (DIA) was created by Senator Barry Goldwater and John F. Kennedy because the CIA was obfuscating and subverting them, and they wanted a department to collect their own intelligence.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Defense Intelligence Agency (DIA)<br>Goldwater, Barry<br>Kennedy, John F.<br>Central Intelligence Agency (CIA)</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:43:31.9-01:43:41.8</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart holds that the Air Force was finished with the extraterrestrial subject after Project Blue Book and effectively put it up for auction, with the Defense Intelligence Agency (DIA) taking it over.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>United States Air Force<br>Project Blue Book<br>Defense Intelligence Agency (DIA)</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:43:41.9-01:43:43.1</td>
+<td><span class="pill t-administrative">administrative</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">The Defense Intelligence Agency (DIA) also took on the Stargate Project.</td>
+<td class="org">Chris Ramsay<span class="relay">&mdash;</span></td>
+<td class="refs">Ramsay, Chris<br>Defense Intelligence Agency (DIA)<br>Stargate Project</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:44:01.1-01:44:11.4</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">The email forwarded to Jon Stewart was written between two acquaintances and its Defense Intelligence Agency (DIA) author did not know it would be passed to Jon Stewart.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>DIA-sourced email listing the men in the room<br>Defense Intelligence Agency (DIA)</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:44:12.9-01:44:21.3</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defense Intelligence Agency (DIA), in an email forwarded to Jon Stewart by an intermediary, said the removal of the Alleged 1991 Alien Interview Film was classified as an unauthorised viewing rather than a theft.</td>
+<td class="org">a person claiming to work inside the Defense Intelligence Agency<span class="relay">an email to Jon Stewart&#x27;s unsigned correspondent &rarr; the correspondent forwarding the email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Defense Intelligence Agency (DIA)<br>Alleged 1991 Alien Interview Film<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:44:29.8-01:44:33.9</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart believes the classification of the removal of the Alleged 1991 Alien Interview Film as an unauthorised viewing was intended to water down the language so that those responsible would not get in trouble with higher-ups.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Alleged 1991 Alien Interview Film</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:44:42.0-01:44:56.1</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defense Intelligence Agency (DIA), in an email forwarded to Jon Stewart by an intermediary, said the Alleged 1991 Alien Interview Film was filmed on 1991-04-22 at 15:15 on behalf of the Office of Naval Intelligence and coordinated by the DIA.</td>
+<td class="org">a person claiming to work inside the Defense Intelligence Agency<span class="relay">an email to Jon Stewart&#x27;s unsigned correspondent &rarr; the correspondent forwarding the email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Alleged 1991 Alien Interview Film<br>Filming of the alleged alien interview<br>Office of Naval Intelligence<br>Defense Intelligence Agency (DIA)<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:45:01.3-01:45:13.5</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">Jon Stewart understands from the forwarded Defense Intelligence Agency (DIA) email that there are so many alien species that the being in the Alleged 1991 Alien Interview Film was considered run-of-the-mill and was not given a distinct scientific classification.</td>
+<td class="org">a person claiming to work inside the Defense Intelligence Agency<span class="relay">an email to Jon Stewart&#x27;s unsigned correspondent &rarr; the correspondent forwarding the email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Alleged 1991 Alien Interview Film<br>Defense Intelligence Agency (DIA)</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:45:25.5-01:45:28.5</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart considers the informal &quot;other grey&quot; designation startling and a mark of authenticity, reasoning that a hoaxer would have supplied a more impressive classification.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Alleged 1991 Alien Interview Film<br>Grey aliens</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:45:29.3-01:45:35.3</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defense Intelligence Agency (DIA), in an email forwarded to Jon Stewart by an intermediary, said the being filmed in the Alleged 1991 Alien Interview Film was a cloned extraterrestrial biological entity (EBE) type two from the Tau Ceti star system.</td>
+<td class="org">a person claiming to work inside the Defense Intelligence Agency<span class="relay">an email to Jon Stewart&#x27;s unsigned correspondent &rarr; the correspondent forwarding the email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Alleged 1991 Alien Interview Film<br>Extraterrestrial Biological Entity (EBE)<br>Tau Ceti star system<br>Defense Intelligence Agency (DIA)<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:45:36.6-01:45:50.5</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defense Intelligence Agency (DIA), in an email forwarded to Jon Stewart by an intermediary, said the being filmed in the Alleged 1991 Alien Interview Film was a haploid, having one sexual chromosome, in contrast to human beings who are diploids with two.</td>
+<td class="org">a person claiming to work inside the Defense Intelligence Agency<span class="relay">an email to Jon Stewart&#x27;s unsigned correspondent &rarr; the correspondent forwarding the email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Alleged 1991 Alien Interview Film<br>Extraterrestrial Biological Entity (EBE)<br>Defense Intelligence Agency (DIA)<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:45:52.1-01:46:00.5</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart discusses only the extraterrestrial biological entity (EBE) type two classification publicly because that is what the people advising him have asked him to do.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Extraterrestrial Biological Entity (EBE)</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:46:16.8-01:46:25.7</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart is angered by the ham-handed treatment of the being described in the Alleged 1991 Alien Interview Film, while not believing the beings were purposely mistreated.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Alleged 1991 Alien Interview Film</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:46:46.4-01:47:04.8</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">The forwarded Defense Intelligence Agency (DIA) email listed the names of military men present at the filming of the Alleged 1991 Alien Interview Film, names which Jon Stewart, who is knowledgeable in ufology and familiar with figures such as Bobby Inman, had never heard of.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>DIA-sourced email listing the men in the room<br>MJ-12 documents<br>Inman, Bobby<br>Ufology<br>Alleged 1991 Alien Interview Film</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:47:08.2-01:47:13.4</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart was at a McDonald&#x27;s oasis in Indiana with his hand shaking when he first read the list of names of the men in the room from the forwarded Defense Intelligence Agency (DIA) email.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>USA, Indiana<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:47:30.0-01:47:34.0</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">The first name on the list of men in the room in the forwarded Defense Intelligence Agency (DIA) email was Rear Admiral Ned Schafer.</td>
+<td class="org">a person claiming to work inside the Defense Intelligence Agency<span class="relay">an email to Jon Stewart&#x27;s unsigned correspondent &rarr; the correspondent forwarding the email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Schafer, Ned<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-document">
+<td class="tc">01:47:36.3-01:47:52.7</td>
+<td><span class="pill t-administrative">administrative</span></td>
+<td><span class="pill o-document">doc</span></td>
+<td class="txt">Ned Schafer had a Wikipedia page showing him in his class A dress uniform, and was head of intelligence, the liaison for intelligence for the Joint Chiefs of Staff, reporting to Colin Powell in the early 1990s.</td>
+<td class="org">Ned Schafer&#x27;s Wikipedia page<span class="relay">Jon Stewart reading the Wikipedia page</span></td>
+<td class="refs">Stewart, Jon<br>Schafer, Ned<br>Wikipedia<br>Joint Chiefs of Staff<br>Powell, Colin</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:48:02.5-01:48:04.4</td>
+<td><span class="pill t-administrative">administrative</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Ned Schafer is dead.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Schafer, Ned</td>
+</tr>
+<tr class="k-document">
+<td class="tc">01:48:11.2-01:48:28.8</td>
+<td><span class="pill t-administrative">administrative</span></td>
+<td><span class="pill o-document">doc</span></td>
+<td class="txt">The next name on the list of men in the room was Captain Lowell Jacoby of naval intelligence, whose Wikipedia biography shows he went on to become a rear admiral and director of the Defense Intelligence Agency (DIA).</td>
+<td class="org">Lowell Jacoby&#x27;s Wikipedia page<span class="relay">Jon Stewart reading the Wikipedia page</span></td>
+<td class="refs">Stewart, Jon<br>Jacoby, Lowell<br>Wikipedia<br>Defense Intelligence Agency (DIA)<br>DIA-sourced email listing the men in the room<br>Office of Naval Intelligence</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:48:30.1-01:48:45.0</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Chris Jackson, a police officer and investigator friend of Jon Stewart, initially dismissed the list of men in the room as a Majestic 12 (MJ-12)-style fabrication, comparing it to the majestic list produced by Jaime Shandera and Bill Moore.</td>
+<td class="org">Chris Jackson<span class="relay">conversation with Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Jackson, Chris<br>Majestic 12 (MJ-12)<br>MJ-12 documents<br>Shandera, Jaime<br>Moore, Bill<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:48:45.9-01:48:58.0</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Chris Jackson pointed out to Jon Stewart that Lowell Jacoby could have been a captain in 1991 and retired thirty years later as a rear admiral, which would explain the rank given in the list of men in the room.</td>
+<td class="org">Chris Jackson<span class="relay">conversation with Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Jackson, Chris<br>Jacoby, Lowell<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:49:02.0-01:49:14.8</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart considers it a mark of authenticity that whoever compiled the list of men in the room gave the men&#x27;s ranks as of 1991 rather than their later ranks.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:49:19.5-01:49:35.3</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart found the email address of former Defense Intelligence Agency (DIA) director Lowell Jacoby and emailed him, and Lowell Jacoby replied &quot;Call me Jake. I don&#x27;t wear the uniform anymore.&quot;</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Jacoby, Lowell<br>Defense Intelligence Agency (DIA)</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:49:39.5-01:49:40.5</td>
+<td><span class="pill t-administrative">administrative</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Lowell Jacoby lives in Virginia.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Jacoby, Lowell<br>USA, Virginia<br>Stewart, Jon</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:49:52.9-01:49:59.5</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">After friendly email exchanges, Lowell Jacoby asked Jon Stewart what he wanted to ask him about his documentary.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Jacoby, Lowell</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:50:12.9-01:50:13.7</td>
+<td><span class="pill t-administrative">administrative</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart&#x27;s father was in the Navy.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>United States Navy</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:50:15.1-01:50:30.0</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart worked with Mark Kirk to stop the closure of the North Chicago Department of Veterans Affairs (VA) facility, which led to the construction of the 132-million-dollar Captain James A. Lovell Federal Health Care Center surgical centre.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Kirk, Mark<br>United States Department of Veterans Affairs (VA)<br>USA, Illinois, North Chicago<br>USA, Illinois, Captain James A. Lovell Federal Health Care Center<br>Lovell, James</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:50:31.8-01:50:36.4</td>
+<td><span class="pill t-administrative">administrative</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart ran for Congress and placed the military and veterans at the top of his priorities.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>United States Congress</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:50:41.9-01:50:46.8</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Lowell Jacoby stopped responding to Jon Stewart after Jon Stewart sent him the forwarded email listing the men in the room.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>Jacoby, Lowell<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:50:51.0-01:50:58.1</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">Military people told Jon Stewart that an honourable serving person who does not want to lie to someone will simply stop talking to them.</td>
+<td class="org">unnamed military people<span class="relay">told to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:51:06.6-01:51:30.5</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Michael Salla of Exopolitics offered to contact Lowell Jacoby on Jon Stewart&#x27;s behalf and emailed him, describing himself as an international negotiator and mediator and putting to him the speculation that he may have been part of an extraterrestrial programme.</td>
+<td class="org">Michael Salla<span class="relay">Michael Salla telling Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Salla, Michael<br>Exopolitics<br>Jacoby, Lowell</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:51:32.2-01:51:41.4</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Lowell Jacoby replied to Michael Salla saying he was not going to talk about any of it, without denying involvement in an extraterrestrial programme.</td>
+<td class="org">Lowell Jacoby<span class="relay">Lowell Jacoby&#x27;s email to Michael Salla &rarr; Michael Salla telling Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Jacoby, Lowell<br>Salla, Michael</td>
+</tr>
+<tr class="k-document">
+<td class="tc">01:51:58.9-01:52:18.0</td>
+<td><span class="pill t-administrative">administrative</span></td>
+<td><span class="pill o-document">doc</span></td>
+<td class="txt">Searching Wikipedia, Jon Stewart initially identified a Dr Craig McPherson who is a cardiologist in Connecticut and had previously been a pulmonologist working with the Department of Veterans Affairs (VA), which Jon Stewart connected to the being&#x27;s coughing in the Alleged 1991 Alien Interview Film.</td>
+<td class="org">a Wikipedia page for a Dr Craig McPherson<span class="relay">Jon Stewart reading the Wikipedia page</span></td>
+<td class="refs">Stewart, Jon<br>McPherson, Craig<br>Wikipedia<br>USA, Connecticut<br>United States Department of Veterans Affairs (VA)<br>Alleged 1991 Alien Interview Film</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:52:24.4-01:52:39.0</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart telephoned Dr Craig McPherson&#x27;s office and was questioned by the secretary about how he had obtained the doctor&#x27;s name.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>McPherson, Craig<br>USA, Illinois, Chicago</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:52:57.1-01:53:06.8</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart told the story of the men in the room on the internet without mentioning all of the names.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:53:10.1-01:53:22.3</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous member of the public told Jon Stewart he had identified the wrong Craig McPherson and pointed him to a Linda Moulton Howe interview with a Dr Craig McPherson who admitted being a scientist at Area 51.</td>
+<td class="org">an unnamed member of the public who contacted Jon Stewart<span class="relay">a message to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>McPherson, Craig<br>Moulton Howe, Linda<br>USA, Nevada, Area 51<br>Linda Moulton Howe interview with Dr. Craig McPherson</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:53:26.1-01:53:43.2</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">The Defense Intelligence Agency (DIA) source&#x27;s list of men in the room recorded Craig McPherson&#x27;s entry as &quot;Dr. Craig McPherson, scientist?&quot; with question marks, which Jon Stewart takes as evidence the source was working from a memo or investigation report rather than personal knowledge.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>McPherson, Craig<br>Defense Intelligence Agency (DIA)<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:54:06.7-01:54:27.4</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Linda Moulton Howe told Jon Stewart that the names on the list of men in the room were &quot;gold&quot; because in thirty years everyone had brought her retread names of military men, whereas he had names of men she had never heard of.</td>
+<td class="org">Linda Moulton Howe<span class="relay">a telephone call with Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Moulton Howe, Linda<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:54:28.3-01:54:31.8</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">Linda Moulton Howe confirmed to Jon Stewart that she had interviewed Dr Craig McPherson and that the interview is available on the internet.</td>
+<td class="org">Linda Moulton Howe<span class="relay">a telephone call with Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Moulton Howe, Linda<br>McPherson, Craig<br>Linda Moulton Howe interview with Dr. Craig McPherson</td>
+</tr>
+<tr class="k-named">
+<td class="tc">01:54:33.5-01:54:38.0</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-named">named</span></td>
+<td class="txt">In Linda Moulton Howe&#x27;s interview with Dr Craig McPherson, he said he was a scientist and had worked with alien craft but had not worked with the beings.</td>
+<td class="org">Craig McPherson<span class="relay">Linda Moulton Howe&#x27;s recorded interview &rarr; Jon Stewart watching the interview</span></td>
+<td class="refs">Stewart, Jon<br>McPherson, Craig<br>Moulton Howe, Linda<br>Linda Moulton Howe interview with Dr. Craig McPherson</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:54:38.5-01:54:40.3</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart finds it notable that Dr Craig McPherson was specific in saying he worked with alien craft but not with the beings.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>McPherson, Craig</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:54:41.0-01:54:48.5</td>
+<td><span class="pill t-opinion">opinion</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart considers that all the names on the list of men in the room are checking out, having eventually identified the correct Craig McPherson.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>McPherson, Craig<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc">01:54:49.5-01:54:53.1</td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">Robert Donovan, of Army intelligence, is another name on the list of men in the room from the forwarded Defense Intelligence Agency (DIA) email.</td>
+<td class="org">a person claiming to work inside the Defense Intelligence Agency<span class="relay">an email to Jon Stewart&#x27;s unsigned correspondent &rarr; the correspondent forwarding the email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Donovan, Robert<br>United States Army<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-speaker">
+<td class="tc">01:54:54.1-01:55:02.1</td>
+<td><span class="pill t-testimony">testimony</span></td>
+<td><span class="pill o-speaker">speaker</span></td>
+<td class="txt">Jon Stewart spent 400 dollars on private investigators, name searches and his own skip trace software from the automobile industry while researching the men on the list.</td>
+<td class="org">Jon Stewart<span class="relay">&mdash;</span></td>
+<td class="refs">Stewart, Jon<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc"></td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defense Intelligence Agency (DIA), in an email forwarded to Jon Stewart by an intermediary, classified the being in the Alleged 1991 Alien Interview Film as an &quot;other grey&quot; rather than a typical grey, describing a round-eyed tan being.</td>
+<td class="org">a person claiming to work inside the Defense Intelligence Agency<span class="relay">an email to Jon Stewart&#x27;s unsigned correspondent &rarr; the correspondent forwarding the email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Alleged 1991 Alien Interview Film<br>Grey aliens<br>Defense Intelligence Agency (DIA)<br>DIA-sourced email listing the men in the room</td>
+</tr>
+<tr class="k-anonymous">
+<td class="tc"></td>
+<td><span class="pill t-hearsay">hearsay</span></td>
+<td><span class="pill o-anonymous">anon</span></td>
+<td class="txt">An anonymous source claiming to work inside the Defense Intelligence Agency (DIA), in an email forwarded to Jon Stewart by an intermediary, said the being in the Alleged 1991 Alien Interview Film became distressed and that after it was stabilised the Office of Naval Intelligence continued with its questioning.</td>
+<td class="org">a person claiming to work inside the Defense Intelligence Agency<span class="relay">an email to Jon Stewart&#x27;s unsigned correspondent &rarr; the correspondent forwarding the email to Jon Stewart</span></td>
+<td class="refs">Stewart, Jon<br>Alleged 1991 Alien Interview Film<br>Office of Naval Intelligence<br>Defense Intelligence Agency (DIA)<br>DIA-sourced email listing the men in the room</td>
+</tr></tbody></table>
+  </div>
+</section>
+
+</div>
+<script>
+  function show(m) {
+    for (const k of ['haiku','opus']) {
+      document.getElementById('p-'+k).hidden = (k !== m);
+      document.getElementById('t-'+k).setAttribute('aria-selected', String(k === m));
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+Parsing record: 1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44.md
+COST ESTIMATE (rough, +/-40%):
+  16,668 source chars
+  model: z-ai/glm-5.1  ($3/$15 per million input/output tokens)
+  est tokens: ~56,668 in + ~6,250 out
+  est cost: ~$0.26  (range $0.16 - $0.37)
+  This spends real money on the metered Anthropic API.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Navy pilots describe encounters with UFOs
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +37 nodes (total 37) [model: complete]
+  37 nodes, 7 acronyms, main_subject='Unidentified Aerial Phenomena (UAP)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +102 claims (chunk total 102, doc total 102) [model: complete]
+  102 claims total: 102 domain, 0 infrastructure
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/navy-pilots/model-runs/navy-pilots.z-ai_glm-5.1.yaml
+Usage: 2 calls, in=14536 out=25819 cache_read=0 cost_equiv=$0.1340
+USAGE_JSON: {"input_tokens": 14536, "output_tokens": 25819, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.133954, "calls": 2}
+TRACE_JSON: [{"input_tokens": 6513, "output_tokens": 4477, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.028817}, {"input_tokens": 8023, "output_tokens": 21342, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.105137}]

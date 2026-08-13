@@ -1,0 +1,421 @@
+=== [1] 2026-07-31T01:24:27+09:00 1986-05-20-pdf-pajarito-astronomers-meeting-notice-may-1986.md
+Parsing record: 1986-05-20-pdf-pajarito-astronomers-meeting-notice-may-1986.md
+Extracting (two-pass) from: Pajarito Astronomers Meeting Notice - May 1986
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +7 nodes (total 7) [model: complete]
+  7 nodes, 1 acronyms, main_subject='Pajarito Astronomers'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +7 claims (chunk total 7, doc total 7) [model: complete]
+  7 claims total: 7 domain, 0 infrastructure
+  locations -> char offset: 7/7 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/1986-05-20-pdf-pajarito-astronomers-meeting-notice-may-1986/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/1986-05-20-pdf-pajarito-astronomers-meeting-notice-may-1986.yaml
+Usage: 1 calls, in=6 out=3393 cache_read=0 cost_equiv=$1.1840
+USAGE_JSON: {"input_tokens": 6, "output_tokens": 3393, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 188848, "cost_equiv_usd": 1.184001, "calls": 1}
+TRACE_JSON: [{"input_tokens": 6, "output_tokens": 3393, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 188848, "cost_usd": 1.184001, "duration_s": 31.5}]
+--- [1] rc=0 elapsed=32s
+=== [2] 2026-07-31T01:24:59+09:00 2026-07-11-audio-nasa-uap-d014-mercury-redstone-4-july-21-1961.v2.md
+Parsing record: 2026-07-11-audio-nasa-uap-d014-mercury-redstone-4-july-21-1961.v2.md
+Extracting (two-pass) from: NASA-UAP-D014, Mercury-Redstone 4, July 21, 1961
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +3 nodes (total 3) [model: complete]
+  3 nodes, 2 acronyms, main_subject='Mercury-Redstone 4'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +1 claims (chunk total 1, doc total 1) [model: complete]
+  1 claims total: 1 domain, 0 infrastructure
+  locations -> timecode: 1/1 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2026-07-11-audio-nasa-uap-d014-mercury-redstone-4-july-21-1961/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2026-07-11-audio-nasa-uap-d014-mercury-redstone-4-july-21-1961.yaml
+Usage: 1 calls, in=6 out=896 cache_read=68325 cost_equiv=$0.7126
+USAGE_JSON: {"input_tokens": 6, "output_tokens": 896, "cache_read_input_tokens": 68325, "cache_creation_input_tokens": 113110, "cost_equiv_usd": 0.7126155, "calls": 1}
+TRACE_JSON: [{"input_tokens": 6, "output_tokens": 896, "cache_read_input_tokens": 68325, "cache_creation_input_tokens": 113110, "cost_usd": 0.7126155, "duration_s": 14.5}]
+--- [2] rc=0 elapsed=15s
+=== [3] 2026-07-31T01:25:14+09:00 undated-pdf-uap-sighting-report.md
+Parsing record: undated-pdf-uap-sighting-report.md
+Extracting (two-pass) from: UAP Sighting Report
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +3 nodes (total 3) [model: complete]
+  3 nodes, 5 acronyms, main_subject='Unidentified Aerial Phenomena (UAP)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +2 claims (chunk total 2, doc total 2) [model: complete]
+  2 claims total: 2 domain, 0 infrastructure
+  locations -> char offset: 2/2 aligned (0 unalignable, 1 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/undated-pdf-uap-sighting-report/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/undated-pdf-uap-sighting-report.yaml
+Usage: 1 calls, in=4 out=1911 cache_read=0 cost_equiv=$0.7083
+USAGE_JSON: {"input_tokens": 4, "output_tokens": 1911, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 113273, "cost_equiv_usd": 0.708315, "calls": 1}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1911, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 113273, "cost_usd": 0.708315, "duration_s": 27.3}]
+--- [3] rc=0 elapsed=28s
+=== [4] 2026-07-31T01:25:42+09:00 1970-11-23-pdf-a-83-001-z-1-correspondence-regarding-ufo-sightings-at-los.md
+Parsing record: 1970-11-23-pdf-a-83-001-z-1-correspondence-regarding-ufo-sightings-at-los.md
+Extracting (two-pass) from: A-83-001-Z-1: Correspondence regarding UFO sightings at Los Alamos, 1948-1951
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +17 nodes (total 17) [model: complete]
+  17 nodes, 1 acronyms, main_subject='Tuck, James L.'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +15 claims (chunk total 15, doc total 15) [model: complete]
+  15 claims total: 13 domain, 2 infrastructure
+  locations -> char offset: 15/15 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/1970-11-23-pdf-a-83-001-z-1-correspondence-regarding-ufo-sightings-at-los/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/1970-11-23-pdf-a-83-001-z-1-correspondence-regarding-ufo-sightings-at-los.yaml
+Usage: 1 calls, in=6 out=12101 cache_read=0 cost_equiv=$1.3635
+USAGE_JSON: {"input_tokens": 6, "output_tokens": 12101, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 196987, "cost_equiv_usd": 1.363455, "calls": 1}
+TRACE_JSON: [{"input_tokens": 6, "output_tokens": 12101, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 196987, "cost_usd": 1.363455, "duration_s": 89.9}]
+--- [4] rc=0 elapsed=90s
+=== [5] 2026-07-31T01:27:12+09:00 1985-01-28-pdf-papua-new-guinea-inquiry-re-overflights.md
+Parsing record: 1985-01-28-pdf-papua-new-guinea-inquiry-re-overflights.md
+Extracting (two-pass) from: Papua New Guinea Inquiry Re Overflights
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +18 nodes (total 18) [model: complete]
+  18 nodes, 7 acronyms, main_subject='1985 Papua New Guinea overflight sightings'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +15 claims (chunk total 15, doc total 15) [model: complete]
+  15 claims total: 12 domain, 3 infrastructure
+  locations -> char offset: 15/15 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/1985-01-28-pdf-papua-new-guinea-inquiry-re-overflights/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/1985-01-28-pdf-papua-new-guinea-inquiry-re-overflights.yaml
+Usage: 1 calls, in=4 out=5752 cache_read=0 cost_equiv=$0.7721
+USAGE_JSON: {"input_tokens": 4, "output_tokens": 5752, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 114306, "cost_equiv_usd": 0.7721279999999999, "calls": 1}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 5752, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 114306, "cost_usd": 0.7721279999999999, "duration_s": 43.4}]
+--- [5] rc=0 elapsed=44s
+=== [6] 2026-07-31T01:27:56+09:00 2015-03-05-web-re-leslie-kean-book-comment.md
+Parsing record: 2015-03-05-web-re-leslie-kean-book-comment.md
+Extracting (two-pass) from: Re: Leslie Kean book comment
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +8 nodes (total 8) [model: complete]
+  8 nodes, 1 acronyms, main_subject='Email from Bob Fish to John Podesta re: Leslie Kean book comment (2015-03-05)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +12 claims (chunk total 12, doc total 12) [model: complete]
+  12 claims total: 11 domain, 1 infrastructure
+  locations -> char offset: 12/12 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2015-03-05-web-re-leslie-kean-book-comment/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2015-03-05-web-re-leslie-kean-book-comment.yaml
+Usage: 1 calls, in=6 out=5652 cache_read=0 cost_equiv=$1.2315
+USAGE_JSON: {"input_tokens": 6, "output_tokens": 5652, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 191121, "cost_equiv_usd": 1.231524, "calls": 1}
+TRACE_JSON: [{"input_tokens": 6, "output_tokens": 5652, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 191121, "cost_usd": 1.231524, "duration_s": 43.6}]
+--- [6] rc=0 elapsed=44s
+=== [7] 2026-07-31T01:28:40+09:00 2009-07-22-video-c-span-buzz-aldrin-reveals-existence-of-monolith-on-mars.v2.md
+Parsing record: 2009-07-22-video-c-span-buzz-aldrin-reveals-existence-of-monolith-on-mars.v2.md
+Extracting (two-pass) from: C-SPAN: Buzz Aldrin Reveals Existence of Monolith on Mars Moon
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +5 nodes (total 5) [model: complete]
+  5 nodes, 0 acronyms, main_subject='Monolith on Phobos'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +5 claims (chunk total 5, doc total 5) [model: complete]
+  5 claims total: 5 domain, 0 infrastructure
+  locations -> timecode: 5/5 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2009-07-22-video-c-span-buzz-aldrin-reveals-existence-of-monolith-on-mars/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2009-07-22-video-c-span-buzz-aldrin-reveals-existence-of-monolith-on-mars.yaml
+Usage: 1 calls, in=4 out=2060 cache_read=0 cost_equiv=$0.7374
+USAGE_JSON: {"input_tokens": 4, "output_tokens": 2060, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 117743, "cost_equiv_usd": 0.7373700000000001, "calls": 1}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 2060, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 117743, "cost_usd": 0.7373700000000001, "duration_s": 23.9}]
+--- [7] rc=0 elapsed=24s
+=== [8] 2026-07-31T01:29:04+09:00 1994-01-31-pdf-tajik-air-pilots-report-unidentified-flying-object.md
+Parsing record: 1994-01-31-pdf-tajik-air-pilots-report-unidentified-flying-object.md
+Extracting (two-pass) from: Tajik Air Pilots Report Unidentified Flying Object
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +17 nodes (total 17) [model: complete]
+  17 nodes, 6 acronyms, main_subject='1994-01-27 Tajik Air Boeing 747SP UFO sighting over Kazakhstan'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +28 claims (chunk total 28, doc total 28) [model: complete]
+  28 claims total: 21 domain, 7 infrastructure
+  locations -> char offset: 28/28 aligned (0 unalignable, 1 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/1994-01-31-pdf-tajik-air-pilots-report-unidentified-flying-object/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/1994-01-31-pdf-tajik-air-pilots-report-unidentified-flying-object.yaml
+Usage: 2 calls, in=8 out=11601 cache_read=0 cost_equiv=$1.5120
+USAGE_JSON: {"input_tokens": 8, "output_tokens": 11601, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 222987, "cost_equiv_usd": 1.5119609999999999, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1572, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 101700, "cost_usd": 0.6337919999999999, "duration_s": 17.0}, {"input_tokens": 4, "output_tokens": 10029, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 121287, "cost_usd": 0.878169, "duration_s": 70.7}]
+--- [8] rc=0 elapsed=88s
+=== [9] 2026-07-31T01:30:32+09:00 2026-07-11-audio-nasa-uap-d010-mercury-atlas-9-audio-excerpt-may-15-1963.v2.md
+Parsing record: 2026-07-11-audio-nasa-uap-d010-mercury-atlas-9-audio-excerpt-may-15-1963.v2.md
+Extracting (two-pass) from: NASA-UAP-D010, Mercury Atlas 9 Audio Excerpt, May 15, 1963
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +6 nodes (total 6) [model: complete]
+  6 nodes, 0 acronyms, main_subject='NASA-UAP-D010, Mercury Atlas 9 Audio Excerpt, May 15, 1963'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +11 claims (chunk total 11, doc total 11) [model: complete]
+  11 claims total: 11 domain, 0 infrastructure
+  locations -> timecode: 11/11 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2026-07-11-audio-nasa-uap-d010-mercury-atlas-9-audio-excerpt-may-15-1963/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2026-07-11-audio-nasa-uap-d010-mercury-atlas-9-audio-excerpt-may-15-1963.yaml
+Usage: 2 calls, in=10 out=6800 cache_read=121197 cost_equiv=$1.1814
+USAGE_JSON: {"input_tokens": 10, "output_tokens": 6800, "cache_read_input_tokens": 121197, "cache_creation_input_tokens": 173828, "cost_equiv_usd": 1.1813571, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1004, "cache_read_input_tokens": 47218, "cache_creation_input_tokens": 52106, "cost_usd": 0.3418734, "duration_s": 16.5}, {"input_tokens": 6, "output_tokens": 5796, "cache_read_input_tokens": 73979, "cache_creation_input_tokens": 121722, "cost_usd": 0.8394836999999999, "duration_s": 46.8}]
+--- [9] rc=0 elapsed=64s
+=== [10] 2026-07-31T01:31:36+09:00 2026-07-11-audio-nasa-uap-d013-mercury-atlas-7-may-24-1962.v2.md
+Parsing record: 2026-07-11-audio-nasa-uap-d013-mercury-atlas-7-may-24-1962.v2.md
+Extracting (two-pass) from: NASA-UAP-D013, Mercury Atlas 7, May 24, 1962
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +5 nodes (total 5) [model: complete]
+  5 nodes, 1 acronyms, main_subject='Mercury-Atlas 7 spaceflight'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +9 claims (chunk total 9, doc total 9) [model: complete]
+  9 claims total: 9 domain, 0 infrastructure
+  locations -> timecode: 9/9 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2026-07-11-audio-nasa-uap-d013-mercury-atlas-7-may-24-1962/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2026-07-11-audio-nasa-uap-d013-mercury-atlas-7-may-24-1962.yaml
+Usage: 2 calls, in=10 out=5214 cache_read=47218 cost_equiv=$1.5648
+USAGE_JSON: {"input_tokens": 10, "output_tokens": 5214, "cache_read_input_tokens": 47218, "cache_creation_input_tokens": 245400, "cost_equiv_usd": 1.5648054, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 860, "cache_read_input_tokens": 47218, "cache_creation_input_tokens": 52419, "cost_usd": 0.3415914, "duration_s": 12.5}, {"input_tokens": 6, "output_tokens": 4354, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 192981, "cost_usd": 1.223214, "duration_s": 34.1}]
+--- [10] rc=0 elapsed=47s
+=== [11] 2026-07-31T01:32:23+09:00 2026-07-11-audio-nasa-uap-d012-mercury-atlas-8-audio-excerpt-october-3-1962.v2.md
+Parsing record: 2026-07-11-audio-nasa-uap-d012-mercury-atlas-8-audio-excerpt-october-3-1962.v2.md
+Extracting (two-pass) from: NASA-UAP-D012, Mercury Atlas 8 Audio Excerpt, October 3, 1962
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +7 nodes (total 7) [model: complete]
+  7 nodes, 2 acronyms, main_subject='NASA-UAP-D012, Mercury Atlas 8 Audio Excerpt, October 3, 1962'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +13 claims (chunk total 13, doc total 13) [model: complete]
+  13 claims total: 12 domain, 1 infrastructure
+  locations -> timecode: 13/13 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2026-07-11-audio-nasa-uap-d012-mercury-atlas-8-audio-excerpt-october-3-1962/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2026-07-11-audio-nasa-uap-d012-mercury-atlas-8-audio-excerpt-october-3-1962.yaml
+Usage: 2 calls, in=10 out=9420 cache_read=86630 cost_equiv=$1.4717
+USAGE_JSON: {"input_tokens": 10, "output_tokens": 9420, "cache_read_input_tokens": 86630, "cache_creation_input_tokens": 217391, "cost_equiv_usd": 1.4716649999999998, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1509, "cache_read_input_tokens": 12319, "cache_creation_input_tokens": 94059, "cost_usd": 0.5906967, "duration_s": 19.9}, {"input_tokens": 6, "output_tokens": 7911, "cache_read_input_tokens": 74311, "cache_creation_input_tokens": 123332, "cost_usd": 0.8809682999999999, "duration_s": 60.8}]
+--- [11] rc=0 elapsed=81s
+=== [12] 2026-07-31T01:33:44+09:00 undated-pdf-apollo-12-air-to-ground-voice-transcription.md
+Parsing record: undated-pdf-apollo-12-air-to-ground-voice-transcription.md
+Extracting (two-pass) from: Apollo 12 Air-to-Ground Voice Transcription
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +9 nodes (total 9) [model: complete]
+  9 nodes, 14 acronyms, main_subject='Apollo 12 Air-to-Ground Voice Transcription'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +11 claims (chunk total 11, doc total 11) [model: complete]
+  11 claims total: 11 domain, 0 infrastructure
+  locations -> char offset: 11/11 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/undated-pdf-apollo-12-air-to-ground-voice-transcription/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/undated-pdf-apollo-12-air-to-ground-voice-transcription.yaml
+Usage: 2 calls, in=8 out=5392 cache_read=54076 cost_equiv=$1.1277
+USAGE_JSON: {"input_tokens": 8, "output_tokens": 5392, "cache_read_input_tokens": 54076, "cache_creation_input_tokens": 171766, "cost_equiv_usd": 1.1277228, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1615, "cache_read_input_tokens": 54076, "cache_creation_input_tokens": 55162, "cost_usd": 0.3714318, "duration_s": 25.2}, {"input_tokens": 4, "output_tokens": 3777, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 116604, "cost_usd": 0.756291, "duration_s": 34.0}]
+--- [12] rc=0 elapsed=60s
+=== [13] 2026-07-31T01:34:44+09:00 2019-06-14-web-pentagon-reinforces-mr-luis-elizondo-had-no.md
+Parsing record: 2019-06-14-web-pentagon-reinforces-mr-luis-elizondo-had-no.md
+Extracting (two-pass) from: Pentagon Reinforces Mr. Luis Elizondo Had “No Responsibilities” on AATIP; Senator Harry Reid’s 2009 Memo Changes Nothing - The Black Vault
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +28 nodes (total 28) [model: complete]
+  28 nodes, 6 acronyms, main_subject='Elizondo, Luis'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +39 claims (chunk total 39, doc total 39) [model: complete]
+  39 claims total: 34 domain, 5 infrastructure
+  locations -> char offset: 39/39 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2019-06-14-web-pentagon-reinforces-mr-luis-elizondo-had-no/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2019-06-14-web-pentagon-reinforces-mr-luis-elizondo-had-no.yaml
+Usage: 2 calls, in=8 out=13080 cache_read=12319 cost_equiv=$1.5055
+USAGE_JSON: {"input_tokens": 8, "output_tokens": 13080, "cache_read_input_tokens": 12319, "cache_creation_input_tokens": 217596, "cost_equiv_usd": 1.5054957, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1331, "cache_read_input_tokens": 12319, "cache_creation_input_tokens": 94899, "cost_usd": 0.5930667000000001, "duration_s": 15.4}, {"input_tokens": 4, "output_tokens": 11749, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 122697, "cost_usd": 0.912429, "duration_s": 81.0}]
+--- [13] rc=0 elapsed=97s
+=== [14] 2026-07-31T01:36:21+09:00 2026-07-11-audio-nasa-uap-d009-apollo-17-audio-excerpt-december-7-1972.v2.md
+Parsing record: 2026-07-11-audio-nasa-uap-d009-apollo-17-audio-excerpt-december-7-1972.v2.md
+Extracting (two-pass) from: NASA-UAP-D009, Apollo 17 Audio Excerpt, December 7, 1972
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +5 nodes (total 5) [model: complete]
+  5 nodes, 1 acronyms, main_subject='Apollo 17 orbital debris sighting, December 7, 1972'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +19 claims (chunk total 19, doc total 19) [model: complete]
+  19 claims total: 19 domain, 0 infrastructure
+  locations -> timecode: 19/19 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2026-07-11-audio-nasa-uap-d009-apollo-17-audio-excerpt-december-7-1972/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2026-07-11-audio-nasa-uap-d009-apollo-17-audio-excerpt-december-7-1972.yaml
+Usage: 2 calls, in=8 out=7788 cache_read=54076 cost_equiv=$1.3032
+USAGE_JSON: {"input_tokens": 8, "output_tokens": 7788, "cache_read_input_tokens": 54076, "cache_creation_input_tokens": 195015, "cost_equiv_usd": 1.3031568, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1102, "cache_read_input_tokens": 54076, "cache_creation_input_tokens": 53256, "cost_usd": 0.35230079999999997, "duration_s": 16.0}, {"input_tokens": 4, "output_tokens": 6686, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 141759, "cost_usd": 0.950856, "duration_s": 59.4}]
+--- [14] rc=0 elapsed=76s
+=== [15] 2026-07-31T01:37:37+09:00 2026-07-11-audio-nasa-uap-d011-mercury-atlas-9-audio-excerpt-may-15-1963.v2.md
+Parsing record: 2026-07-11-audio-nasa-uap-d011-mercury-atlas-9-audio-excerpt-may-15-1963.v2.md
+Extracting (two-pass) from: NASA-UAP-D011, Mercury Atlas 9 Audio Excerpt, May 15, 1963
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +7 nodes (total 7) [model: complete]
+  7 nodes, 3 acronyms, main_subject='NASA-UAP-D011, Mercury Atlas 9 Audio Excerpt, May 15, 1963'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +20 claims (chunk total 20, doc total 20) [model: complete]
+  20 claims total: 20 domain, 0 infrastructure
+  locations -> timecode: 20/20 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2026-07-11-audio-nasa-uap-d011-mercury-atlas-9-audio-excerpt-may-15-1963/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2026-07-11-audio-nasa-uap-d011-mercury-atlas-9-audio-excerpt-may-15-1963.yaml
+Usage: 2 calls, in=10 out=14783 cache_read=42456 cost_equiv=$1.8114
+USAGE_JSON: {"input_tokens": 10, "output_tokens": 14783, "cache_read_input_tokens": 42456, "cache_creation_input_tokens": 262820, "cost_equiv_usd": 1.8114318, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1252, "cache_read_input_tokens": 42456, "cache_creation_input_tokens": 65088, "cost_usd": 0.4220568, "duration_s": 16.9}, {"input_tokens": 6, "output_tokens": 13531, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 197732, "cost_usd": 1.389375, "duration_s": 99.1}]
+--- [15] rc=0 elapsed=116s
+=== [16] 2026-07-31T01:39:33+09:00 2008-pdf-the-prime-phobos-reconnaissance-and-international-mars.md
+Parsing record: 2008-pdf-the-prime-phobos-reconnaissance-and-international-mars.md
+Extracting (two-pass) from: The PRIME (Phobos Reconnaissance and International Mars Exploration) Mission and Mars Sample Return
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +75 nodes (total 75) [model: complete]
+  75 nodes, 16 acronyms, main_subject='Phobos Reconnaissance and International Mars Exploration (PRIME) Mission'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +67 claims (chunk total 67, doc total 67) [model: complete]
+  67 claims total: 67 domain, 0 infrastructure
+  locations -> char offset: 67/67 aligned (0 unalignable, 1 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2008-pdf-the-prime-phobos-reconnaissance-and-international-mars/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2008-pdf-the-prime-phobos-reconnaissance-and-international-mars.yaml
+Usage: 2 calls, in=8 out=20951 cache_read=41409 cost_equiv=$1.4341
+USAGE_JSON: {"input_tokens": 8, "output_tokens": 20951, "cache_read_input_tokens": 41409, "cache_creation_input_tokens": 184563, "cost_equiv_usd": 1.4340897, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 4790, "cache_read_input_tokens": 41409, "cache_creation_input_tokens": 62127, "cost_usd": 0.45704670000000003, "duration_s": 38.6}, {"input_tokens": 4, "output_tokens": 16161, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 122436, "cost_usd": 0.977043, "duration_s": 105.9}]
+--- [16] rc=0 elapsed=145s
+=== [17] 2026-07-31T01:41:58+09:00 2023-06-09-web-claims-that-ufo-information-was-inappropriately-withheld.md
+Parsing record: 2023-06-09-web-claims-that-ufo-information-was-inappropriately-withheld.md
+Extracting (two-pass) from: Claims that UFO information was inappropriately withheld from Congress deemed ‘credible,’ ‘urgent’
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +24 nodes (total 24) [model: complete]
+  24 nodes, 5 acronyms, main_subject='David Grusch whistleblower complaint to the Intelligence Community Inspector General'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +38 claims (chunk total 38, doc total 38) [model: complete]
+  38 claims total: 35 domain, 3 infrastructure
+  locations -> char offset: 37/38 aligned (1 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2023-06-09-web-claims-that-ufo-information-was-inappropriately-withheld/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2023-06-09-web-claims-that-ufo-information-was-inappropriately-withheld.yaml
+Usage: 2 calls, in=10 out=19656 cache_read=46646 cost_equiv=$1.8872
+USAGE_JSON: {"input_tokens": 10, "output_tokens": 19656, "cache_read_input_tokens": 46646, "cache_creation_input_tokens": 263062, "cost_equiv_usd": 1.8872358, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1176, "cache_read_input_tokens": 46646, "cache_creation_input_tokens": 60573, "cost_usd": 0.39508380000000004, "duration_s": 14.2}, {"input_tokens": 6, "output_tokens": 18480, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 202489, "cost_usd": 1.492152, "duration_s": 130.9}]
+--- [17] rc=0 elapsed=146s
+=== [18] 2026-07-31T01:44:24+09:00 2026-07-11-audio-nasa-uap-d003a-gemini-7-audio-excerpt-1965.v2.md
+Parsing record: 2026-07-11-audio-nasa-uap-d003a-gemini-7-audio-excerpt-1965.v2.md
+Extracting (two-pass) from: NASA-UAP-D003A, Gemini 7 Audio Excerpt, 1965
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +9 nodes (total 9) [model: complete]
+  9 nodes, 2 acronyms, main_subject='1965 Gemini 7 unidentified object sighting'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +20 claims (chunk total 20, doc total 20) [model: complete]
+  20 claims total: 20 domain, 0 infrastructure
+  locations -> timecode: 20/20 aligned (0 unalignable, 1 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2026-07-11-audio-nasa-uap-d003a-gemini-7-audio-excerpt-1965/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2026-07-11-audio-nasa-uap-d003a-gemini-7-audio-excerpt-1965.yaml
+Usage: 2 calls, in=8 out=6274 cache_read=54078 cost_equiv=$1.1227
+USAGE_JSON: {"input_tokens": 8, "output_tokens": 6274, "cache_read_input_tokens": 54078, "cache_creation_input_tokens": 168731, "cost_equiv_usd": 1.1227434, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 685, "cache_read_input_tokens": 54078, "cache_creation_input_tokens": 53859, "cost_usd": 0.3496644, "duration_s": 11.2}, {"input_tokens": 4, "output_tokens": 5589, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 114872, "cost_usd": 0.7730790000000001, "duration_s": 42.2}]
+--- [18] rc=0 elapsed=54s
+=== [19] 2026-07-31T01:45:18+09:00 undated-pdf-statement-to-congress.md
+Parsing record: undated-pdf-statement-to-congress.md
+Extracting (two-pass) from: Statement to Congress
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +45 nodes (total 45) [model: complete]
+  45 nodes, 10 acronyms, main_subject='Knapp, George'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +70 claims (chunk total 70, doc total 70) [model: complete]
+  70 claims total: 60 domain, 10 infrastructure
+  locations -> char offset: 70/70 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/undated-pdf-statement-to-congress/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/undated-pdf-statement-to-congress.yaml
+Usage: 2 calls, in=10 out=38076 cache_read=126878 cost_equiv=$1.8136
+USAGE_JSON: {"input_tokens": 10, "output_tokens": 38076, "cache_read_input_tokens": 126878, "cache_creation_input_tokens": 200722, "cost_equiv_usd": 1.8135654, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1901, "cache_read_input_tokens": 47220, "cache_creation_input_tokens": 56246, "cost_usd": 0.380169, "duration_s": 18.6}, {"input_tokens": 6, "output_tokens": 36175, "cache_read_input_tokens": 79658, "cache_creation_input_tokens": 144476, "cost_usd": 1.4333964000000001, "duration_s": 239.9}]
+--- [19] rc=0 elapsed=259s
+=== [20] 2026-07-31T01:49:37+09:00 2017-12-16-web-glowing-auras-and-black-money-the-pentagon-s-mysterious-u-f.md
+Parsing record: 2017-12-16-web-glowing-auras-and-black-money-the-pentagon-s-mysterious-u-f.md
+Extracting (two-pass) from: Glowing Auras and ‘Black Money’: The Pentagon’s Mysterious U.F.O. Program (Published 2017)
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +46 nodes (total 46) [model: complete]
+  46 nodes, 8 acronyms, main_subject='Advanced Aerospace Threat Identification Program (AATIP)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +85 claims (chunk total 85, doc total 85) [model: complete]
+  85 claims total: 84 domain, 1 infrastructure
+  locations -> char offset: 84/85 aligned (1 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2017-12-16-web-glowing-auras-and-black-money-the-pentagon-s-mysterious-u-f/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2017-12-16-web-glowing-auras-and-black-money-the-pentagon-s-mysterious-u-f.yaml
+Usage: 2 calls, in=10 out=48747 cache_read=54078 cost_equiv=$2.4375
+USAGE_JSON: {"input_tokens": 10, "output_tokens": 48747, "cache_read_input_tokens": 54078, "cache_creation_input_tokens": 281677, "cost_equiv_usd": 2.4375204, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 3150, "cache_read_input_tokens": 54078, "cache_creation_input_tokens": 56798, "cost_usd": 0.4042734, "duration_s": 29.4}, {"input_tokens": 6, "output_tokens": 45597, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 224879, "cost_usd": 2.033247, "duration_s": 295.3}]
+--- [20] rc=0 elapsed=325s
+=== [21] 2026-07-31T01:55:02+09:00 2019-06-01-web-the-media-loves-this-ufo-expert-who-says-he-worked-for-an.md
+Parsing record: 2019-06-01-web-the-media-loves-this-ufo-expert-who-says-he-worked-for-an.md
+Extracting (two-pass) from: The Media Loves This UFO Expert Who Says He Worked for an Obscure Pentagon Program. Did He?
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +45 nodes (total 45) [model: complete]
+  45 nodes, 8 acronyms, main_subject='Elizondo, Luis'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+    claims iter 1: +85 claims (chunk total 85, doc total 85) [model: complete]
+  claims chunk 2/2 (570 chars)
+    claims iter 1: +7 claims (chunk total 7, doc total 92) [model: complete]
+  92 claims total: 76 domain, 16 infrastructure
+  locations -> char offset: 87/92 aligned (5 unalignable, 1 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2019-06-01-web-the-media-loves-this-ufo-expert-who-says-he-worked-for-an/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2019-06-01-web-the-media-loves-this-ufo-expert-who-says-he-worked-for-an.yaml
+Usage: 3 calls, in=18 out=51502 cache_read=350404 cost_equiv=$2.5567
+USAGE_JSON: {"input_tokens": 18, "output_tokens": 51502, "cache_read_input_tokens": 350404, "cache_creation_input_tokens": 279829, "cost_equiv_usd": 2.5566792000000005, "calls": 3}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1744, "cache_read_input_tokens": 54078, "cache_creation_input_tokens": 59509, "cost_usd": 0.3994494, "duration_s": 18.5}, {"input_tokens": 8, "output_tokens": 46426, "cache_read_input_tokens": 165460, "cache_creation_input_tokens": 153268, "cost_usd": 1.6656600000000001, "duration_s": 310.5}, {"input_tokens": 6, "output_tokens": 3332, "cache_read_input_tokens": 130866, "cache_creation_input_tokens": 67052, "cost_usd": 0.4915698, "duration_s": 28.1}]
+--- [21] rc=0 elapsed=358s
+=== [22] 2026-07-31T02:01:00+09:00 2023-06-05-web-intelligence-officials-say-u-s-has-retrieved-craft-of-non.md
+Parsing record: 2023-06-05-web-intelligence-officials-say-u-s-has-retrieved-craft-of-non.md
+Extracting (two-pass) from: Intelligence Officials Say U.S. Has Retrieved Craft of Non-Human Origin
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +49 nodes (total 49) [model: complete]
+  49 nodes, 11 acronyms, main_subject='Grusch, David Charles'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+    claims iter 1: +103 claims (chunk total 103, doc total 103) [model: complete]
+  claims chunk 2/2 (1,523 chars)
+    claims iter 1: +8 claims (chunk total 8, doc total 111) [model: complete]
+  111 claims total: 109 domain, 2 infrastructure
+  locations -> char offset: 111/111 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2023-06-05-web-intelligence-officials-say-u-s-has-retrieved-craft-of-non/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2023-06-05-web-intelligence-officials-say-u-s-has-retrieved-craft-of-non.yaml
+Usage: 3 calls, in=20 out=70861 cache_read=266926 cost_equiv=$3.7797
+USAGE_JSON: {"input_tokens": 20, "output_tokens": 70861, "cache_read_input_tokens": 266926, "cache_creation_input_tokens": 439445, "cost_equiv_usd": 3.7797228000000005, "calls": 3}
+TRACE_JSON: [{"input_tokens": 6, "output_tokens": 3959, "cache_read_input_tokens": 128994, "cache_creation_input_tokens": 60817, "cost_usd": 0.46300319999999995, "duration_s": 33.2}, {"input_tokens": 8, "output_tokens": 62068, "cache_read_input_tokens": 82084, "cache_creation_input_tokens": 239574, "cost_usd": 2.3931132, "duration_s": 418.2}, {"input_tokens": 6, "output_tokens": 4834, "cache_read_input_tokens": 55848, "cache_creation_input_tokens": 139054, "cost_usd": 0.9236064000000002, "duration_s": 38.4}]
+--- [22] rc=0 elapsed=490s
+=== [23] 2026-07-31T02:09:10+09:00 2002-10-16-pdf-ewd-notes-eric-davis-meeting-with-adm-wilson.md
+Parsing record: 2002-10-16-pdf-ewd-notes-eric-davis-meeting-with-adm-wilson.md
+Extracting (two-pass) from: EWD Notes - Eric Davis Meeting with Adm. Wilson
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +63 nodes (total 63) [model: complete]
+  63 nodes, 18 acronyms, main_subject='Eric Davis meeting with Admiral Thomas Wilson, 16 October 2002'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+    claims iter 1: +107 claims (chunk total 107, doc total 107) [model: complete]
+  claims chunk 2/2 (4,758 chars)
+    claims iter 1: +63 claims (chunk total 63, doc total 170) [model: complete]
+  170 claims total: 168 domain, 2 infrastructure
+  locations -> char offset: 170/170 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2002-10-16-pdf-ewd-notes-eric-davis-meeting-with-adm-wilson/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2002-10-16-pdf-ewd-notes-eric-davis-meeting-with-adm-wilson.yaml
+Usage: 3 calls, in=18 out=101943 cache_read=214632 cost_equiv=$4.2398
+USAGE_JSON: {"input_tokens": 18, "output_tokens": 101943, "cache_read_input_tokens": 214632, "cache_creation_input_tokens": 441027, "cost_equiv_usd": 4.239750600000001, "calls": 3}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 5983, "cache_read_input_tokens": 41758, "cache_creation_input_tokens": 73700, "cost_usd": 0.5444844, "duration_s": 57.5}, {"input_tokens": 8, "output_tokens": 63254, "cache_read_input_tokens": 78903, "cache_creation_input_tokens": 244121, "cost_usd": 2.4372309000000003, "duration_s": 431.1}, {"input_tokens": 6, "output_tokens": 32706, "cache_read_input_tokens": 93971, "cache_creation_input_tokens": 123206, "cost_usd": 1.2580353, "duration_s": 225.2}]
+--- [23] rc=0 elapsed=715s
+=== [24] 2026-07-31T02:21:05+09:00 2012-05-pdf-conference-report-cultural-and-linguistic-advancement-for.md
+Parsing record: 2012-05-pdf-conference-report-cultural-and-linguistic-advancement-for.md
+Extracting (two-pass) from: Conference Report: Cultural and Linguistic Advancement for Mission Success: Enhancing Language, Regional and Cultural Capabilities Across Whole of Government for an Effective COIN Strategy
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +73 nodes (total 73) [model: complete]
+  73 nodes, 31 acronyms, main_subject='Conference on Cultural and Linguistic Advancement for Mission Success (2012)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+    claims iter 1: +67 claims (chunk total 67, doc total 67) [model: complete]
+  claims chunk 2/2 (17,943 chars)
+    claims iter 1: +46 claims (chunk total 46, doc total 113) [model: complete]
+  113 claims total: 107 domain, 6 infrastructure
+  locations -> char offset: 113/113 aligned (0 unalignable, 5 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2012-05-pdf-conference-report-cultural-and-linguistic-advancement-for/sonnet.d161b1ed.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2012-05-pdf-conference-report-cultural-and-linguistic-advancement-for.yaml
+Usage: 3 calls, in=22 out=68357 cache_read=437866 cost_equiv=$3.4770
+USAGE_JSON: {"input_tokens": 22, "output_tokens": 68357, "cache_read_input_tokens": 437866, "cache_creation_input_tokens": 386702, "cost_equiv_usd": 3.4769927999999997, "calls": 3}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 3406, "cache_read_input_tokens": 54078, "cache_creation_input_tokens": 65839, "cost_usd": 0.4623594, "duration_s": 29.9}, {"input_tokens": 12, "output_tokens": 38488, "cache_read_input_tokens": 243883, "cache_creation_input_tokens": 232785, "cost_usd": 2.0472308999999997, "duration_s": 252.4}, {"input_tokens": 6, "output_tokens": 26463, "cache_read_input_tokens": 139905, "cache_creation_input_tokens": 88078, "cost_usd": 0.9674024999999999, "duration_s": 174.5}]
+--- [24] rc=0 elapsed=458s
+BATCH COMPLETE 2026-07-31T02:28:43+09:00: 24 records

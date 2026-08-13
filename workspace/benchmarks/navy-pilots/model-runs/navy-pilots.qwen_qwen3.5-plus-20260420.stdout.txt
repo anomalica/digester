@@ -1,0 +1,16 @@
+Parsing record: 1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44.md
+COST ESTIMATE (rough, +/-40%):
+  16,668 source chars
+  model: qwen/qwen3.5-plus-20260420  ($3/$15 per million input/output tokens)
+  est tokens: ~56,668 in + ~6,250 out
+  est cost: ~$0.26  (range $0.16 - $0.37)
+  This spends real money on the metered Anthropic API.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Navy pilots describe encounters with UFOs
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +37 nodes (total 37) [model: complete]
+  37 nodes, 8 acronyms, main_subject='Unidentified Aerial Phenomena (UAP)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+Usage: 1 calls, in=7394 out=8196 cache_read=0 cost_equiv=$0.0170
+USAGE_JSON: {"input_tokens": 7394, "output_tokens": 8196, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.016971, "calls": 1}
+TRACE_JSON: [{"input_tokens": 7394, "output_tokens": 8196, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.016971}]

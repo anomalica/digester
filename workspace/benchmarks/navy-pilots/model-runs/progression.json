@@ -1,0 +1,728 @@
+{
+  "anthropic/claude-haiku-4.5": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 54,
+        "cum_nodes": 54,
+        "cum_claims": 0,
+        "cum_items": 54,
+        "call_cost": 0.0185,
+        "cum_cost": 0.0185,
+        "cum_in": 7315,
+        "cum_out": 2237
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 87,
+        "cum_nodes": 54,
+        "cum_claims": 87,
+        "cum_items": 141,
+        "call_cost": 0.083642,
+        "cum_cost": 0.102142,
+        "cum_in": 16672,
+        "cum_out": 17094
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 141,
+    "total_cost": 0.102142
+  },
+  "anthropic/claude-opus-4.8": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 34,
+        "cum_nodes": 34,
+        "cum_claims": 0,
+        "cum_items": 34,
+        "call_cost": 0.084575,
+        "cum_cost": 0.084575,
+        "cum_in": 10285,
+        "cum_out": 1326
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 69,
+        "cum_nodes": 34,
+        "cum_claims": 69,
+        "cum_items": 103,
+        "call_cost": 0.48641,
+        "cum_cost": 0.570985,
+        "cum_in": 22832,
+        "cum_out": 18273
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 103,
+    "total_cost": 0.570985
+  },
+  "anthropic/claude-sonnet-4.6": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 39,
+        "cum_nodes": 39,
+        "cum_claims": 0,
+        "cum_items": 39,
+        "call_cost": 0.048393,
+        "cum_cost": 0.048393,
+        "cum_in": 7316,
+        "cum_out": 1763
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 88,
+        "cum_nodes": 39,
+        "cum_claims": 88,
+        "cum_items": 127,
+        "call_cost": 0.282348,
+        "cum_cost": 0.330741,
+        "cum_in": 16417,
+        "cum_out": 18766
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 127,
+    "total_cost": 0.330741
+  },
+  "deepseek/deepseek-v3.2": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 34,
+        "cum_nodes": 34,
+        "cum_claims": 0,
+        "cum_items": 34,
+        "call_cost": 0.0020887,
+        "cum_cost": 0.002089,
+        "cum_in": 6563,
+        "cum_out": 1028
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 67,
+        "cum_nodes": 34,
+        "cum_claims": 67,
+        "cum_items": 101,
+        "call_cost": 0.0058061432,
+        "cum_cost": 0.007895,
+        "cum_in": 14580,
+        "cum_out": 12601
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 101,
+    "total_cost": 0.007895
+  },
+  "deepseek/deepseek-v4-pro": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 41,
+        "cum_nodes": 41,
+        "cum_claims": 0,
+        "cum_items": 41,
+        "call_cost": 0.03102246,
+        "cum_cost": 0.031022,
+        "cum_in": 6563,
+        "cum_out": 5633
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 88,
+        "cum_nodes": 41,
+        "cum_claims": 88,
+        "cum_items": 129,
+        "call_cost": 0.05151792,
+        "cum_cost": 0.08254,
+        "cum_in": 14739,
+        "cum_out": 31153
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 129,
+    "total_cost": 0.08254
+  },
+  "google/gemini-3-flash-preview": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 29,
+        "cum_nodes": 29,
+        "cum_claims": 0,
+        "cum_items": 29,
+        "call_cost": 0.0070375,
+        "cum_cost": 0.007038,
+        "cum_in": 7415,
+        "cum_out": 1110
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 28,
+        "cum_nodes": 29,
+        "cum_claims": 28,
+        "cum_items": 57,
+        "call_cost": 0.020071,
+        "cum_cost": 0.027109,
+        "cum_in": 16339,
+        "cum_out": 6313
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 57,
+    "total_cost": 0.027109
+  },
+  "google/gemini-3.1-flash-lite": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 26,
+        "cum_nodes": 26,
+        "cum_claims": 0,
+        "cum_items": 26,
+        "call_cost": 0.00326375,
+        "cum_cost": 0.003264,
+        "cum_in": 7415,
+        "cum_out": 940
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 28,
+        "cum_nodes": 26,
+        "cum_claims": 28,
+        "cum_items": 54,
+        "call_cost": 0.009947,
+        "cum_cost": 0.013211,
+        "cum_in": 16261,
+        "cum_out": 6097
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 54,
+    "total_cost": 0.013211
+  },
+  "google/gemini-3.1-pro-preview": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 47,
+        "cum_nodes": 47,
+        "cum_claims": 0,
+        "cum_items": 47,
+        "call_cost": 0.076114,
+        "cum_cost": 0.076114,
+        "cum_in": 7415,
+        "cum_out": 5107
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 81,
+        "cum_nodes": 47,
+        "cum_claims": 81,
+        "cum_items": 128,
+        "call_cost": 0.287956,
+        "cum_cost": 0.36407,
+        "cum_in": 16603,
+        "cum_out": 27572
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 128,
+    "total_cost": 0.36407
+  },
+  "google/gemini-3.5-flash": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 27,
+        "cum_nodes": 27,
+        "cum_claims": 0,
+        "cum_items": 27,
+        "call_cost": 0.0205995,
+        "cum_cost": 0.020599,
+        "cum_in": 7415,
+        "cum_out": 1053
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 41,
+        "cum_nodes": 27,
+        "cum_claims": 41,
+        "cum_items": 68,
+        "call_cost": 0.094959,
+        "cum_cost": 0.115559,
+        "cum_in": 16319,
+        "cum_out": 10120
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 68,
+    "total_cost": 0.115559
+  },
+  "meta-llama/llama-4-maverick": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 32,
+        "cum_nodes": 32,
+        "cum_claims": 0,
+        "cum_items": 32,
+        "call_cost": 0.00345055,
+        "cum_cost": 0.003451,
+        "cum_in": 6433,
+        "cum_out": 1199
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 31,
+        "cum_nodes": 32,
+        "cum_claims": 31,
+        "cum_items": 63,
+        "call_cost": 0.00465315,
+        "cum_cost": 0.008104,
+        "cum_in": 14310,
+        "cum_out": 6985
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 63,
+    "total_cost": 0.008104
+  },
+  "mistralai/mistral-small-3.2-24b-instruct": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 29,
+        "cum_nodes": 29,
+        "cum_claims": 0,
+        "cum_items": 29,
+        "call_cost": 0.000733725,
+        "cum_cost": 0.000734,
+        "cum_in": 7215,
+        "cum_out": 963
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 58,
+        "cum_nodes": 29,
+        "cum_claims": 58,
+        "cum_items": 87,
+        "call_cost": 0.003078275,
+        "cum_cost": 0.003812,
+        "cum_in": 15912,
+        "cum_out": 13093
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 87,
+    "total_cost": 0.003812
+  },
+  "openai/gpt-5-nano": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 34,
+        "cum_nodes": 34,
+        "cum_claims": 0,
+        "cum_items": 34,
+        "call_cost": 0.00680325,
+        "cum_cost": 0.006803,
+        "cum_in": 6441,
+        "cum_out": 16203
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 31,
+        "cum_nodes": 34,
+        "cum_claims": 31,
+        "cum_items": 65,
+        "call_cost": 0.0114513,
+        "cum_cost": 0.018255,
+        "cum_in": 14283,
+        "cum_out": 43851
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 65,
+    "total_cost": 0.018255
+  },
+  "openai/gpt-5.1": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 49,
+        "cum_nodes": 49,
+        "cum_claims": 0,
+        "cum_items": 49,
+        "call_cost": 0.02704125,
+        "cum_cost": 0.027041,
+        "cum_in": 6441,
+        "cum_out": 1899
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 113,
+        "cum_nodes": 49,
+        "cum_claims": 113,
+        "cum_items": 162,
+        "call_cost": 0.26889625,
+        "cum_cost": 0.295938,
+        "cum_in": 14694,
+        "cum_out": 27757
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 162,
+    "total_cost": 0.295938
+  },
+  "openai/gpt-5.2": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 51,
+        "cum_nodes": 51,
+        "cum_claims": 0,
+        "cum_items": 51,
+        "call_cost": 0.08090775,
+        "cum_cost": 0.080908,
+        "cum_in": 6441,
+        "cum_out": 4974
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 151,
+        "cum_nodes": 51,
+        "cum_claims": 151,
+        "cum_items": 202,
+        "call_cost": 0.402199,
+        "cum_cost": 0.483107,
+        "cum_in": 14829,
+        "cum_out": 32654
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 202,
+    "total_cost": 0.483107
+  },
+  "qwen/qwen3-235b-a22b-2507": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 32,
+        "cum_nodes": 32,
+        "cum_claims": 0,
+        "cum_items": 32,
+        "call_cost": 0.00075859,
+        "cum_cost": 0.000759,
+        "cum_in": 7121,
+        "cum_out": 1177
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 70,
+        "cum_nodes": 32,
+        "cum_claims": 70,
+        "cum_items": 102,
+        "call_cost": 0.0021515,
+        "cum_cost": 0.00291,
+        "cum_in": 15668,
+        "cum_out": 14145
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 102,
+    "total_cost": 0.00291
+  },
+  "qwen/qwen3.6-plus": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 33,
+        "cum_nodes": 33,
+        "cum_claims": 0,
+        "cum_items": 33,
+        "call_cost": 0.01680575,
+        "cum_cost": 0.016806,
+        "cum_in": 7394,
+        "cum_out": 7386
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 70,
+        "cum_nodes": 33,
+        "cum_claims": 70,
+        "cum_items": 103,
+        "call_cost": 0.0670592,
+        "cum_cost": 0.083865,
+        "cum_in": 16276,
+        "cum_out": 40295
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 103,
+    "total_cost": 0.083865
+  },
+  "x-ai/grok-4.20": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 30,
+        "cum_nodes": 30,
+        "cum_claims": 0,
+        "cum_items": 30,
+        "call_cost": 0.0106853,
+        "cum_cost": 0.010685,
+        "cum_in": 6444,
+        "cum_out": 1079
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 82,
+        "cum_nodes": 30,
+        "cum_claims": 82,
+        "cum_items": 112,
+        "call_cost": 0.05118155,
+        "cum_cost": 0.061867,
+        "cum_in": 14269,
+        "cum_out": 17666
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 112,
+    "total_cost": 0.061867
+  },
+  "x-ai/grok-4.3": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 30,
+        "cum_nodes": 30,
+        "cum_claims": 0,
+        "cum_items": 30,
+        "call_cost": 0.0108956,
+        "cum_cost": 0.010896,
+        "cum_in": 6452,
+        "cum_out": 1186
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 17,
+        "cum_nodes": 30,
+        "cum_claims": 17,
+        "cum_items": 47,
+        "call_cost": 0.01707435,
+        "cum_cost": 0.02797,
+        "cum_in": 14269,
+        "cum_out": 4161
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 47,
+    "total_cost": 0.02797
+  },
+  "z-ai/glm-4.5-air": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 36,
+        "cum_nodes": 36,
+        "cum_claims": 0,
+        "cum_items": 36,
+        "call_cost": 0.00446759,
+        "cum_cost": 0.004468,
+        "cum_in": 6574,
+        "cum_out": 3882
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 118,
+        "cum_nodes": 36,
+        "cum_claims": 118,
+        "cum_items": 154,
+        "call_cost": 0.06574721,
+        "cum_cost": 0.070215,
+        "cum_in": 14636,
+        "cum_out": 62223
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 154,
+    "total_cost": 0.070215
+  },
+  "z-ai/glm-5.1": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 37,
+        "cum_nodes": 37,
+        "cum_claims": 0,
+        "cum_items": 37,
+        "call_cost": 0.028817,
+        "cum_cost": 0.028817,
+        "cum_in": 6513,
+        "cum_out": 4477
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 102,
+        "cum_nodes": 37,
+        "cum_claims": 102,
+        "cum_items": 139,
+        "call_cost": 0.105137,
+        "cum_cost": 0.133954,
+        "cum_in": 14536,
+        "cum_out": 25819
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 139,
+    "total_cost": 0.133954
+  },
+  "z-ai/glm-5.2": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 38,
+        "cum_nodes": 38,
+        "cum_claims": 0,
+        "cum_items": 38,
+        "call_cost": 0.01529186,
+        "cum_cost": 0.015292,
+        "cum_in": 6520,
+        "cum_out": 2153
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 99,
+        "cum_nodes": 38,
+        "cum_claims": 99,
+        "cum_items": 137,
+        "call_cost": 0.078185,
+        "cum_cost": 0.093477,
+        "cum_in": 14683,
+        "cum_out": 17325
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 137,
+    "total_cost": 0.093477
+  },
+  "z-ai/glm-5": {
+    "loops": [
+      {
+        "loop": 1,
+        "pass": "nodes",
+        "new": 42,
+        "cum_nodes": 42,
+        "cum_claims": 0,
+        "cum_items": 42,
+        "call_cost": 0.02694315,
+        "cum_cost": 0.026943,
+        "cum_in": 6513,
+        "cum_out": 9191
+      },
+      {
+        "loop": 2,
+        "pass": "claims",
+        "new": 114,
+        "cum_nodes": 42,
+        "cum_claims": 114,
+        "cum_items": 156,
+        "call_cost": 0.0704638,
+        "cum_cost": 0.097407,
+        "cum_in": 14564,
+        "cum_out": 28695
+      }
+    ],
+    "n_loops": 2,
+    "n_node_loops": 1,
+    "n_claim_loops": 1,
+    "total_items": 156,
+    "total_cost": 0.097407
+  }
+}

@@ -1,0 +1,426 @@
+2026-08-01T05:53:13+09:00 waiting: an extraction is already running
+2026-08-01T05:55:13+09:00 waiting: an extraction is already running
+2026-08-01T05:57:13+09:00 waiting: an extraction is already running
+2026-08-01T05:59:13+09:00 waiting: an extraction is already running
+2026-08-01T06:01:13+09:00 waiting: an extraction is already running
+2026-08-01T06:03:14+09:00 waiting: an extraction is already running
+2026-08-01T06:05:14+09:00 waiting: an extraction is already running
+2026-08-01T06:07:14+09:00 waiting: an extraction is already running
+2026-08-01T06:09:14+09:00 waiting: an extraction is already running
+=== queue driver up 2026-08-01T06:11:14+09:00
+=== 2026-08-01T06:11:14+09:00 2004-11-14-pdf-nimitz-carrier-strike-group-csg-11-aav-incident-report.md
+Parsing record: 2004-11-14-pdf-nimitz-carrier-strike-group-csg-11-aav-incident-report.md
+Allowance ok (session 20%, weekly 84%)
+Extracting (two-pass) from: Nimitz Carrier Strike Group (CSG-11) AAV Incident Report
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +43 nodes (total 43) [model: complete]
+  43 nodes, 24 acronyms, main_subject='2004 USS Nimitz UAP encounter'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+    claims iter 1: +100 claims (chunk total 100, doc total 100)
+    claims iter 2: +16 claims (chunk total 116, doc total 116) [model: complete]
+  claims chunk 2/2 (13,576 chars)
+    claims iter 1: +88 claims (chunk total 88, doc total 204) [model: complete]
+  204 claims total: 204 domain, 0 infrastructure
+  locations -> char offset: 204/204 aligned (0 unalignable, 3 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2004-11-14-pdf-nimitz-carrier-strike-group-csg-11-aav-incident-report/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2004-11-14-pdf-nimitz-carrier-strike-group-csg-11-aav-incident-report.yaml
+Usage: 4 calls, in=20 out=83717 cache_read=243860 cost_equiv=$4.0695
+USAGE_JSON: {"input_tokens": 20, "output_tokens": 83717, "cache_read_input_tokens": 243860, "cache_creation_input_tokens": 456762, "cost_equiv_usd": 4.069545, "calls": 4}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 2427, "cache_read_input_tokens": 54158, "cache_creation_input_tokens": 62237, "cost_usd": 0.42608640000000003, "duration_s": 22.6}, {"input_tokens": 6, "output_tokens": 29042, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 208164, "cost_usd": 1.6846320000000001, "duration_s": 193.4}, {"input_tokens": 4, "output_tokens": 4280, "cache_read_input_tokens": 54267, "cache_creation_input_tokens": 91604, "cost_usd": 0.6301161, "duration_s": 36.1}, {"input_tokens": 6, "output_tokens": 47968, "cache_read_input_tokens": 135435, "cache_creation_input_tokens": 94757, "cost_usd": 1.3287105000000001, "duration_s": 314.9}]
+--- rc=0 elapsed=570s 2004-11-14-pdf-nimitz-carrier-strike-group-csg-11-aav-incident-report.md
+=== 2026-08-01T06:20:44+09:00 2020-04-27-web-statement-by-the-department-of-defense-on-the-release-of.md
+Parsing record: 2020-04-27-web-statement-by-the-department-of-defense-on-the-release-of.md
+Allowance ok (session 23%, weekly 84%)
+Extracting (two-pass) from: Statement by the Department of Defense on the Release of Historical Navy Videos
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +7 nodes (total 7) [model: complete]
+  7 nodes, 4 acronyms, main_subject='Statement by the Department of Defense on the Release of Historical Navy Videos'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +10 claims (chunk total 10, doc total 10) [model: complete]
+  10 claims total: 9 domain, 1 infrastructure
+  locations -> char offset: 10/10 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2020-04-27-web-statement-by-the-department-of-defense-on-the-release-of/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2020-04-27-web-statement-by-the-department-of-defense-on-the-release-of.yaml
+Usage: 2 calls, in=8 out=2893 cache_read=12318 cost_equiv=$1.2910
+USAGE_JSON: {"input_tokens": 8, "output_tokens": 2893, "cache_read_input_tokens": 12318, "cache_creation_input_tokens": 207312, "cost_equiv_usd": 1.2909864, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 610, "cache_read_input_tokens": 12318, "cache_creation_input_tokens": 90704, "cost_usd": 0.5570814, "duration_s": 9.8}, {"input_tokens": 4, "output_tokens": 2283, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 116608, "cost_usd": 0.733905, "duration_s": 20.0}]
+--- rc=0 elapsed=40s 2020-04-27-web-statement-by-the-department-of-defense-on-the-release-of.md
+=== 2026-08-01T06:21:24+09:00 2020-09-08-video-david-fravor-ufos-aliens-fighter-jets-and-aerospace.v2.md
+Parsing record: 2020-09-08-video-david-fravor-ufos-aliens-fighter-jets-and-aerospace.v2.md
+Allowance ok (session 23%, weekly 84%)
+Extracting (two-pass) from: David Fravor: UFOs, Aliens, Fighter Jets, and Aerospace Engineering | Lex Fridman Podcast #122
+Pass A: nodes (with iteration + chunking)
+  nodes chunk 1/6 (46,195 chars)
+    nodes iter 1: +63 nodes (total 63) [model: complete]
+  nodes chunk 2/6 (49,294 chars)
+    nodes iter 1: +37 nodes (total 100) [model: complete]
+  nodes chunk 3/6 (49,585 chars)
+    nodes iter 1: +28 nodes (total 128) [model: complete]
+  nodes chunk 4/6 (49,848 chars)
+    nodes iter 1: +35 nodes (total 163) [model: complete]
+  nodes chunk 5/6 (47,431 chars)
+    nodes iter 1: +35 nodes (total 198) [model: complete]
+  nodes chunk 6/6 (17,440 chars)
+    nodes iter 1: +13 nodes (total 211) [model: complete]
+  211 nodes, 31 acronyms, main_subject='David Fravor'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/13 (20,000 chars)
+    claims iter 1: +49 claims (chunk total 49, doc total 49) [model: complete]
+  claims chunk 2/13 (20,000 chars)
+    claims iter 1: +72 claims (chunk total 72, doc total 121) [model: complete]
+  claims chunk 3/13 (20,000 chars)
+    claims iter 1: +41 claims (chunk total 41, doc total 162) [model: complete]
+  claims chunk 4/13 (20,000 chars)
+    claims iter 1: +56 claims (chunk total 56, doc total 218) [model: complete]
+  claims chunk 5/13 (20,000 chars)
+    claims iter 1: +43 claims (chunk total 43, doc total 261) [model: complete]
+  claims chunk 6/13 (20,000 chars)
+    claims iter 1: +59 claims (chunk total 59, doc total 320) [model: complete]
+  claims chunk 7/13 (20,000 chars)
+    claims iter 1: +52 claims (chunk total 52, doc total 372) [model: complete]
+  claims chunk 8/13 (20,000 chars)
+    claims iter 1: +48 claims (chunk total 48, doc total 420) [model: complete]
+  claims chunk 9/13 (20,000 chars)
+    claims iter 1: +23 claims (chunk total 23, doc total 443) [model: complete]
+  claims chunk 10/13 (20,000 chars)
+    claims iter 1: +46 claims (chunk total 46, doc total 489) [model: complete]
+  claims chunk 11/13 (20,000 chars)
+    claims iter 1: +21 claims (chunk total 21, doc total 510) [model: complete]
+  claims chunk 12/13 (20,000 chars)
+    claims iter 1: +26 claims (chunk total 26, doc total 536) [model: complete]
+  claims chunk 13/13 (19,793 chars)
+    claims iter 1: +36 claims (chunk total 36, doc total 572) [model: complete]
+  572 claims total: 554 domain, 18 infrastructure
+  locations -> timecode: 568/572 aligned (4 unalignable, 2 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2020-09-08-video-david-fravor-ufos-aliens-fighter-jets-and-aerospace/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2020-09-08-video-david-fravor-ufos-aliens-fighter-jets-and-aerospace.yaml
+Usage: 19 calls, in=110 out=304243 cache_read=1909464 cost_equiv=$18.0082
+USAGE_JSON: {"input_tokens": 110, "output_tokens": 304243, "cache_read_input_tokens": 1909464, "cache_creation_input_tokens": 2145232, "cost_equiv_usd": 18.0082062, "calls": 19}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 6000, "cache_read_input_tokens": 12318, "cache_creation_input_tokens": 101671, "cost_usd": 0.7037334, "duration_s": 58.1}, {"input_tokens": 4, "output_tokens": 2910, "cache_read_input_tokens": 48921, "cache_creation_input_tokens": 70035, "cost_usd": 0.47854830000000004, "duration_s": 30.6}, {"input_tokens": 4, "output_tokens": 2086, "cache_read_input_tokens": 48921, "cache_creation_input_tokens": 71327, "cost_usd": 0.4739403, "duration_s": 24.4}, {"input_tokens": 4, "output_tokens": 3131, "cache_read_input_tokens": 52537, "cache_creation_input_tokens": 72191, "cost_usd": 0.4958841, "duration_s": 32.6}, {"input_tokens": 4, "output_tokens": 3334, "cache_read_input_tokens": 48921, "cache_creation_input_tokens": 72139, "cost_usd": 0.4975323, "duration_s": 34.5}, {"input_tokens": 4, "output_tokens": 1321, "cache_read_input_tokens": 54158, "cache_creation_input_tokens": 62982, "cost_usd": 0.4139664, "duration_s": 17.2}, {"input_tokens": 8, "output_tokens": 22949, "cache_read_input_tokens": 163782, "cache_creation_input_tokens": 144533, "cost_usd": 1.2605916000000001, "duration_s": 160.2}, {"input_tokens": 6, "output_tokens": 30980, "cache_read_input_tokens": 14949, "cache_creation_input_tokens": 218770, "cost_usd": 1.7818226999999998, "duration_s": 219.7}, {"input_tokens": 6, "output_tokens": 18972, "cache_read_input_tokens": 44471, "cache_creation_input_tokens": 185531, "cost_usd": 1.4111253000000001, "duration_s": 151.4}, {"input_tokens": 8, "output_tokens": 27727, "cache_read_input_tokens": 136267, "cache_creation_input_tokens": 177851, "cost_usd": 1.5239151, "duration_s": 200.3}, {"input_tokens": 6, "output_tokens": 27894, "cache_read_input_tokens": 97033, "cache_creation_input_tokens": 137939, "cost_usd": 1.2751719000000001, "duration_s": 212.6}, {"input_tokens": 6, "output_tokens": 35953, "cache_read_input_tokens": 97033, "cache_creation_input_tokens": 143176, "cost_usd": 1.4274789, "duration_s": 267.4}, {"input_tokens": 6, "output_tokens": 17984, "cache_read_input_tokens": 135605, "cache_creation_input_tokens": 77694, "cost_usd": 0.7766235000000001, "duration_s": 153.2}, {"input_tokens": 8, "output_tokens": 24121, "cache_read_input_tokens": 233513, "cache_creation_input_tokens": 90802, "cost_usd": 0.9767048999999999, "duration_s": 173.2}, {"input_tokens": 8, "output_tokens": 12038, "cache_read_input_tokens": 233007, "cache_creation_input_tokens": 83913, "cost_usd": 0.7539741, "duration_s": 96.7}, {"input_tokens": 6, "output_tokens": 20809, "cache_read_input_tokens": 98654, "cache_creation_input_tokens": 131208, "cost_usd": 1.1289972000000001, "duration_s": 158.0}, {"input_tokens": 6, "output_tokens": 9601, "cache_read_input_tokens": 97033, "cache_creation_input_tokens": 124600, "cost_usd": 0.9207429, "duration_s": 70.3}, {"input_tokens": 6, "output_tokens": 16888, "cache_read_input_tokens": 146248, "cache_creation_input_tokens": 88608, "cost_usd": 0.8288603999999999, "duration_s": 145.9}, {"input_tokens": 6, "output_tokens": 19545, "cache_read_input_tokens": 146093, "cache_creation_input_tokens": 90262, "cost_usd": 0.8785929, "duration_s": 152.3}]
+--- rc=0 elapsed=2391s 2020-09-08-video-david-fravor-ufos-aliens-fighter-jets-and-aerospace.v2.md
+=== 2026-08-01T07:01:15+09:00 2021-05-17-video-navy-pilots-describe-encounters-with-ufos.v2.md
+Parsing record: 2021-05-17-video-navy-pilots-describe-encounters-with-ufos.v2.md
+Allowance ok (session 32%, weekly 86%)
+Extracting (two-pass) from: Navy pilots describe encounters with UFOs
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +31 nodes (total 31) [model: complete]
+  31 nodes, 7 acronyms, main_subject='2004 USS Nimitz UAP encounter'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +94 claims (chunk total 94, doc total 94) [model: complete]
+  94 claims total: 92 domain, 2 infrastructure
+  locations -> timecode: 94/94 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2021-05-17-video-navy-pilots-describe-encounters-with-ufos/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2021-05-17-video-navy-pilots-describe-encounters-with-ufos.yaml
+Usage: 2 calls, in=8 out=33758 cache_read=54158 cost_equiv=$1.5599
+USAGE_JSON: {"input_tokens": 8, "output_tokens": 33758, "cache_read_input_tokens": 54158, "cache_creation_input_tokens": 172884, "cost_equiv_usd": 1.5599454000000001, "calls": 2}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1347, "cache_read_input_tokens": 54158, "cache_creation_input_tokens": 56010, "cost_usd": 0.37252440000000003, "duration_s": 14.6}, {"input_tokens": 4, "output_tokens": 32411, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 116874, "cost_usd": 1.187421, "duration_s": 240.3}]
+--- rc=0 elapsed=258s 2021-05-17-video-navy-pilots-describe-encounters-with-ufos.v2.md
+=== 2026-08-01T07:05:33+09:00 2021-09-06-video-the-ufo-phenomenon-full-documentary-2021-7news-spotlight.v2.md
+Parsing record: 2021-09-06-video-the-ufo-phenomenon-full-documentary-2021-7news-spotlight.v2.md
+Allowance ok (session 32%, weekly 86%)
+Extracting (two-pass) from: The UFO Phenomenon | Full Documentary 2021 | 7NEWS Spotlight
+Pass A: nodes (with iteration + chunking)
+  nodes chunk 1/2 (49,839 chars)
+    nodes iter 1: +54 nodes (total 54) [model: complete]
+  nodes chunk 2/2 (16,757 chars)
+    nodes iter 1: +11 nodes (total 65) [model: complete]
+  65 nodes, 7 acronyms, main_subject='Unidentified Aerial Phenomena (UAP)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/4 (20,000 chars)
+    claims iter 1: +59 claims (chunk total 59, doc total 59) [model: complete]
+  claims chunk 2/4 (20,000 chars)
+    claims iter 1: +83 claims (chunk total 83, doc total 142) [model: complete]
+  claims chunk 3/4 (20,000 chars)
+    claims iter 1: +53 claims (chunk total 53, doc total 195) [model: complete]
+  claims chunk 4/4 (6,596 chars)
+    claims iter 1: +12 claims (chunk total 12, doc total 207) [model: complete]
+  207 claims total: 201 domain, 6 infrastructure
+  locations -> timecode: 207/207 aligned (0 unalignable, 1 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2021-09-06-video-the-ufo-phenomenon-full-documentary-2021-7news-spotlight/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2021-09-06-video-the-ufo-phenomenon-full-documentary-2021-7news-spotlight.yaml
+Usage: 6 calls, in=30 out=85841 cache_read=347598 cost_equiv=$5.2785
+USAGE_JSON: {"input_tokens": 30, "output_tokens": 85841, "cache_read_input_tokens": 347598, "cache_creation_input_tokens": 647745, "cost_equiv_usd": 5.2784544, "calls": 6}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 5228, "cache_read_input_tokens": 48921, "cache_creation_input_tokens": 71349, "cost_usd": 0.5212023000000001, "duration_s": 54.7}, {"input_tokens": 4, "output_tokens": 1835, "cache_read_input_tokens": 54158, "cache_creation_input_tokens": 58677, "cost_usd": 0.39584640000000004, "duration_s": 24.0}, {"input_tokens": 6, "output_tokens": 16055, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 205647, "cost_usd": 1.4747249999999998, "duration_s": 115.5}, {"input_tokens": 6, "output_tokens": 27874, "cache_read_input_tokens": 92116, "cache_creation_input_tokens": 113047, "cost_usd": 1.1240448, "duration_s": 220.2}, {"input_tokens": 6, "output_tokens": 29901, "cache_read_input_tokens": 139093, "cache_creation_input_tokens": 91196, "cost_usd": 1.0374369, "duration_s": 230.9}, {"input_tokens": 4, "output_tokens": 4948, "cache_read_input_tokens": 13310, "cache_creation_input_tokens": 107829, "cost_usd": 0.725199, "duration_s": 46.7}]
+--- rc=0 elapsed=697s 2021-09-06-video-the-ufo-phenomenon-full-documentary-2021-7news-spotlight.v2.md
+=== 2026-08-01T07:17:10+09:00 2022-08-17-pdf-foia-response-18-f-0324-aatip-and-luis-elizondo-documents.md
+Parsing record: 2022-08-17-pdf-foia-response-18-f-0324-aatip-and-luis-elizondo-documents.md
+Allowance ok (session 36%, weekly 86%)
+Extracting (two-pass) from: FOIA Response 18-F-0324: AATIP and Luis Elizondo Documents
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +35 nodes (total 35) [model: complete]
+  35 nodes, 16 acronyms, main_subject='FOIA Response 18-F-0324: AATIP and Luis Elizondo Documents'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+    claims iter 1: +63 claims (chunk total 63, doc total 63) [model: complete]
+  claims chunk 2/2 (1,693 chars)
+    claims iter 1: +13 claims (chunk total 13, doc total 76) [model: complete]
+  76 claims total: 58 domain, 18 infrastructure
+  locations -> char offset: 76/76 aligned (0 unalignable, 31 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2022-08-17-pdf-foia-response-18-f-0324-aatip-and-luis-elizondo-documents/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2022-08-17-pdf-foia-response-18-f-0324-aatip-and-luis-elizondo-documents.yaml
+Usage: 3 calls, in=18 out=45359 cache_read=172044 cost_equiv=$3.3234
+USAGE_JSON: {"input_tokens": 18, "output_tokens": 45359, "cache_read_input_tokens": 172044, "cache_creation_input_tokens": 431895, "cost_equiv_usd": 3.3234221999999995, "calls": 3}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1932, "cache_read_input_tokens": 52537, "cache_creation_input_tokens": 58760, "cost_usd": 0.3973131, "duration_s": 19.3}, {"input_tokens": 8, "output_tokens": 36265, "cache_read_input_tokens": 76910, "cache_creation_input_tokens": 223660, "cost_usd": 1.9090319999999998, "duration_s": 240.1}, {"input_tokens": 6, "output_tokens": 7162, "cache_read_input_tokens": 42597, "cache_creation_input_tokens": 149475, "cost_usd": 1.0170770999999998, "duration_s": 54.7}]
+--- rc=0 elapsed=323s 2022-08-17-pdf-foia-response-18-f-0324-aatip-and-luis-elizondo-documents.md
+=== 2026-08-01T07:22:33+09:00 2023-07-26-pdf-david-fravor-statement-for-the-house-oversight-committee.md
+Parsing record: 2023-07-26-pdf-david-fravor-statement-for-the-house-oversight-committee.md
+Allowance ok (session 38%, weekly 87%)
+Extracting (two-pass) from: David Fravor Statement for the House Oversight Committee
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +34 nodes (total 34) [model: complete]
+  34 nodes, 11 acronyms, main_subject='David Fravor'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +56 claims (chunk total 56, doc total 56) [model: complete]
+  56 claims total: 53 domain, 3 infrastructure
+  locations -> char offset: 56/56 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2023-07-26-pdf-david-fravor-statement-for-the-house-oversight-committee/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2023-07-26-pdf-david-fravor-statement-for-the-house-oversight-committee.yaml
+Usage: 1 calls, in=4 out=14308 cache_read=0 cost_equiv=$0.9403
+USAGE_JSON: {"input_tokens": 4, "output_tokens": 14308, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 120937, "cost_equiv_usd": 0.9402539999999999, "calls": 1}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 14308, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 120937, "cost_usd": 0.9402539999999999, "duration_s": 99.6}]
+--- rc=0 elapsed=102s 2023-07-26-pdf-david-fravor-statement-for-the-house-oversight-committee.md
+=== 2026-08-01T07:24:15+09:00 2023-07-26-pdf-unidentified-anomalous-phenomena-implications-on-national-security-public-safety.md
+Parsing record: 2023-07-26-pdf-unidentified-anomalous-phenomena-implications-on-national-security-public-safety.md
+Allowance ok (session 38%, weekly 87%)
+Extracting (two-pass) from: Unidentified Anomalous Phenomena: Implications on National Security, Public Safety, and Government Transparency
+Pass A: nodes (with iteration + chunking)
+  nodes chunk 1/3 (49,017 chars)
+    nodes iter 1: +135 nodes (total 135) [model: complete]
+  nodes chunk 2/3 (49,566 chars)
+    nodes iter 1: +18 nodes (total 153) [model: complete]
+  nodes chunk 3/3 (49,771 chars)
+    nodes iter 1: +27 nodes (total 180) [model: complete]
+  180 nodes, 35 acronyms, main_subject='Unidentified Anomalous Phenomena: Implications on National Security, Public Safety, and Government Transparency (hearing, 2023-07-26)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/8 (20,000 chars)
+    claims iter 1: +46 claims (chunk total 46, doc total 46)
+    claims iter 2: +6 claims (chunk total 52, doc total 52) [model: complete]
+  claims chunk 2/8 (20,000 chars)
+    claims iter 1: +51 claims (chunk total 51, doc total 103) [model: complete]
+  claims chunk 3/8 (20,000 chars)
+    claims iter 1: +75 claims (chunk total 75, doc total 178) [model: complete]
+  claims chunk 4/8 (20,000 chars)
+    claims iter 1: +60 claims (chunk total 60, doc total 238) [model: complete]
+  claims chunk 5/8 (20,000 chars)
+    claims iter 1: +51 claims (chunk total 51, doc total 289) [model: complete]
+  claims chunk 6/8 (20,000 chars)
+    claims iter 1: +60 claims (chunk total 60, doc total 349) [model: complete]
+  claims chunk 7/8 (20,000 chars)
+    claims iter 1: +64 claims (chunk total 64, doc total 413) [model: complete]
+  claims chunk 8/8 (8,354 chars)
+    claims iter 1: +20 claims (chunk total 20, doc total 433) [model: complete]
+  433 claims total: 415 domain, 18 infrastructure
+  locations -> char offset: 432/433 aligned (1 unalignable, 1 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2023-07-26-pdf-unidentified-anomalous-phenomena-implications-on-national-security-public-safety/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2023-07-26-pdf-unidentified-anomalous-phenomena-implications-on-national-security-public-safety.yaml
+Usage: 12 calls, in=78 out=203883 cache_read=1405883 cost_equiv=$12.7200
+USAGE_JSON: {"input_tokens": 78, "output_tokens": 203883, "cache_read_input_tokens": 1405883, "cache_creation_input_tokens": 1539953, "cost_equiv_usd": 12.719961900000001, "calls": 12}
+TRACE_JSON: [{"input_tokens": 6, "output_tokens": 5043, "cache_read_input_tokens": 130388, "cache_creation_input_tokens": 70323, "cost_usd": 0.5367173999999999, "duration_s": 44.8}, {"input_tokens": 6, "output_tokens": 3100, "cache_read_input_tokens": 94377, "cache_creation_input_tokens": 121847, "cost_usd": 0.8059131, "duration_s": 29.6}, {"input_tokens": 6, "output_tokens": 3870, "cache_read_input_tokens": 144030, "cache_creation_input_tokens": 78200, "cost_usd": 0.570477, "duration_s": 38.3}, {"input_tokens": 8, "output_tokens": 13972, "cache_read_input_tokens": 82870, "cache_creation_input_tokens": 214014, "cost_usd": 1.518549, "duration_s": 98.4}, {"input_tokens": 6, "output_tokens": 4842, "cache_read_input_tokens": 52220, "cache_creation_input_tokens": 182082, "cost_usd": 1.180806, "duration_s": 44.6}, {"input_tokens": 8, "output_tokens": 27962, "cache_read_input_tokens": 232881, "cache_creation_input_tokens": 92214, "cost_usd": 1.0426023, "duration_s": 194.0}, {"input_tokens": 6, "output_tokens": 35964, "cache_read_input_tokens": 96520, "cache_creation_input_tokens": 138692, "cost_usd": 1.400586, "duration_s": 246.7}, {"input_tokens": 6, "output_tokens": 29051, "cache_read_input_tokens": 145917, "cache_creation_input_tokens": 92981, "cost_usd": 1.0374441, "duration_s": 211.0}, {"input_tokens": 8, "output_tokens": 24582, "cache_read_input_tokens": 135583, "cache_creation_input_tokens": 175910, "cost_usd": 1.4648889, "duration_s": 173.5}, {"input_tokens": 8, "output_tokens": 29511, "cache_read_input_tokens": 179799, "cache_creation_input_tokens": 136628, "cost_usd": 1.3163966999999999, "duration_s": 207.4}, {"input_tokens": 4, "output_tokens": 16584, "cache_read_input_tokens": 52220, "cache_creation_input_tokens": 78331, "cost_usd": 0.734424, "duration_s": 118.7}, {"input_tokens": 6, "output_tokens": 9402, "cache_read_input_tokens": 59078, "cache_creation_input_tokens": 158731, "cost_usd": 1.1111574000000002, "duration_s": 69.4}]
+--- rc=0 elapsed=1487s 2023-07-26-pdf-unidentified-anomalous-phenomena-implications-on-national-security-public-safety.md
+=== 2026-08-01T07:49:02+09:00 2024-01-24-pdf-unclassified-summary-of-report-no-dodig-2023-109-evaluation-of-the-dods-actions-.md
+Parsing record: 2024-01-24-pdf-unclassified-summary-of-report-no-dodig-2023-109-evaluation-of-the-dods-actions-.md
+Allowance ok (session 43%, weekly 88%)
+Extracting (two-pass) from: Unclassified Summary of Report No. DODIG-2023-109, "Evaluation of the DoD's Actions Regarding Unidentified Anomalous Phenomena," August 15, 2023
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +56 nodes (total 56) [model: complete]
+  56 nodes, 14 acronyms, main_subject="Evaluation of the DoD's Actions Regarding Unidentified Anomalous Phenomena (DODIG-2023-109)"
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+    claims iter 1: +77 claims (chunk total 77, doc total 77) [model: complete]
+  claims chunk 2/2 (8,900 chars)
+    claims iter 1: +25 claims (chunk total 25, doc total 102) [model: complete]
+  102 claims total: 102 domain, 0 infrastructure
+  locations -> char offset: 102/102 aligned (0 unalignable, 5 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2024-01-24-pdf-unclassified-summary-of-report-no-dodig-2023-109-evaluation-of-the-dods-actions-/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2024-01-24-pdf-unclassified-summary-of-report-no-dodig-2023-109-evaluation-of-the-dods-actions-.yaml
+Usage: 3 calls, in=16 out=67268 cache_read=150326 cost_equiv=$3.4912
+USAGE_JSON: {"input_tokens": 16, "output_tokens": 67268, "cache_read_input_tokens": 150326, "cache_creation_input_tokens": 406165, "cost_equiv_usd": 3.4911558, "calls": 3}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 2870, "cache_read_input_tokens": 54158, "cache_creation_input_tokens": 60899, "cost_usd": 0.42470339999999995, "duration_s": 25.1}, {"input_tokens": 8, "output_tokens": 56204, "cache_read_input_tokens": 82669, "cache_creation_input_tokens": 235684, "cost_usd": 2.2819887000000003, "duration_s": 360.2}, {"input_tokens": 4, "output_tokens": 8194, "cache_read_input_tokens": 13499, "cache_creation_input_tokens": 109582, "cost_usd": 0.7844637, "duration_s": 55.3}]
+--- rc=0 elapsed=459s 2024-01-24-pdf-unclassified-summary-of-report-no-dodig-2023-109-evaluation-of-the-dods-actions-.md
+=== 2026-08-01T07:56:41+09:00 2024-02-01-pdf-report-on-the-historical-record-of-us-government-involvement-with-unidentified-a.md
+Parsing record: 2024-02-01-pdf-report-on-the-historical-record-of-us-government-involvement-with-unidentified-a.md
+Allowance ok (session 45%, weekly 88%)
+Extracting (two-pass) from: Report on the Historical Record of U.S. Government Involvement with Unidentified Anomalous Phenomena (UAP), Volume I
+Pass A: nodes (with iteration + chunking)
+  nodes chunk 1/4 (23,350 chars)
+    nodes iter 1: +44 nodes (total 44) [model: complete]
+  nodes chunk 2/4 (48,887 chars)
+    nodes iter 1: +121 nodes (total 165) [model: complete]
+  nodes chunk 3/4 (42,645 chars)
+    nodes iter 1: +42 nodes (total 207) [model: complete]
+  nodes chunk 4/4 (31,514 chars)
+    nodes iter 1: +77 nodes (total 284) [model: complete]
+  284 nodes, 55 acronyms, main_subject='Report on the Historical Record of U.S. Government Involvement with Unidentified Anomalous Phenomena (UAP), Volume I'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/8 (20,000 chars)
+    claims iter 1: +96 claims (chunk total 96, doc total 96) [model: complete]
+  claims chunk 2/8 (20,000 chars)
+    claims iter 1: +91 claims (chunk total 91, doc total 187) [model: complete]
+  claims chunk 3/8 (20,000 chars)
+    claims iter 1: +81 claims (chunk total 81, doc total 268) [model: complete]
+  claims chunk 4/8 (20,000 chars)
+    claims iter 1: +91 claims (chunk total 91, doc total 359) [model: complete]
+  claims chunk 5/8 (20,000 chars)
+    claims iter 1: +93 claims (chunk total 93, doc total 452) [model: complete]
+  claims chunk 6/8 (20,000 chars)
+    claims iter 1: +60 claims (chunk total 60, doc total 512) [model: complete]
+  claims chunk 7/8 (20,000 chars)
+    claims iter 1: +86 claims (chunk total 86, doc total 598) [model: complete]
+  claims chunk 8/8 (6,396 chars)
+    claims iter 1: +32 claims (chunk total 32, doc total 630) [model: complete]
+  630 claims total: 614 domain, 16 infrastructure
+  locations -> char offset: 630/630 aligned (0 unalignable, 3 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2024-02-01-pdf-report-on-the-historical-record-of-us-government-involvement-with-unidentified-a/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2024-02-01-pdf-report-on-the-historical-record-of-us-government-involvement-with-unidentified-a.yaml
+Usage: 12 calls, in=66 out=308139 cache_read=1239035 cost_equiv=$13.1742
+USAGE_JSON: {"input_tokens": 66, "output_tokens": 308139, "cache_read_input_tokens": 1239035, "cache_creation_input_tokens": 1363363, "cost_equiv_usd": 13.174171500000002, "calls": 12}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 3372, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 104907, "cost_usd": 0.680034, "duration_s": 29.9}, {"input_tokens": 4, "output_tokens": 4894, "cache_read_input_tokens": 54158, "cache_creation_input_tokens": 70967, "cost_usd": 0.5154714, "duration_s": 39.9}, {"input_tokens": 4, "output_tokens": 4293, "cache_read_input_tokens": 54158, "cache_creation_input_tokens": 71804, "cost_usd": 0.5114784, "duration_s": 36.9}, {"input_tokens": 4, "output_tokens": 3144, "cache_read_input_tokens": 48921, "cache_creation_input_tokens": 73140, "cost_usd": 0.5006883, "duration_s": 26.8}, {"input_tokens": 8, "output_tokens": 58416, "cache_read_input_tokens": 184008, "cache_creation_input_tokens": 178641, "cost_usd": 2.0033124, "duration_s": 373.7}, {"input_tokens": 8, "output_tokens": 47950, "cache_read_input_tokens": 155632, "cache_creation_input_tokens": 200546, "cost_usd": 1.9692395999999999, "duration_s": 308.9}, {"input_tokens": 6, "output_tokens": 44418, "cache_read_input_tokens": 155774, "cache_creation_input_tokens": 109147, "cost_usd": 1.3679022, "duration_s": 291.0}, {"input_tokens": 4, "output_tokens": 27219, "cache_read_input_tokens": 16749, "cache_creation_input_tokens": 124106, "cost_usd": 1.1579576999999999, "duration_s": 174.2}, {"input_tokens": 4, "output_tokens": 26733, "cache_read_input_tokens": 61399, "cache_creation_input_tokens": 83892, "cost_usd": 0.9227787000000001, "duration_s": 176.5}, {"input_tokens": 6, "output_tokens": 32649, "cache_read_input_tokens": 155097, "cache_creation_input_tokens": 102083, "cost_usd": 1.1487801, "duration_s": 213.1}, {"input_tokens": 8, "output_tokens": 40141, "cache_read_input_tokens": 201306, "cache_creation_input_tokens": 154632, "cost_usd": 1.5903228, "duration_s": 261.4}, {"input_tokens": 6, "output_tokens": 14910, "cache_read_input_tokens": 151833, "cache_creation_input_tokens": 89498, "cost_usd": 0.8062059, "duration_s": 100.5}]
+--- rc=0 elapsed=2062s 2024-02-01-pdf-report-on-the-historical-record-of-us-government-involvement-with-unidentified-a.md
+=== 2026-08-01T08:31:03+09:00 2024-11-13-pdf-written-testimony-of-luis-elizondo-unidentified-anomalous-phenomena-exposing-the.md
+Parsing record: 2024-11-13-pdf-written-testimony-of-luis-elizondo-unidentified-anomalous-phenomena-exposing-the.md
+Allowance ok (session 51%, weekly 89%)
+Extracting (two-pass) from: Written Testimony of Luis Elizondo: Unidentified Anomalous Phenomena: Exposing the Truth
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +21 nodes (total 21) [model: complete]
+  21 nodes, 5 acronyms, main_subject='Written Testimony of Luis Elizondo: Unidentified Anomalous Phenomena: Exposing the Truth'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +28 claims (chunk total 28, doc total 28) [model: complete]
+  28 claims total: 26 domain, 2 infrastructure
+  locations -> char offset: 28/28 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2024-11-13-pdf-written-testimony-of-luis-elizondo-unidentified-anomalous-phenomena-exposing-the/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2024-11-13-pdf-written-testimony-of-luis-elizondo-unidentified-anomalous-phenomena-exposing-the.yaml
+Usage: 1 calls, in=4 out=7674 cache_read=0 cost_equiv=$0.8215
+USAGE_JSON: {"input_tokens": 4, "output_tokens": 7674, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 117734, "cost_equiv_usd": 0.821526, "calls": 1}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 7674, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 117734, "cost_usd": 0.821526, "duration_s": 54.2}]
+--- rc=0 elapsed=59s 2024-11-13-pdf-written-testimony-of-luis-elizondo-unidentified-anomalous-phenomena-exposing-the.md
+=== 2026-08-01T08:32:02+09:00 2025-03-27-web-rep-burlison-welcomes-former-u-s-air-force-officer-david.md
+Parsing record: 2025-03-27-web-rep-burlison-welcomes-former-u-s-air-force-officer-david.md
+Allowance ok (session 53%, weekly 89%)
+Extracting (two-pass) from: Rep. Burlison Welcomes Former U.S. Air Force Officer David Grusch as Special Advisor
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +18 nodes (total 18) [model: complete]
+  18 nodes, 6 acronyms, main_subject='David Grusch'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +24 claims (chunk total 24, doc total 24) [model: complete]
+  24 claims total: 24 domain, 0 infrastructure
+  locations -> char offset: 24/24 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2025-03-27-web-rep-burlison-welcomes-former-u-s-air-force-officer-david/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2025-03-27-web-rep-burlison-welcomes-former-u-s-air-force-officer-david.yaml
+Usage: 1 calls, in=6 out=12355 cache_read=74385 cost_equiv=$0.9563
+USAGE_JSON: {"input_tokens": 6, "output_tokens": 12355, "cache_read_input_tokens": 74385, "cache_creation_input_tokens": 124768, "cost_equiv_usd": 0.9562665000000001, "calls": 1}
+TRACE_JSON: [{"input_tokens": 6, "output_tokens": 12355, "cache_read_input_tokens": 74385, "cache_creation_input_tokens": 124768, "cost_usd": 0.9562665000000001, "duration_s": 83.7}]
+--- rc=0 elapsed=93s 2025-03-27-web-rep-burlison-welcomes-former-u-s-air-force-officer-david.md
+=== 2026-08-01T08:33:35+09:00 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+Parsing record: 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+Allowance ceiling: weekly 89% >= 88% start-line (ceiling 95 less 7 reserved for end-of-week verification and fixes)
+  window resets at 2026-08-05T10:59:59.305125+00:00
+  Not starting. Completed chunks are cached; resume is cheap.
+--- rc=77 elapsed=2s 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+    parked (allowance); re-check in 600s
+=== 2026-08-01T08:43:37+09:00 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+Parsing record: 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+Allowance ceiling: weekly 89% >= 88% start-line (ceiling 95 less 7 reserved for end-of-week verification and fixes)
+  window resets at 2026-08-05T10:59:59.650056+00:00
+  Not starting. Completed chunks are cached; resume is cheap.
+--- rc=77 elapsed=2s 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+    parked (allowance); re-check in 600s
+=== 2026-08-01T08:53:39+09:00 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+Parsing record: 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+Allowance ceiling: weekly 89% >= 88% start-line (ceiling 95 less 7 reserved for end-of-week verification and fixes)
+  window resets at 2026-08-05T10:59:59.650056+00:00
+  Not starting. Completed chunks are cached; resume is cheap.
+--- rc=77 elapsed=20s 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+    parked (allowance); re-check in 600s
+=== queue driver up 2026-08-01T08:59:44+09:00
+=== 2026-08-01T08:59:44+09:00 2004-11-14-pdf-nimitz-carrier-strike-group-csg-11-aav-incident-report.md
+Parsing record: 2004-11-14-pdf-nimitz-carrier-strike-group-csg-11-aav-incident-report.md
+Allowance ok (session 53%, weekly 89%)
+Extracting (two-pass) from: Nimitz Carrier Strike Group (CSG-11) AAV Incident Report
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +43 nodes (total 43) [model: complete]
+  43 nodes, 24 acronyms, main_subject='2004 USS Nimitz UAP encounter'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+=== queue driver up 2026-08-01T09:02:17+09:00
+=== 2026-08-01T09:02:17+09:00 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+Parsing record: 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+Allowance ceiling: weekly 89% >= 88% start-line (ceiling 95 less 7 reserved for end-of-week verification and fixes)
+  window resets at 2026-08-05T10:59:59.874223+00:00
+  Not starting. Completed chunks are cached; resume is cheap.
+--- rc=77 elapsed=2s 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+    deferred (allowance): 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+=== 2026-08-01T09:02:19+09:00 2026-05-08-video-bob-lazar-just-revealed-his-biggest-secret-debriefed-ep-87.v2.md
+Parsing record: 2026-05-08-video-bob-lazar-just-revealed-his-biggest-secret-debriefed-ep-87.v2.md
+Allowance ok (session 53%, weekly 89%)
+Extracting (two-pass) from: Bob Lazar Just Revealed His BIGGEST Secret - DEBRIEFED ep. 87
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +28 nodes (total 28) [model: complete]
+  28 nodes, 2 acronyms, main_subject='Bob Lazar'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+    claims iter 1: +36 claims (chunk total 36, doc total 36) [model: complete]
+  claims chunk 2/2 (17,934 chars)
+    claims iter 1: +39 claims (chunk total 39, doc total 75) [model: complete]
+  75 claims total: 70 domain, 5 infrastructure
+  locations -> timecode: 72/75 aligned (3 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2026-05-08-video-bob-lazar-just-revealed-his-biggest-secret-debriefed-ep-87/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2026-05-08-video-bob-lazar-just-revealed-his-biggest-secret-debriefed-ep-87.yaml
+Usage: 3 calls, in=18 out=39553 cache_read=208337 cost_equiv=$3.2552
+USAGE_JSON: {"input_tokens": 18, "output_tokens": 39553, "cache_read_input_tokens": 208337, "cache_creation_input_tokens": 433223, "cost_equiv_usd": 3.2551881, "calls": 3}
+TRACE_JSON: [{"input_tokens": 4, "output_tokens": 1033, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 121806, "cost_usd": 0.7463429999999999, "duration_s": 14.0}, {"input_tokens": 8, "output_tokens": 21600, "cache_read_input_tokens": 82422, "cache_creation_input_tokens": 219263, "cost_usd": 1.6643286, "duration_s": 167.1}, {"input_tokens": 6, "output_tokens": 16920, "cache_read_input_tokens": 125915, "cache_creation_input_tokens": 92154, "cost_usd": 0.8445164999999999, "duration_s": 128.7}]
+--- rc=0 elapsed=320s 2026-05-08-video-bob-lazar-just-revealed-his-biggest-secret-debriefed-ep-87.v2.md
+=== 2026-08-01T09:07:39+09:00 2026-05-26-pdf-usper-narrative-senior-usic-official.md
+Parsing record: 2026-05-26-pdf-usper-narrative-senior-usic-official.md
+Allowance ok (session 55%, weekly 89%)
+Extracting (two-pass) from: USPER Narrative, Senior USIC Official
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +9 nodes (total 9) [model: complete]
+  9 nodes, 6 acronyms, main_subject='Senior U.S. Intelligence Officer (Anonymous)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +42 claims (chunk total 42, doc total 42) [model: complete]
+  42 claims total: 39 domain, 3 infrastructure
+  locations -> char offset: 42/42 aligned (0 unalignable, 0 ambiguous)
+
+Variant: /home/mark/repos/anomalica/digests/variants/2026-05-26-pdf-usper-narrative-senior-usic-official/sonnet.e9b8b6d4.yaml
+Canonical (latest-written): /home/mark/repos/anomalica/digests/records/2026-05-26-pdf-usper-narrative-senior-usic-official.yaml
+Usage: 1 calls, in=6 out=28242 cache_read=75386 cost_equiv=$1.2576
+USAGE_JSON: {"input_tokens": 6, "output_tokens": 28242, "cache_read_input_tokens": 75386, "cache_creation_input_tokens": 135223, "cost_equiv_usd": 1.2576018, "calls": 1}
+TRACE_JSON: [{"input_tokens": 6, "output_tokens": 28242, "cache_read_input_tokens": 75386, "cache_creation_input_tokens": 135223, "cost_usd": 1.2576018, "duration_s": 193.1}]
+--- rc=0 elapsed=195s 2026-05-26-pdf-usper-narrative-senior-usic-official.md
+=== 2026-08-01T09:10:54+09:00 2026-06-12-video-revealing-the-nordic-alien-prophecies-michael-horn.v2.md
+Parsing record: 2026-06-12-video-revealing-the-nordic-alien-prophecies-michael-horn.v2.md
+Allowance ceiling: weekly 89% >= 88% start-line (ceiling 95 less 7 reserved for end-of-week verification and fixes)
+  window resets at 2026-08-05T11:00:00.308670+00:00
+  Not starting. Completed chunks are cached; resume is cheap.
+--- rc=77 elapsed=2s 2026-06-12-video-revealing-the-nordic-alien-prophecies-michael-horn.v2.md
+    deferred (allowance): 2026-06-12-video-revealing-the-nordic-alien-prophecies-michael-horn.v2.md
+    all remaining deferred by allowance; re-check in 600s
+=== 2026-08-01T09:20:57+09:00 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+Parsing record: 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+Allowance ceiling: weekly 90% >= 88% start-line (ceiling 95 less 7 reserved for end-of-week verification and fixes)
+  window resets at 2026-08-05T11:00:00.141604+00:00
+  Not starting. Completed chunks are cached; resume is cheap.
+--- rc=77 elapsed=2s 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+    deferred (allowance): 2026-04-24-video-skinny-bob-is-real-lifelong-abductee-reveals-everything.v2.md
+=== 2026-08-01T09:20:59+09:00 2026-06-12-video-revealing-the-nordic-alien-prophecies-michael-horn.v2.md
+Parsing record: 2026-06-12-video-revealing-the-nordic-alien-prophecies-michael-horn.v2.md
+Allowance ceiling: weekly 90% >= 88% start-line (ceiling 95 less 7 reserved for end-of-week verification and fixes)
+  window resets at 2026-08-05T11:00:00.141604+00:00
+  Not starting. Completed chunks are cached; resume is cheap.
+--- rc=77 elapsed=2s 2026-06-12-video-revealing-the-nordic-alien-prophecies-michael-horn.v2.md
+    deferred (allowance): 2026-06-12-video-revealing-the-nordic-alien-prophecies-michael-horn.v2.md
+    all remaining deferred by allowance; re-check in 600s

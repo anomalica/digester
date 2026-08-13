@@ -1,0 +1,95 @@
+{
+  "nodes": [
+    {
+      "type": "person",
+      "name": "Elizondo, Luis"
+    },
+    {
+      "type": "person",
+      "name": "Whitaker, Bill"
+    },
+    {
+      "type": "person",
+      "name": "Reid, Harry"
+    },
+    {
+      "type": "organisation",
+      "name": "60 Minutes"
+    },
+    {
+      "type": "organisation",
+      "name": "Pentagon"
+    },
+    {
+      "type": "organisation",
+      "name": "United States Senate Intelligence Committee"
+    },
+    {
+      "type": "organisation",
+      "name": "Office of the Director of National Intelligence (DNI)"
+    },
+    {
+      "type": "organisation",
+      "name": "Department of Defense (DoD)"
+    },
+    {
+      "type": "project",
+      "name": "Advanced Aerospace Threat Identification Program (AATIP)"
+    },
+    {
+      "type": "place",
+      "name": "Afghanistan"
+    },
+    {
+      "type": "place",
+      "name": "Middle East"
+    },
+    {
+      "type": "place",
+      "name": "Guantanamo"
+    },
+    {
+      "type": "topic",
+      "name": "Unidentified Aerial Phenomena (UAP)"
+    },
+    {
+      "type": "document",
+      "name": "DNI/Secretary of Defense UAP report to Senate Intelligence Committee"
+    }
+  ],
+  "claims": [
+    {
+      "quote": "the intelligence committee has ordered the director of national intelligence and the secretary of defense to deliver a report on the mysterious sightings by next month",
+      "text": "The Senate Intelligence Committee ordered the Director of National Intelligence and the Secretary of Defense to deliver a report on UAP sightings, due the month after this broadcast."
+    },
+    {
+      "quote": "after decades of public denial the pentagon now admits there's something out there",
+      "text": "After decades of public denial, the Pentagon has acknowledged the existence of Unidentified Aerial Phenomena."
+    },
+    {
+      "quote": "The government has already stated for the record that they're real.",
+      "text": "Luis Elizondo states that the U.S. government has officially stated for the record that UFOs/UAP are real."
+    },
+    {
+      "quote": "Luis Elizondo spent 20 years running military intelligence operations worldwide in Afghanistan, the Middle East, and Guantanamo.",
+      "text": "Luis Elizondo spent 20 years running military intelligence operations worldwide, including in Afghanistan, the Middle East, and Guantanamo."
+    },
+    {
+      "quote": "That's when he was asked to join something at the Pentagon called the Advanced Aerospace Threat Identification Program, or AATIP.",
+      "text": "In 2008, Luis Elizondo was asked to join the Pentagon's Advanced Aerospace Threat Identification Program (AATIP)."
+    },
+    {
+      "quote": "The mission of AATIP was quite simple. It was to collect and analyze information involving anomalous aerial vehicles",
+      "text": "AATIP's mission was to collect and analyze information involving anomalous aerial vehicles (UAP)."
+    },
+    {
+      "quote": "Buried away in the Pentagon, AATIP was part of a $22 million program sponsored by then Senate Majority Leader Harry Reid to investigate UFOs.",
+      "text": "AATIP was part of a $22 million Pentagon program to investigate UFOs, sponsored by then Senate Majority Leader Harry Reid."
+    },
+    {
+      "quote": "When Elizondo took over in 2010, he focused on the national security implications of unidentified aerial phenomena documented by U.S. service members.",
+      "text": "Luis Elizondo took over AATIP in 2010 and focused it on the national security implications of UAP documented by U.S. service members."
+    }
+  ],
+  "relevance_notes": "KEPT: all substantive factual assertions - the Senate Intelligence Committee's ordered report from the DNI and SecDef (an official action with a deadline), the Pentagon's shift from denial to acknowledgement, Elizondo's 20-year intelligence background and locations of service, his 2008 recruitment into AATIP, AATIP's mission statement, the $22 million funding figure and Harry Reid's sponsorship, and Elizondo's 2010 takeover with a national-security focus. These carry specific who/what/when/how-much information. SKIPPED as claims: conversational framing and rhetoric such as 'We have tackled many strange stories on 60 Minutes', 'the story will continue in a moment', Whitaker's 'It sounds nutty, wacky' and Elizondo's rhetorical responses ('What is it? What are its intentions?'), and the terminology remark 'We call them UAPs' - these are interview narration, filler, or open questions rather than factual assertions. NODES were captured completely, including tangential named places (Afghanistan, Guantanamo, Middle East) and organisations (60 Minutes, DNI office, DoD) since other digests may connect to them. The pending report was captured as a document node since it is a concrete official artifact referenced by the source. Persons formatted 'Last, First'; acronyms expanded (AATIP, UAP, DNI, DoD)."
+}

@@ -1,0 +1,20 @@
+Parsing record: 1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44.md
+COST ESTIMATE (rough, +/-40%):
+  16,668 source chars
+  model: openai/gpt-5-mini  ($3/$15 per million input/output tokens)
+  est tokens: ~56,668 in + ~6,250 out
+  est cost: ~$0.26  (range $0.16 - $0.37)
+  This spends real money on the metered Anthropic API.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Navy pilots describe encounters with UFOs
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +39 nodes (total 39) [model: complete]
+  39 nodes, 5 acronyms, main_subject='Unidentified Aerial Phenomena (UAP)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +114 claims (chunk total 114, doc total 114) [model: complete]
+  114 claims total: 107 domain, 7 infrastructure
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/navy-pilots/model-runs/navy-pilots.openai_gpt-5-mini.yaml
+Usage: 2 calls, in=14451 out=34352 cache_read=0 cost_equiv=$0.0723
+USAGE_JSON: {"input_tokens": 14451, "output_tokens": 34352, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.07231675, "calls": 2}
+TRACE_JSON: [{"input_tokens": 6441, "output_tokens": 5241, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.01209225}, {"input_tokens": 8010, "output_tokens": 29111, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.0602245}]

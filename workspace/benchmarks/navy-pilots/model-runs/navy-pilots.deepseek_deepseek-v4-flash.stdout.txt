@@ -1,0 +1,20 @@
+Parsing record: 1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44.md
+COST ESTIMATE (rough, +/-40%):
+  16,668 source chars
+  model: deepseek/deepseek-v4-flash  ($0/$0 per million input/output tokens)
+  est tokens: ~56,668 in + ~6,250 out
+  est cost: ~$0.01  (range $0.00 - $0.01)
+  This spends real money on the metered Anthropic API.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Navy pilots describe encounters with UFOs
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +35 nodes (total 35) [model: complete]
+  35 nodes, 6 acronyms, main_subject='2004 USS Nimitz UAP encounter'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+    claims iter 1: +70 claims (chunk total 70, doc total 70) [model: complete]
+  70 claims total: 70 domain, 0 infrastructure
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/navy-pilots/model-runs/navy-pilots.deepseek_deepseek-v4-flash.yaml
+Usage: 2 calls, in=14661 out=20393 cache_read=0 cost_equiv=$0.0057
+USAGE_JSON: {"input_tokens": 14661, "output_tokens": 20393, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.005740916, "calls": 2}
+TRACE_JSON: [{"input_tokens": 6563, "output_tokens": 7952, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.002442916}, {"input_tokens": 8098, "output_tokens": 12441, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.003298}]
