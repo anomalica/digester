@@ -15,7 +15,7 @@ while read -r rec; do
 	echo "=== [$n] $(date -Is) $rec" >>"$LOG"
 	start=$(date +%s)
 	timeout 3600 python3 -m digester.cli extract \
-		"/home/mark/repos/anomalica/ingests/records/$rec" \
+		"/home/mark/repos/anomalica/ingests/by-name/$rec" \
 		--model sonnet --digests-root /home/mark/repos/anomalica/digests >>"$LOG" 2>&1
 	rc=$?
 	echo "--- [$n] rc=$rc elapsed=$(($(date +%s) - start))s" >>"$LOG"

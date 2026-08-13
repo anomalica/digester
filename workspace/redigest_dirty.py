@@ -38,7 +38,7 @@ def body(h: str):
 
 def dirty_set():
     out = []
-    for d in sorted(glob.glob(str(ROOT / "digests/records/*.yaml"))):
+    for d in sorted(glob.glob(str(ROOT / "digests/*.yaml"))):
         # Scope cap (master): hold the two big ebooks for a supervised run when
         # Mark's back to watch fleet contention - they're 3.5h of the 5.9h.
         if "ebook" in Path(d).stem:

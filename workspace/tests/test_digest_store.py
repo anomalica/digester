@@ -58,7 +58,7 @@ def test_variant_path_carries_model_and_prompt(tmp_path):
 def test_active_run_writes_variant_and_canonical(tmp_path):
     w = ds.write_digest(tmp_path, "rec", "DIGEST", "haiku", ACTIVE)
     assert w["variant"].read_text() == "run_kind: production\nDIGEST"
-    assert w["canonical"] == tmp_path / "records" / "rec.yaml"
+    assert w["canonical"] == tmp_path / "rec.yaml"
     assert w["canonical"].read_text() == "run_kind: production\nDIGEST"
 
 
@@ -66,7 +66,7 @@ def test_override_run_writes_variant_only(tmp_path):
     w = ds.write_digest(tmp_path, "rec", "EXPERIMENT", "haiku", OVERRIDE)
     assert w["variant"].exists()
     assert w["canonical"] is None
-    assert not (tmp_path / "records" / "rec.yaml").exists()
+    assert not (tmp_path / "rec.yaml").exists()
 
 
 def test_variant_only_flag_skips_canonical(tmp_path):

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Re-ingest every record in ingests through the validated production
-# prompt into native YAML at digests/records/<name>.yaml.
+# prompt into native YAML at digests/<name>.yaml.
 #
 # Runs sequentially, smallest input first so the books land last. Each record
 # overwrites its old YAML in place. If a record fails the loop continues to
@@ -121,8 +121,8 @@ for ingest in "${files[@]}"; do
 	# so the strip has to happen here too or canonicals fragment the same way.
 	name=$(printf '%s' "$name" | sed -E 's/\.v[0-9]+$//')
 	output_host="$DIGESTS_DIR/records/${name}.yaml"
-	output_container="/home/nonroot/digests/records/${name}.yaml"
-	ingest_container="/home/nonroot/ingests/records/${name}.md"
+	output_container="/home/nonroot/digests/${name}.yaml"
+	ingest_container="/home/nonroot/ingests/by-name/${name}.md"
 
 	echo
 	echo "===  [$((ok + ${#failed[@]} + 1))/${#files[@]}]  $name  ==="
@@ -150,7 +150,7 @@ fi
 # The graph half (import into the DB, rebuild, stats) is NOT the digester's job
 # any more - it moved to the assimilator when extraction and assimilation split
 # (ADR 0034), and `digester.cli import/rebuild/stats` no longer exist. This
-# script's job ends at writing per-record digests under digests/records/. To
+# script's job ends at writing per-record digests under digests/. To
 # build the graph from them, run the assimilator:
 #     python -m assimilator.cli rebuild <digests-root>
 echo

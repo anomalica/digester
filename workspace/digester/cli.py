@@ -780,7 +780,7 @@ _ANOMALICA = Path(__file__).resolve().parents[3]
 @click.option(
     "--digests",
     type=click.Path(),
-    default=str(_ANOMALICA / "digests" / "records"),
+    default=str(_ANOMALICA / "digests"),
     help="Canonical digests directory",
 )
 @click.option(
@@ -792,7 +792,7 @@ _ANOMALICA = Path(__file__).resolve().parents[3]
 @click.option(
     "--records",
     type=click.Path(),
-    default=str(_ANOMALICA / "ingests" / "records"),
+    default=str(_ANOMALICA / "ingests" / "by-name"),
     help="Ingest records (annotation survival, frontmatter drift)",
 )
 def health_cmd(digests: str, store: str, records: str) -> None:
@@ -891,13 +891,13 @@ def health_cmd(digests: str, store: str, records: str) -> None:
 @click.option(
     "--digests",
     type=click.Path(),
-    default=str(_ANOMALICA / "digests" / "records"),
+    default=str(_ANOMALICA / "digests"),
     help="Canonical digests directory",
 )
 @click.option(
     "--records",
     type=click.Path(),
-    default=str(_ANOMALICA / "ingests" / "records"),
+    default=str(_ANOMALICA / "ingests" / "by-name"),
     help="Ingest records directory",
 )
 def stale_records_cmd(digests: str, records: str) -> None:

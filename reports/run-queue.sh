@@ -19,7 +19,7 @@ export PYTHONPATH=/home/mark/repos/anomalica/anomalica-common/src:.
 export DIGESTER_USE_API=0 ANOMALICA_CLI_EFFORT=low
 export ANOMALICA_CLI_TIMEOUT_S=1800 ANOMALICA_CLI_LONG_TIMEOUT_S=3600
 
-RECORDS=/home/mark/repos/anomalica/ingests/records
+RECORDS=/home/mark/repos/anomalica/ingests/by-name
 DIGESTS=/home/mark/repos/anomalica/digests
 LIST=${LIST:-/home/mark/repos/anomalica/digester/reports/books.list}
 LOG=${LOG:-/home/mark/repos/anomalica/digester/reports/queue.log}

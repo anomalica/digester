@@ -81,7 +81,7 @@ def variant_path(
 
 
 def canonical_path(digests_root: Path, friendly_name: str) -> Path:
-    return digests_root / "records" / f"{_de_version(friendly_name)}.yaml"
+    return digests_root / f"{_de_version(friendly_name)}.yaml"
 
 
 def write_digest(

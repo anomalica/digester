@@ -28,11 +28,10 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent.parent.parent
 SOURCE = (
     ROOT
-    / "ingests/records/2021-05-17-video-navy-pilots-describe-encounters-with-ufos.md"
+    / "ingests/by-name/2021-05-17-video-navy-pilots-describe-encounters-with-ufos.md"
 )
 DIGEST = (
-    ROOT
-    / "digests/records/2021-05-17-video-navy-pilots-describe-encounters-with-ufos.yaml"
+    ROOT / "digests/2021-05-17-video-navy-pilots-describe-encounters-with-ufos.yaml"
 )
 
 _TS_LINE = re.compile(r"^(\d{2}):(\d{2}):(\d{2})\.(\d)\s+(.*)$")

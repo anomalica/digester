@@ -2,7 +2,7 @@
 """Convert legacy .extract.md files to the locked .yaml digest format.
 
 Reads from digests/extracts/*.extract.md (the legacy markdown
-intermediate) and writes to digests/records/<friendly>.yaml
+intermediate) and writes to digests/<friendly>.yaml
 (the new YAML interchange format per decision 0027).
 
 Run inside the container:

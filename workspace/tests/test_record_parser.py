@@ -122,7 +122,7 @@ def test_parse_record_rejects_a_path_instead_of_contents():
     import pytest
 
     with pytest.raises(ValueError, match="CONTENTS, not a path"):
-        parse_record("/home/mark/repos/anomalica/ingests/records/some-record.md")
+        parse_record("/home/mark/repos/anomalica/ingests/by-name/some-record.md")
 
 
 def test_parse_record_still_accepts_a_short_real_record():

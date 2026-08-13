@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# First-pass batch digest: run every record under ingests/records/
+# First-pass batch digest: run every record under ingests/by-name/
 # through `digester digest`, writing .extract.md files to digests/extracts/
 # and accumulating nodes/claims in the shared SQLite databases.
 #
@@ -7,7 +7,7 @@
 
 set -u
 
-INGESTS_DIR="/home/nonroot/ingests/records"
+INGESTS_DIR="/home/nonroot/ingests/by-name"
 DIGESTS_DIR="/home/nonroot/digests/extracts"
 LOG_FILE="/home/nonroot/digests/batch.log"
 SUCCEEDED_FILE="/home/nonroot/digests/succeeded.txt"
