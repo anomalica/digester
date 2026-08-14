@@ -58,9 +58,15 @@ echo "=== queue driver up $(date -Is)" >>"$LOG"
 # The digest for record X.v2.md is X.yaml - the .v2 is stripped on the digest side
 # and only the symlink joins the two namespaces. Getting this wrong reads every
 # record as undigested and re-runs the entire corpus.
+#
+# Canonical digests sit at the ROOT of digests/ since the 2026-08-13 rename; the
+# old records/ subdirectory is gone. This line kept the old path through that
+# rename, and its failure mode is the one the paragraph above warns about: every
+# lookup misses, every record reads as undigested, and the queue re-runs the whole
+# corpus on the plan.
 digest_for() {
 	local slug="${1%.md}"
-	echo "$DIGESTS/records/${slug%.v2}.yaml"
+	echo "$DIGESTS/${slug%.v2}.yaml"
 }
 
 while :; do
