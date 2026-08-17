@@ -62,12 +62,33 @@ while read -r slug; do
 	# editors credited for work they did not do. False attestation, the same
 	# class the external-passage marker exists to prevent.
 	#
-	# Known-instance guard, not a general compilation detector: it keys on the
-	# scanned "NEXT DOCUMENT" divider pages, which is one publisher's convention
-	# and the only one in 225 pdf and ebook records. Records ingested since
-	# document-boundary annotations shipped carry them, so this is about the
-	# legacy tail. It cannot false-negative us into a worse position than having
-	# no check at all.
+	# WHAT A PASSING CHECK MEANS: "this known record is not queued unannotated".
+	# It does NOT mean "no compilations are queued", and it does NOT mean the
+	# boundaries are right. Two blind spots, in different dimensions:
+	#
+	#   1. Known instance, not a detector. It keys on the scanned "NEXT DOCUMENT"
+	#      divider pages - one publisher's physical convention, transcribed source
+	#      content rather than anything we emit, and the only instance in 225 pdf
+	#      and ebook records. It says nothing about the next compilation.
+	#   2. Presence, not correctness. It tests for the ABSENCE of any
+	#      `<!-- document:` annotation, so 3 annotations where 17 papers exist
+	#      stands it down and 14 papers digest attributed to the container. Same
+	#      if all 17 land carrying the container's creators instead of each
+	#      paper's author.
+	#
+	# Blind spot 2 is deliberately NOT closed here by counting dividers against
+	# annotations, because no divider count maps to the paper count: this record
+	# has 44 "NEXT DOCUMENT" occurrences - 23 image annotations, 6 headings, 15
+	# other - against 17 papers. Any threshold would be a guess presented as a
+	# check, which is worse than a stated limit.
+	#
+	# Correctness belongs where the annotations are produced: the ingester
+	# verifies they are present, that there are 17, and that each paper's
+	# `creators` is its own author before anything downstream sees it. This is
+	# only the backstop against the annotation never landing at all.
+	#
+	# Both blind spots are false negatives, so neither leaves us worse off than
+	# having no check - but a passing check must not be read as verification.
 	if grep -q "NEXT DOCUMENT" "$link" 2>/dev/null && ! grep -q "<!-- document:" "$link" 2>/dev/null; then
 		compilations=$((compilations + 1))
 		echo "queue-preflight: $slug is a compilation with no document boundaries" >&2
