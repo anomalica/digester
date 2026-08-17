@@ -50,6 +50,44 @@ while read -r slug; do
 	fi
 done <"$LIST"
 
+compilations=0
+while read -r slug; do
+	[ -n "$slug" ] || continue
+	link="$ANOMALICA/ingests/by-name/${slug%.md}.md"
+	[ -e "$link" ] || link="$ANOMALICA/ingests/by-name/${slug%.md}.v2.md"
+	[ -e "$link" ] || continue
+	# A compilation whose papers are not yet delimited. Digesting it attributes
+	# every claim to the CONTAINER - Robert L. Forward's work sourced to "NASA
+	# workshop proceedings", his person node uncredited, and the container's
+	# editors credited for work they did not do. False attestation, the same
+	# class the external-passage marker exists to prevent.
+	#
+	# Known-instance guard, not a general compilation detector: it keys on the
+	# scanned "NEXT DOCUMENT" divider pages, which is one publisher's convention
+	# and the only one in 225 pdf and ebook records. Records ingested since
+	# document-boundary annotations shipped carry them, so this is about the
+	# legacy tail. It cannot false-negative us into a worse position than having
+	# no check at all.
+	if grep -q "NEXT DOCUMENT" "$link" 2>/dev/null && ! grep -q "<!-- document:" "$link" 2>/dev/null; then
+		compilations=$((compilations + 1))
+		echo "queue-preflight: $slug is a compilation with no document boundaries" >&2
+	fi
+done <"$LIST"
+
+if [ "$compilations" -gt 0 ]; then
+	cat >&2 <<-EOF
+		queue-preflight: REFUSING TO START.
+
+		$compilations queued record(s) hold several documents with no boundaries marked.
+		Digesting one attributes every claim to the container rather than to the paper's
+		real authors, which is wrong in the data and expensive to unpick.
+
+		Re-ingest it so the papers are delimited, then start the queue. This check
+		passes by itself once that is done.
+	EOF
+	exit 1
+fi
+
 if [ "$marked" -gt 0 ]; then
 	cat >&2 <<-EOF
 		queue-preflight: REFUSING TO START.
