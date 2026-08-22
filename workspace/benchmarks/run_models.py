@@ -16,20 +16,29 @@ Safe at runtime (never echoed). Usage:
 from __future__ import annotations
 
 import json
+import os
 import re
 import subprocess
 import sys
 import time
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from anomalica_common.llm.cost import estimate_record  # noqa: E402
+
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parent
 ANOM = WORKSPACE.parent.parent
 
 _NAVY_HASH = "1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44"
-ARTICLE = "navy-pilots"
+
+# The record is a parameter, not a constant. Held as a default so the navy
+# baseline reproduces unchanged, while a second record can be swept without
+# copying this file - which is how the two would drift apart.
+ARTICLE = os.environ.get("BENCH_ARTICLE", "navy-pilots")
+RECORD_PATH = os.environ.get("BENCH_RECORD")
 OUT_DIR = HERE / ARTICLE / "model-runs"
-COST_CEILING_USD = 5.0  # backstop: stop launching if cumulative spend exceeds this
+COST_CEILING_USD = float(os.environ.get("BENCH_COST_CEILING_USD", "5.0"))
 CONCURRENCY = (
     5  # models run in parallel - one slow reasoning model can't block the rest
 )
@@ -70,6 +79,11 @@ MODELS = [
 
 
 def resolve_record() -> Path:
+    if RECORD_PATH:
+        p = Path(RECORD_PATH)
+        if not p.exists():
+            raise SystemExit(f"BENCH_RECORD does not exist: {p}")
+        return p
     store = ANOM / "ingests/store"
     for c in (
         store / f"{_NAVY_HASH}.v2.md",
@@ -191,12 +205,26 @@ def _safe_run(model: str, record: Path, env: dict) -> dict:
         return {"model": model, "error": f"driver: {e}", "cost_usd": 0.0}
 
 
+def _materialised_chars(record: Path) -> int:
+    """Size the model actually sees - the basis every estimate must use."""
+    try:
+        sys.path.insert(0, str(WORKSPACE))
+        from anomalica_common.pre_digest import materialise
+
+        from digester.record_parser import parse_record
+
+        return len(materialise(parse_record(record.read_text(errors="replace")).body))
+    except Exception:
+        return record.stat().st_size
+
+
 def main() -> int:
     import os
-    from concurrent.futures import ThreadPoolExecutor, as_completed
+    from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     record = resolve_record()
+    record_chars = _materialised_chars(record)
     models = sys.argv[1:] or MODELS
     env = {
         **os.environ,
@@ -216,38 +244,76 @@ def main() -> int:
         else:
             pending.append(model)
 
+    # PROJECTED-SPEND CEILING, not a start gate.
+    #
+    # The old loop submitted every model up front and checked the ceiling only as
+    # results returned. With CONCURRENCY workers, that leaves up to CONCURRENCY
+    # runs in flight past the limit - `cancel_futures` cancels QUEUED work and
+    # cannot stop a call already dispatched. A "$12 ceiling" duly produced $12.11.
+    #
+    # A model is now admitted only if spent + in-flight-estimate + its own
+    # estimate stays under the ceiling, using the HIGH end of the estimate band so
+    # the projection errs upward. The ceiling therefore bounds what the run CAN
+    # cost, not what it has already cost.
+    est: dict[str, float] = {}
+    for m in pending:
+        try:
+            est[m] = estimate_record(record_chars, m)["usd_high"]
+        except Exception:
+            est[m] = 0.0  # unpriced: cannot project, so it is admitted on spend alone
+
     total = 0.0
     done = 0
+    queued = list(pending)
+    inflight: dict = {}
+    refused: list[str] = []
     with ThreadPoolExecutor(max_workers=CONCURRENCY) as ex:
-        futs = {ex.submit(_safe_run, m, record, env): m for m in pending}
-        for fut in as_completed(futs):
-            row = fut.result()
-            rows.append(row)
-            done += 1
-            total += row.get("cost_usd") or 0.0
-            print(
-                f"[{done}/{len(pending)}] {row['model']}: {_status(row)}  "
-                f"| cumulative ${total:.4f}",
-                flush=True,
-            )
-            manifest.write_text(
-                json.dumps(
-                    {
-                        "record": record.name,
-                        "rows": rows,
-                        "total_cost_usd": round(total, 4),
-                    },
-                    indent=2,
-                )
-            )
-            if total > COST_CEILING_USD:
+        while queued or inflight:
+            while queued and len(inflight) < CONCURRENCY:
+                m = queued[0]
+                committed = sum(e for _, e in inflight.values())
+                if total + committed + est.get(m, 0.0) > COST_CEILING_USD:
+                    break
+                queued.pop(0)
+                inflight[ex.submit(_safe_run, m, record, env)] = (m, est.get(m, 0.0))
+            if not inflight:
+                refused = list(queued)
                 print(
-                    f"\n!! COST CEILING ${COST_CEILING_USD} EXCEEDED - cancelling "
-                    f"un-started models",
+                    f"\n!! PROJECTED SPEND would breach ${COST_CEILING_USD} - "
+                    f"not starting {len(refused)} model(s): {', '.join(refused)}",
                     flush=True,
                 )
-                ex.shutdown(wait=False, cancel_futures=True)
                 break
+            finished, _ = wait(list(inflight), return_when=FIRST_COMPLETED)
+            for fut in finished:
+                inflight.pop(fut, None)
+                row = fut.result()
+                rows.append(row)
+                done += 1
+                total += row.get("cost_usd") or 0.0
+                print(
+                    f"[{done}/{len(pending)}] {row['model']}: {_status(row)}  "
+                    f"| cumulative ${total:.4f}",
+                    flush=True,
+                )
+                manifest.write_text(
+                    json.dumps(
+                        {
+                            "record": record.name,
+                            "rows": rows,
+                            "total_cost_usd": round(total, 4),
+                            "refused_for_ceiling": refused,
+                        },
+                        indent=2,
+                    )
+                )
+                if total > COST_CEILING_USD:
+                    print(
+                        f"\n!! ACTUAL SPEND ${total:.4f} EXCEEDED CEILING "
+                        f"${COST_CEILING_USD} - draining, starting nothing further",
+                        flush=True,
+                    )
+                    queued.clear()
 
     print(f"\n=== done: {len(rows)} rows, total ${total:.4f} ===")
     print(f"outputs: {OUT_DIR}")
