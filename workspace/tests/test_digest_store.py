@@ -155,3 +155,41 @@ def test_run_kind_distinguishes_a_production_run_from_a_comparison_run(tmp_path)
     comp = write_digest(tmp_path, "rec", "BODY", "sonnet", prov, run_label="repeat")
     assert comp["variant"].read_text().startswith("run_kind: comparison\n")
     assert comp["canonical"] is None
+
+
+def test_the_plain_output_path_also_stamps_run_kind(tmp_path, monkeypatch):
+    """A digest written with -o must carry run_kind too.
+
+    Only digest_store.write_digest stamped it, so every digest written with -o
+    had no run_kind at all - which is most of why the nine digests of 19 August
+    cannot be attributed to a run. A field present on one write path and absent
+    on the other is worse than absent on both: it reads as "old artefact"
+    rather than "a different path wrote it".
+    """
+    from digester import cli
+    from digester.record_parser import parse_record
+
+    rec = tmp_path / "rec.md"
+    rec.write_text("---\ntitle: T\ncontent_hash: 'sha256:aa'\n---\nA body.\n")
+    out = tmp_path / "out.yaml"
+    # patched at SOURCE: _do_extract imports it locally, so the module
+    # attribute on cli does not exist to patch
+    import digester.extract as ex
+
+    monkeypatch.setattr(
+        ex,
+        "extract_two_pass",
+        lambda *a, **k: {"nodes": [], "claims": [], "terminology": [], "prompts": []},
+    )
+    cli._do_extract(
+        rec,
+        parse_record(rec.read_text()),
+        out,
+        "haiku",
+        False,
+        None,
+        False,
+        None,
+        None,
+    )
+    assert out.read_text().startswith("run_kind: "), out.read_text()[:80]

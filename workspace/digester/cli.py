@@ -425,9 +425,22 @@ def _do_extract(
                 )
             return written["variant"]
 
+        # Stamp run_kind HERE too, not only on the digests_root path. Only
+        # digest_store.write_digest stamped it, so any digest written with -o
+        # carried no run_kind at all - which is most of why the nine digests of
+        # 19 August cannot be attributed to a run today. A field that exists on
+        # one write path and not the other is worse than one that exists on
+        # neither: its absence reads as "old artefact" rather than "other path".
+        from digester import digest_store  # local, matching the branch above
+
         out_path = output if output else path.with_suffix(".yaml")
-        out_path.write_text(text)
-        click.echo(f"\nWritten to: {out_path}")
+        kind = (
+            "production"
+            if digest_store.is_active_prompt(result.get("prompts"))
+            else "comparison"
+        )
+        out_path.write_text(f"run_kind: {kind}\n{text}")
+        click.echo(f"\nWritten to: {out_path} (run_kind: {kind})")
         return out_path
     finally:
         _echo_usage()
