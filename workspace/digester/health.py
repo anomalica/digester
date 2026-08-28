@@ -538,6 +538,13 @@ MAPPED_RECORD_FIELDS = frozenset(
         "fetched_url",
         "description",
         "review_carryover",
+        # 2026-08-28: REVERSED. Previously in UNWANTED on the reasoning that
+        # copyright is access-control state whose authority is the ingest record,
+        # so a copy elsewhere is a staler second source of truth. Sound, and
+        # wrong: with the graph blind to copyright the assimilator nearly
+        # published verbatim excerpts from 13 copyrighted books. The digest now
+        # carries the STATUS only, flattened to copyright_status.
+        "copyright",
     }
 )
 
@@ -556,7 +563,6 @@ UNWANTED_RECORD_FIELDS = frozenset(
         "date_extracted",
         "snapshots",
         "source_hash",
-        "copyright",
         "superseded_by",
         "superseded_reason",
         # media is storage accounting and says nothing about claims. copyright is
