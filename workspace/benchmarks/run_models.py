@@ -96,6 +96,37 @@ def resolve_record() -> Path:
     raise SystemExit(f"navy benchmark record not found for {_NAVY_HASH}")
 
 
+def check_budget(key: str) -> None:
+    """Refuse to start when the POOLED daily budget cannot cover a run.
+
+    The $3/day OpenRouter cap is shared across every component, and no session
+    can see another's consumption when sizing work. A 403 partway through a
+    sweep leaves some records done and some not, which is a worse state than not
+    starting - and it is indistinguishable from a model failing, which is exactly
+    how "Sol cannot handle a web record" got reported as a finding when the real
+    cause was the budget running out mid-run.
+    """
+    import urllib.request
+
+    req = urllib.request.Request(
+        "https://openrouter.ai/api/v1/key", headers={"Authorization": f"Bearer {key}"}
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as r:
+            d = json.load(r).get("data") or {}
+    except Exception as exc:  # unreadable budget is not permission to spend
+        raise SystemExit(f"cannot read OpenRouter budget ({exc}); refusing to start")
+    used, limit = float(d.get("usage_daily") or 0), d.get("limit")
+    rem = d.get("limit_remaining")
+    print(f"OpenRouter daily: ${used:.4f} used, limit ${limit}, remaining ${rem}")
+    if rem is not None and float(rem) <= 0:
+        raise SystemExit(
+            f"POOLED daily budget exhausted (${used:.2f} of ${limit}) - refusing to "
+            "start. This is shared with every other component; another run may have "
+            "consumed it."
+        )
+
+
 def openrouter_key() -> str:
     secrets = Path.home() / "repos/secrets"
     proc = subprocess.run(
@@ -226,10 +257,12 @@ def main() -> int:
     record = resolve_record()
     record_chars = _materialised_chars(record)
     models = sys.argv[1:] or MODELS
+    _key = openrouter_key()
+    check_budget(_key)
     env = {
         **os.environ,
         "DIGESTER_USE_API": "1",
-        "OPENROUTER_API_KEY": openrouter_key(),
+        "OPENROUTER_API_KEY": _key,
     }
     manifest = OUT_DIR / "manifest.json"
 
