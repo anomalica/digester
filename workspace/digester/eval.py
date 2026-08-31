@@ -269,26 +269,40 @@ def parse_highlights(body: str) -> list[dict]:
         events.append((m.start(), m.end(), "end", m.group(1)))
     events.sort(key=lambda e: e[0])
 
+    # A highlight may be EXTENDED: one id, several start/end pairs, so its
+    # evidence can sit at the top and bottom of a paragraph with the digression
+    # between them left out. One highlight, one id, ONE expected claim.
+    #
+    # So ranges are a LIST per id, not a single tuple. As a tuple the second pair
+    # overwrote the first - and worse than the obvious failure: `order` gained the
+    # id a second time while `spans[hid]` held only the last range, so the output
+    # was two copies of the SECOND part with the first silently gone. Nothing
+    # errored, and the gold was quietly wrong.
     open_at: dict[str, int] = {}  # id -> content-start offset (after the marker)
     order: list[str] = []
-    spans: dict[str, tuple[int, int]] = {}
+    spans: dict[str, list[tuple[int, int]]] = {}
     for _mstart, mend, kind, hid in events:
         if kind == "start":
             if hid not in open_at:
                 open_at[hid] = mend
-                order.append(hid)
+                if hid not in order:
+                    order.append(hid)
         else:
             start = open_at.pop(hid, None)
             if start is not None:
                 # content ends at the marker's start (the end marker begins at _mstart)
-                spans[hid] = (start, _mstart)
+                spans.setdefault(hid, []).append((start, _mstart))
     for hid, start in open_at.items():  # unmatched start -> auto-close at body end
-        spans[hid] = (start, len(body))
+        spans.setdefault(hid, []).append((start, len(body)))
 
     result = []
     for hid in order:
-        s, e = spans[hid]
-        raw = body[s:e]
+        # Parts JOINED IN BODY ORDER with an elision marker, never concatenated.
+        # Running one part's opening into another's ending manufactures a sentence
+        # the source never uttered - the false-quotation failure arriving through
+        # the grader rather than through an extraction.
+        parts = sorted(spans.get(hid, []))
+        raw = " [...] ".join(body[s:e] for s, e in parts)
         # The wrapped prose is source, but it may itself carry nested markers /
         # word timestamps; strip those so the inner text matches the pre-digest.
         text = strip_word_timestamps(strip_overlay_markers(raw)).strip()

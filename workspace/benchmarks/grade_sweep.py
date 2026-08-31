@@ -39,11 +39,25 @@ _COMPOUND = re.compile(
 def highlights(body: str) -> list[str]:
     """Highlighted passages, flattened. Markers nest, so the inner start tag of
     an overlapping pair would otherwise be captured as part of the outer text."""
-    out = []
+    # Group by ID, not per pair. A highlight may be EXTENDED - one id, several
+    # start/end pairs - so counting pairs inflates the coverage DENOMINATOR and
+    # every model's score drops for a reviewer choosing two ends of a paragraph
+    # over the whole thing. One highlight is one expected claim however many
+    # pieces its evidence arrives in.
+    by_id: dict[str, list[str]] = {}
+    seq = 0
     for m in re.finditer(
-        r"\{\{highlight-start[^}]*\}\}(.*?)\{\{highlight-end[^}]*\}\}", body, re.S
+        r"\{\{highlight-start:?\s*([A-Za-z0-9]*)[^}]*\}\}(.*?)"
+        r"\{\{highlight-end[^}]*\}\}",
+        body,
+        re.S,
     ):
-        t = re.sub(r"\{\{[^}]*\}\}", " ", m.group(1))
+        hid = m.group(1) or f"_anon{(seq := seq + 1)}"
+        by_id.setdefault(hid, []).append(m.group(2))
+    out = []
+    for hid, chunks in by_id.items():
+        m_group = " [...] ".join(chunks)
+        t = re.sub(r"\{\{[^}]*\}\}", " ", m_group)
         t = re.sub(r"<!--.*?-->", " ", t, flags=re.S)
         t = re.sub(r"\s+", " ", t).strip()
         if len(t) > 40:

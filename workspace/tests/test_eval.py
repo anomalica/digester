@@ -235,3 +235,35 @@ def test_coref_untestable_when_ancestors_name_nobody():
     )
     assert r["coref_applicable"] == 0
     assert r["coref_untestable"] == 1
+
+
+def test_an_extended_highlight_is_one_gold_unit_joined_by_elision():
+    """One id, several start/end pairs: one highlight, one expected claim.
+
+    A reviewer draws one highlight and expects one claim. The evidence is often
+    at the top and bottom of a fat paragraph, so highlighting the whole thing
+    would tell the grader "one claim from all of this" and stop saying which.
+
+    As a single tuple per id the second pair overwrote the first AND the id was
+    appended to `order` twice, so the output was two copies of the SECOND part
+    with the first silently gone. Nothing errored; the gold was quietly wrong.
+    """
+    from digester.eval import parse_highlights
+
+    body = (
+        "intro "
+        "{{highlight-start: a1}}the part that matters{{highlight-end: a1}}"
+        " a long digression nobody wants in the quote "
+        "{{highlight-start: a1}}and its conclusion{{highlight-end: a1}}"
+        " outro"
+    )
+    units = parse_highlights(body)
+    assert len(units) == 1, f"extended highlight split into {len(units)} units"
+    text = units[0]["text"]
+    assert "the part that matters" in text
+    assert "and its conclusion" in text
+    assert "digression" not in text, "the omitted middle leaked into the gold"
+    # joined, never concatenated - otherwise the grader manufactures a sentence
+    # the source never uttered
+    assert "[...]" in text, text
+    assert "matters and its" not in text
