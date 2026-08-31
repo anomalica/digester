@@ -378,46 +378,48 @@ def _do_extract(
             ),
             review=_review_provenance_for(path),
             record_extra={
-                k: v
-                for k in (
-                    "release",
-                    "provenance",
-                    "classification",
-                    "supersedes",
-                    "speakers",
-                    "pages",
-                    "fetched_url",
-                    "description",
-                )
-                if (v := parsed.metadata.get(k))
+                **{
+                    k: v
+                    for k in (
+                        "release",
+                        "provenance",
+                        "classification",
+                        "supersedes",
+                        "speakers",
+                        "pages",
+                        "fetched_url",
+                        "description",
+                    )
+                    if (v := parsed.metadata.get(k))
+                },
+                # COPYRIGHT STATUS, flattened from the record's nested `copyright.status`.
+                #
+                # Reverses an earlier ruling of mine that this deliberately had ONE home
+                # in the ingest record, on the grounds that a copy in a public artefact
+                # becomes a staler second source of truth for an access decision. That
+                # reasoning is still sound and it was still wrong, because the cost
+                # landed elsewhere: with the graph unable to see copyright at all, the
+                # assimilator came close to publishing verbatim excerpts from 13
+                # copyrighted books. A field that must be joined is a field that gets
+                # forgotten, and 0 of 100 graph records carrying a status is the proof.
+                #
+                # Flattened deliberately: the digest carries the STATUS only, not the
+                # whole copyright block, so nothing else in it is republished.
+                #
+                # KNOWN HAZARD, and it is the reason the original ruling existed: this
+                # lives in frontmatter, and frontmatter changes are invisible to
+                # `stale-records` (pre_digest.sha256 covers the BODY). A licence that
+                # changes after digestion leaves every digest asserting the old status
+                # with nothing able to detect it. The metadata-refresh path must cover
+                # this field, and an access decision at publish time should still read
+                # the store rather than trusting this snapshot.
+                **(
+                    {"copyright_status": _cp["status"]}
+                    if isinstance(_cp := parsed.metadata.get("copyright"), dict)
+                    and _cp.get("status")
+                    else {}
+                ),
             },
-            # COPYRIGHT STATUS, flattened from the record's nested `copyright.status`.
-            #
-            # Reverses an earlier ruling of mine that this deliberately had ONE home
-            # in the ingest record, on the grounds that a copy in a public artefact
-            # becomes a staler second source of truth for an access decision. That
-            # reasoning is still sound and it was still wrong, because the cost
-            # landed elsewhere: with the graph unable to see copyright at all, the
-            # assimilator came close to publishing verbatim excerpts from 13
-            # copyrighted books. A field that must be joined is a field that gets
-            # forgotten, and 0 of 100 graph records carrying a status is the proof.
-            #
-            # Flattened deliberately: the digest carries the STATUS only, not the
-            # whole copyright block, so nothing else in it is republished.
-            #
-            # KNOWN HAZARD, and it is the reason the original ruling existed: this
-            # lives in frontmatter, and frontmatter changes are invisible to
-            # `stale-records` (pre_digest.sha256 covers the BODY). A licence that
-            # changes after digestion leaves every digest asserting the old status
-            # with nothing able to detect it. The metadata-refresh path must cover
-            # this field, and an access decision at publish time should still read
-            # the store rather than trusting this snapshot.
-            **(
-                {"copyright_status": _cp["status"]}
-                if isinstance(_cp := parsed.metadata.get("copyright"), dict)
-                and _cp.get("status")
-                else {}
-            ),
             model=model,
             ai_usage=ai_usage,
             pre_digest={"sha256": pd_sha, "prep_version": PREP_VERSION},

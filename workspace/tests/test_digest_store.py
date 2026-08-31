@@ -193,3 +193,47 @@ def test_the_plain_output_path_also_stamps_run_kind(tmp_path, monkeypatch):
         None,
     )
     assert out.read_text().startswith("run_kind: "), out.read_text()[:80]
+
+
+def test_copyright_status_reaches_the_record_block(tmp_path, monkeypatch):
+    """A record carrying copyright.status must serialise, not crash.
+
+    The field was spread as a TOP-LEVEL keyword to two_pass_result_to_yaml
+    instead of into record_extra, so every record with a copyright block raised
+    TypeError at SERIALISATION - after the model work was done. Thirty overnight
+    attempts each extracted, aligned, spent the allowance, then threw it away.
+
+    148 tests passed throughout, because the run_kind fixture has no copyright
+    block: the bug needed the field to exist, and no fixture had it. A test that
+    cannot reach the failing branch is not coverage.
+    """
+    import yaml as _yaml
+
+    import digester.extract as ex
+    from digester import cli
+    from digester.record_parser import parse_record
+
+    rec = tmp_path / "rec.md"
+    rec.write_text(
+        "---\ntitle: T\ncontent_hash: 'sha256:aa'\n"
+        "copyright:\n  status: publicly_accessible\n---\nA body.\n"
+    )
+    out = tmp_path / "out.yaml"
+    monkeypatch.setattr(
+        ex,
+        "extract_two_pass",
+        lambda *a, **k: {"nodes": [], "claims": [], "terminology": [], "prompts": []},
+    )
+    cli._do_extract(
+        rec,
+        parse_record(rec.read_text()),
+        out,
+        "haiku",
+        False,
+        None,
+        False,
+        None,
+        None,
+    )
+    d = _yaml.safe_load(out.read_text())
+    assert d["record"]["copyright_status"] == "publicly_accessible"
