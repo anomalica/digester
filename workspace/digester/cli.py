@@ -960,5 +960,53 @@ def stale_records_cmd(digests: str, records: str) -> None:
         click.echo(str(p))
 
 
+@main.command(name="selftest")
+@click.argument("file_path", type=click.Path(exists=True))
+def selftest_cmd(file_path: str) -> None:
+    """Serialise one record end to end with NO model call, then exit.
+
+    A crash AFTER the model call is the most expensive failure shape the pipeline
+    has: the work is done, the allowance is spent, and the result is thrown away.
+    That is not hypothetical - copyright_status was passed as a top-level keyword
+    instead of into record_extra, and 30 overnight attempts each ran both passes,
+    aligned the offsets, spent roughly $0.87 of plan-equivalent, and died at
+    serialisation. Zero output, ~$26 of allowance, and a green test suite
+    throughout because no fixture carried a copyright block.
+
+    Run this against a REAL record before dispatching a batch. It exercises the
+    same _do_extract path with the model stubbed, so every field that record
+    carries reaches the serialiser exactly as it would in a paid run - and any
+    signature mismatch costs a second rather than a batch.
+    """
+    import tempfile
+
+    import yaml
+
+    import digester.extract as ex
+
+    path = Path(file_path)
+    parsed = parse_record(path.read_text(errors="replace"))
+    real = ex.extract_two_pass
+    ex.extract_two_pass = lambda *a, **k: {
+        "nodes": [],
+        "claims": [],
+        "terminology": [],
+        "prompts": [],
+    }
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "selftest.yaml"
+            _do_extract(path, parsed, out, "haiku", False, None, False, None, None)
+            doc = yaml.safe_load(out.read_text())
+    except Exception as exc:
+        click.echo(f"SELFTEST FAILED on {path.name}: {type(exc).__name__}: {exc}")
+        raise SystemExit(1) from exc
+    finally:
+        ex.extract_two_pass = real
+    carried = sorted((doc.get("record") or {}).keys())
+    click.echo(f"selftest ok: {path.name}")
+    click.echo(f"  record block carries: {', '.join(carried)}")
+
+
 if __name__ == "__main__":
     main()
