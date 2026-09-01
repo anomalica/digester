@@ -960,6 +960,64 @@ def stale_records_cmd(digests: str, records: str) -> None:
         click.echo(str(p))
 
 
+@main.command(name="grade-record")
+@click.argument("record", type=click.Path(exists=True))
+@click.option(
+    "--digests-root",
+    type=click.Path(),
+    default=str(_ANOMALICA / "digests"),
+    help="Digests repo holding variants/",
+)
+def grade_record_cmd(record: str, digests_root: str) -> None:
+    """Grade every variant of RECORD against its own reviewer highlights.
+
+    Self-service on purpose: any component that dispatches variants can score
+    them without waiting on this one. Variants are read from the standard
+    location - digests/variants/{friendly-name}/*.yaml - so a dispatcher that
+    writes there needs no handoff and no signal.
+
+    Scores are comparable WITHIN a record and not across records. Measured
+    2026-09-01: the same model varies 24-40 points between records while four
+    models differ by 21 points on one record, so a table mixing records ranks
+    whichever model drew the easier text.
+    """
+    import yaml as _yaml
+
+    from digester.eval import grade_digest
+
+    path = Path(record)
+    body = parse_record(path.read_text(errors="replace")).body
+    stem = path.name.removesuffix(".v2.md").removesuffix(".md")
+    vdir = Path(digests_root) / "variants" / stem
+    files = sorted(vdir.glob("*.yaml")) if vdir.is_dir() else []
+    if not files:
+        click.echo(f"No variants at {vdir}")
+        raise SystemExit(1)
+    rows = []
+    for f in files:
+        d = _yaml.safe_load(f.read_text())
+        r = grade_digest(body, d)
+        rows.append((f.stem.split(".")[0], r))
+    rows.sort(key=lambda x: -x[1]["recall"])
+    g = rows[0][1]
+    click.echo(f"{stem}")
+    click.echo(
+        f"  {g['gold_units']} gold units, {g['units_with_context']} with context chains"
+    )
+    click.echo(
+        f"\n{'model':22} {'recall':>7} {'fidelity':>9} {'coref':>7} {'claims':>7}"
+    )
+    for name, r in rows:
+        click.echo(
+            f"{name[:22]:22} {r['recall']:7.3f} {r['quote_fidelity']:9.3f} "
+            f"{r['coref_rate']:7.3f} {r['claims']:7}"
+        )
+    click.echo(
+        "\nComparable within this record only. A gap under ~2 points is noise "
+        "(same model, same record, same prompt scored 63.7 and 61.7 on two runs)."
+    )
+
+
 @main.command(name="selftest")
 @click.argument("file_path", type=click.Path(exists=True))
 def selftest_cmd(file_path: str) -> None:
