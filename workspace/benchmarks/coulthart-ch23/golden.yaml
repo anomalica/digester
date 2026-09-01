@@ -18,9 +18,16 @@
 # the typed lists. They are NOT scored until adjudicated.
 
 source: "In Plain Sight - Chapter 23: Dr Salvatore Pais's Puzzling Patents"
-schema_note: >
-  Person canonical names follow decision 0023 (plain legal name, no titles). Place canonical names follow the Country-first
-  convention. Documents are individuated (rule 1: each named patent/paper is its own node). #magic___^_^___line
+# LITERAL BLOCK (|-), not folded (>). The shared commit hook runs yamlfmt with
+# retain_line_breaks: true, which writes a #magic___^_^___line sentinel INTO any
+# value containing a newline - and above ~120 emitted chars (100 if the value has
+# a blank line) it does not annotate but DESTROYS: the file stops parsing and the
+# tail is deleted silently. Block form round-trips clean at any tested length.
+# Stripping the marker by hand does not work; it returns on the next commit.
+schema_note: |-
+  Person canonical names follow decision 0023 (plain legal name, no titles).
+  Place canonical names follow the Country-first convention.
+  Documents are individuated (rule 1: each named patent/paper is its own node).
 must_find:
 
   person:
