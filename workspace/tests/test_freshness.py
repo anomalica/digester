@@ -17,9 +17,11 @@ from digester.record_parser import parse_record
 HASH = "a" * 64
 
 
-def _record(body: str) -> str:
+def _record(body: str, hash_: str = HASH, supersedes: str | None = None) -> str:
+    sup = f"supersedes: {supersedes}\n" if supersedes else ""
     return (
-        f"---\ncontent_hash: sha256:{HASH}\nschema: anomalica/record/1\n---\n\n{body}\n"
+        f"---\ncontent_hash: sha256:{hash_}\n{sup}schema: anomalica/record/1\n---\n\n"
+        f"{body}\n"
     )
 
 
@@ -109,3 +111,36 @@ def test_the_store_body_is_compared_when_by_name_holds_a_stale_copy(
     assert found[0]["record"] == r / "slug.md", (
         "the by-name path still names the record"
     )
+
+
+def test_a_digest_of_a_superseded_record_resolves_to_its_replacement(
+    tmp_path, monkeypatch
+):
+    """A re-ingest retires the old hash to store/v1; the digest must not read as orphaned."""
+    monkeypatch.setattr(health, "_SURVIVAL_CACHE", tmp_path / "cache.json")
+    old_hash, new_hash = "b" * 64, "c" * 64
+    ingests = tmp_path / "ingests"
+    store, by_name = ingests / "store", ingests / "by-name"
+    (store / "v1").mkdir(parents=True)
+    by_name.mkdir()
+    old = _record("The witness saw a light.\nIt moved.", old_hash)
+    (store / "v1" / f"{old_hash}.md").write_text(old)
+    (store / f"{new_hash}.md").write_text(
+        _record(
+            "The witness saw two lights.\nThey moved.", new_hash, supersedes=old_hash
+        )
+    )
+    (by_name / "slug.md").symlink_to(f"../store/{new_hash}.md")
+    digests = tmp_path / "digests"
+    digests.mkdir()
+    (digests / "slug.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "record": {"content_hash": f"sha256:{old_hash}"},
+                "pre_digest": {"sha256": _hash(old), "prep_version": PREP_VERSION},
+            }
+        )
+    )
+    found = health.pre_digest_freshness(digests, by_name)
+    assert [f["issue"] for f in found] == ["record_changed"]
+    assert found[0]["record"] == by_name / "slug.md"

@@ -193,8 +193,18 @@ def _records_by_hash(records_dir: Path) -> dict[str, Path]:
             fm = yaml.load(raw.split("---", 2)[1], Loader=_Loader)
         except (yaml.YAMLError, IndexError):
             continue
-        if isinstance(fm, dict) and fm.get("content_hash"):
+        if not isinstance(fm, dict):
+            continue
+        if fm.get("content_hash"):
             by_hash[str(fm["content_hash"]).split(":")[-1]] = rec
+        # A re-ingest retires the old record to store/v1 and names it here, so
+        # a digest built from the retired hash resolves to its replacement and
+        # reports as changed rather than orphaned. setdefault: a record that
+        # still declares the hash as its own wins.
+        sup = fm.get("supersedes")
+        for old in sup if isinstance(sup, list) else [sup]:
+            if old:
+                by_hash.setdefault(str(old).split(":")[-1], rec)
     return by_hash
 
 
