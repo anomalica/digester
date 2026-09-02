@@ -217,3 +217,23 @@ def test_the_checker_fails_closed_on_a_policy_refusal(monkeypatch):
 def test_the_policy_permits_the_shipped_pair():
     assert ent.policy_refusal(ent.STAGE1_MODEL, ent.STAGE2_MODEL) is None
     assert ent.policy_refusal("cross-encoder/nli-deberta-v3-base")
+
+
+def test_an_out_of_memory_batch_halves_and_then_moves_to_the_cpu(monkeypatch):
+    torch = __import__("pytest").importorskip("torch")
+    c = ent.Classifier("stub", device="cuda", batch_size=4)
+    c._model = object()
+    c._tok = object()
+    calls = []
+
+    def run(batch):
+        calls.append((len(batch), c.device))
+        if c.device == "cuda":
+            raise torch.cuda.OutOfMemoryError("no")
+        return [[0.9, 0.05, 0.05]] * len(batch)
+
+    monkeypatch.setattr(c, "_run_batch", run)
+    monkeypatch.setattr(c, "_to_cpu", lambda: setattr(c, "device", "cpu"))
+    out = c.probs([("a", "b")] * 5)
+    assert len(out) == 5 and all(r[0] == 0.9 for r in out)
+    assert calls[0] == (4, "cuda") and (1, "cuda") in calls and calls[-1][1] == "cpu"

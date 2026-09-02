@@ -173,22 +173,49 @@ class Classifier:
             range(len(pairs)), key=lambda k: len(pairs[k][0]) + len(pairs[k][1])
         )
         out: list[list[float] | None] = [None] * len(pairs)
-        for i in range(0, len(order), self.batch_size):
+        i = 0
+        while i < len(order):
             idx = order[i : i + self.batch_size]
-            x = self._tok(
-                [pairs[k][0] for k in idx],
-                [pairs[k][1] for k in idx],
-                truncation="only_first",
-                max_length=MAX_TOKENS,
-                padding=True,
-                return_tensors="pt",
-            ).to(self.device)
-            with torch.no_grad():
-                p = torch.softmax(self._model(**x).logits.float(), -1).cpu()
-            for k, row in zip(idx, p):
-                out[k] = row.tolist()
+            try:
+                rows = self._run_batch([pairs[k] for k in idx])
+            except torch.cuda.OutOfMemoryError:
+                # The card is shared with the transcription service, and a
+                # 512-token batch on the large model can exceed what is left.
+                # Halve and retry; at one pair per batch, move to the CPU
+                # rather than fail the digest.
+                torch.cuda.empty_cache()
+                if self.batch_size > 1:
+                    self.batch_size //= 2
+                    continue
+                self._to_cpu()
+                continue
+            for k, row in zip(idx, rows):
+                out[k] = row
+            i += len(idx)
         self.seconds += time.monotonic() - t0
         return out  # type: ignore[return-value]
+
+    def _run_batch(self, batch: list[tuple[str, str]]) -> list[list[float]]:
+        import torch
+
+        x = self._tok(
+            [p for p, _ in batch],
+            [h for _, h in batch],
+            truncation="only_first",
+            max_length=MAX_TOKENS,
+            padding=True,
+            return_tensors="pt",
+        ).to(self.device)
+        with torch.no_grad():
+            p = torch.softmax(self._model(**x).logits.float(), -1).cpu()
+        return [row.tolist() for row in p]
+
+    def _to_cpu(self) -> None:
+        import torch
+
+        self.device = "cpu"
+        self._model = self._model.float().to("cpu")
+        torch.cuda.empty_cache()
 
     def release(self) -> None:
         self._model = None
