@@ -110,6 +110,15 @@ def locate(pre_digest: str, quote: str, location: str | None) -> tuple[int, int]
         i = text.find(frag[:80])
         if i >= 0:
             return i, i + len(q)
+        # The pre-digest breaks lines where the quote has spaces (a sentence
+        # per line in transcripts, wrapped paragraphs in ebooks); 13.6% of the
+        # corpus failed the exact search on that alone. Match the first tokens
+        # across any whitespace.
+        tokens = frag.split()[:12]
+        if tokens:
+            m = re.search(r"\s+".join(re.escape(t) for t in tokens), text)
+            if m:
+                return m.start(), m.start() + len(q)
     m = _CHAR_SPAN.search(location or "")
     if m:
         a, b = int(m.group(1)), int(m.group(2))
@@ -273,6 +282,7 @@ def annotate(
     stage1_model: str = STAGE1_MODEL,
     stage2_model: str = STAGE2_MODEL,
     force: bool = False,
+    redo_unlocated: bool = False,
 ) -> dict:
     """Write `entailment` onto every eligible claim of a loaded digest.
 
@@ -280,6 +290,11 @@ def annotate(
     (no quote or no text), unlocated (stage 1 only), and the label mix by
     premise. Pure over its inputs apart from the mutation of `doc`; the
     classifiers are injected so tests need no model.
+
+    `redo_unlocated` takes only the claims left at neutral/quote by an
+    earlier pass - stage 1 said neutral and the quote was not located - and
+    gives them stage 2 now that the locator has improved. Stage 1 is
+    deterministic, so its verdict stands and is not re-run.
     """
     counts = {
         "assessed": 0,
@@ -294,6 +309,13 @@ def annotate(
             if not _eligible(c):
                 counts["ineligible"] += 1
                 continue
+            if redo_unlocated:
+                e = c.get("entailment") or {}
+                if e.get("label") == "neutral" and e.get("premise") == "quote":
+                    todo.append(c)
+                else:
+                    counts["skipped"] += 1
+                continue
             if _assessed(c) and not force:
                 counts["skipped"] += 1
                 continue
@@ -305,18 +327,21 @@ def annotate(
         s = c.get("speaker")
         return s.get("name") if isinstance(s, dict) else None
 
-    first = stage1([(_premise(speaker(c), c["quote"]), c["text"]) for c in todo])
     second: list[dict] = []
-    for c, row in zip(todo, first):
-        label, score = _verdict(row)
-        c["entailment"] = {
-            "label": label,
-            "score": score,
-            "model": stage1_model,
-            "premise": "quote",
-        }
-        if label == "neutral":
-            second.append(c)
+    if redo_unlocated:
+        second = list(todo)
+    else:
+        first = stage1([(_premise(speaker(c), c["quote"]), c["text"]) for c in todo])
+        for c, row in zip(todo, first):
+            label, score = _verdict(row)
+            c["entailment"] = {
+                "label": label,
+                "score": score,
+                "model": stage1_model,
+                "premise": "quote",
+            }
+            if label == "neutral":
+                second.append(c)
 
     if second and stage2 is not None and pre_digest:
         pairs, targets = [], []
@@ -339,6 +364,8 @@ def annotate(
         counts["unlocated"] += len(second)
 
     for c in todo:
+        if redo_unlocated and c["entailment"].get("premise") != "window":
+            continue  # still unlocated: the earlier verdict stands, nothing new
         counts["assessed"] += 1
         k = f"{c['entailment']['label']}/{c['entailment']['premise']}"
         counts["labels"][k] = counts["labels"].get(k, 0) + 1
@@ -360,7 +387,13 @@ class Checker:
         self.stage1 = Classifier(stage1_model, device)
         self.stage2 = Classifier(stage2_model, device)
 
-    def annotate(self, doc: dict, pre_digest: str | None, force: bool = False) -> dict:
+    def annotate(
+        self,
+        doc: dict,
+        pre_digest: str | None,
+        force: bool = False,
+        redo_unlocated: bool = False,
+    ) -> dict:
         s1, s2 = self.stage1.seconds, self.stage2.seconds
         counts = annotate(
             doc,
@@ -370,6 +403,7 @@ class Checker:
             stage1_model=self.stage1.model_id,
             stage2_model=self.stage2.model_id,
             force=force,
+            redo_unlocated=redo_unlocated,
         )
         counts["duration_s"] = round(
             (self.stage1.seconds - s1) + (self.stage2.seconds - s2), 1
@@ -401,7 +435,11 @@ class Checker:
 
 
 def annotate_yaml(
-    text: str, pre_digest: str | None, checker: Checker, force: bool = False
+    text: str,
+    pre_digest: str | None,
+    checker: Checker,
+    force: bool = False,
+    redo_unlocated: bool = False,
 ) -> tuple[str, dict]:
     """Annotate a serialised digest. Returns (new text, counts).
 
@@ -417,7 +455,9 @@ def annotate_yaml(
     doc = yaml.load(text, Loader=_Loader)
     if not isinstance(doc, dict):
         raise ValueError("digest is not a mapping")
-    counts = checker.annotate(doc, pre_digest, force=force)
+    counts = checker.annotate(
+        doc, pre_digest, force=force, redo_unlocated=redo_unlocated
+    )
     if not counts["assessed"]:
         return text, counts
     usage = doc.get("ai_usage")

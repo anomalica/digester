@@ -1154,6 +1154,11 @@ def selftest_cmd(file_path: str) -> None:
     "--force", is_flag=True, help="Re-assess claims that already carry a verdict"
 )
 @click.option(
+    "--redo-unlocated",
+    is_flag=True,
+    help="Only claims left at neutral/quote (quote not located) get the window stage",
+)
+@click.option(
     "--dry-run", is_flag=True, help="List digests that need a check; write nothing"
 )
 @click.option("--device", default=None, help="cuda | cpu (default: cuda if available)")
@@ -1168,6 +1173,7 @@ def check_cmd(
     force: bool,
     dry_run: bool,
     device: str | None,
+    redo_unlocated: bool,
 ) -> None:
     """Annotate existing digests with per-claim entailment.
 
@@ -1240,7 +1246,9 @@ def check_cmd(
                 continue
             pre = entailment.pre_digest_for(doc, Path(records))
             try:
-                out, counts = entailment.annotate_yaml(text, pre, checker, force=force)
+                out, counts = entailment.annotate_yaml(
+                    text, pre, checker, force=force, redo_unlocated=redo_unlocated
+                )
             except Exception as e:  # noqa: BLE001 - reported per file, batch continues
                 click.echo(f"  FAILED {p.name}: {type(e).__name__}: {e}")
                 failed += 1

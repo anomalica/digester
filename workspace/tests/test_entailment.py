@@ -169,7 +169,7 @@ def test_the_yaml_round_trip_keeps_the_field_and_the_rest(monkeypatch):
     )
 
     class Stub:
-        def annotate(self, doc, pre, force=False):
+        def annotate(self, doc, pre, force=False, redo_unlocated=False):
             c = ent.annotate(doc, pre, _stage([E]), _stage([]), force=force)
             c["duration_s"] = 2.5
             return c
@@ -237,3 +237,65 @@ def test_an_out_of_memory_batch_halves_and_then_moves_to_the_cpu(monkeypatch):
     out = c.probs([("a", "b")] * 5)
     assert len(out) == 5 and all(r[0] == 0.9 for r in out)
     assert calls[0] == (4, "cuda") and (1, "cuda") in calls and calls[-1][1] == "cpu"
+
+
+def test_locate_crosses_line_breaks_the_quote_does_not_have():
+    pre = "Intro.\nAnd there must be evidence today\nthat that knowledge is being used.\nMore."
+    assert ent.locate(
+        pre, "And there must be evidence today that that knowledge", None
+    ) == (7, 59)
+
+
+def test_redo_unlocated_gives_only_the_stranded_claims_the_window_stage():
+    stranded = _claim(
+        "The object hovered for ten minutes",
+        "Alice saw it hover.",
+        "Alice",
+        entailment={
+            "label": "neutral",
+            "score": 0.9,
+            "model": "m1",
+            "premise": "quote",
+        },
+    )
+    settled = _claim(
+        "q",
+        "t",
+        entailment={
+            "label": "entails",
+            "score": 0.9,
+            "model": "m1",
+            "premise": "quote",
+        },
+    )
+    still_lost = _claim(
+        "nowhere at all",
+        "t",
+        entailment={
+            "label": "neutral",
+            "score": 0.9,
+            "model": "m1",
+            "premise": "quote",
+        },
+    )
+    doc = {"domain_claims": [stranded, settled, still_lost]}
+    seen1 = []
+    counts = ent.annotate(doc, PRE, _stage([], seen1), _stage([E]), redo_unlocated=True)
+    assert seen1 == [], "stage one is not re-run"
+    assert (
+        stranded["entailment"]["premise"] == "window"
+        and stranded["entailment"]["label"] == "entails"
+    )
+    assert (
+        settled["entailment"]["label"] == "entails"
+        and settled["entailment"]["premise"] == "quote"
+    )
+    assert still_lost["entailment"] == {
+        "label": "neutral",
+        "score": 0.9,
+        "model": "m1",
+        "premise": "quote",
+    }
+    assert (
+        counts["assessed"] == 1 and counts["skipped"] == 1 and counts["unlocated"] == 1
+    )
