@@ -233,6 +233,51 @@ def extract_cmd(
         ctx.exit(77)
 
 
+def _entail(text: str, pre_digest: str | None, echo=lambda _: None) -> str:
+    """The last step of extraction: per-claim entailment (digester/entailment.py).
+
+    Never lets the digest go: an extraction that just spent allowance is not
+    lost to a post-step. Missing torch, a policy refusal, a model that fails to
+    load, a CUDA error - each leaves the claims unassessed and says so. The
+    CHECK_JSON line is the scheduler's machine record of the run (model ids,
+    claim count, wall time), the local-stage twin of USAGE_JSON.
+    """
+    from digester import entailment
+
+    if not entailment.enabled():
+        return text
+    if not entailment.available():
+        echo("Entailment: torch/transformers not installed; claims left unassessed")
+        return text
+    try:
+        checker = entailment.Checker()
+    except PermissionError as e:
+        echo(f"Entailment: {e}; claims left unassessed")
+        return text
+    try:
+        out, counts = entailment.annotate_yaml(text, pre_digest, checker)
+    except Exception as e:  # noqa: BLE001 - see docstring
+        echo(f"Entailment: failed ({type(e).__name__}: {e}); claims left unassessed")
+        return text
+    finally:
+        checker.release()
+    echo(f"Entailment: {counts['assessed']} claims assessed, {counts['labels']}")
+    echo(f"CHECK_JSON: {json.dumps(_check_record(counts))}")
+    return out
+
+
+def _check_record(counts: dict) -> dict:
+    return {
+        "stage": "check",
+        "models": counts.get("models", []),
+        "assessed": counts["assessed"],
+        "kept": counts["skipped"],
+        "unlocated": counts["unlocated"],
+        "labels": counts["labels"],
+        "duration_s": counts.get("duration_s", 0.0),
+    }
+
+
 def _normalise_locations(parsed, claims: list, echo=lambda _: None) -> None:
     """Rewrite claim locations to a canonical span, timed or not.
 
@@ -432,6 +477,8 @@ def _do_extract(
                 else None
             ),
         )
+
+        text = _entail(text, pre_digest_text, click.echo)
 
         if digests_root is not None:
             from digester import digest_store
@@ -1064,6 +1111,157 @@ def selftest_cmd(file_path: str) -> None:
     carried = sorted((doc.get("record") or {}).keys())
     click.echo(f"selftest ok: {path.name}")
     click.echo(f"  record block carries: {', '.join(carried)}")
+
+
+@main.command(name="check")
+@click.argument("digests", nargs=-1, type=click.Path(exists=True))
+@click.option(
+    "--digests-root",
+    type=click.Path(),
+    default=str(_ANOMALICA / "digests"),
+    help="Digests repo; with --all, every canonical digest in it",
+)
+@click.option(
+    "--all", "all_", is_flag=True, help="Every canonical digest under --digests-root"
+)
+@click.option("--variants", is_flag=True, help="With --all, the variants/ tree as well")
+@click.option(
+    "--records",
+    type=click.Path(),
+    default=str(_ANOMALICA / "ingests" / "by-name"),
+    help="Ingest records directory (the store beside it is read by hash)",
+)
+@click.option(
+    "--model",
+    "stage1_model",
+    default=None,
+    help="Stage-one classifier (quote premise); default: the policy's first choice",
+)
+@click.option(
+    "--stage2-model",
+    default=None,
+    help="Stage-two classifier (record window); default: the policy's second choice",
+)
+@click.option(
+    "--force", is_flag=True, help="Re-assess claims that already carry a verdict"
+)
+@click.option(
+    "--dry-run", is_flag=True, help="List digests that need a check; write nothing"
+)
+@click.option("--device", default=None, help="cuda | cpu (default: cuda if available)")
+def check_cmd(
+    digests: tuple[str, ...],
+    digests_root: str,
+    all_: bool,
+    variants: bool,
+    records: str,
+    stage1_model: str | None,
+    stage2_model: str | None,
+    force: bool,
+    dry_run: bool,
+    device: str | None,
+) -> None:
+    """Annotate existing digests with per-claim entailment.
+
+    The same step `extract` runs last, applied to digests that predate it.
+    Local and deterministic: no model calls, no allowance. Claims that already
+    carry a verdict are left alone unless --force. Takes the graphics card for
+    the duration; say so on the bus before a corpus-wide run.
+
+    Exit codes, for the scheduler: 0 assessed and written; 3 nothing to do
+    (every eligible claim already carried a verdict); 1 at least one digest
+    failed (the rest were still written); 2 cannot run (torch missing, the
+    model policy refuses the classifier, no digests named). One CHECK_JSON
+    line per digest carries model ids, claim count, label mix and wall time.
+    """
+    import yaml
+
+    from digester import entailment
+    from digester.health import _Loader
+
+    root = Path(digests_root)
+    paths = [Path(p) for p in digests]
+    if all_:
+        paths += sorted(root.glob("*.yaml"))
+        if variants:
+            paths += sorted((root / "variants").glob("*/*.yaml"))
+    if not paths:
+        click.echo("nothing to check: give digest paths or --all")
+        raise SystemExit(2)
+
+    def load(p: Path) -> dict | None:
+        try:
+            doc = yaml.load(p.read_text(), Loader=_Loader)
+        except (OSError, yaml.YAMLError) as e:
+            click.echo(f"  skip {p.name}: {type(e).__name__}: {e}")
+            return None
+        return doc if isinstance(doc, dict) else None
+
+    if dry_run:
+        due = [
+            p
+            for p in paths
+            if (d := load(p)) is not None and (force or entailment.needs_check(d))
+        ]
+        for p in due:
+            click.echo(str(p))
+        click.echo(f"\n{len(due)} of {len(paths)} digest(s) need a check")
+        raise SystemExit(0 if due else 3)
+
+    if not entailment.available():
+        click.echo("torch/transformers not installed; nothing assessed")
+        raise SystemExit(2)
+    try:
+        checker = entailment.Checker(
+            device,
+            stage1_model or entailment.STAGE1_MODEL,
+            stage2_model or entailment.STAGE2_MODEL,
+        )
+    except PermissionError as e:
+        click.echo(str(e))
+        raise SystemExit(2) from e
+
+    totals: dict[str, int] = {}
+    files = assessed = failed = 0
+    try:
+        for p in paths:
+            text = p.read_text()
+            doc = load(p)
+            if doc is None:
+                failed += 1
+                continue
+            pre = entailment.pre_digest_for(doc, Path(records))
+            try:
+                out, counts = entailment.annotate_yaml(text, pre, checker, force=force)
+            except Exception as e:  # noqa: BLE001 - reported per file, batch continues
+                click.echo(f"  FAILED {p.name}: {type(e).__name__}: {e}")
+                failed += 1
+                continue
+            if counts["assessed"]:
+                p.write_text(out)
+                files += 1
+                assessed += counts["assessed"]
+                for k, v in counts["labels"].items():
+                    totals[k] = totals.get(k, 0) + v
+            note = "" if pre else "  (record not found: quote stage only)"
+            click.echo(
+                f"  {p.name}: {counts['assessed']} assessed, {counts['skipped']} kept, "
+                f"{counts['unlocated']} unlocated{note}"
+            )
+            click.echo(
+                f"CHECK_JSON: {json.dumps({'digest': str(p), **_check_record(counts)})}"
+            )
+    finally:
+        checker.release()
+    click.echo(
+        f"\n{files} digest(s) written, {assessed} claims assessed, {failed} failed"
+    )
+    for k in sorted(totals):
+        click.echo(f"  {k}: {totals[k]}")
+    if failed:
+        raise SystemExit(1)
+    if not assessed:
+        raise SystemExit(3)
 
 
 if __name__ == "__main__":
