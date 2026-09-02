@@ -645,12 +645,27 @@ def stale_record_paths(
 def pre_digest_freshness(
     digests_dir: Path, records_dir: Path, loaded: list | None = None
 ) -> list[dict]:
-    """Digests whose recorded pre-digest no longer matches the record."""
+    """Digests whose recorded pre-digest no longer matches the record.
+
+    The recomputed hash is compared BEFORE the prep version is consulted. A
+    PREP_VERSION bump changes materialise's output only for records carrying
+    the markers it touched, so a digest whose text hashes identically under
+    the current prep is fresh whatever version built it. Reporting on the
+    version first flagged 86 of 108 digests after the 6 -> 7 bump and buried
+    the 32 whose text had actually moved.
+
+    The body is read from the content-addressed store when the digest's hash
+    resolves there. `by-name/` is documented as symlinks into the store, but
+    24 entries are regular files holding the body as first ingested, and two
+    of those records were reviewed and rewritten in the store afterwards -
+    compared against the by-name copy, both read as fresh.
+    """
     from anomalica_common.pre_digest import PREP_VERSION, materialise, pre_digest_hash
 
     from digester.record_parser import parse_record
 
     by_hash = _records_by_hash(records_dir)
+    store = records_dir.parent / "store"
 
     cache = _cache_load()
     out = []
@@ -658,20 +673,6 @@ def pre_digest_freshness(
         pd = d.get("pre_digest") or {}
         recorded, version = pd.get("sha256"), pd.get("prep_version")
         if not recorded:
-            continue
-        if version is not None and version != PREP_VERSION:
-            out.append(
-                {
-                    "digest": stem,
-                    "issue": "prep_version",
-                    "detail": f"built under prep {version}, current is {PREP_VERSION}",
-                    "record": by_hash.get(
-                        ((d.get("record") or {}).get("content_hash") or "").split(":")[
-                            -1
-                        ]
-                    ),
-                }
-            )
             continue
         h = ((d.get("record") or {}).get("content_hash") or "").split(":")[-1]
         rec = by_hash.get(h)
@@ -688,8 +689,12 @@ def pre_digest_freshness(
                 }
             )
             continue
+        body_path = next(
+            (p for p in (store / f"{h}.md", store / f"{h}.v2.md") if p.is_file()),
+            rec,
+        )
         try:
-            raw = rec.read_text(errors="replace")
+            raw = body_path.read_text(errors="replace")
         except OSError:
             continue
         key = f"pdsha:{PREP_VERSION}:{hashlib.sha256(raw.encode()).hexdigest()}"
@@ -700,7 +705,21 @@ def pre_digest_freshness(
             except ValueError:
                 continue
             cache[key] = actual
-        if actual != recorded:
+        if actual == recorded:
+            continue
+        if version is not None and version != PREP_VERSION:
+            out.append(
+                {
+                    "digest": stem,
+                    "issue": "prep_version",
+                    "detail": (
+                        f"built under prep {version}, current is {PREP_VERSION}; "
+                        f"recorded {recorded[:12]}, record now yields {actual[:12]}"
+                    ),
+                    "record": rec,
+                }
+            )
+        else:
             out.append(
                 {
                     "digest": stem,
