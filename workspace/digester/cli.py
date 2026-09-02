@@ -1045,19 +1045,27 @@ def grade_record_cmd(record: str, digests_root: str) -> None:
         d = _yaml.safe_load(f.read_text())
         r = grade_digest(body, d)
         rows.append((f.stem.split(".")[0], r))
-    rows.sort(key=lambda x: -x[1]["recall"])
+    # A record with no reviewer highlights grades every variant at recall None;
+    # those sort last and print n/a rather than crashing the whole table.
+    rows.sort(key=lambda x: (x[1]["recall"] is None, -(x[1]["recall"] or 0.0)))
     g = rows[0][1]
     click.echo(f"{stem}")
     click.echo(
         f"  {g['gold_units']} gold units, {g['units_with_context']} with context chains"
     )
+    if not g["gold_units"]:
+        click.echo("  no reviewer highlights: recall cannot be scored here")
     click.echo(
         f"\n{'model':22} {'recall':>7} {'fidelity':>9} {'coref':>7} {'claims':>7}"
     )
+
+    def _f(v: float | None, width: int) -> str:
+        return f"{v:{width}.3f}" if isinstance(v, (int, float)) else f"{'n/a':>{width}}"
+
     for name, r in rows:
         click.echo(
-            f"{name[:22]:22} {r['recall']:7.3f} {r['quote_fidelity']:9.3f} "
-            f"{r['coref_rate']:7.3f} {r['claims']:7}"
+            f"{name[:22]:22} {_f(r['recall'], 7)} {_f(r['quote_fidelity'], 9)} "
+            f"{_f(r['coref_rate'], 7)} {r['claims']:7}"
         )
     click.echo(
         "\nComparable within this record only. A gap under ~2 points is noise "
