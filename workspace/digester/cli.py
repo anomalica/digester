@@ -378,6 +378,19 @@ def _do_extract(
         store_pre_digest(predigests_root, record_key, pre_digest_text)
 
     click.echo(f"Extracting (two-pass) from: {parsed.title or path.name}")
+    # What this run is, for its ledger row. The transport writes the row when
+    # the accumulator is reset (below) or at exit, so a run started outside the
+    # scheduler still reaches the History page - which is the whole point: the
+    # benchmark scripts spawn this command with a metered key and --confirm.
+    from anomalica_common.llm import ledger
+
+    ledger.set_context(
+        type="digest",
+        ref=(parsed.metadata.get("content_hash") or "").split(":")[-1] or None,
+        source_type=parsed.source_type,
+        body_chars=len(parsed.body or ""),
+        source="digester-direct",
+    )
     reset_usage()
     reset_schema_enforcement()
     try:
