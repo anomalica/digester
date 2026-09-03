@@ -21,6 +21,7 @@ from anomalica_common.llm import (
     reset_schema_enforcement,
     reset_usage,
     resolve_use_api,
+    note_run_failure,
     check_allowance,
     headroom_for,
     weekly_reserve_for,
@@ -204,6 +205,7 @@ def extract_cmd(
             run_label,
         )
     except ExtractionCancelled:
+        note_run_failure()
         click.echo(
             "\nCancelled at a chunk boundary. Completed chunks are cached; rerun the "
             "same (record, model, prompt) to resume - only the remaining chunks will "
@@ -211,6 +213,7 @@ def extract_cmd(
         )
         ctx.exit(75)
     except OpencodeRateLimited as e:
+        note_run_failure()
         click.echo(
             f"\nRate-limited by the opencode plan: {e}\nCompleted chunks are cached; "
             "park this lane and retry with backoff - this is NOT an extraction "
@@ -218,6 +221,7 @@ def extract_cmd(
         )
         ctx.exit(77)
     except PlanRateLimited as e:
+        note_run_failure()
         # Same exit code as the opencode case, and for the same reason: on a flat
         # plan throttling is the governor, not spend. It must park the lane, never
         # strike toward skip - two strikes and the scheduler unstages a record that
@@ -1291,6 +1295,74 @@ def check_cmd(
         raise SystemExit(1)
     if not assessed:
         raise SystemExit(3)
+
+
+@main.command(name="spend")
+@click.option("--day", default=None, help="UTC day (YYYY-MM-DD); default today")
+@click.option(
+    "--provider-usd",
+    type=float,
+    default=None,
+    help="What the provider says was spent. Without it, OPENROUTER_API_KEY is "
+    "read and OpenRouter asked directly.",
+)
+def spend_cmd(day: str | None, provider_usd: float | None) -> None:
+    """What the ledger accounts for on a day, against what was actually billed.
+
+    The ledger gate cannot be enforced - anyone can post to a provider's URL
+    without telling anyone - so this is the safety net: a gap means money was
+    spent by something that wrote no row. That is the question nobody could
+    answer on 2026-09-03, when a day's OpenRouter spend had no owner.
+
+    Exit codes: 0 reconciled (or nothing to compare), 1 a gap over a cent.
+    """
+    import json as _json
+    import os
+    import urllib.request
+
+    from anomalica_common.llm import ledger
+
+    if provider_usd is None and os.environ.get("OPENROUTER_API_KEY"):
+        req = urllib.request.Request(
+            "https://openrouter.ai/api/v1/key",
+            headers={"Authorization": f"Bearer {os.environ['OPENROUTER_API_KEY']}"},
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=20) as raw:
+                data = _json.loads(raw.read().decode()).get("data") or {}
+            # OpenRouter counts a UTC day, which is why the ledger does too.
+            if day in (None, ledger.rows_for.__defaults__ and None):
+                provider_usd = data.get("usage_daily")
+        except OSError as e:
+            click.echo(f"could not ask OpenRouter: {e}")
+
+    out = ledger.reconcile(provider_usd, day)
+    click.echo(f"day {out['day']} (UTC)")
+    click.echo(
+        f"  rows {out['rows']}, metered {out['metered_rows']}, unpriced {out['unpriced_rows']}"
+    )
+    click.echo(f"  ledger accounts for ${out['recorded_usd']:.4f}")
+    for k in sorted(out["by_type"], key=lambda k: -out["by_type"][k]):
+        click.echo(f"    {k:28} ${out['by_type'][k]:.4f}")
+    if "provider_usd" not in out:
+        click.echo(
+            "  no provider figure: pass --provider-usd or export OPENROUTER_API_KEY"
+        )
+        return
+    click.echo(f"  provider billed  ${out['provider_usd']:.4f}")
+    if abs(out["gap_usd"]) <= 0.01:
+        click.echo("  reconciled")
+        return
+    click.echo(f"  UNACCOUNTED      ${out['gap_usd']:.4f}")
+    if out["unpriced_rows"]:
+        click.echo(
+            f"  ({out['unpriced_rows']} metered row(s) carry no cost, so part of the "
+            "gap may be recorded work the provider priced elsewhere)"
+        )
+    click.echo(
+        "  something spent money without writing a row; see anomalica_common.llm.probe"
+    )
+    raise SystemExit(1)
 
 
 if __name__ == "__main__":
