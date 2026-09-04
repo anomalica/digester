@@ -267,3 +267,15 @@ def test_an_extended_highlight_is_one_gold_unit_joined_by_elision():
     # the source never uttered
     assert "[...]" in text, text
     assert "matters and its" not in text
+
+
+def test_coverage_counts_a_character_once_however_many_claims_quote_it():
+    """Recall read above 1.0 and rewarded repetition until this was the union."""
+    from digester.eval import _overlap
+
+    assert _overlap([0, 100], [(0, 50), (0, 50), (0, 50)]) == 50, "same span thrice"
+    assert _overlap([0, 100], [(0, 60), (40, 100)]) == 100, "overlapping, merged"
+    assert _overlap([0, 100], [(0, 30), (70, 100)]) == 60, "disjoint, summed"
+    assert _overlap([0, 100], [(0, 200)]) <= 100, "never more than the span itself"
+    assert _overlap([50, 60], [(0, 200)]) == 10
+    assert _overlap([0, 100], []) == 0

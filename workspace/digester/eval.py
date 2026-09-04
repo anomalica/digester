@@ -245,13 +245,31 @@ def _closure_referents(
 
 
 def _overlap(span: list[int], spans: list[tuple[int, int]]) -> int:
-    """Characters of `span` covered by the union of `spans`."""
+    """Characters of `span` covered by the UNION of `spans`.
+
+    The union, and it has to be: summing each span's overlap counted a
+    character once per claim that covered it, so two claims quoting the same
+    sentence scored it twice and coverage could exceed the span's own length.
+    Recall is a mean of those fractions, so it read above 1.0 and rewarded a
+    model in proportion to how much it repeated itself - which is the opposite
+    of what it is for, and it silently favoured the more verbose model in every
+    comparison drawn from it.
+    """
     lo, hi = span
     cov = 0
+    start = end = None
     for s, e in sorted(spans):
         s, e = max(s, lo), min(e, hi)
-        if s < e:
-            cov += e - s
+        if s >= e:
+            continue
+        if end is None or s > end:
+            if end is not None:
+                cov += end - start
+            start, end = s, e
+        else:
+            end = max(end, e)
+    if end is not None:
+        cov += end - start
     return cov
 
 
