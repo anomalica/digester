@@ -1,5 +1,7 @@
 # Run-to-run variance: GLM-5.2 repeated on jon-stewart
 
+> **Recall recomputed 2026-09-04**; figures dated before that used a grader that over-counted overlapping claims (`_overlap` summed each claim's overlap with a highlight instead of taking their union, so a character covered by three claims counted three times). Fixed in digester c9ca17e.
+
 Two runs of the **same model, same record, same prompt sha (d161b1ed), same
 schema enforcement (mixed)**. This is the repeat measurement the model
 comparison had been deferring, obtained as a by-product of the streaming
@@ -65,3 +67,24 @@ deliberate repeat cannot overwrite its twin"). It was not used, because the
 second run was framed as a re-run of a failure rather than as a repeat. Any
 run of an already-measured configuration is a repeat, whatever its motivation,
 and needs a label.
+
+## Recomputed on the fixed grader (2026-09-04)
+
+Only ONE of the two runs still exists: an identical (model, prompt) re-run
+overwrites its own variant, so run 1 was replaced by run 2. The survivor is
+identified as run 2 by its claim count (663), though its `extracted_at` reads
+2026-07-28; the run spanned the night.
+
+| | reported (old grader) | recomputed (fixed) |
+|---|---|---|
+| recall | 61.7 | 60.8 |
+| quote fidelity | 94.6 | 93.6 |
+| off-target | 49.9 | 49.4 |
+| broken quotes | 36 | 42 |
+| claims | 663 | 663 |
+
+**Run 1 is unverifiable** - its variant no longer exists, so the -2.0 point
+run-to-run delta this report established cannot be restated. That number is
+quoted elsewhere as a noise floor (including in `digester grade-record`'s own
+printed caveat); it should be treated as unmeasured until an arm is repeated
+deliberately and kept, which is what `--run-label` exists for.

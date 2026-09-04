@@ -1085,8 +1085,10 @@ def grade_record_cmd(record: str, digests_root: str) -> None:
             f"{_f(r['coref_rate'], 7)} {r['claims']:7}"
         )
     click.echo(
-        "\nComparable within this record only. A gap under ~2 points is noise "
-        "(same model, same record, same prompt scored 63.7 and 61.7 on two runs)."
+        "\nComparable within this record only. The ~2-point noise floor once "
+        "quoted here is UNMEASURED: it came from two runs scored on a grader "
+        "that over-counted overlapping claims, and one of the two variants no "
+        "longer exists. Repeat an arm with --run-label to measure it."
     )
 
 
