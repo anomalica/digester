@@ -9,6 +9,8 @@ import statistics
 import click
 
 from anomalica_common.llm import (
+    RouteEnumLimit,
+    ledger,
     accumulate,
     estimate_batch,
     estimate_record,
@@ -204,6 +206,36 @@ def extract_cmd(
             Path(predigests_root) if predigests_root else None,
             run_label,
         )
+    except RouteEnumLimit as e:
+        # A CONDITION OF THE ROUTE, NOT A FAILURE OF THE RECORD, so the record
+        # is digested by the next model the policy permits rather than left in
+        # the queue. Refusing quickly would only trade a slow failure for a fast
+        # one; the corpus would still have the hole. The flat-rate lane exists to
+        # spend allowance on records that need it, and a record whose node
+        # directory overflows the route is exactly one that needs it.
+        fallback = _next_permitted_model("digest", e.model)
+        if fallback is None:
+            note_run_failure()
+            click.echo(f"\n{e}\nNo permitted fallback for the digest stage.")
+            ctx.exit(1)
+        click.echo(
+            f"\n{e}\nRerouting to {fallback} and re-extracting; the abandoned "
+            f"attempt spent no metered money."
+        )
+        ledger.set_context(
+            rerouted_from=e.model, reroute_reason=f"enum {e.members} > {e.limit}"
+        )
+        _do_extract(
+            path,
+            parsed,
+            Path(output) if output else None,
+            fallback,
+            resolve_use_api(_USE_API_VAR),
+            Path(digests_root) if digests_root else None,
+            variant_only,
+            Path(predigests_root) if predigests_root else None,
+            run_label,
+        )
     except ExtractionCancelled:
         note_run_failure()
         click.echo(
@@ -235,6 +267,25 @@ def extract_cmd(
             "extraction failure."
         )
         ctx.exit(77)
+
+
+def _next_permitted_model(stage: str, after: str) -> str | None:
+    """The next model the policy permits for `stage`, skipping `after`.
+
+    Walks the stage's own priority list in order rather than picking a
+    favourite, so a reroute lands wherever the policy says the work should go
+    next - and skips anything the policy would refuse, which is how a deny
+    entry keeps applying to a fallback as much as to a first choice.
+    """
+    from anomalica_common import model_policy
+
+    policy = model_policy.load()
+    order = policy.priority(stage)
+    start = order.index(after) + 1 if after in order else 0
+    for candidate in order[start:]:
+        if candidate != after and not policy.refusal(stage, candidate):
+            return candidate
+    return None
 
 
 def _entail(text: str, pre_digest: str | None, echo=lambda _: None) -> str:
