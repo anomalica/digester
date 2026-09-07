@@ -280,6 +280,12 @@ def _next_permitted_model(stage: str, after: str) -> str | None:
     from anomalica_common import model_policy
 
     policy = model_policy.load()
+    # The DECLARED target wins where the policy names one: a reroute is a
+    # different question from a first choice, and the answer belongs in the
+    # policy where it can be found, not in this function.
+    declared = policy.reroute(stage)
+    if declared and declared != after:
+        return declared
     order = policy.priority(stage)
     start = order.index(after) + 1 if after in order else 0
     for candidate in order[start:]:
