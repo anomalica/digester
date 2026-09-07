@@ -1155,7 +1155,11 @@ def grade_record_cmd(record: str, digests_root: str) -> None:
         "off) spread 3.9 points of recall - 0.826, 0.831, 0.865 - with claim "
         "counts of 224, 242 and 257. A range from three samples understates "
         "the true spread, so read 3.9 as a lower bound: a gap of that size or "
-        "less between two models says nothing at all."
+        "less between two models says nothing at all.\nRULE: no recall "
+        "difference measured on ONE record counts as a finding. A recall claim "
+        "needs many records or repeated arms, and must say which it had. "
+        "Fidelity varied 0.34 points across those arms, so grounding "
+        "comparisons survive at sizes where recall comparisons do not."
     )
 
 

@@ -384,10 +384,14 @@ not. A range from three samples understates the spread, so 3.9 is a lower bound.
 **This retires the effort test's conclusion, not just its figures.** The low
 versus medium recall differences were -2.2, +0.7, -3.7 and -2.6 points; every
 one of them sits inside a 3.9-point band measured on one of the same records.
-The honest statement is that the effort test did not measure a difference
-between low and medium at all - it measured four samples of one distribution.
-What survives is the cost side, which is not noisy: medium spent 1.8-3.3x the
-output tokens for no demonstrated gain, and that alone justifies staying at low.
+
+State the finding as: WE COULD NOT DETECT A RECALL DIFFERENCE BETWEEN LOW AND
+MEDIUM, AND LOW IS CHEAPER. Not "we tested low against medium and low won" -
+the two lead to different decisions the next time someone considers raising the
+default. The first invites a rerun with better instruments; the second says the
+question is closed, and it is not. What was actually measured is the cost, which
+is not noisy: medium spent 1.8-3.3x the output tokens for no gain anyone can
+demonstrate, and that alone justifies staying at low.
 
 It also puts a floor under every model comparison of this size. The first graded
 trio's opus-over-sonnet gap recomputes to 3.8 points, which is inside this band;
