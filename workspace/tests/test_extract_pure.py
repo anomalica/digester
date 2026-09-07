@@ -381,3 +381,22 @@ def test_format_directory_includes_type_name_and_dates():
     assert "Nimitz encounter" in out
     assert "date_start=2004-11-10" in out and "date_end=2004-11-16" in out
     assert "person" in out and "Fravor, David" in out
+
+
+def test_pass_a_stops_when_the_node_directory_outgrows_the_route(monkeypatch):
+    """The directory travels in Pass A's PROMPT, not its schema.
+
+    A book failed at chunk 18 of 27 with 473 accumulated nodes and malformed
+    JSON - never reaching Pass B, where the enum guard sits. A guard that only
+    watches the schema would let exactly that happen again.
+    """
+    import pytest
+    from anomalica_common.llm import RouteEnumLimit, check_route_capacity
+
+    with pytest.raises(RouteEnumLimit) as e:
+        check_route_capacity("opencode-go/kimi-k3", 473)
+    assert e.value.members == 473
+
+    check_route_capacity("opencode-go/kimi-k3", 22)  # at the limit, permitted
+    check_route_capacity("claude-sonnet-5", 5000)  # native enforcement, no ceiling
+    check_route_capacity("deepseek/deepseek-v4-pro", 5000)  # openrouter, unaffected

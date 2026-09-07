@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 
+from anomalica_common.llm import check_route_capacity
 from anomalica_common.pre_digest import materialise
 from digester import prompt_registry
 import re
@@ -1079,6 +1080,12 @@ def extract_nodes_v2(
         seen_names_in_chunk: set[str] = set()
         for it in range(ITERATION_MAX):
             _check_cancel()  # stop before dispatching the next call; prior calls cached
+            # The directory grows with every chunk and travels in the prompt,
+            # so a route that cannot carry it fails HERE, mid-book, with
+            # malformed JSON - not at Pass B where the enum guard sits. Checked
+            # each round so the reroute happens the moment the directory
+            # outgrows the route rather than after another twenty minutes.
+            check_route_capacity(model, len(merged_nodes))
             directory_lines = [
                 f"  - ({n['node_type']}) {name}" for name, n in merged_nodes.items()
             ]
