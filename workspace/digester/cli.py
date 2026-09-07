@@ -30,6 +30,7 @@ from anomalica_common.llm import (
     spend_confirmed,
     usage_entry,
 )
+from anomalica_common.model_policy import PolicyRefusal
 from digester.record_parser import parse_record
 
 # The digester resolves its own metered toggle: DIGESTER_USE_API > global
@@ -213,7 +214,14 @@ def extract_cmd(
         # one; the corpus would still have the hole. The flat-rate lane exists to
         # spend allowance on records that need it, and a record whose node
         # directory overflows the route is exactly one that needs it.
-        fallback = _next_permitted_model("digest", e.model)
+        try:
+            fallback = _next_permitted_model("digest", e.model)
+        except PolicyRefusal as refusal:
+            # A reroute that cannot legally happen is a defect in the policy, so
+            # it stops here rather than quietly serving the next permitted model.
+            note_run_failure()
+            click.echo(f"\n{e}\n{refusal}")
+            ctx.exit(1)
         if fallback is None:
             note_run_failure()
             click.echo(f"\n{e}\nNo permitted fallback for the digest stage.")
