@@ -1150,10 +1150,12 @@ def grade_record_cmd(record: str, digests_root: str) -> None:
             f"{_f(r['coref_rate'], 7)} {r['claims']:7}"
         )
     click.echo(
-        "\nComparable within this record only. The ~2-point noise floor once "
-        "quoted here is UNMEASURED: it came from two runs scored on a grader "
-        "that over-counted overlapping claims, and one of the two variants no "
-        "longer exists. Repeat an arm with --run-label to measure it."
+        "\nComparable within this record only. MEASURED NOISE FLOOR: three "
+        "identical Sonnet 5 runs of the Fowler interview (2026-09-07, cache "
+        "off) spread 3.9 points of recall - 0.826, 0.831, 0.865 - with claim "
+        "counts of 224, 242 and 257. A range from three samples understates "
+        "the true spread, so read 3.9 as a lower bound: a gap of that size or "
+        "less between two models says nothing at all."
     )
 
 

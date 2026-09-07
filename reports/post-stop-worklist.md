@@ -363,3 +363,34 @@ between low and medium is slightly WIDER, not narrower. Any other conclusion
 drawn from a recall number dated before 2026-09-04 should be recomputed rather
 than trusted; the model comparison that produced the digest priority list was
 run after the fix.
+
+
+## The measured noise floor retires the effort test's conclusion (2026-09-07)
+
+Three identical Sonnet 5 runs of the Fowler interview, cache off, each under its
+own run label so every arm survives:
+
+| arm | claims | recall | quote fidelity | off-target |
+|-----|-------:|-------:|---------------:|-----------:|
+| repeat-1 | 242 | 0.8264 | 0.9917 | 0.4875 |
+| repeat-2 | 224 | 0.8310 | 0.9911 | 0.4730 |
+| repeat-3 | 257 | 0.8654 | 0.9883 | 0.5079 |
+
+Recall spread 3.90 points, standard deviation 0.017. Claim count varies by 33,
+13.7% of the mean, on identical inputs. Quote fidelity is stable to a third of a
+point, so FIDELITY comparisons survive where RECALL comparisons of this size do
+not. A range from three samples understates the spread, so 3.9 is a lower bound.
+
+**This retires the effort test's conclusion, not just its figures.** The low
+versus medium recall differences were -2.2, +0.7, -3.7 and -2.6 points; every
+one of them sits inside a 3.9-point band measured on one of the same records.
+The honest statement is that the effort test did not measure a difference
+between low and medium at all - it measured four samples of one distribution.
+What survives is the cost side, which is not noisy: medium spent 1.8-3.3x the
+output tokens for no demonstrated gain, and that alone justifies staying at low.
+
+It also puts a floor under every model comparison of this size. The first graded
+trio's opus-over-sonnet gap recomputes to 3.8 points, which is inside this band;
+so is the 3-point figure the knowledge note calls a typical model difference.
+Fidelity and grounding gaps (Haiku's 91.0% against Sonnet's 98.3%) are a
+different measure and are not affected.
