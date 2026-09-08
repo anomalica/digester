@@ -66,39 +66,48 @@ SKY=$(ls "$BY"/2026-08-09-video-ross-coulthart-q-a-skywatcher*.md | head -1)
 # the window resets on its own and the run has all night.
 CEILING=83
 SESSION_PAUSE=86
-window_used() {
-	(cd /home/mark/repos/anomalica/scheduler && timeout 60 python3 -c "
-import sys
-from backend import usage
-name = sys.argv[1]
-w = [x for x in usage._claude_usage({}).get('windows', []) if x['name'] == name]
-print(int(w[0]['used']) if w else 100)
-" "$1" 2>/dev/null) || echo 100
-}
-weekly_used() { window_used weekly; }
-session_used() { window_used session; }
+QUOTA=/home/mark/repos/anomalica/digester/reports/quota.py
 
+# One cached read answers both windows; see quota.py for why it is not two
+# calls and why a failed read says "unknown" rather than 100.
+read_windows() {
+	local out
+	out=$(timeout 120 python3 "$QUOTA" 2>/dev/null) || out="unknown unknown"
+	WEEKLY=${out%% *}
+	SESSION=${out##* }
+}
+
+# A FULL SESSION WAITS; AN UNREADABLE ONE DOES NOT. The session window is a
+# throttle that resets on its own, so pausing costs nothing but time. Pausing
+# because the reader returned an error would cost the night.
 await_session() {
-	local used waited=0
-	used=$(session_used)
-	while [ "$used" -ge "$SESSION_PAUSE" ] && [ "$waited" -lt 21600 ]; do
-		echo "    session at ${used}%, waiting 10 min for the window to reset"
+	local waited=0
+	read_windows
+	while [ "$SESSION" != "unknown" ] && [ "$SESSION" -ge "$SESSION_PAUSE" ] &&
+		[ "$waited" -lt 21600 ]; do
+		echo "    session at ${SESSION}%, waiting 10 min for the window to reset"
 		sleep 600
 		waited=$((waited + 600))
-		used=$(session_used)
+		read_windows
 	done
 }
 
-# The variant filename a cell will write, so a restart skips finished work
-# rather than paying for it twice. A sweep restarted at 22:08 re-ran a cell that
-# had completed at 21:58 because nothing checked.
-variant_of() {
-	python3 -c "
-import sys
-from digester import extract
-from digester.digest_store import prompt_sha8
-print(f'{sys.argv[1]}.{prompt_sha8(extract.prompt_provenance())}.{sys.argv[2]}.yaml')
-" "$1" "$2" 2>/dev/null
+# AN UNREADABLE WEEKLY WINDOW STOPS THE RUN, after twenty minutes of trying.
+# It is the budget Mark set, and proceeding blind past a ceiling is the one
+# failure here that costs something other than time.
+weekly_ok() {
+	local tries=0
+	while [ "$WEEKLY" = "unknown" ] && [ "$tries" -lt 4 ]; do
+		echo "    weekly window unreadable, retrying in 5 min"
+		sleep 300
+		tries=$((tries + 1))
+		read_windows
+	done
+	if [ "$WEEKLY" = "unknown" ]; then
+		echo "=== STOPPING: cannot read the weekly window, so cannot respect the ceiling"
+		return 1
+	fi
+	[ "$WEEKLY" -lt "$CEILING" ]
 }
 
 cell() {
@@ -112,12 +121,11 @@ cell() {
 		return 0
 	fi
 	await_session
-	used=$(weekly_used)
-	if [ "$used" -ge "$CEILING" ]; then
-		echo "=== STOPPING at ${used}% weekly, ceiling ${CEILING}% - ${model}/${label} not started"
+	if ! weekly_ok; then
+		echo "=== STOPPING at ${WEEKLY}% weekly, ceiling ${CEILING}% - ${model}/${label} not started"
 		exit 0
 	fi
-	echo "[$model $label] ${stem:0:38} weekly ${used}% session $(session_used)% $(date +%H:%M)"
+	echo "[$model $label] ${stem:0:38} weekly ${WEEKLY}% session ${SESSION}% $(date +%H:%M)"
 	local t0 rc el
 	t0=$(date +%s)
 	timeout 5400 python3 -m digester.cli extract "$rec" \
@@ -135,7 +143,8 @@ cell() {
 	fi
 }
 
-echo "=== grid start $(date +%H:%M), weekly $(weekly_used)%, ceiling ${CEILING}%"
+read_windows
+echo "=== grid start $(date +%H:%M), weekly ${WEEKLY}%, session ${SESSION}%, ceiling ${CEILING}%"
 for arm in 1 2 3; do
 	cell sonnet "$FOW" "grid-$arm"
 	cell opus "$FOW" "grid-$arm"
@@ -146,4 +155,5 @@ for arm in 1 2 3; do
 done
 cell haiku "$FOW" "grid-1"
 cell opus "$SKY" "grid-1"
-echo "=== grid done $(date +%H:%M), weekly $(weekly_used)%"
+read_windows
+echo "=== grid done $(date +%H:%M), weekly ${WEEKLY}%, session ${SESSION}%"
