@@ -27,12 +27,12 @@ class TestSoleReference:
     def test_a_single_reference_marked_subject_is_correct(self):
         out = salience.sole_reference_score([digest(claim(("Roswell", "subject")))])
         assert out["sole_reference_edges"] == 1 and out["wrong"] == 0
-        assert out["error_rate"] == 0.0
+        assert out["error_upper_bound"] == 0.0
 
     def test_a_single_reference_marked_anything_else_is_wrong(self):
         d = digest(claim(("Sydney", "setting")), claim(("UFO", "mentioned")))
         out = salience.sole_reference_score([d])
-        assert out["wrong"] == 2 and out["error_rate"] == 1.0
+        assert out["wrong"] == 2 and out["error_upper_bound"] == 1.0
         assert out["wrong_by_role"] == {"setting": 1, "mentioned": 1}
         assert out["examples"][0][0] == "Sydney"
 
@@ -45,12 +45,14 @@ class TestSoleReference:
         """A digest predating the field must not read as 100% wrong."""
         out = salience.sole_reference_score([digest(claim(("Roswell", None)))])
         assert out["unassessed"] == 1 and out["wrong"] == 0
-        assert out["error_rate"] is None, "no assessed edges means no rate, not zero"
+        assert out["error_upper_bound"] is None, (
+            "no assessed edges means no rate, not zero"
+        )
 
     def test_the_rate_is_over_assessed_edges_not_all_of_them(self):
         d = digest(claim(("A", "subject")), claim(("B", "setting")), claim(("C", None)))
         out = salience.sole_reference_score([d])
-        assert out["assessed"] == 2 and out["error_rate"] == 0.5
+        assert out["assessed"] == 2 and out["error_upper_bound"] == 0.5
 
 
 class TestAmbientPrior:
@@ -92,12 +94,12 @@ class TestAmbientPrior:
         assert salience.ambient_check([d]) == {}
 
 
-def test_the_report_carries_all_three_instruments():
+def test_the_report_carries_every_instrument():
     d = digest(
         claim(("Roswell", "subject")), claim(("UFO", "subject"), ("X", "setting"))
     )
     out = salience.report([d])
-    assert set(out) == {"sole_reference", "role_mix", "ambient"}
+    assert set(out) == {"sole_reference", "subject_first", "role_mix", "ambient"}
     assert out["role_mix"]["subject"] == 2 and out["role_mix"]["setting"] == 1
 
 
