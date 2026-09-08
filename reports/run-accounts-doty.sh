@@ -2,6 +2,18 @@
 # Account pass on the Richard Doty interview (40k words, 291 highlights, ~26
 # narrated accounts by master's reading). Subscription, cleared by Mark.
 set -uo pipefail
+# Forward a stop to the children. Without this, `systemctl stop` kills only
+# the wrapper: the extraction keeps running, systemd waits the full stop
+# timeout, and Fedora's TimeoutStopFailureMode=abort drop-in then escalates to
+# SIGABRT and writes a coredump. Observed as "State 'final-sigterm' timed out.
+# Aborting" on a unit that had simply been asked to stop. These cells are
+# stopped and restarted routinely as fixes land, so a clean exit is worth six
+# lines.
+_stop() {
+	trap - TERM INT
+	kill -TERM -$$ 2>/dev/null
+}
+trap _stop TERM INT
 unset DIGESTER_USE_API ANOMALICA_USE_API OPENROUTER_API_KEY
 export ANOMALICA_CLI_TIMEOUT_S=2700 ANOMALICA_CLI_LONG_TIMEOUT_S=3000
 export PYTHONPATH=/home/mark/repos/anomalica/anomalica-common/src:.
