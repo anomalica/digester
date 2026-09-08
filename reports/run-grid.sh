@@ -19,6 +19,20 @@
 # THE CALL CACHE IS OFF: an identical call replays its stored response, so
 # cached repeats would return byte-identical digests and measure nothing.
 set -uo pipefail
+
+# RUN FROM A COPY, NEVER FROM THE REPOSITORY FILE.
+# Bash does not read a script into memory - it reads incrementally and keeps a
+# byte offset - so editing this file while it runs shifts every offset after the
+# cursor and the shell resumes mid-token. It presents as a bug on a line that is
+# correct: an edit at 22:00 killed an hour-old sweep with "line 39: rec: unbound
+# variable" on a call that passes all three arguments. Exec'ing a snapshot makes
+# the repository copy editable at any time without touching the run.
+if [ "${GRID_FROM_COPY:-}" != "1" ]; then
+	_copy=$(mktemp /tmp/run-grid.XXXXXX.sh)
+	cat "$0" >"$_copy"
+	chmod +x "$_copy"
+	GRID_FROM_COPY=1 exec "$_copy" "$@"
+fi
 _stop() {
 	trap - TERM INT
 	kill -TERM -$$ 2>/dev/null
