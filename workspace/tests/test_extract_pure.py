@@ -3,6 +3,7 @@ schema's node-name enum, and document chunking. These are the deterministic,
 breakable parts between the model and the data model."""
 
 import json
+from pathlib import Path
 
 from anomalica_common.digest import (
     AttestationLevel,
@@ -545,3 +546,39 @@ class TestPinningAConfiguration:
         extract.release_prompts()
         assert extract._nodes_prompt() == "AFTER"
         assert {p["sha256"] for p in extract.prompt_provenance()} == {"bbb"}
+
+
+class TestTheCodeFingerprint:
+    """It must move when the code that produces a claim moves, and not
+    otherwise. It hashed the git commit plus a dirty flag, which failed both
+    ways: a report commit relabelled every later cell of a running grid, and
+    every uncommitted state hashed to the same "-dirty"."""
+
+    def test_a_change_outside_the_extraction_sources_does_not_move_it(self, tmp_path):
+        from digester import extract
+
+        before = extract.code_fingerprint()
+        probe = Path(extract.__file__).resolve().parents[2] / "reports" / "_probe.tmp"
+        probe.parent.mkdir(exist_ok=True)
+        probe.write_text("a report written while a grid runs")
+        try:
+            assert extract.code_fingerprint() == before
+        finally:
+            probe.unlink()
+
+    def test_a_change_to_the_extraction_source_moves_it(self):
+        from digester import extract
+
+        src = Path(extract.__file__)
+        before, original = extract.code_fingerprint(), src.read_bytes()
+        try:
+            src.write_bytes(original + b"\n# changed\n")
+            assert extract.code_fingerprint() != before
+        finally:
+            src.write_bytes(original)
+        assert extract.code_fingerprint() == before, "and back when reverted"
+
+    def test_it_is_stable_across_calls(self):
+        from digester import extract
+
+        assert extract.code_fingerprint() == extract.code_fingerprint()

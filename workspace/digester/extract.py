@@ -781,35 +781,49 @@ def schema_fingerprint() -> str:
 
 
 def code_fingerprint() -> str:
-    """The commit the extractor is running from, or `dirty` beside it.
+    """A hash over the SOURCE that assembles a run, not the repository's state.
 
     Not decoration: prompt and schema together still miss a change to how the
-    request is assembled - chunking, iteration, the directory carried between
-    chunks. Two digests can share both halves and still come from different
-    code.
+    request is built - chunking, iteration, the directory carried between
+    chunks. Two digests can share both halves and come from different code.
+
+    It hashed the git commit plus a dirty flag, and that reports the wrong
+    thing. A grid runs for hours while the repository keeps moving underneath
+    it, so a commit touching only a report or a test relabelled every cell that
+    came after it, and one grid looked like nine configurations. The reverse
+    failure was worse: every uncommitted state hashed to the same "-dirty",
+    so two runs with genuinely different code recorded the same fingerprint.
+
+    Hashing the extraction sources instead is exact in both directions - it
+    moves when the code that produces a claim moves, and only then. Tests,
+    reports and prompts are excluded: prompts carry their own hash, and the
+    others cannot reach a run.
     """
-    import subprocess
+    import hashlib as _h
     from pathlib import Path
 
-    root = Path(__file__).resolve().parents[2]
+    roots = [Path(__file__).resolve().parent]
     try:
-        sha = subprocess.run(
-            ["git", "-C", str(root), "rev-parse", "--short=8", "HEAD"],
-            capture_output=True,
-            text=True,
-            timeout=10,
-        ).stdout.strip()
-        dirty = subprocess.run(
-            ["git", "-C", str(root), "status", "--porcelain", "--untracked-files=no"],
-            capture_output=True,
-            text=True,
-            timeout=10,
-        ).stdout.strip()
-    except (OSError, subprocess.SubprocessError):
-        return "unknown"
-    if not sha:
-        return "unknown"
-    return f"{sha}-dirty" if dirty else sha
+        import anomalica_common
+
+        common = Path(anomalica_common.__file__).resolve().parent
+        roots += [common / "llm", common / "digest"]
+        roots += sorted(common.glob("pre_digest*"))
+    except ImportError:
+        pass
+
+    digest = _h.sha256()
+    for root in roots:
+        if not root.exists():
+            continue
+        base = root.parent
+        files = [root] if root.is_file() else sorted(root.rglob("*.py"))
+        for f in files:
+            if "__pycache__" in f.parts or f.name.startswith("test_"):
+                continue
+            digest.update(str(f.relative_to(base)).encode())
+            digest.update(f.read_bytes())
+    return digest.hexdigest()[:8]
 
 
 def extraction_config() -> dict:

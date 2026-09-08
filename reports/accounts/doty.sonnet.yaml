@@ -2,167 +2,169 @@ record:
   content_hash: sha256:868395b7e8a1f005c309f865abc637b573cfd56907204bec18f799c151ba648d
 model: sonnet
 accounts:
-  - id: acct-the-one-thing-that-convinced-me-beyond-anything-else-that-i-had-access-to
-    title: A female Air Force sergeant's repeated abductions and government surveillance operation
-    subject: an unnamed Air Force sergeant
-    when: spanning Doty's OSI career, ongoing
-    where: an apartment near Kirtland Air Force Base
-    span: The one thing that convinced me beyond anything else that I had access to-if I was a member of Congress.
+  - id: acct-the-one-thing-that-convinced-me-beyond-anything-else-that-i-had
+    title: Air Force sergeant's repeated abductions and thwarted taking near Kirtland
+    subject: an Air Force sergeant, a whistleblower
+    when: her Air Force career, surveillance operation set up by OSI
+    where: her apartment/dorm near Kirtland Air Force Base
+    span: The one thing that convinced me beyond anything else that I had-that convinced me that there are, that they weren't
+      humans doing this to her.
     teller_role: investigated
-  - id: acct-yes-i-was-on-a-temporary-assignment-to-ellsworth-air-force-base-on-something-entirely-different.
-    title: Mario Woods' encounter and subsequent OSI debriefing at Ellsworth Air Force Base
-    subject: Sergeant Mario Woods
+  - id: acct-we-had-a-guest-on-recently-mario-woods-who-you-re-familiar-with
+    title: Mario Woods's craft and being encounter and subsequent OSI debrief
+    subject: Sergeant Mario Woods, an Air Force security policeman
     when: '1977'
     where: Ellsworth Air Force Base, South Dakota
-    span: Yes, I was on a temporary assignment to Ellsworth Air Force Base on something entirely different.-I think it would
-      have been probably about 10 hours of interrogation.
+    span: we had a guest on recently Mario Woods who you're familiar with-probably about 10 hours of interrogation.
     teller_role: investigated
-  - id: acct-he-was-taking-pictures-of-these-objects-flying-around
-    title: Paul Bennewitz's photographs of a classified drone program mistaken for UFOs
-    subject: Paul Bennewitz
-    when: late 1970s
-    where: near Kirtland Air Force Base
-    span: He was taking pictures of these objects flying around-we had to convince Paul that, yeah, he was seeing UFOs.
+  - id: acct-michael-johnson-was-in-another-room.
+    title: Michael Johnson's hospitalization and separate interrogation
+    subject: Michael Johnson, the second security policeman with Mario Woods
+    when: same incident as Mario Woods, 1977
+    where: Ellsworth Air Force Base hospital and OSI office
+    span: Michael Johnson was in another room.-only Mario Woods.
+    teller_role: unclear
+  - id: acct-we-had-a-case-at-kirtland-involving-a
+    title: Sandia guard's encounter with a landed craft and two entities at a nuclear weapons bunker
+    subject: a Sandia National Laboratories security guard
+    when: late 1979 or early 1980
+    where: a classified weapons area of Kirtland Air Force Base
+    span: We had a case at Kirtland involving a-They showed us some documents.
     teller_role: investigated
-  - id: acct-well-when-i-was-working-on-a-myrna-hansen-case-and-you-know-who-myrna-hansen-is
-    title: The Myrna Hansen abduction case linked to the Bennewitz affair
+  - id: acct-so-i-did.-i-went-over-there.
+    title: The 1979 briefing on US government contact with extraterrestrials since 1947
+    subject: Doty and a small group briefed by an Air Force colonel and a civilian
+    when: '1979'
+    where: the Air Force Special Security Office, west side of Kirtland Air Force Base
+    span: So I did. I went over there.-They showed us some documents.
+    teller_role: briefed_or_read
+  - id: acct-it-showed-the-craft.
+    title: Film shown at the briefing depicting the Roswell crash recovery
+    subject: a classified recovery film
+    when: 1947 event, film shown during the 1979 briefing
+    where: Roswell/Corona, New Mexico
+    span: It showed the craft.-narrating what we were seeing.
+    teller_role: briefed_or_read
+  - id: acct-they-also-showed-a-second-uh-recovery-site-in-kingman-arizona
+    title: Film shown at the briefing depicting a second recovery near Kingman, Arizona
+    subject: a classified recovery film
+    when: 1953, film shown during the 1979 briefing
+    where: Kingman, Arizona
+    span: they also showed a second uh recovery site in kingman arizona-The recovery truck said United States Air Force on
+      it.
+    teller_role: briefed_or_read
+  - id: acct-well-when-i-was-working-on-a-myrna-hansen-case
+    title: Myrna Hansen abduction case and the DIA agents who revealed a dedicated abduction investigation unit
     subject: Myrna Hansen
     when: '1980'
-    where: near Cimarron, New Mexico
-    span: Well, when I was working on a Myrna Hansen case, and you know who Myrna Hansen is-I just thought she was psychologically
-      unstable or something.
+    where: Kirtland OSI office
+    span: Well, when I was working on a Myrna Hansen case-this has been going on for years.
     teller_role: investigated
-  - id: acct-she-s-driving.-she-leaves-kirtland.-she-s-driving-on-the-interstate-25-to-colorado.
-    title: A captain's dependent wife taken from the roadside near Springer and found at Eagle Nest Lake
-    subject: an unnamed dependent wife of an Air Force captain
-    when: unspecified, during Doty's OSI career
-    where: near Springer, New Mexico, and Eagle Nest Lake
-    span: She's driving. She leaves Kirtland. She's driving on the Interstate 25 to Colorado.-So it really happened.
+  - id: acct-when-the-case-first-opened-the-paul-bennewitz-case-first-opened
+    title: Paul Bennewitz disinformation operation over drone sightings mistaken for UFOs
+    subject: Paul Bennewitz
+    when: circa 1979-1980
+    where: Kirtland Air Force Base area
+    span: When the case first opened, the Paul Bennewitz case first opened-That's all I had to do.
     teller_role: investigated
-  - id: acct-we-had-a-case-at-kirtland-involving-a-sighting-in-a-highly-classified-area-of-the-base.
-    title: A Sandia National Laboratory security guard's UFO landing near a classified bunker
-    subject: an unnamed Sandia National Laboratories security guard
-    when: late 1979 or early 1980
-    where: a highly classified area of Kirtland Air Force Base
-    span: We had a case at Kirtland involving a sighting in a highly classified area of the base.-and it took off.
+  - id: acct-there-was-another-case-i-was-involved-in.
+    title: Captain's dependent wife taken from the roadside near Springer
+    subject: a captain's dependent wife
+    when: unspecified, before her husband was stationed elsewhere
+    where: Interstate 25 near Springer, New Mexico, and Eagle Nest Lake
+    span: There was another case I was involved in.-legitimate. And walked out.
     teller_role: investigated
-  - id: acct-so-i-did.-i-went-over-there.-i-sat-and-went-in-a-room.
-    title: Doty's own 1979/80 briefing into the government's UFO investigation program
-    subject: Doty himself, receiving a classified briefing
-    when: 1979 or 1980
-    where: an Air Force special security office on Kirtland Air Force Base
-    span: So I did. I went over there. I sat and went in a room.-We took it all in.
-    teller_role: briefed_or_read
-  - id: acct-the-crash-in-roswell-the-crash-at-kingman.
-    title: A film of the Roswell crash recovery shown during Doty's briefing
-    subject: the 1947 Roswell/Corona crash recovery
-    when: 1947 (event); shown to Doty circa 1979-80
-    where: Corona/Roswell, New Mexico
-    span: the crash in Roswell, the crash at Kingman.-the recovery truck said United States Air Force on it.
-    teller_role: briefed_or_read
   - id: acct-this-air-force-pilot-loves-fishing.
-    title: An Air National Guard A-7D pilot's missing-time UFO encounter at a New Mexico lake
-    subject: an unnamed New Mexico Air National Guard A-7D pilot
+    title: A-7D National Guard pilot's fishing encounter and missing time near a northern New Mexico lake
+    subject: an Air Force Air National Guard A-7D pilot
     when: unspecified, during Doty's OSI career
-    where: a lake in northern New Mexico
-    span: This Air Force pilot loves fishing.-and that's, that's one of these cases here that's absolutely real
-    teller_role: investigated
-  - id: acct-i-knew-there-was-a-project
-    title: Two Carthusian monks brought to Groom Lake to communicate with a captive extraterrestrial
-    subject: two Carthusian monks from a Vermont monastery
-    when: 1980s, confirmed to Doty decades later
-    where: the S2 Annex at Groom Lake, and a Carthusian monastery in Vermont
-    span: I knew there was a project-that they were in fact gifted.
-    teller_role: investigated
-  - id: acct-i-know-the-facility
-    title: A closed-circuit television glimpse of a captive alien 'visitor'
-    subject: an unnamed extraterrestrial 'visitor' held in captivity
-    when: unspecified, during Doty's OSI career
-    where: a secure facility Doty was not cleared to enter
-    span: I know the facility-Now I know what they had there, at least one.
-    teller_role: experienced
-  - id: acct-in-1958-i-think-it-was-i-can-t-remember-what-year-but-in-the-50s-or-early-60s-a-ufo-had-crashed-on-this-rancher-s-land
-    title: A UFO crash buried by a rancher, discovered decades later in a mine shaft
-    subject: an unnamed rancher's buried crash, later found by miners
-    when: originally 1950s-60s; investigated by Doty around 2000
-    where: a rancher's land and adjoining mine shaft, South Dakota
-    span: In 1958, I think it was, I can't remember what year, but in the 50s or early 60s, a UFO had crashed on this rancher's
-      land-I was never privy to that.
-    teller_role: investigated
-  - id: acct-me-and-my-partner-went-out-to-a-place-outside-uh-the-nellis-test-and-training-range-up-near-warm-springs.
-    title: A crashed disc recovered near Warm Springs with covered alien bodies
-    subject: an unnamed crashed craft and its occupants
-    when: unspecified, during Doty's OSI career
-    where: near Warm Springs, outside the Nellis Test and Training Range
-    span: me and my partner went out to a place outside, uh, the Nellis Test and Training Range up near Warm Springs.-They
-      looked probably at least five foot.
-    teller_role: investigated
-  - id: acct-this-goes-back-to-a-rather-long-story-about-time-travel
-    title: A self-proclaimed time traveler who walked into a rock crevice near Sedona and never returned
-    subject: an unnamed man claiming to be a time traveler
-    when: during Sandia Labs' time-travel experiments, Doty's OSI era
-    where: near Sedona, Arizona
-    span: this goes back to a rather long story about time travel-he's never returned
-    teller_role: investigated
-  - id: acct-there-was-an-air-force-team-out-at-nellis-test-and-training-range
-    title: An extraterrestrial encountered walking along a road at the Nellis range
-    subject: an unnamed extraterrestrial encountered by an Air Force team
-    when: 1970s
-    where: Nellis Test and Training Range
-    span: there was an Air Force team out at Nellis Test and Training Range-This is verified
-    teller_role: investigated
-  - id: acct-the-mj-12-that-jamie-shandira-got.
-    title: The chain of custody of the MJ-12 documents from Jamie Shandera to Doty
-    subject: Jamie Shandera's receipt of the MJ-12 documents
-    when: early-to-mid 1980s
-    where: Washington, D.C.; Albuquerque; San Francisco
-    span: The MJ-12 that Jamie Shandira got.-It was placed in his box.
+    where: a lake in northern New Mexico near the Colorado border area
+    span: This Air Force pilot loves fishing.-That's one of these cases here that's absolutely real
     teller_role: investigated
   - id: acct-we-all-know-who-linda-howe-is.
-    title: Linda Howe's HBO documentary and the hunt for her Pentagon source
-    subject: Linda Howe and an unnamed Pentagon officer
-    when: 1980s
+    title: Linda Howe's HBO documentary briefing and the Pentagon officer who leaked to her
+    subject: Linda Moulton Howe
+    when: circa mid-1980s
     where: Kirtland Air Force Base
-    span: We all know who Linda Howe is.-then some of it isn't.
+    span: We all know who Linda Howe is.-I never get that from her.
     teller_role: investigated
-  - id: acct-these-two-people-were-legitimately-collecting-really-really-good-information-from-a-person-that-had-a-close-encounter
-    title: A deception operation to discourage two Nevada MUFON investigators from a close-encounter case
-    subject: two unnamed Nevada MUFON field investigators and an unnamed close-encounter witness
-    when: unspecified
-    where: near the Nellis Test and Training Range, Nevada
-    span: These two people were legitimately collecting really, really good information from a person that had a close encounter-we
-      didn't always win.
+  - id: acct-that-s-probably-the-one-regret.
+    title: Bill Moore's role feeding disinformation into UFO groups on behalf of counterintelligence
+    subject: Bill Moore
+    when: 1980s
+    where: unspecified, San Francisco meeting referenced
+    span: That's probably the one regret.-what Bill was doing.
     teller_role: investigated
-  - id: acct-there-s-been-two-occasions-where-i-ve-been-visited-by-fbi-agents
-    title: FBI visits after Gaia disclosures, and uniformed Space Force officers monitoring a UFO convention
-    subject: Doty's own public disclosures and subsequent government attention
-    when: 2018 and 2019
-    where: a UFO convention in Laughlin, Nevada
-    span: There's been two occasions where I've been visited by FBI agents-They probably were there three or four days or
-      two, three days.
+  - id: acct-in-1988-there-is-a-tv-special-which-you-re-on
+    title: The 1987 UFO Cover-Up Live television special deception operation (Falcon and Condor)
+    subject: the UFO Cover-Up Live TV special and Doty's alias 'Falcon'
+    when: recorded October 1987, aired 1988
+    where: a filmed interview location, part of an OSI/FBI operation
+    span: in 1988 there is a TV special which you're on-They were hoping to draw somebody that they were looking for
+    teller_role: experienced
+  - id: acct-i-knew-of-an-operation-that-was-occurring-at-groom-lake.
+    title: Carthusian monks recruited as interpreters for extraterrestrials at S2 Annex
+    subject: two Carthusian monks at a Vermont monastery
+    when: 1980s, story surfacing decades later
+    where: Groom Lake S2 Annex and a Carthusian monastery in Vermont
+    span: I knew of an operation that was occurring at Groom Lake.-that they were able to communicate with them. Now, that's
+      it. That's 1980s era,
+    teller_role: investigated
+  - id: acct-the-guy-that-smuggled-it-out-spoke.
+    title: The Air Force sergeant who smuggled the Alien Interview footage out of Groom Lake
+    subject: an unnamed Air Force sergeant audiovisual technician
+    when: 1980s
+    where: Groom Lake audiovisual lab
+    span: the guy that smuggled it out spoke.-he still feels, well, he could still be prosecuted.
+    teller_role: was_told
+  - id: acct-i-was-actually-at-one-crash-site-i-was-there
+    title: Recovery of a small disc-shaped craft from a mine shaft
+    subject: a small saucer-shaped craft found by miners
+    when: 1950s or early 1960s, opened around 1984
+    where: a mine shaft, South Dakota
+    span: i was actually at one crash site i was there-That was probably a scout ship
+    teller_role: investigated
+  - id: acct-our-job-was-to-go-out-and-recruit
+    title: Prostitutes recruited near Nellis to inform on Air Force personnel discussing classified test flights
+    subject: prostitutes near Nellis Test and Training Range, and a major flying the F-117
+    when: late 1970s and 1980s
+    where: Nye County, Nevada, near the Nellis testing range
+    span: Our job was to go out and recruit-On the books at least.
+    teller_role: investigated
+  - id: acct-this-person-responded-to-sandy-lab-and-said-i-m-a-time-traveler
+    title: A man who walked through a rock crevice near Sedona and never returned
+    subject: an unnamed man claiming to be a time traveler
+    when: 1980s, tied to Sandia National Laboratories experiments
+    where: a rock formation near Sedona, Arizona
+    span: this person responded to Sandy Lab and said, I'm a time traveler-he's never returned
+    teller_role: investigated
+  - id: acct-in-about-1965-uh-i
+    title: A close 1965 high school wrestling match against a state runner-up
+    subject: Doty, as a high school wrestler
+    when: circa 1965
+    where: a high school wrestling meet against a rival school
+    span: in about 1965, uh, I-I win by one point.
     teller_role: experienced
 dropped:
-  - title: A childhood levitation experience while jumping near a stop sign
+  - title: A childhood levitation experience while jumping down a street
     because: only 0 claims
-  - title: A film of a second recovery site at Kingman, Arizona
+  - title: The MJ-12 document delivered to Jamie Shandera and later seized by Doty
     because: only 2 claims
-  - title: An Air Force technician's smuggling of the 'Alien Interview' footage out of Groom Lake
+  - title: A submarine crew member's smuggled artifact and the Naval Intelligence investigation
+    because: only 2 claims
+  - title: Witnessing the 'fabric of space' open during a Nevada Test Site magnet experiment
     because: only 1 claims
-  - title: A Navy submariner's recovered artifact and the resulting counterintelligence investigation
+  - title: A Civil War-era photograph from Lancaster, Pennsylvania showing a modern jet
     because: only 2 claims
-  - title: A witnessed opening of 'the fabric of space' during Nevada Test Site experiments
+  - title: An Air Force team's roadside encounter with a walking extraterrestrial at Nellis
     because: only 2 claims
-  - title: A Civil War-era photograph allegedly showing a jet over a Lancaster, Pennsylvania battlefield
-    because: only 2 claims
-  - title: 'The 1987 ''UFO Cover-Up: Live'' broadcast interview as ''Falcon'''
-    because: only 1 claims
-  - title: A UFO sighting following a tram up Sandia Crest
-    because: only 1 claims
-  - title: A one-point high school wrestling championship match
+  - title: David Copperfield's father's wartime ID placing him at Roswell
     because: only 0 claims
-  - title: A 2014 trip to Laos searching for evidence at a POW site
+  - title: A UFO trailing the Sandia Crest tram in 1980
+    because: only 2 claims
+  - title: A 2014 search for POW evidence at Lima Site 85 in Laos
     because: only 1 claims
 binding:
-  bound: 256
+  bound: 280
   unbindable: 5
-  outside: 133
+  outside: 109
