@@ -46,6 +46,39 @@ def body_for(record_dir: str) -> str | None:
     return parse_record(hits[0].read_text(errors="replace")).body if hits else None
 
 
+def _permutation_p(a: list[float], b: list[float]) -> float:
+    """Exact one-sided permutation p on the mean difference.
+
+    The floor heuristic - compare the gap to the largest within-model spread -
+    is a rule of thumb and it is too crude in one specific case: when one arm
+    has a wide spread driven by a single low run, it can call a comparison
+    "says nothing" while every arm of one model sits beyond every arm of the
+    other. That happened on the first completed block, where the heuristic said
+    nothing and the arms were completely separated. Report both.
+
+    With three arms each the smallest attainable p is 1/20 = 0.05, so a result
+    AT 0.05 means complete separation and nothing stronger can be shown at this
+    sample size. It is not the same as a p of 0.05 from a large sample.
+    """
+    from itertools import combinations
+
+    pool = a + b
+    obs = st.mean(a) - st.mean(b)
+    hits = total = 0
+    for combo in combinations(range(len(pool)), len(a)):
+        ga = [pool[i] for i in combo]
+        gb = [pool[i] for i in range(len(pool)) if i not in combo]
+        total += 1
+        if st.mean(ga) - st.mean(gb) >= obs:
+            hits += 1
+    return hits / total if total else 1.0
+
+
+def _separated(a: list[float], b: list[float]) -> bool:
+    """Whether every value of one group lies beyond every value of the other."""
+    return min(a) > max(b) or min(b) > max(a)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--label-prefix", default="grid-")
@@ -108,12 +141,14 @@ def main() -> int:
                 if not ra or not rb:
                     continue
                 gap = st.mean(ra) - st.mean(rb)
-                verdict = (
-                    "INSIDE THE FLOOR - says nothing"
-                    if abs(gap) <= floor
-                    else "outside the floor on this record"
+                floor_verdict = (
+                    "inside the floor" if abs(gap) <= floor else "outside the floor"
                 )
-                print(f"  {a} - {b}: {gap:+.3f}  {verdict}")
+                pv = _permutation_p(ra, rb)
+                sep = (
+                    "arms separate completely" if _separated(ra, rb) else "arms overlap"
+                )
+                print(f"  {a} - {b}: {gap:+.3f}  {floor_verdict}, p={pv:.3f}, {sep}")
         print(
             "  A gap outside the floor on ONE record is still one record. "
             "It needs the same sign on the other before it is a finding."
