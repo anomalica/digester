@@ -4,22 +4,30 @@ A claim's reference says a node is MENTIONED; the role says what it IS. The
 question is whether a model can decide that reliably, and two instruments
 answer it without a single call and without a noise floor.
 
-THE SOLE-REFERENCE SET IS GROUND TRUTH, NOT AN ESTIMATE. A claim that
-references exactly one node has no other candidate for what it is about, so
-that edge is `subject` by definition - 10,343 of the live graph's 83,798 edges,
-one in eight. A model marking one of them `setting` or `mentioned` is
-unambiguously wrong, and the error rate on them is a clean number. That matters
-because the obvious test - compare recall with and without the field - cannot
-work: run-to-run recall moves 3.9 points on this corpus, which swamps the size
-of degradation a new field actually causes.
+THE SOLE-REFERENCE SET IS NOT GROUND TRUTH. It was built as ground truth on the
+argument that a claim referencing exactly one node has no other candidate for
+what it is about - 10,343 of the live graph's 83,798 edges. Forty pairs were
+then hand-labelled by reading (reports/salience/hand-labels.yaml) and the
+argument did not survive: of the five edges the instrument called wrong, five
+were correct. Every error it reported was spurious. What it actually detects is
+a claim whose subject was never extracted, which leaves a setting as the only
+thing to point at - a free measure of UNDER-EXTRACTION, and a good one, but not
+an accuracy measure. See `sole_reference_score`.
 
-THE AMBIENT PRIOR IS THE SECOND INSTRUMENT. A node that is genuinely the
-subject of things gets talked about alone; a node that is ambient never is.
-Measured on the live graph, the share of a node's edges that are
-sole-reference: Whitley Strieber 22%, Richard Hoagland 4%, UAP 11%, UFO 8% -
-the two corpus-wide terms sit lowest. So a prompt that marks UFO `subject` at a
-high rate is wrong before anyone reads a claim, and this reports that rate
-rather than waiting for a human to notice.
+WHAT THE HAND-LABELLED SET MEASURES INSTEAD. Model role accuracy on that sample
+is 85% (91% once the pairs with no defensible answer are dropped), 95% interval
+plus or minus 11 points. Two arms would need roughly 100 labelled pairs EACH to
+resolve a ten-point difference, so comparing models on this field costs reading
+time, not quota. Score any change with reports/salience/score_labels.py.
+
+THE AMBIENT PRIOR IS THE SECOND INSTRUMENT, and it needs a population. A node
+that is genuinely the subject of things gets talked about alone; a node that is
+ambient never is. Measured on the live graph, the share of a node's edges that
+are sole-reference: Whitley Strieber 22%, Richard Hoagland 4%, UAP 11%, UFO 8% -
+the two corpus-wide terms sit lowest. That is a statement about the corpus and
+says nothing about one record: read within a single record the check fired at
+89% on nine edges that were right, and the hand-labelled set contains the same
+case (UFO as the subject of "sightings continue to occur", correctly).
 
 Both instruments were found by the assimilator against the existing graph.
 """
@@ -54,9 +62,10 @@ def sole_reference_score(digests: list[dict]) -> dict:
     The objects have no node, so the only thing left to point at is where it
     happened.
 
-    So `wrong` here is an UPPER BOUND on error containing an unknown quantity
-    of correct answers, and `under_nodded` is the more useful reading of the
-    same count: a sole-reference claim whose one reference is properly a
+    So `wrong` here is an UPPER BOUND on error, and the hand-labelled set says
+    the quantity of correct answers inside it is not small: all five of the
+    edges it called wrong on that sample were right. `under_nodded` is the
+    honest reading of the same count: a sole-reference claim whose one reference is properly a
     setting, participant or mention is a claim whose SUBJECT IS MISSING FROM
     THE GRAPH. That is a free measure of under-extraction that nothing else
     provides. See `subject_first_score` for an accuracy measure that is not
@@ -166,16 +175,28 @@ def ambient_check(
         "Unidentified Anomalous Phenomena (UAP)",
     ),
     ceiling: float = 0.25,
+    min_records: int = 5,
 ) -> dict:
     """Whether a corpus-wide term is being marked `subject` too often.
 
-    A node the whole corpus is about is rarely what a single claim is about,
-    and the live graph agrees: the two ambient terms have the lowest
-    sole-reference share of the top ten nodes. A high subject rate on them is
-    the prompt failing in the way that is hardest to see by reading output,
-    because each individual call looks defensible.
+    ACROSS RECORDS, NEVER WITHIN ONE, and that distinction is the whole check.
+    The prior is a corpus statistic: UFO carries 1,414 edges across 72 records
+    with an 8% sole-reference share, so it cannot be the subject of most claims
+    in most records. It says nothing about any single record. On a record that
+    is actually about unidentified objects, claims about their shape, their
+    behaviour and their frequency are correctly `subject` - read within one
+    record the check fired at 89% on nine edges that were right.
+
+    So a node is only evaluated once its edges span `min_records`. Below that
+    there is no population to be ambient across, and the check stays silent
+    rather than guessing.
     """
     mix = role_mix(digests)["per_node"]
+    seen_in: dict[str, set[int]] = {}
+    for i, d in enumerate(digests):
+        for c in claims_of(d):
+            for r in _refs(c):
+                seen_in.setdefault(r.get("name") or "", set()).add(i)
     out = {}
     for name, counts in mix.items():
         # EXACT names, not a substring. Matching any node containing "UFO"
@@ -187,11 +208,13 @@ def ambient_check(
         if name.strip().lower() not in {a.strip().lower() for a in ambient}:
             continue
         assessed = sum(v for k, v in counts.items() if k in ROLES)
-        if not assessed:
+        records = len(seen_in.get(name, ()))
+        if not assessed or records < min_records:
             continue
         rate = counts.get("subject", 0) / assessed
         out[name] = {
             "edges": assessed,
+            "records": records,
             "subject_rate": round(rate, 3),
             "over_ceiling": rate > ceiling,
         }

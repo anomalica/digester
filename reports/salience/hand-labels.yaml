@@ -1,0 +1,215 @@
+# Hand-labelled reference roles: the calibration set for every automatic measure.
+#
+# Forty claim/reference pairs drawn at random (seed 5) from the haiku digest of
+# 2026-08-08-video-raymond-fowler, labelled by reading the claim and applying the
+# four deletion tests in prompts/claims.txt literally.
+#
+# It exists because both automatic instruments in salience.py ASSUME an answer
+# rather than knowing one, and nothing had ever checked those assumptions against
+# a human reading. Scored by reports/salience/score_labels.py.
+#
+# `ambiguous: true` marks a pair where two roles are defensible under the
+# definitions as written - not a hard case for the model, a GAP IN THE TAXONOMY.
+# Scored both ways; the strict number counts them, the clean number drops them.
+schema: anomalica/salience-labels/1
+record: 2026-08-08-video-raymond-fowler
+digest: haiku
+sample: random seed 5, 40 claim/reference pairs
+labelled_by: reading, against the deletion tests in prompts/claims.txt
+pairs:
+  - i: 0
+    ref: USA, California, Edwards Air Force Base
+    model: setting
+    gold: setting
+  - i: 1
+    ref: USA, Nevada, Frenchman's Flats
+    model: setting
+    gold: setting
+    note: subject (the GTE manager) has no node - an under-nodded claim
+  - i: 2
+    ref: UFOs, Interplanetary Visitors
+    model: mentioned
+    gold: subject
+    ambiguous: true
+    note: >-
+      "Fowler wrote five books: A; B; C; D; E." Deleting a title changes what is asserted, so `mentioned` fails its own test;
+      but a book does not act, so `participant` fails too. THE ROLE SET HAS NO SLOT FOR THE OBJECT OF A CLAIM, and this is
+      the one real taxonomy gap the sample found.
+  - i: 3
+    ref: Betty Andreasson
+    model: subject
+    gold: subject
+  - i: 4
+    ref: J. Allen Hynek
+    model: subject
+    gold: subject
+  - i: 5
+    ref: National Security Council
+    model: participant
+    gold: participant
+    note: requests the investigation; the claim is about the investigation
+  - i: 6
+    ref: Raymond Fowler
+    model: subject
+    gold: subject
+  - i: 7
+    ref: USA, Massachusetts, South Ashburnham
+    model: setting
+    gold: setting
+    note: place is not in the claim text but is where the described event happened
+  - i: 8
+    ref: United States Navy (USN)
+    model: subject
+    gold: subject
+  - i: 9
+    ref: 1944-1945 Foo Fighters sightings
+    model: subject
+    gold: subject
+  - i: 10
+    ref: Unidentified Flying Object (UFO)
+    model: subject
+    gold: subject
+    note: >-
+      the corpus-wide term, correctly `subject` - delete it and "sightings continue to occur" has no subject. The ambient
+      prior would call this wrong.
+  - i: 11
+    ref: UK, England, Ipswich
+    model: setting
+    gold: setting
+  - i: 12
+    ref: Betty Andreasson
+    model: subject
+    gold: subject
+  - i: 13
+    ref: United States Air Force (USAF)
+    model: subject
+    gold: subject
+    note: >-
+      claim says "the government"; USAF is the wrong NODE for it, but given that node the role is right. A node-choice defect,
+      not a role defect.
+  - i: 14
+    ref: USA, Alaska, Anchorage
+    model: setting
+    gold: setting
+  - i: 15
+    ref: USA, New Mexico, Kirtland Air Force Base
+    model: setting
+    gold: setting
+    note: subject (the landings) has no node - under-nodded
+  - i: 16
+    ref: 1896-1897 UFO airship wave
+    model: subject
+    gold: subject
+  - i: 17
+    ref: UK, England, RAF Woodbridge
+    model: setting
+    gold: setting
+    note: subject (the depressions) has no node - under-nodded
+  - i: 18
+    ref: Betty Andreasson
+    model: subject
+    gold: subject
+  - i: 19
+    ref: Raymond Fowler
+    model: subject
+    gold: subject
+  - i: 20
+    ref: USA, Arizona, Phoenix
+    model: mentioned
+    gold: setting
+    ambiguous: true
+    note: >-
+      a hedged destination ("either Tucson or Phoenix"). Deleting it leaves the same assertion less precisely, which is the
+      setting test; reading the hedge as an aside gives `mentioned`.
+  - i: 21
+    ref: USA, New Mexico, White Sands
+    model: setting
+    gold: setting
+  - i: 22
+    ref: November 1986 Japanese Airlines UFO incident, Alaska
+    model: subject
+    gold: subject
+  - i: 23
+    ref: Project Sign
+    model: participant
+    gold: subject
+    note: >-
+      "Project Sign submitted an estimate to General Vandenberg" - Project Sign acts and is the grammatical subject; Vandenberg
+      receives. The model marked them the other way round. A clear inversion.
+  - i: 24
+    ref: Avro experimental aircraft
+    model: subject
+    gold: subject
+  - i: 25
+    ref: Betty Andreasson
+    model: subject
+    gold: subject
+    ambiguous: true
+    note: >-
+      she is the patient, not the agent ("a needle was inserted into her nostril"). `subject` by the deletion test; `participant`
+      says the node ACTS, which she does not. The taxonomy gap again, milder.
+  - i: 26
+    ref: Betty Andreasson
+    model: mentioned
+    gold: mentioned
+    note: appears only to identify whose husband
+  - i: 27
+    ref: USA, Massachusetts, Beverly
+    model: mentioned
+    gold: setting
+    note: where the reported sightings happened, not an aside
+  - i: 28
+    ref: November 1986 Japanese Airlines UFO incident, Alaska
+    model: subject
+    gold: subject
+  - i: 29
+    ref: USA, Massachusetts, Middleton
+    model: setting
+    gold: setting
+  - i: 30
+    ref: USA, Massachusetts, Danvers
+    model: setting
+    gold: setting
+  - i: 31
+    ref: USA, New Mexico, Socorro
+    model: setting
+    gold: setting
+  - i: 32
+    ref: The Melchizedek Connection
+    model: mentioned
+    gold: subject
+    ambiguous: true
+    note: same claim and same taxonomy gap as i=2
+  - i: 33
+    ref: 1946 European UFO wave
+    model: subject
+    gold: subject
+  - i: 34
+    ref: United Nations (UN)
+    model: setting
+    gold: participant
+    note: >-
+      "appeared before the UN" reads as a venue, but the same claim has the UN sponsoring a study - it acts, so `participant`.
+  - i: 35
+    ref: Betty Andreasson
+    model: subject
+    gold: subject
+  - i: 36
+    ref: November 1986 Japanese Airlines UFO incident, Alaska
+    model: mentioned
+    gold: mentioned
+    note: a size comparison - the textbook `mentioned`
+  - i: 37
+    ref: 1946 European UFO wave
+    model: subject
+    gold: subject
+    ambiguous: true
+    note: the claim is about the diplomatic mission; the wave is what it was for
+  - i: 38
+    ref: Doolittle
+    model: subject
+    gold: subject
+  - i: 39
+    ref: Raymond Fowler
+    model: subject
+    gold: subject

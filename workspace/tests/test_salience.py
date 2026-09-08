@@ -1,13 +1,16 @@
 """Scoring reference roles against evidence that needs no model.
 
-The sole-reference set is ground truth by construction, not an estimate: a
-claim with one reference is about that node or about nothing. That gives a
-clean error rate where the obvious instrument - recall with and without the
-field - cannot work, because run-to-run recall moves 3.9 points on this corpus
-and swamps the effect.
+The sole-reference set was built as ground truth by construction - a claim with
+one reference is about that node or about nothing - and forty hand-labelled
+pairs showed it is not: every error it reported on that sample was a correct
+answer. What it counts is claims whose subject was never extracted. These tests
+hold it to that reading, and hold the hand-labelled set itself intact, because
+it is now the only thing here that knows a right answer.
 """
 
 from __future__ import annotations
+
+from pathlib import Path
 
 from digester import salience
 
@@ -64,7 +67,7 @@ class TestAmbientPrior:
             claim(("UFO", "subject"), ("Kevin Day", "subject")),
             claim(("UFO", "mentioned"), ("Nimitz", "subject")),
         )
-        out = salience.ambient_check([d], ceiling=0.25)
+        out = salience.ambient_check([d] * 5, ceiling=0.25, min_records=5)
         assert out["UFO"]["subject_rate"] > 0.25 and out["UFO"]["over_ceiling"]
 
     def test_an_ambient_term_mostly_marked_mentioned_passes(self):
@@ -72,7 +75,7 @@ class TestAmbientPrior:
             *[claim(("UAP", "mentioned"), ("X", "subject")) for _ in range(9)],
             claim(("UAP", "subject"), ("Y", "setting")),
         )
-        out = salience.ambient_check([d], ceiling=0.25)
+        out = salience.ambient_check([d] * 5, ceiling=0.25, min_records=5)
         assert out["UAP"]["subject_rate"] == 0.1 and not out["UAP"]["over_ceiling"]
 
     def test_nodes_that_are_not_ambient_are_not_checked(self):
@@ -152,3 +155,47 @@ class TestSubjectFirst:
             )
         )
         assert salience.subject_first_score([d], window=20)["subject_first_edges"] == 0
+
+
+def test_the_ambient_check_stays_silent_on_a_single_record():
+    """The prior is a corpus statistic and says nothing about one record. Read
+    within a record about unidentified objects, it fired at 89% on nine edges
+    that were all correct."""
+    d = digest(*[claim(("UFO", "subject")) for _ in range(9)])
+    assert salience.ambient_check([d]) == {}, "no population to be ambient across"
+
+
+class TestTheHandLabelledSet:
+    """The calibration set is the only thing here that knows a right answer.
+
+    It is a data file, so nothing else catches it rotting: a stray role name or
+    a truncated sample would silently weaken every number scored against it.
+    """
+
+    @staticmethod
+    def _labels():
+        import yaml
+
+        path = (
+            Path(__file__).resolve().parents[2]
+            / "reports"
+            / "salience"
+            / "hand-labels.yaml"
+        )
+        return yaml.safe_load(path.read_text())
+
+    def test_every_label_names_a_real_role(self):
+        for pair in self._labels()["pairs"]:
+            assert pair["gold"] in salience.ROLES, pair
+            assert pair["model"] in salience.ROLES, pair
+
+    def test_the_sample_is_large_enough_to_carry_a_number(self):
+        pairs = self._labels()["pairs"]
+        assert len(pairs) >= 30, "below a few dozen the interval swallows the result"
+        assert len({p["i"] for p in pairs}) == len(pairs), "indices must be unique"
+
+    def test_the_ambiguous_pairs_carry_their_reason(self):
+        """An `ambiguous` flag with no note is an unexplained exclusion."""
+        for pair in self._labels()["pairs"]:
+            if pair.get("ambiguous"):
+                assert pair.get("note"), pair["i"]
