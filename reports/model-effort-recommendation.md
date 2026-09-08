@@ -6,6 +6,23 @@ establish and what they merely fail to disprove.
 **Recommendation: Sonnet 5 at low effort for the digest stage. Opus only where
 a record has failed on Sonnet.**
 
+## Amendment, 2026-09-08: every figure below was measured under a defect
+
+The claims schema handed to the model carried two enums built from Python sets,
+so the six claim types and three attestation levels were presented in a
+different order on every run. Option order biases which option a model picks.
+That variation is inside every number in this report and inside the 3.9-point
+noise floor they are read against.
+
+The figures are not void - the defect is unbiased across models, so it inflates
+the floor rather than favouring an arm, which makes every "not established"
+verdict here CONSERVATIVE and every "established" one safe. But the floor is
+larger than it needs to be, and a difference this report could not resolve may
+resolve at a configuration where the model sees a fixed schema.
+
+A grid re-run at one pinned configuration with the schema fixed is in progress.
+Treat what follows as superseded when it lands.
+
 ## The grid
 
 Two records, both chosen for dense reviewer highlights rather than length, both
