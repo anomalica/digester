@@ -426,7 +426,11 @@ def _do_extract(
         pre_digest_hash,
         store_pre_digest,
     )
-    from digester.extract import build_record_context, extract_two_pass
+    from digester.extract import (
+        build_record_context,
+        extract_two_pass,
+        extraction_config,
+    )
 
     record_context = build_record_context(
         title=parsed.title,
@@ -558,6 +562,7 @@ def _do_extract(
                 if (is_openrouter_model(model) or is_opencode_model(model))
                 else None
             ),
+            extraction_config=extraction_config(),
         )
 
         text = _entail(text, pre_digest_text, click.echo)

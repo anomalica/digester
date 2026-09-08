@@ -7,6 +7,7 @@ Supports two backends:
 
 from __future__ import annotations
 
+import hashlib
 import json
 
 from digester import accounts as accounts_mod
@@ -695,6 +696,30 @@ def _format_directory_v2(nodes: list[dict]) -> str:
     return "\n".join(lines)
 
 
+# PINNED FOR THE LIFE OF A RUN. Prompts are read from disk per call and code is
+# imported once, so editing a prompt mid-batch changes a running extraction
+# while editing the schema beside it does not - one run picked up a new prompt
+# and kept its old schema, and was told to emit a field that schema forbade.
+# Capturing the text once makes the edit unable to reach a run in flight, which
+# is better than a rule saying not to: cached chunks make a restart cheap, so
+# nothing is lost by pinning.
+_pinned_prompts: dict[str, str] = {}
+
+
+def pin_prompts() -> None:
+    """Freeze this run's prompt text. Called once at the start of a run."""
+    _pinned_prompts["nodes"] = prompt_registry.prompt_text(
+        "nodes", "DIGESTER_NODES_PROMPT_FILE"
+    )
+    _pinned_prompts["claims"] = prompt_registry.prompt_text(
+        "claims", "DIGESTER_CLAIMS_PROMPT_FILE"
+    )
+
+
+def release_prompts() -> None:
+    _pinned_prompts.clear()
+
+
 def _nodes_prompt() -> str:
     """Nodes-pass prompt from the registry, overridable per run via
     DIGESTER_NODES_PROMPT_FILE (lets Haiku and Sonnet carry different prompts).
@@ -707,7 +732,9 @@ def _claims_prompt_template() -> str:
     DIGESTER_CLAIMS_PROMPT_FILE. Keeps the
     {directory}/{main_subject}/{codenames_block}/{acronyms_block} placeholders
     and {{ }} for literal braces."""
-    return prompt_registry.prompt_text("claims", "DIGESTER_CLAIMS_PROMPT_FILE")
+    return _pinned_prompts.get("claims") or prompt_registry.prompt_text(
+        "claims", "DIGESTER_CLAIMS_PROMPT_FILE"
+    )
 
 
 def prompt_provenance() -> list[dict]:
@@ -720,6 +747,80 @@ def prompt_provenance() -> list[dict]:
         {"pass": "nodes", **nodes.as_dict()},
         {"pass": "claims", **claims.as_dict()},
     ]
+
+
+def schema_fingerprint() -> str:
+    """A hash over the SHAPES the model is constrained to, node names excluded.
+
+    Node names vary per record and would make every digest's fingerprint
+    unique; what identifies a configuration is the schema's structure - which
+    fields are required, which enums exist, whether a reference is a string or
+    an object carrying a role.
+    """
+    skeleton = json.dumps(
+        [NODES_SCHEMA_V2, build_claims_schema_v2([]), CAST_SCHEMA, ACCOUNTS_SCHEMA],
+        sort_keys=True,
+    )
+    return hashlib.sha256(skeleton.encode()).hexdigest()[:8]
+
+
+def code_fingerprint() -> str:
+    """The commit the extractor is running from, or `dirty` beside it.
+
+    Not decoration: prompt and schema together still miss a change to how the
+    request is assembled - chunking, iteration, the directory carried between
+    chunks. Two digests can share both halves and still come from different
+    code.
+    """
+    import subprocess
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[2]
+    try:
+        sha = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "--short=8", "HEAD"],
+            capture_output=True,
+            text=True,
+            timeout=10,
+        ).stdout.strip()
+        dirty = subprocess.run(
+            ["git", "-C", str(root), "status", "--porcelain", "--untracked-files=no"],
+            capture_output=True,
+            text=True,
+            timeout=10,
+        ).stdout.strip()
+    except (OSError, subprocess.SubprocessError):
+        return "unknown"
+    if not sha:
+        return "unknown"
+    return f"{sha}-dirty" if dirty else sha
+
+
+def extraction_config() -> dict:
+    """Everything that decides what a run produces, as one fingerprint.
+
+    A DIGEST MUST RECORD WHAT ACTUALLY PRODUCED IT. The prompt sha names the
+    prompt text and nothing else, so two digests sharing one can still have
+    been built under different schemas or different code - and one of them
+    was: a batch running while the prompt and schema were both edited picked
+    up the new prompt (read from disk per call) and kept the old schema
+    (imported once), producing 565 claims told to emit a field their schema
+    forbade. Nothing in that artefact recorded the mismatch.
+
+    `config` is the single value to compare. Two digests either provably came
+    from the same setup or provably did not.
+    """
+    prompts = prompt_provenance()
+    parts = [p.get("sha256", "") for p in prompts] + [
+        schema_fingerprint(),
+        code_fingerprint(),
+    ]
+    return {
+        "config": hashlib.sha256("".join(parts).encode()).hexdigest()[:8],
+        "prompts": prompts,
+        "schema": schema_fingerprint(),
+        "code": code_fingerprint(),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -1388,6 +1489,7 @@ def extract_two_pass(
     # caller materialises + stores the pre-digest and records its hash; this is
     # idempotent, so a raw-text caller (benchmarks) still gets the same input.
     text = materialise(text)
+    pin_prompts()
     if on_progress:
         on_progress("Pass A: nodes (with iteration + chunking)")
     nodes_result = extract_nodes_v2(

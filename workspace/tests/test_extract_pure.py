@@ -433,3 +433,61 @@ class TestReferenceRoles:
         assert "delete the node and the claim has no subject left" in t
         assert "Delete it and nothing the claim asserts changes" in t
         assert "judging importance" in t, "the test is mechanical, not a judgement"
+
+
+class TestExtractionFingerprint:
+    """A digest must record what actually produced it.
+
+    The prompt sha names the prompt text and nothing else, so two digests
+    sharing one can still have come from different schemas or different code -
+    and one pair did, when a batch picked up an edited prompt while keeping the
+    schema it had already imported.
+    """
+
+    def test_the_fingerprint_covers_prompts_schema_and_code(self):
+        from digester.extract import extraction_config
+
+        c = extraction_config()
+        assert set(c) == {"config", "prompts", "schema", "code"}
+        assert len(c["config"]) == 8 and len(c["schema"]) == 8
+        assert c["prompts"], "the prompt half is still recorded, not replaced"
+
+    def test_a_schema_change_changes_the_fingerprint(self, monkeypatch):
+        from digester import extract
+
+        before = extract.schema_fingerprint()
+        monkeypatch.setattr(extract, "CLAIM_REF_ROLES", ("subject", "other"))
+        assert extract.schema_fingerprint() != before
+
+    def test_node_names_do_not_change_the_fingerprint(self):
+        """Names vary per record; the shape is what identifies a configuration."""
+        from digester import extract
+
+        assert extract.schema_fingerprint() == extract.schema_fingerprint()
+
+
+class TestPinnedPrompts:
+    def test_a_pinned_prompt_survives_an_edit_to_the_file(self, tmp_path, monkeypatch):
+        """An edit mid-batch must not reach a run already in flight."""
+        from digester import extract
+
+        f = tmp_path / "claims.txt"
+        f.write_text("ORIGINAL")
+        monkeypatch.setenv("DIGESTER_CLAIMS_PROMPT_FILE", str(f))
+        extract.pin_prompts()
+        try:
+            f.write_text("EDITED MID RUN")
+            assert extract._claims_prompt_template() == "ORIGINAL"
+        finally:
+            extract.release_prompts()
+
+    def test_without_a_pin_the_file_is_read_each_time(self, tmp_path, monkeypatch):
+        from digester import extract
+
+        f = tmp_path / "claims.txt"
+        f.write_text("FIRST")
+        monkeypatch.setenv("DIGESTER_CLAIMS_PROMPT_FILE", str(f))
+        extract.release_prompts()
+        assert extract._claims_prompt_template() == "FIRST"
+        f.write_text("SECOND")
+        assert extract._claims_prompt_template() == "SECOND"
