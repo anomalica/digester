@@ -42,10 +42,25 @@ def claims_of(digest: dict) -> list[dict]:
 
 
 def sole_reference_score(digests: list[dict]) -> dict:
-    """Error rate on edges that cannot be anything but `subject`.
+    """Roles on claims that reference exactly one node.
 
-    No model decided these and no threshold is involved: a claim with one
-    reference is about that node or it is about nothing.
+    NOT AN ACCURACY MEASURE, and it was built as one. The assumption - a claim
+    with one reference is about that node - holds only when the claim's real
+    subject HAS a node. Read against a real digest, most of the apparent errors
+    were the model applying the definitions correctly to a claim whose subject
+    was never extracted: "Disc-shaped objects landed at Kirtland Air Force
+    Base", sole reference Kirtland, marked `setting` - remove Kirtland and the
+    claim still asserts that objects landed, which is the setting test verbatim.
+    The objects have no node, so the only thing left to point at is where it
+    happened.
+
+    So `wrong` here is an UPPER BOUND on error containing an unknown quantity
+    of correct answers, and `under_nodded` is the more useful reading of the
+    same count: a sole-reference claim whose one reference is properly a
+    setting, participant or mention is a claim whose SUBJECT IS MISSING FROM
+    THE GRAPH. That is a free measure of under-extraction that nothing else
+    provides. See `subject_first_score` for an accuracy measure that is not
+    confounded this way.
     """
     total = wrong = unassessed = 0
     wrong_examples: list[tuple[str, str, str]] = []
@@ -72,10 +87,56 @@ def sole_reference_score(digests: list[dict]) -> dict:
         "sole_reference_edges": total,
         "assessed": assessed,
         "unassessed": unassessed,
+        # An UPPER BOUND on error, not an error count - see the docstring.
         "wrong": wrong,
-        "error_rate": round(wrong / assessed, 4) if assessed else None,
+        "error_upper_bound": round(wrong / assessed, 4) if assessed else None,
+        # The same number read the other way: claims whose subject has no node.
+        "under_nodded": wrong,
+        "under_nodded_rate": round(wrong / assessed, 4) if assessed else None,
         "wrong_by_role": dict(by_wrong_role),
         "examples": wrong_examples,
+    }
+
+
+def subject_first_score(digests: list[dict], window: int = 60) -> dict:
+    """Accuracy on claims whose single reference OPENS the claim.
+
+    The confound in `sole_reference_score` is a claim whose subject was never
+    extracted, leaving a setting or a participant as the only reference. When
+    the sole reference is also the first thing the sentence names, that is a
+    cheap approximation of the grammatical subject being present - "Raymond
+    Fowler investigated..." rather than "Disc-shaped objects landed at
+    Kirtland...". On those, `subject` really is the answer.
+
+    An approximation, and it says so: a sentence can open with a setting
+    ("At Kirtland, objects landed"). It is narrower and cleaner than the set it
+    replaces, not perfect.
+    """
+    total = wrong = 0
+    examples: list[tuple[str, str, str]] = []
+    for d in digests:
+        for c in claims_of(d):
+            refs = _refs(c)
+            if len(refs) != 1:
+                continue
+            name, role = refs[0].get("name") or "", refs[0].get("role")
+            text = (c.get("text") or "").strip()
+            if role not in ROLES or not name or not text:
+                continue
+            head = text[:window].lower()
+            first_word = name.split(",")[0].split("(")[0].strip().lower()
+            if not first_word or first_word not in head:
+                continue
+            total += 1
+            if role != "subject":
+                wrong += 1
+                if len(examples) < 10:
+                    examples.append((name, role, text[:90]))
+    return {
+        "subject_first_edges": total,
+        "wrong": wrong,
+        "error_rate": round(wrong / total, 4) if total else None,
+        "examples": examples,
     }
 
 
@@ -143,6 +204,7 @@ def report(digests: list[dict]) -> dict:
     mix = role_mix(digests)
     return {
         "sole_reference": sole,
+        "subject_first": subject_first_score(digests),
         "role_mix": mix["overall"],
         "ambient": ambient_check(digests),
     }

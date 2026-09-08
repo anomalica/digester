@@ -99,3 +99,54 @@ def test_the_report_carries_all_three_instruments():
     out = salience.report([d])
     assert set(out) == {"sole_reference", "role_mix", "ambient"}
     assert out["role_mix"]["subject"] == 2 and out["role_mix"]["setting"] == 1
+
+
+class TestTheConfound:
+    """The sole-reference set is not an accuracy measure, and was built as one.
+
+    A claim with one reference is about that node only if the claim's real
+    subject HAS a node. Read against a real digest, most apparent errors were
+    the model applying the definitions correctly to a claim whose subject was
+    never extracted.
+    """
+
+    def test_the_headline_number_is_named_an_upper_bound(self):
+        d = digest(claim(("Kirtland Air Force Base", "setting")))
+        out = salience.sole_reference_score([d])
+        assert out["error_upper_bound"] == 1.0
+        assert "error_rate" not in out, "the name promised more than it carried"
+
+    def test_the_same_count_is_reported_as_under_nodding(self):
+        """A sole-reference claim whose one ref is properly a setting is a claim
+        whose SUBJECT is missing from the graph - a free measure of
+        under-extraction that nothing else provides."""
+        d = digest(claim(("Kirtland Air Force Base", "setting")))
+        assert salience.sole_reference_score([d])["under_nodded"] == 1
+
+
+class TestSubjectFirst:
+    def test_a_reference_that_opens_the_claim_should_be_the_subject(self):
+        d = digest(
+            claim(
+                ("Raymond Fowler", "subject"),
+                text="Raymond Fowler investigated the case.",
+            ),
+            claim(
+                ("Raymond Fowler", "setting"),
+                text="Raymond Fowler investigated the case.",
+            ),
+        )
+        out = salience.subject_first_score([d])
+        assert out["subject_first_edges"] == 2 and out["wrong"] == 1
+        assert out["error_rate"] == 0.5
+
+    def test_a_claim_whose_subject_has_no_node_is_excluded(self):
+        """The confound the set exists to avoid: the reference is not named
+        first, so it is probably not the subject."""
+        d = digest(
+            claim(
+                ("USA, New Mexico, Kirtland Air Force Base", "setting"),
+                text="Disc-shaped objects landed at Kirtland Air Force Base.",
+            )
+        )
+        assert salience.subject_first_score([d], window=20)["subject_first_edges"] == 0
