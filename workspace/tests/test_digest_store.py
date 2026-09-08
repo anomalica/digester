@@ -237,3 +237,32 @@ def test_copyright_status_reaches_the_record_block(tmp_path, monkeypatch):
     )
     d = _yaml.safe_load(out.read_text())
     assert d["record"]["copyright_status"] == "publicly_accessible"
+
+
+class TestSplittingAVariantStem:
+    """A variant filename is (model, prompt sha, run label) and the model half
+    contains dots. Splitting on the first one lost a provider's name and the
+    prompt version at once."""
+
+    def test_a_provider_name_containing_dots_survives(self):
+        model, sha, label = ds.split_variant_stem("openai-gpt-5.6-luna.e9b8b6d4")
+        assert (model, sha, label) == ("openai-gpt-5.6-luna", "e9b8b6d4", "")
+
+    def test_the_run_label_comes_back_separately(self):
+        assert ds.split_variant_stem("sonnet.e9b8b6d4.effort-medium") == (
+            "sonnet",
+            "e9b8b6d4",
+            "effort-medium",
+        )
+
+    def test_a_label_containing_dots_is_not_split_further(self):
+        _, _, label = ds.split_variant_stem("opus.e9b8b6d4.repeat.1")
+        assert label == "repeat.1"
+
+    def test_a_stem_with_no_prompt_sha_yields_no_sha_rather_than_a_guess(self):
+        """Better an empty column than a model name presented as a fingerprint."""
+        assert ds.split_variant_stem("sonnet") == ("sonnet", "", "")
+
+    def test_a_shorter_hex_run_is_not_mistaken_for_the_sha(self):
+        model, sha, _ = ds.split_variant_stem("model.abc.e9b8b6d4")
+        assert (model, sha) == ("model.abc", "e9b8b6d4")

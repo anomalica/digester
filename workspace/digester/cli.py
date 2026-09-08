@@ -1134,7 +1134,13 @@ def grade_record_cmd(record: str, digests_root: str) -> None:
         d = _yaml.safe_load(f.read_text())
         r = grade_digest(body, d)
         model, prompt_sha, label = split_variant_stem(f.stem)
-        rows.append(((f"{model} {label}".strip(), prompt_sha), r))
+        # The FILENAME hashes the prompts alone, so two artefacts can share a
+        # fingerprint and differ in schema and code - which is the confound the
+        # prompt column was added to catch, one level down. The body carries the
+        # whole configuration when it was written after that was recorded;
+        # before then there is no answer, and "no answer" is its own value.
+        cfg = (d.get("extraction_config") or {}).get("config") or "-"
+        rows.append(((f"{model} {label}".strip(), prompt_sha, cfg), r))
     # A record with no reviewer highlights grades every variant at recall None;
     # those sort last and print n/a rather than crashing the whole table.
     rows.sort(key=lambda x: (x[1]["recall"] is None, -(x[1]["recall"] or 0.0)))
@@ -1146,27 +1152,34 @@ def grade_record_cmd(record: str, digests_root: str) -> None:
     if not g["gold_units"]:
         click.echo("  no reviewer highlights: recall cannot be scored here")
     click.echo(
-        f"\n{'model':26} {'prompt':>9} {'recall':>7} {'fidelity':>9} "
-        f"{'coref':>7} {'claims':>7}"
+        f"\n{'model':26} {'prompt':>9} {'config':>9} {'recall':>7} "
+        f"{'fidelity':>9} {'coref':>7} {'claims':>7}"
     )
 
     def _f(v: float | None, width: int) -> str:
         return f"{v:{width}.3f}" if isinstance(v, (int, float)) else f"{'n/a':>{width}}"
 
-    for (name, prompt_sha), r in rows:
+    for (name, prompt_sha, cfg), r in rows:
         click.echo(
-            f"{name[:26]:26} {prompt_sha or '?':>9} {_f(r['recall'], 7)} "
+            f"{name[:26]:26} {prompt_sha or '?':>9} {cfg:>9} {_f(r['recall'], 7)} "
             f"{_f(r['quote_fidelity'], 9)} {_f(r['coref_rate'], 7)} {r['claims']:7}"
         )
-    # A grid built across a prompt change ranks the prompt, not the model, and
-    # nothing else in this table would show it: the rows look identical.
-    shas = {sha for (_, sha), _ in rows if sha}
-    if len(shas) > 1:
-        click.echo(
-            f"\nTWO PROMPT VERSIONS IN THIS TABLE ({', '.join(sorted(shas))}). "
-            "Rows under different prompts are NOT comparable - the prompt is a "
-            "variable, so compare within one column value or re-run the gaps."
-        )
+    # A grid built across a prompt or schema change ranks that change, not the
+    # model, and nothing else in this table would show it: the rows look
+    # identical. Warn on either column, and count "-" as a value of its own -
+    # an artefact written before the configuration was recorded is not known to
+    # match one written after, it is simply unlabelled.
+    for label, values in (
+        ("PROMPT", {sha for (_, sha, _), _ in rows if sha}),
+        ("CONFIGURATION", {c for (_, _, c), _ in rows}),
+    ):
+        if len(values) > 1:
+            click.echo(
+                f"\nTWO {label} VERSIONS IN THIS TABLE "
+                f"({', '.join(sorted(values))}). Rows that differ there are NOT "
+                "comparable - it is a variable like the model. Compare within "
+                "one value, or re-run the gaps at one configuration."
+            )
     click.echo(
         "\nComparable within this record only. MEASURED NOISE FLOOR: three "
         "identical Sonnet 5 runs of the Fowler interview (2026-09-07, cache "
