@@ -153,8 +153,35 @@ cell() {
 		>"$LOGS/$stem.$model.$label.log" 2>&1
 	rc=$?
 	el=$(($(date +%s) - t0))
+	# EXIT 77 IS "NOT YET", NOT "FAILED". The extractor has its own allowance
+	# guard reading its own cache, and that cache honours a 15-minute age while
+	# ignoring the window's own reset time - so for up to a quarter of an hour
+	# after a reset it refuses on a pre-reset reading. At 00:00 tonight this
+	# runner saw session 0% and the extractor saw 94% at the same instant, and
+	# because 77 was treated as terminal the whole remaining grid burned in five
+	# seconds. Wait it out instead: the run has all night and a refusal costs
+	# nothing but time.
+	if [ $rc -eq 77 ]; then
+		local paced=0
+		while [ $rc -eq 77 ] && [ $paced -lt 5 ]; do
+			echo "    paced by the extractor's own allowance guard; waiting 5 min"
+			sleep 300
+			paced=$((paced + 1))
+			t0=$(date +%s)
+			timeout 5400 python3 -m digester.cli extract "$rec" \
+				--model "$model" \
+				--digests-root /home/mark/repos/anomalica/digests \
+				--variant-only --run-label "$label" \
+				>"$LOGS/$stem.$model.$label.log" 2>&1
+			rc=$?
+			el=$(($(date +%s) - t0))
+		done
+	fi
 	if [ $rc -eq 0 ]; then
 		echo "    ok in ${el}s"
+	elif [ $rc -eq 77 ]; then
+		echo "=== STOPPING: still paced after 25 minutes of retries"
+		exit 0
 	else
 		echo "    FAILED exit $rc after ${el}s"
 		tail -3 "$LOGS/$stem.$model.$label.log" | sed 's/^/      /'
