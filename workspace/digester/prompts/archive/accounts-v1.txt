@@ -36,11 +36,7 @@ To be an account it must have ALL of:
   - a rough WHEN or a rough WHERE, or both. "the late 1970s", "northern New Mexico", "a lake north of Santa Fe" all qualify. Neither one needs to be precise.
   - enough substance to be a story rather than a remark: several sentences of narration, not a passing clause.
 
-Below that floor it is a digression, an aside, or a general opinion, and you must NOT emit it.
-
-LENGTH IS NOT IMPORTANCE. Some of the most significant accounts in a record are the shortest - a fourteen-line admission can matter more than a two-hundred-line case history. Do not skip a short telling because it is brief, and do not assume a long passage is an account because it is long. A long stretch of opinion or background is still not an account.
-
-A long interview can hold thirty or forty accounts. Do not stop at a dozen because that feels like enough; keep going until the record is genuinely exhausted. When you are unsure whether something clears the floor, emit it and let the count decide - a candidate that turns out thin is cheap, and a telling nobody recorded is lost.
+Below that floor it is a digression, an aside, or a general opinion, and you must NOT emit it. Twenty accounts in an hour-long interview is almost always wrong; a handful to a couple of dozen across a long one is normal. When you are unsure whether something clears the floor, leave it out - a missed account costs less than a fabricated one.
 
 Opinions, background explanation, career summary, discussion of documents, and argument about what UFOs are: none of these are accounts, however long they run.
 
@@ -55,21 +51,7 @@ Mark where the account runs by quoting its first and last words.
 
 Both must appear in the record EXACTLY as you write them. They are matched against the text mechanically; a paraphrase, a tidied-up quote or a summary will not be found, and the account will be lost. Copy, do not compose.
 
-================================================================
-ACCOUNTS INTERLEAVE - THIS IS THE HARDEST PART AND THE MOST IMPORTANT
-================================================================
-
-A telling is very often INTERRUPTED and resumed later, and what interrupts it is usually ANOTHER ACCOUNT rather than a digression. One stretch of a real interview contained four accounts and two non-accounts woven together: a case opened, a second account was narrated inside it, a third interrupted that, a fourth interrupted the third, and the first case only resumed hundreds of lines later.
-
-So do NOT assume one account is one contiguous block, and do NOT let an interruption end an account early. When a telling is suspended and picked up again:
-
-  - list the account ONCE
-  - put its first stretch in `span_start` / `span_end`
-  - put every later stretch in `also_spans`
-
-THE STRONGEST CUE THAT A TELLING HAS RESUMED IS CONVERSATIONAL, NOT LEXICAL. Watch for the interviewer trying to re-anchor ("so to get back to...", "so you're in the parking lot..."), and for the speaker correcting the order ("no no no, that was later", "this was before that"). A speaker correcting the interviewer about sequence is almost always a seam between accounts. Do not rely on the same names or places recurring - a resumed telling often shares no distinctive words with its own opening.
-
-A story may also be MENTIONED long before it is told - a passing reference thousands of words earlier, with no name, date or place in common with the telling itself. That early mention is not a span of the account and must not be included; only the telling is.
+The span covers the telling of that story only. If the speaker returns to the same story much later, that is a SECOND span of the same account - list the account once and give its additional spans in `also_spans`.
 
 Be generous at the edges rather than tight: it is better for a span to include a sentence of lead-in than to cut the first fact of the story.
 

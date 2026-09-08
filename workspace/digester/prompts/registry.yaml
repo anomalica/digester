@@ -156,9 +156,13 @@ prompts:
         added: '2026-07-31'
         note: person nodes emit natural-order names, not surname-first
   accounts:
-    active: v1
+    active: v2
     versions:
       v1:
-        file: accounts.txt
+        file: archive/accounts-v1.txt
         added: '2026-09-08'
         note: account pass - a telling is a span of a source, never a node
+      v2:
+        file: accounts.txt
+        added: '2026-09-08'
+        note: accounts interleave; resumption is conversational; length is not importance
