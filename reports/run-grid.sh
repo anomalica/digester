@@ -110,6 +110,24 @@ weekly_ok() {
 	[ "$WEEKLY" -lt "$CEILING" ]
 }
 
+# The variant filename a cell will write, so a restart skips finished work
+# rather than paying for it twice. A sweep restarted at 22:08 re-ran a cell that
+# had completed at 21:58 because nothing checked.
+#
+# This definition was deleted once by a later edit that replaced the block it
+# sat in, leaving the call at the bottom of `cell` with nothing to call. It
+# failed SAFE - the empty result fails the -n guard, so no cell was ever wrongly
+# skipped - but it printed an error per cell and the skip did nothing, which is
+# the quietest way for a feature to be absent.
+variant_of() {
+	python3 -c "
+import sys
+from digester import extract
+from digester.digest_store import prompt_sha8
+print(f'{sys.argv[1]}.{prompt_sha8(extract.prompt_provenance())}.{sys.argv[2]}.yaml')
+" "$1" "$2" 2>/dev/null
+}
+
 cell() {
 	local model=$1 rec=$2 label=$3 stem used want
 	stem=$(basename "$rec")
