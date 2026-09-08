@@ -398,3 +398,29 @@ trio's opus-over-sonnet gap recomputes to 3.8 points, which is inside this band;
 so is the 3-point figure the knowledge note calls a typical model difference.
 Fidelity and grounding gaps (Haiku's 91.0% against Sonnet's 98.3%) are a
 different measure and are not affected.
+
+## A prompt edit changes a RUNNING extraction; a code edit does not (2026-09-08)
+
+Prompts are read from disk per call (`prompt_registry.prompt_text`), while code
+is loaded once at import. So editing a prompt while an extraction is in flight
+changes its behaviour mid-run, and editing the schema beside it does not.
+
+Observed: a sweep started at 20:00. The claims prompt was replaced at about
+20:10 with one that asks for a role on every node reference, and the schema
+constraining those references was changed in the same minute. The run picked up
+the NEW PROMPT - its recorded prompt sha is the new one, d5c58d8c - and kept the
+OLD SCHEMA from the module it had already imported. The model was therefore
+instructed to emit a field the schema forbade, and emitted bare strings: the
+digest carries 565 claims and 1,110 references, none of them assessed.
+
+Consequences worth knowing:
+- That digest is a HYBRID and is not a clean artefact of either configuration.
+  Its prompt sha names a prompt whose instructions it could not follow.
+- The prompt sha in a digest is therefore not sufficient to identify what
+  produced it. It identifies the prompt text and nothing about the schema.
+- A batch launched AFTER both edits gets both, consistently. Ordering is the
+  whole difference and nothing in the artefact records it.
+
+Rule: do not edit prompts while a batch is running. If a prompt must change,
+stop the batch, change both halves, and restart - the cached chunks make a
+restart cheap, which is exactly why there is no reason to edit in flight.
