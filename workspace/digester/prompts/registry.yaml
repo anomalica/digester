@@ -57,10 +57,14 @@ prompts:
         commit: 2788c43bbf
         note: earlier claims v2 state
       v4:
-        file: claims.txt
+        file: archive/claims-v4.txt
         added: '2026-07-31'
         note: node_references match the directory's natural-order names
-    active: v4
+      v5:
+        file: claims.txt
+        added: '2026-09-08'
+        note: every node_reference carries a role decided by the deletion test
+    active: v5
   extraction:
     versions:
       g249b8fd3:

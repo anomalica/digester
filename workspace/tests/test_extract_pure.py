@@ -296,15 +296,17 @@ def test_schema_enums_node_references_to_pass_a_names():
     items = schema["properties"]["claims"]["items"]["properties"]["node_references"][
         "items"
     ]
-    assert items["enum"] == names  # claims can only reference locked node names
+    # The lock moved INSIDE the ref object when roles arrived; it is still a
+    # lock, and this asserts where it now lives rather than that it is gone.
+    assert items["properties"]["name"]["enum"] == names
 
 
 def test_schema_without_names_has_no_enum():
     items = build_claims_schema_v2([])["properties"]["claims"]["items"]["properties"][
         "node_references"
     ]["items"]
-    assert "enum" not in items
-    assert items["type"] == "string"
+    assert "enum" not in items["properties"]["name"]
+    assert items["properties"]["name"]["type"] == "string"
 
 
 def test_schema_requires_core_claim_fields():
@@ -400,3 +402,34 @@ def test_pass_a_stops_when_the_node_directory_outgrows_the_route(monkeypatch):
     check_route_capacity("opencode-go/kimi-k3", 22)  # at the limit, permitted
     check_route_capacity("claude-sonnet-5", 5000)  # native enforcement, no ceiling
     check_route_capacity("deepseek/deepseek-v4-pro", 5000)  # openrouter, unaffected
+
+
+class TestReferenceRoles:
+    """A ref records that a node is MENTIONED; the role records what it IS.
+
+    Without it a setting and a subject are the same edge, so nothing downstream
+    can tell Sydney from Roswell or rank two thousand claims.
+    """
+
+    def test_the_schema_constrains_both_the_name_and_the_role(self):
+        from digester.extract import CLAIM_REF_ROLES, build_claims_schema_v2
+
+        item = build_claims_schema_v2(["Kevin Day", "USS Princeton"])["properties"][
+            "claims"
+        ]["items"]["properties"]["node_references"]["items"]
+        assert item["required"] == ["name", "role"]
+        assert item["properties"]["name"]["enum"] == ["Kevin Day", "USS Princeton"]
+        assert item["properties"]["role"]["enum"] == list(CLAIM_REF_ROLES)
+
+    def test_the_roles_are_ordered_from_most_to_least_central(self):
+        from digester.extract import CLAIM_REF_ROLES
+
+        assert CLAIM_REF_ROLES == ("subject", "participant", "setting", "mentioned")
+
+    def test_the_deletion_tests_are_in_the_prompt_verbatim(self):
+        from digester import prompt_registry
+
+        t = prompt_registry.prompt_text("claims", "DIGESTER_CLAIMS_PROMPT_FILE")
+        assert "delete the node and the claim has no subject left" in t
+        assert "Delete it and nothing the claim asserts changes" in t
+        assert "judging importance" in t, "the test is mechanical, not a judgement"

@@ -568,6 +568,20 @@ NODES_SCHEMA_V2 = {
 }
 
 
+# ORDINAL, NOT A SCORE. A claim's refs record that a node is MENTIONED, never
+# that the claim is ABOUT it, so nothing distinguishes a setting from a subject
+# and every downstream consumer inherits the ambiguity - an assembler choosing
+# fifty claims from two thousand has nothing to rank with, and no rule can tell
+# Sydney from Roswell because the edge is identical.
+#
+# Four values rather than a 0-1 score, deliberately: a float would wobble at
+# least as much as the 3.9-point run-to-run noise measured on this corpus while
+# presenting itself as exact, and a reviewer can disagree with `setting` in a
+# way that means something where they cannot disagree with 0.62. Ordered, so a
+# consumer can rank: subject > participant > setting > mentioned.
+CLAIM_REF_ROLES = ("subject", "participant", "setting", "mentioned")
+
+
 def build_claims_schema_v2(node_names: list[str]) -> dict:
     """JSON Schema for the claims pass. node_references items are restricted
     to the exact node names from Pass A - this is what physically prevents
@@ -636,11 +650,21 @@ def build_claims_schema_v2(node_names: list[str]) -> dict:
                         "date": {"type": "string"},
                         "node_references": {
                             "type": "array",
-                            "items": (
-                                {"type": "string", "enum": node_names}
-                                if node_names
-                                else {"type": "string"}
-                            ),
+                            "items": {
+                                "type": "object",
+                                "required": ["name", "role"],
+                                "properties": {
+                                    "name": (
+                                        {"type": "string", "enum": node_names}
+                                        if node_names
+                                        else {"type": "string"}
+                                    ),
+                                    "role": {
+                                        "type": "string",
+                                        "enum": list(CLAIM_REF_ROLES),
+                                    },
+                                },
+                            },
                         },
                         "confidence": {
                             "type": "number",
@@ -1435,6 +1459,23 @@ def _parse_response(raw: str) -> ExtractionResult:
         refs = c.get("node_references", [])
         if not isinstance(refs, list):
             refs = []
+        # BOTH SHAPES. Refs were bare names before roles existed, and a cached
+        # response or an older prompt still returns them that way; a run must
+        # not lose its refs over a shape change it did not make.
+        ref_roles = {}
+        flat_refs = []
+        for r in refs:
+            if isinstance(r, dict):
+                name = str(r.get("name") or "").strip()
+                if not name:
+                    continue
+                flat_refs.append(name)
+                role = r.get("role")
+                if role in CLAIM_REF_ROLES:
+                    ref_roles[name] = role
+            elif r:
+                flat_refs.append(str(r))
+        refs = flat_refs
         original = c.get("original_excerpt")
         if isinstance(original, str):
             original = original.strip() or None
@@ -1449,6 +1490,7 @@ def _parse_response(raw: str) -> ExtractionResult:
                 date=c.get("date"),
                 date_end=c.get("date_end"),
                 node_references=[str(r) for r in refs if r],
+                ref_roles=ref_roles or None,
                 confidence=float(c.get("confidence", 1.0)),
             )
         )
