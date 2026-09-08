@@ -77,6 +77,20 @@ class TestAmbientPrior:
         d = digest(claim(("Kevin Day", "subject")))
         assert salience.ambient_check([d]) == {}
 
+    def test_a_specific_incident_containing_the_word_is_not_ambient(self):
+        """Substring matching flagged 'November 1986 Japanese Airlines UFO
+        incident, Alaska' at a 93% subject rate as a problem. It is a specific
+        incident and being the subject is correct."""
+        d = digest(
+            *[
+                claim(
+                    ("November 1986 Japanese Airlines UFO incident, Alaska", "subject")
+                )
+                for _ in range(9)
+            ]
+        )
+        assert salience.ambient_check([d]) == {}
+
 
 def test_the_report_carries_all_three_instruments():
     d = digest(

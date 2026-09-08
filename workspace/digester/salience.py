@@ -97,7 +97,13 @@ def role_mix(digests: list[dict]) -> dict:
 
 def ambient_check(
     digests: list[dict],
-    ambient: tuple[str, ...] = ("UFO", "UAP"),
+    ambient: tuple[str, ...] = (
+        "UFO",
+        "UAP",
+        "Unidentified Flying Object (UFO)",
+        "Unidentified Aerial Phenomena (UAP)",
+        "Unidentified Anomalous Phenomena (UAP)",
+    ),
     ceiling: float = 0.25,
 ) -> dict:
     """Whether a corpus-wide term is being marked `subject` too often.
@@ -111,7 +117,13 @@ def ambient_check(
     mix = role_mix(digests)["per_node"]
     out = {}
     for name, counts in mix.items():
-        if not any(a.lower() in name.lower() for a in ambient):
+        # EXACT names, not a substring. Matching any node containing "UFO"
+        # flagged "November 1986 Japanese Airlines UFO incident, Alaska" at a
+        # 93% subject rate as though it were a problem - it is a specific
+        # incident and being the subject is correct. The prior is about
+        # CORPUS-WIDE terms that name the whole field, and a specific event
+        # that happens to contain one of those words is not one.
+        if name.strip().lower() not in {a.strip().lower() for a in ambient}:
             continue
         assessed = sum(v for k, v in counts.items() if k in ROLES)
         if not assessed:
