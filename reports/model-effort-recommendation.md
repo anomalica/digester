@@ -3,137 +3,145 @@
 Recommendation, evidence, and an explicit line between what the measurements
 establish and what they merely fail to disprove.
 
-**Recommendation: Sonnet 5 at low effort for the digest stage. Opus only where
-a record has failed on Sonnet.**
+**Recommendation: Sonnet 5 at low effort for the digest stage. Opus 5 where
+completeness matters more than cost and a record gets one pass. Haiku 4.5 not
+for long records at all, and on short ones only behind the low-yield guard with
+an automatic re-run.**
 
-## Amendment, 2026-09-08: every figure below was measured under a defect
-
-The claims schema handed to the model carried two enums built from Python sets,
-so the six claim types and three attestation levels were presented in a
-different order on every run. Option order biases which option a model picks.
-That variation is inside every number in this report and inside the 3.9-point
-noise floor they are read against.
-
-The figures are not void - the defect is unbiased across models, so it inflates
-the floor rather than favouring an arm, which makes every "not established"
-verdict here CONSERVATIVE and every "established" one safe. But the floor is
-larger than it needs to be, and a difference this report could not resolve may
-resolve at a configuration where the model sees a fixed schema.
-
-A grid re-run at one pinned configuration with the schema fixed is in progress.
-Treat what follows as superseded when it lands.
+Superseded the 2026-09-03 grid entirely. That one mixed two claims prompts, was
+graded before the coverage metric was fixed, and ran while the schema handed the
+model its enum options in a randomised order. This one is 14 cells at a single
+pinned configuration - prompt `0f2d8dc9`, schema `4f4332da`, code `dccf3da6` -
+with the call cache off, three arms per model per record where the allowance
+allowed.
 
 ## The grid
 
-Two records, both chosen for dense reviewer highlights rather than length, both
-graded on the fixed coverage metric (a highlighted character counts once,
-however many claims quote it). All rows below share prompt fingerprint
-`e9b8b6d4`; rows at any other fingerprint are excluded, because a prompt change
-is a variable exactly like the model.
+Raymond Fowler interview, 10,001 words, 3 chunks, 69 gold units:
 
-Raymond Fowler interview, 10,001 words, 69 gold units:
+| model | recall | fidelity | claims | output tokens/claim |
+|---|---|---|---|---|
+| Opus 5 | 0.909 / 0.888 / 0.872 → **0.890** | 0.969 / 0.969 / 0.965 | 323 / 323 / 313 | 371 |
+| Sonnet 5 | 0.804 / 0.858 / 0.869 → **0.843** | 0.977 / 0.979 / 0.974 | 221 / 242 / 227 | 525 |
+| Haiku 4.5 | 0.501 (one arm) | 0.956 | 135 | 1,516 |
 
-| model | recall | fidelity | claims |
-|---|---|---|---|
-| Opus 5 | 0.892 | 0.976 | 335 |
-| DeepSeek v4 Pro | 0.889 | 0.985 | 203 |
-| Sonnet 5 | 0.865 / 0.834 / 0.831 / 0.826 | 0.988 / 0.978 / 0.991 / 0.992 | 257 / 227 / 224 / 242 |
-| Sonnet 5, effort medium | 0.797 | 0.986 | 286 |
-| GPT-5.6 Luna | 0.685 | 0.993 | 273 |
-| Haiku 4.5 | not run at this prompt | | |
-
-Ross Coulthart Skywatcher session, 4,609 words, 43 gold units:
+Ross Coulthart Skywatcher session, 4,609 words, 1 chunk, 43 gold units:
 
 | model | recall | fidelity | claims |
 |---|---|---|---|
-| Opus 5 | 0.931 | 0.986 | 151 |
-| Sonnet 5 | 0.913 | 1.000 | 127 |
-| Sonnet 5, effort medium | 0.892 | 0.991 | 108 |
-| DeepSeek v4 Pro | 0.859 | 0.981 | 107 |
-| Haiku 4.5 | 0.842 | 1.000 | 109 |
-| GPT-5.6 Luna | 0.649 | 0.989 | 89 |
+| Opus 5 | 0.941 (one arm) | 0.986 | 143 |
+| Sonnet 5 | 0.889 / 0.893 / 0.899 → **0.894** | 1.000 / 1.000 / 1.000 | 104 / 119 / 117 |
+| Haiku 4.5 | 0.183 / 0.936 / 0.880 → 0.666 | 1.000 / 0.992 / 1.000 | 20 / 122 / 91 |
 
-The four Sonnet arms on Fowler are identical runs with the call cache off. They
-spread 3.9 points, and three samples understate a spread, so **3.9 points is a
-lower bound on the noise floor**. Any gap at or below it means nothing.
+## The floor is a property of the record, not the corpus
+
+This is the methodological result and it changes how every other number here is
+read. Sonnet, identical arms, cache off:
+
+| record | chunks | spread across 3 arms |
+|---|---|---|
+| Fowler, 10,001 words | 3 | **6.5 points** |
+| Skywatcher, 4,609 words | 1 | **1.0 point** |
+
+Sixfold, same model, same configuration. The variance lives at the chunk
+boundaries, where runs diverge in what the accumulated node directory carries
+forward. Every "3.9-point noise floor" statement in these notes is really a
+statement about multi-chunk records, and it was a three-sample underestimate
+even for those.
+
+The practical consequence inverts an earlier note. A short single-chunk record
+is not merely cheaper to compare on, it is QUIETER: on Skywatcher a 1-point
+difference separates, on Fowler nothing under about 7 points can.
+
+Removing the randomised enum order did NOT reduce run-to-run variance. It
+removed an uncontrolled variable from the experiment without making it quieter.
 
 ## Established
 
-**Luna is far below the field, on both records, by margins nothing else here
-approaches**: 15.4 points below the Sonnet mean on Fowler and 26.4 on
-Skywatcher. Four to seven times the floor, same direction on both records. It
-should not extract.
+**Opus recalls about 4.7 points more than Sonnet.** +4.60 on the long record,
++4.73 on the short one - the same sign on both records, near-identical
+magnitudes, and on each record every Opus arm scored above every Sonnet arm.
+That is the two-record criterion this project set, and it is met. Note the
+strength available: with three arms against three, an exact permutation test
+bottoms out at p = 0.050, which is what complete separation yields and the most
+that sample size can show.
 
-Nothing else in this grid is established. What follows is the specific reason
-in each case.
+**Sonnet grounds its quotes better than Opus, on both records, also with
+complete separation.** -0.90 points on the long record, -1.40 on the short,
+where Sonnet's three arms all located every quote (1.000) and Opus did not.
+Checked against the known defects in the fidelity measure before believing it:
+Opus does write more ellipsis-elided quotes (7, 2, 8 against 2, 6, 3), and
+correcting for elision and Unicode punctuation leaves the gap unchanged at
+0.9655 against 0.9753. It is grounding, not measurement.
+
+**Haiku is far below both on a long record.** 0.501 against Sonnet's 0.843 -
+34 points, five times that record's floor. One arm, so not established by the
+two-record rule, but the margin is not close and the supporting evidence is
+mechanical: it took 3,351 seconds against Sonnet's ~1,000 and spent 204,726
+output tokens producing 135 claims where Sonnet spent 116,074 producing 221.
+
+**Haiku throws a catastrophic run roughly one time in three on a short record.**
+0.183, 0.936, 0.880 - a 75-point spread. Its central case matches Sonnet; the
+failure produced 20 claims where the record yields about 110, and burned 148,797
+output tokens doing it. `health.low_yield` catches that run (0.88 claims/KB
+against the good arms' 5.34 and 3.98) and flags nothing else in the corpus, so
+the failure is detectable rather than silent - but it needs the guard and an
+automatic re-run, and Sonnet needs neither.
+
+**Effort medium is not better anywhere** (2026-09-03 grid, superseded for
+magnitudes but not for direction): below low on both records and better on
+neither, at higher cost.
+
+**Luna sits 15 to 26 points below the field** (2026-09-03 grid). Four to seven
+times any floor measured here, same direction on both records. It should not
+extract.
 
 ## Not established
 
-**Opus over Sonnet.** +5.3 points on Fowler, +1.8 on Skywatcher. Consistent in
-direction, but one gap sits inside the floor and the other barely outside it on
-a floor that is itself a lower bound. Opus also produced 33% more claims on
-Fowler (335 against 224-257) and 19% more on Skywatcher for that gap, so the
-extra output is not buying measured coverage. It is the most expensive model on
-the plan.
+**That Opus is the better extractor overall.** The two established results point
+opposite ways: it finds more and grounds worse. Per record it produces about
+five more quotes that cannot be located in the source than Sonnet does (10.3
+against 5.4 on the long record), because it writes 40% more claims at a slightly
+lower grounding rate.
 
-**DeepSeek against Sonnet - the direction flips.** +5.0 on Fowler, -5.4 on
-Skywatcher. Two records, opposite signs, both around the floor. Worth noting
-that on Fowler it matched Opus (0.889 against 0.892) on 203 claims against
-Opus's 335.
+**Anything about DeepSeek or Luna at this configuration.** Both are metered and
+were excluded; their figures above come from the superseded grid.
 
-**Haiku below Sonnet.** 7.1 points down on Skywatcher, which is outside the
-floor - but that is ONE record, and the rule here is that no recall difference
-measured on one record counts. Haiku was never run on Fowler at this prompt.
-The run made on 2026-09-08 used a different claims prompt and cannot be added
-to this table; it scored 0.770 against a Sonnet mean of 0.839 at the older
-prompt, which points the same way and proves nothing, because the prompt
-differs.
+**Haiku on a long record, and Opus on a short one**, each having one arm.
 
-**A live policy line rests on the untested half of this.** The digest stage
-rationale in `anomalica/architecture/model-policy.yaml` says short single-chunk
-sources go to Haiku, "whose recall holds". Skywatcher is single-chunk and
-Haiku's recall did not hold there: 7.1 points below Sonnet and 8.9 below Opus,
-both outside the floor. One record is not a finding, but the policy line has no
-measurement behind it at all, and the one measurement that exists contradicts
-it. It should not stand unqualified.
+## Why Sonnet is the default despite Opus recalling more
 
-## No evidence of benefit
+The asymmetry between the two failure modes decides it. A missed claim is an
+absence - recoverable by a later pass, another record, or a reviewer. A claim
+whose quote cannot be located in the source is an assertion that LOOKS sourced
+and is not, and it propagates to every page built from that claim. The project's
+own standard is that accuracy matters more here than anywhere else because
+nothing downstream can catch it.
 
-**Effort medium.** Below low on both records: -4.2 points on Fowler against the
-Sonnet mean, -2.1 on Skywatcher. Each gap is at or inside the floor, so medium
-is not measurably WORSE. It is also not better anywhere, on either record, and
-it costs more. There is no case for it.
+Sonnet is also stable where it matters (1.0-point spread on a single-chunk
+record, 6.5 on a chunked one, no failure mode observed in six arms), and Opus
+burns the plan roughly twice as fast.
 
-## The gap, and what closing it costs
-
-The grid is missing Haiku on Fowler at `e9b8b6d4`, and that cell cannot be
-made. The variant filename hashes the PROMPTS only; the claims schema and the
-extraction code have both changed since these artefacts were written, so
-pinning the old prompts would produce a file that shares the fingerprint and
-differs underneath - the same confound, hidden better.
-
-Closing it honestly means re-running the whole grid at the current
-configuration: five models across two records, plus repeat arms to re-measure
-the floor, since the floor is configuration-specific too. That is roughly a
-dozen runs on the subscription and it is a quota decision, not a technical one.
-
-The cheaper question first: what would it change? Luna is out either way. The
-Sonnet recommendation stands on Opus's advantage being unproven and Haiku's
-disadvantage being pointed-at-but-unproven, and a full re-run would resolve
-both. If either resolves the other way, the recommendation moves.
+Opus earns its place where a record gets one pass and completeness is worth more
+than the cost - but its output needs the fidelity check applied, not assumed.
 
 ## What the artefacts carry
 
-Every row in the tables above was written before the extraction fingerprint
-existed, so their `extraction_config` is empty and the prompt sha in the
-filename is the only configuration they record. Runs from 2026-09-08 onward
-carry `extraction_config` with prompt, schema and code fingerprints in the body.
+Every cell above records `extraction_config` in its body with prompt, schema and
+code fingerprints, and the variant filename carries the prompt hash.
 `grade-record` prints both columns and refuses to let a mixed table pass
-silently.
+silently. Reproduce with `reports/run-grid.sh`; analyse with
+`reports/grid_analysis.py`, which reports the floor, an exact permutation p, and
+whether the arms separate.
+
+One known gap: the code fingerprint walks a hand-enumerated set of directories
+and misses `anomalica_common/irrelevant.py`, which decides how much of a record
+reaches the model. It has not changed under a run, but the guarantee is narrower
+than the field advertises.
 
 ## Related
 
-- `anomalica/knowledge/reading-a-model-comparison.md` - the noise floor and the
-  one-record rule.
-- `anomalica/knowledge/pick-the-densest-signal-not-the-biggest.md` - why these
-  two records and not the two longest.
+- `anomalica/knowledge/reading-a-model-comparison.md`
+- `anomalica/knowledge/pick-the-densest-signal-not-the-biggest.md`
+- `anomalica/knowledge/the-fingerprint-that-differed-from-itself.md`
+- `reports/quote-location-audit.md` - why every fidelity figure is a lower bound
