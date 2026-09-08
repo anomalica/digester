@@ -80,7 +80,39 @@ def main() -> int:
     _instrument(rows, "subject_first", "subject_first_score")
     _confusion(rows)
     _power(rows)
+    _stratified()
     return 0
+
+
+def _stratified() -> None:
+    """The instrument's assumption, on a sample drawn from what it selects.
+
+    The random set contains too few sole-reference edges to calibrate the
+    instrument, so a second file samples that population directly. It answers a
+    different question and must not be mixed into the accuracy figure above:
+    it is biased towards exactly the claims where the assumption fails.
+    """
+    path = LABELS.with_name("hand-labels-sole.yaml")
+    if not path.exists():
+        return
+    pairs = yaml.safe_load(path.read_text())["pairs"]
+    right = [p for p in pairs if p["gold"] == "subject"]
+    wrong_model = [p for p in pairs if p["gold"] != p["model"]]
+    print(
+        f"\nsole_reference_score, calibrated on {len(pairs)} edges drawn FROM ITS OWN SELECTION"
+    )
+    print(
+        f"  its assumption (gold=subject) holds on {len(right)}/{len(pairs)}"
+        f" = {len(right) / len(pairs):.0%}"
+    )
+    print(
+        f"  so about {1 - len(right) / len(pairs):.0%} of what it scores is a claim whose"
+        " subject was never extracted"
+    )
+    print(
+        f"  model role accuracy on this sample: {len(pairs) - len(wrong_model)}/{len(pairs)}"
+        f" = {1 - len(wrong_model) / len(pairs):.0%} - NOT a general figure, the sample is biased"
+    )
 
 
 def _subject_first(claim: dict, ref: dict, window: int = 60) -> bool:

@@ -1,0 +1,162 @@
+# Hand-labelled SOLE-REFERENCE edges: calibration for the instrument, not the model.
+#
+# A STRATIFIED SAMPLE, and that is the point of it. The random 40 pairs in
+# hand-labels.yaml contained only 18 that sole_reference_score selects, too few
+# to say how often its assumption holds. These 30 are drawn ONLY from claims
+# with exactly one reference - the population the instrument scores.
+#
+# So this file measures THE INSTRUMENT. It must never be used for the model's
+# overall role accuracy: the sample is deliberately biased towards claims whose
+# subject was never extracted, which is where the instrument's assumption fails.
+# hand-labels.yaml is the unbiased set.
+#
+# Labelled by reading under claims v6 - the four tests applied IN ORDER, first
+# fit wins, `participant` covering a node acted upon as well as one that acts.
+schema: anomalica/salience-labels/1
+record: 2026-08-08-video-raymond-fowler
+digest: haiku
+sample: sole-reference claims only, random seed 77, 30 of 125
+population: the edges sole_reference_score selects
+labelled_by: reading, against the deletion tests in prompts/claims.txt
+pairs:
+  - i: 0
+    ref: USA, Massachusetts, South Ashburnham
+    model: setting
+    gold: setting
+    note: subject is Betty Andreasson's father, who has no node
+  - i: 1
+    ref: Project Sign
+    model: subject
+    gold: subject
+  - i: 2
+    ref: Unidentified Flying Object (UFO)
+    model: subject
+    gold: subject
+    note: the corpus-wide term as the genuine subject of 'sightings continue to occur'
+  - i: 3
+    ref: William Heitz
+    model: participant
+    gold: mentioned
+    note: the claim names the 728th Aircraft Control and Warning Squadron, not Heitz. Delete him and nothing it asserts changes.
+      The model is wrong here, and the instrument would have called it wrong for a different reason than the real one.
+  - i: 4
+    ref: Air Materiel Command
+    model: participant
+    gold: participant
+    note: heads the team; the Army Air Force is the claim's subject and has no node
+  - i: 5
+    ref: William Heitz
+    model: subject
+    gold: subject
+  - i: 6
+    ref: USA, Massachusetts, South Ashburnham
+    model: setting
+    gold: setting
+    note: subject is the creatures, no node
+  - i: 7
+    ref: 1946 European UFO wave
+    model: subject
+    gold: subject
+    ambiguous: true
+    note: the purpose-clause case, the same one left open at hand-labels.yaml i=37
+  - i: 8
+    ref: JANAP 146 order
+    model: subject
+    gold: subject
+  - i: 9
+    ref: Unidentified Flying Object (UFO)
+    model: subject
+    gold: subject
+    note: 'stands in for the disc-shaped objects the claim describes: a loose node choice with the right role'
+  - i: 10
+    ref: UK, England, RAF Woodbridge
+    model: setting
+    gold: setting
+    note: subject is the animals, no node
+  - i: 11
+    ref: Robertson Panel investigation (1953)
+    model: subject
+    gold: subject
+  - i: 12
+    ref: USA, Massachusetts, Middleton
+    model: setting
+    gold: setting
+    note: subject is the family, no node
+  - i: 13
+    ref: Flying Flapjack
+    model: subject
+    gold: subject
+  - i: 14
+    ref: Close Encounter Type G
+    model: mentioned
+    gold: participant
+    note: the cases were investigated, so the category is acted upon; deleting it changes which abductees are meant, so `mentioned`
+      fails its own test. Subject is the abductees, who have no node.
+  - i: 15
+    ref: Robertson Panel investigation (1953)
+    model: mentioned
+    gold: participant
+    note: the Panel outlined the programme - it acts. The subject is the programme, which has no node.
+  - i: 16
+    ref: United States Navy (USN)
+    model: mentioned
+    gold: mentioned
+    note: appears only to identify whose pilot
+  - i: 17
+    ref: Gordon Cooper
+    model: subject
+    gold: subject
+  - i: 18
+    ref: Raymond Fowler
+    model: subject
+    gold: subject
+  - i: 19
+    ref: United States Air Force (USAF)
+    model: subject
+    gold: subject
+  - i: 20
+    ref: Raymond Fowler
+    model: subject
+    gold: subject
+  - i: 21
+    ref: J. Allen Hynek
+    model: subject
+    gold: subject
+  - i: 22
+    ref: 1960s UFO radar tracking alert
+    model: subject
+    gold: subject
+    note: the event node as the subject of a claim describing that event
+  - i: 23
+    ref: Close Encounter of the Third Kind
+    model: subject
+    gold: subject
+    note: a definition - the node is what is defined
+  - i: 24
+    ref: USA, Massachusetts, Middleton
+    model: setting
+    gold: setting
+  - i: 25
+    ref: Betty Andreasson
+    model: subject
+    gold: subject
+  - i: 26
+    ref: November 1986 Japanese Airlines UFO incident, Alaska
+    model: subject
+    gold: participant
+    ambiguous: true
+    note: '''Elmendorf Air Force Base attributed the radar signature to ground clutter'' - Elmendorf is the subject and has
+      no node; the incident is what was explained away, so it is acted upon. Arguable, and marked so.'
+  - i: 27
+    ref: 1960s UFO radar tracking alert
+    model: subject
+    gold: subject
+  - i: 28
+    ref: November 1986 Japanese Airlines UFO incident, Alaska
+    model: subject
+    gold: subject
+  - i: 29
+    ref: Betty Andreasson
+    model: subject
+    gold: subject
+    note: the claim is about the Andreasson family; she is the closest node and carries it

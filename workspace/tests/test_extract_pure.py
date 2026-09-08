@@ -607,7 +607,18 @@ class TestTheSchemaIsProcessStable:
         import subprocess
         import sys
 
-        env = {**os.environ, "PYTHONHASHSEED": str(seed)}
+        # The subprocess must find the same `digester` this test imported,
+        # whatever directory pytest was invoked from. Relying on the cwd made
+        # the test pass from workspace/ and fail from the repository root with
+        # ModuleNotFoundError, which reads as the fix having come undone.
+        workspace = str(Path(__file__).resolve().parents[1])
+        env = {
+            **os.environ,
+            "PYTHONHASHSEED": str(seed),
+            "PYTHONPATH": os.pathsep.join(
+                [workspace, os.environ.get("PYTHONPATH", "")]
+            ).rstrip(os.pathsep),
+        }
         out = subprocess.run(
             [sys.executable, "-c", self.SNIPPET],
             capture_output=True,
