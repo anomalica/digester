@@ -1,0 +1,90 @@
+You are identifying the distinct ACCOUNTS a source contains.
+
+An account is one narrated story: a single episode somebody tells, with its own subject, its own time and place, and its own beginning and end in this record. A long interview is usually a sequence of them.
+
+Your ONLY job in this call is to find the accounts and mark where each one runs. Claims and entities are separate passes. Do not extract facts here.
+
+================================================================
+AN ACCOUNT IS A TELLING, NOT A VERIFIED EVENT
+================================================================
+
+This is the distinction the whole pass turns on. You are marking that SOMEBODY TOLD A STORY HERE. You are not asserting the story happened, and you must not write titles that do.
+
+Write the title as the telling:
+  GOOD  "A captain's wife taken from the roadside near Springer"
+  GOOD  "The A-7D pilot's missing thirteen hours at a northern New Mexico lake"
+  GOOD  "Monks bussed to the S2 Annex as interpreters"
+  BAD   "The Springer abduction" - asserts an abduction occurred
+  BAD   "Proof of alien contact at Eagle Nest Lake" - asserts and editorialises
+
+Neutral, specific, and identifiable on its own out of context. A reader seeing only your title should know which story you mean.
+
+================================================================
+AN ACCOUNT DOES NOT NEED A NAME OR A PUBLIC RECORD
+================================================================
+
+The accounts that matter most are usually the ones with no famous name attached. An anonymous witness, an unnamed pilot, an incident nobody has written a book about - these are accounts exactly as much as the well-known cases are. Do not skip an account because you cannot match it to something you recognise, and do not privilege the named cases.
+
+Equally: a case the speaker merely MENTIONS is not an account. "That was around the time of Roswell" is a reference, not a telling. The test is whether the record contains the story being told here, at length, with its own detail.
+
+================================================================
+THE FLOOR - what is NOT an account
+================================================================
+
+To be an account it must have ALL of:
+  - a SUBJECT: who or what the story is about, even if unnamed ("a captain's dependent wife", "an A-7D pilot")
+  - a rough WHEN or a rough WHERE, or both. "the late 1970s", "northern New Mexico", "a lake north of Santa Fe" all qualify. Neither one needs to be precise.
+  - enough substance to be a story rather than a remark: several sentences of narration, not a passing clause.
+
+Below that floor it is a digression, an aside, or a general opinion, and you must NOT emit it. Twenty accounts in an hour-long interview is almost always wrong; a handful to a couple of dozen across a long one is normal. When you are unsure whether something clears the floor, leave it out - a missed account costs less than a fabricated one.
+
+Opinions, background explanation, career summary, discussion of documents, and argument about what UFOs are: none of these are accounts, however long they run.
+
+================================================================
+THE SPAN
+================================================================
+
+Mark where the account runs in this record, using the record's own position markers:
+
+  - If the record carries TIMECODES, give start and end as timecodes in the same form the record uses.
+  - Otherwise give start and end as the exact opening and closing PHRASES of the passage, quoted verbatim from the record, long enough to be unique (8-15 words each).
+
+The span covers the telling of that story only. If the speaker returns to the same story much later, that is a SECOND span of the same account - list the account once and give its additional spans in `also_spans`.
+
+Be generous at the edges rather than tight: it is better for a span to include a sentence of lead-in than to cut the first fact of the story.
+
+================================================================
+THE TELLER'S OWN ROLE
+================================================================
+
+For each account say how the speaker stands in relation to it, using exactly one of:
+
+  - "experienced": the speaker is the witness or participant - it happened to them
+  - "investigated": the speaker worked the case, interviewed, or handled it officially
+  - "was_told": the speaker heard it from a named or describable person
+  - "briefed_or_read": the speaker got it from a document, a briefing, or a film
+  - "unclear": the record does not say
+
+This is about the SPEAKER, not about how reliable the story is. Do not judge the story.
+
+================================================================
+OUTPUT FORMAT - valid JSON only, no markdown fencing
+================================================================
+
+{
+  "accounts": [
+    {
+      "title": "the telling, neutrally named",
+      "subject": "who or what it is about, unnamed is fine",
+      "when": "rough time, or empty string if the record does not say",
+      "where": "rough place, or empty string if the record does not say",
+      "span_start": "timecode or verbatim opening phrase",
+      "span_end": "timecode or verbatim closing phrase",
+      "also_spans": [{"span_start": "...", "span_end": "..."}],
+      "teller_role": "experienced|investigated|was_told|briefed_or_read|unclear"
+    }
+  ],
+  "extraction_complete": true
+}
+
+Set extraction_complete=true when you have emitted every account in the record and have nothing to add. The loop reads it and stops asking.

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 
+from digester import accounts as accounts_mod
 from anomalica_common.llm import check_route_capacity
 from anomalica_common.pre_digest import materialise
 from digester import prompt_registry
@@ -858,6 +859,105 @@ def extract_cast(
         ],
         "acronyms": [{"acronym": k, "expansion": v} for k, v in acronyms.items()],
     }
+
+
+ACCOUNTS_SCHEMA = {
+    "type": "object",
+    "required": ["accounts", "extraction_complete"],
+    "properties": {
+        "accounts": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["title", "subject", "span_start", "span_end"],
+                "properties": {
+                    "title": {"type": "string"},
+                    "subject": {"type": "string"},
+                    "when": {"type": "string"},
+                    "where": {"type": "string"},
+                    "span_start": {"type": "string"},
+                    "span_end": {"type": "string"},
+                    "also_spans": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "span_start": {"type": "string"},
+                                "span_end": {"type": "string"},
+                            },
+                        },
+                    },
+                    "teller_role": {
+                        "type": "string",
+                        "enum": list(accounts_mod.VALID_TELLER_ROLES),
+                    },
+                },
+            },
+        },
+        "extraction_complete": {"type": "boolean"},
+    },
+}
+
+
+def _accounts_prompt_template() -> str:
+    return prompt_registry.prompt_text("accounts", "DIGESTER_ACCOUNTS_PROMPT_FILE")
+
+
+def extract_accounts(
+    text: str,
+    model: str = DEFAULT_MODEL,
+    record_context: str = "",
+    on_progress=None,
+    use_api: bool = False,
+) -> dict:
+    """Find the distinct tellings in a record. The structural sibling of the cast.
+
+    Same shape as `extract_cast` and for the same reason: the whole record sits
+    in a cached prefix and only the task tail varies, so asking for more costs
+    the tail and the output rather than the record again. Chunking would be
+    wrong here in a way it is not for nodes - an account can straddle any
+    boundary we choose, and a chunked pass would report one story as two
+    whenever the split landed inside it.
+
+    Iteration carries the titles found so far, not the spans: repeating a span
+    back to the model invites it to adjust boundaries it already settled, and
+    the boundary is the one thing this pass exists to establish.
+    """
+    preamble = record_context + _accounts_prompt_template()
+    found: dict[str, dict] = {}
+
+    for it in range(ITERATION_MAX):
+        task = "Emit every distinct account in this record."
+        if found:
+            task += (
+                "\n\nALREADY CAPTURED - do NOT repeat these and do NOT restate their"
+                " spans:\n"
+                + "\n".join(f"  - {t}" for t in sorted(found))
+                + "\n\nAdd only accounts that are MISSING. If none are missing,"
+                " return an empty array and set extraction_complete=true."
+            )
+
+        raw = call_with_document(
+            preamble, text, task, model, schema=ACCOUNTS_SCHEMA, use_api=use_api
+        )
+        result = json.loads(raw) if isinstance(raw, str) else raw
+
+        added = 0
+        for a in result.get("accounts", []) or []:
+            title = (a.get("title") or "").strip()
+            if title and title not in found:
+                found[title] = a
+                added += 1
+
+        if on_progress:
+            done = " [model: complete]" if result.get("extraction_complete") else ""
+            on_progress(
+                f"    accounts iter {it + 1}: +{added} (total {len(found)}){done}"
+            )
+        if result.get("extraction_complete") or added == 0:
+            break
+
+    return {"accounts": list(found.values())}
 
 
 def expand_source_ids(claims: list[dict], sources: list[dict]) -> int:

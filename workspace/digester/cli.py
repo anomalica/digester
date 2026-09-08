@@ -1438,5 +1438,129 @@ def spend_cmd(day: str | None, provider_usd: float | None) -> None:
     raise SystemExit(1)
 
 
+@main.command(name="accounts")
+@click.argument("file_path", type=click.Path(exists=True))
+@click.option("--model", default="sonnet", help="Model for the account pass")
+@click.option(
+    "--digest",
+    type=click.Path(),
+    default=None,
+    help="An existing digest of this record; its claims are bound to the "
+    "accounts and the floor applied. Without one the pass emits candidates "
+    "only, since the floor cannot be checked without claims.",
+)
+@click.option("--out", type=click.Path(), default=None, help="Write the result as YAML")
+@click.option("--min-claims", type=int, default=None, help="Floor (default 3)")
+@click.pass_context
+def accounts_cmd(
+    ctx: click.Context,
+    file_path: str,
+    model: str,
+    digest: str | None,
+    out: str | None,
+    min_claims: int | None,
+) -> None:
+    """Find the distinct accounts - the separate stories - in a record.
+
+    Extraction pulls atomic facts and loses the shape of the source: three
+    abductions described in one interview become one undifferentiated pile of
+    claims. This marks where each telling runs, then binds the record's claims
+    to them by span arithmetic, which is free because the claims are already
+    located.
+
+    An account is a SPAN OF THIS RECORD, never an entity - two sources telling
+    the same story give two accounts, correctly, because there were two
+    tellings.
+    """
+    import yaml as _yaml
+
+    from anomalica_common.llm import ledger
+
+    from digester import accounts as accounts_mod
+    from digester.extract import build_record_context, extract_accounts
+
+    path = Path(file_path)
+    parsed = parse_record(path.read_text(errors="replace"))
+
+    use_api = resolve_use_api(_USE_API_VAR)
+    if not use_api:
+        allowance = check_allowance(
+            session_headroom=headroom_for(len(parsed.body or "")),
+            weekly_headroom=weekly_reserve_for(len(parsed.body or "")),
+        )
+        if not allowance.ok:
+            click.echo(f"Allowance ceiling: {allowance.reason}")
+            ctx.exit(77)
+        click.echo(f"Allowance ok ({allowance.reason})")
+
+    ledger.set_context(
+        type="accounts",
+        ref=(parsed.metadata.get("content_hash") or "").split(":")[-1] or None,
+        source_type=parsed.source_type,
+        body_chars=len(parsed.body or ""),
+        source="digester-direct",
+    )
+    reset_usage()
+    click.echo(f"Accounts: {parsed.title or path.name}")
+    result = extract_accounts(
+        parsed.body,
+        model=model,
+        record_context=build_record_context(parsed),
+        on_progress=click.echo,
+        use_api=use_api,
+    )
+    candidates = result.get("accounts") or []
+    click.echo(f"\n{len(candidates)} candidate account(s)")
+
+    claims: list = []
+    if digest:
+        d = _yaml.safe_load(Path(digest).read_text()) or {}
+        claims = (d.get("domain_claims") or []) + (d.get("infrastructure_claims") or [])
+        click.echo(f"binding {len(claims)} claims from {Path(digest).name}")
+
+    bound = accounts_mod.bind(candidates, claims, parsed.body)
+    kept, dropped = accounts_mod.apply_floor(
+        candidates,
+        bound["per_account"],
+        min_claims if min_claims is not None else accounts_mod.MIN_CLAIMS,
+    )
+    click.echo(
+        f"claims bound {bound['counts']['bound']}, outside any account "
+        f"{bound['counts']['outside']}, unbindable {bound['counts']['unbindable']}"
+    )
+    click.echo(f"{len(kept)} account(s) clear the floor, {len(dropped)} dropped\n")
+
+    by_index = {id(a): i for i, a in enumerate(candidates)}
+    for a in kept:
+        i = by_index[id(a)]
+        click.echo(
+            f"  [{bound['per_account'][i]:3} claims] {a.get('span_start')}-"
+            f"{a.get('span_end')}  {a.get('title')}"
+        )
+        click.echo(
+            f"        subject: {a.get('subject')} | when: {a.get('when') or '-'} | "
+            f"where: {a.get('where') or '-'} | teller: {a.get('teller_role') or '-'}"
+        )
+    for a in dropped:
+        click.echo(f"  DROPPED ({a['dropped_because']}): {a.get('title')}")
+
+    if out:
+        payload = {
+            "record": {"content_hash": parsed.metadata.get("content_hash")},
+            "model": model,
+            "accounts": [accounts_mod.conform(a, by_index[id(a)]) for a in kept],
+            "dropped": [
+                {"title": a.get("title"), "because": a["dropped_because"]}
+                for a in dropped
+            ],
+            "binding": bound["counts"],
+        }
+        Path(out).write_text(
+            _yaml.safe_dump(payload, sort_keys=False, allow_unicode=True)
+        )
+        click.echo(f"\nwrote {out}")
+    click.echo(f"USAGE_JSON: {json.dumps(get_usage())}")
+
+
 if __name__ == "__main__":
     main()
