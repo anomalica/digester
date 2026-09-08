@@ -1528,7 +1528,13 @@ def accounts_cmd(
     # materialise strips, so phrase-matching against it finds nothing.
     from anomalica_common.pre_digest import materialise
 
-    bound = accounts_mod.bind(candidates, claims, materialise(parsed.body))
+    body = materialise(parsed.body)
+    # The record's own word timestamps map a claim's timecode straight to an
+    # offset, with no quote matching and nothing lost. Built once per record.
+    anchors = accounts_mod.build_time_map(parsed.body, body)
+    if anchors:
+        click.echo(f"word-timestamp map: {len(anchors)} anchors")
+    bound = accounts_mod.bind(candidates, claims, body, anchors)
     kept, dropped = accounts_mod.apply_floor(
         candidates,
         bound["per_account"],

@@ -158,3 +158,39 @@ class TestIdentity:
             acct("00:10:00", "00:20:00", teller_role="investigated"), 0
         )
         assert out["teller_role"] == "investigated"
+
+
+class TestOneEndedSpans:
+    """The model tidies a phrase and one end stops matching. An interview is
+    sequential, so the next telling's start supplies the missing end."""
+
+    BODY = (
+        "AAA start one here. " * 5
+        + "BBB start two here. " * 5
+        + "CCC start three here. " * 5
+    )
+
+    def test_a_missing_end_runs_to_the_next_account(self):
+        a = [
+            {
+                "span_start": "AAA start one here",
+                "span_end": "a phrase that is not present",
+            },
+            {"span_start": "BBB start two here", "span_end": "BBB start two here"},
+        ]
+        spans = accounts.resolve_all(a, self.BODY)
+        assert spans[0], "the first account kept a span"
+        assert spans[0][0][1] <= self.BODY.index("BBB"), (
+            "it stops where the next begins"
+        )
+
+    def test_an_account_with_neither_end_is_still_dropped(self):
+        a = [{"span_start": "nowhere at all", "span_end": "nor here"}]
+        assert accounts.resolve_all(a, self.BODY) == [[]], (
+            "no span invented from nothing"
+        )
+
+    def test_a_fully_resolved_span_is_untouched(self):
+        a = [{"span_start": "AAA start one here", "span_end": "BBB start two here"}]
+        spans = accounts.resolve_all(a, self.BODY)
+        assert spans[0][0][0] == self.BODY.index("AAA")

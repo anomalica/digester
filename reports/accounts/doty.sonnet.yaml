@@ -2,6 +2,13 @@ record:
   content_hash: sha256:868395b7e8a1f005c309f865abc637b573cfd56907204bec18f799c151ba648d
 model: sonnet
 accounts:
+  - id: acct-the-one-thing-that-convinced-me-beyond-anything-else-that-i-had-access-to
+    title: A female Air Force sergeant's repeated abductions and government surveillance operation
+    subject: an unnamed Air Force sergeant
+    when: spanning Doty's OSI career, ongoing
+    where: an apartment near Kirtland Air Force Base
+    span: The one thing that convinced me beyond anything else that I had access to-if I was a member of Congress.
+    teller_role: investigated
   - id: acct-yes-i-was-on-a-temporary-assignment-to-ellsworth-air-force-base-on-something-entirely-different.
     title: Mario Woods' encounter and subsequent OSI debriefing at Ellsworth Air Force Base
     subject: Sergeant Mario Woods
@@ -9,6 +16,13 @@ accounts:
     where: Ellsworth Air Force Base, South Dakota
     span: Yes, I was on a temporary assignment to Ellsworth Air Force Base on something entirely different.-I think it would
       have been probably about 10 hours of interrogation.
+    teller_role: investigated
+  - id: acct-he-was-taking-pictures-of-these-objects-flying-around
+    title: Paul Bennewitz's photographs of a classified drone program mistaken for UFOs
+    subject: Paul Bennewitz
+    when: late 1970s
+    where: near Kirtland Air Force Base
+    span: He was taking pictures of these objects flying around-we had to convince Paul that, yeah, he was seeing UFOs.
     teller_role: investigated
   - id: acct-well-when-i-was-working-on-a-myrna-hansen-case-and-you-know-who-myrna-hansen-is
     title: The Myrna Hansen abduction case linked to the Bennewitz affair
@@ -39,6 +53,20 @@ accounts:
     where: an Air Force special security office on Kirtland Air Force Base
     span: So I did. I went over there. I sat and went in a room.-We took it all in.
     teller_role: briefed_or_read
+  - id: acct-the-crash-in-roswell-the-crash-at-kingman.
+    title: A film of the Roswell crash recovery shown during Doty's briefing
+    subject: the 1947 Roswell/Corona crash recovery
+    when: 1947 (event); shown to Doty circa 1979-80
+    where: Corona/Roswell, New Mexico
+    span: the crash in Roswell, the crash at Kingman.-the recovery truck said United States Air Force on it.
+    teller_role: briefed_or_read
+  - id: acct-this-air-force-pilot-loves-fishing.
+    title: An Air National Guard A-7D pilot's missing-time UFO encounter at a New Mexico lake
+    subject: an unnamed New Mexico Air National Guard A-7D pilot
+    when: unspecified, during Doty's OSI career
+    where: a lake in northern New Mexico
+    span: This Air Force pilot loves fishing.-and that's, that's one of these cases here that's absolutely real
+    teller_role: investigated
   - id: acct-i-knew-there-was-a-project
     title: Two Carthusian monks brought to Groom Lake to communicate with a captive extraterrestrial
     subject: two Carthusian monks from a Vermont monastery
@@ -61,12 +89,27 @@ accounts:
     span: In 1958, I think it was, I can't remember what year, but in the 50s or early 60s, a UFO had crashed on this rancher's
       land-I was never privy to that.
     teller_role: investigated
+  - id: acct-me-and-my-partner-went-out-to-a-place-outside-uh-the-nellis-test-and-training-range-up-near-warm-springs.
+    title: A crashed disc recovered near Warm Springs with covered alien bodies
+    subject: an unnamed crashed craft and its occupants
+    when: unspecified, during Doty's OSI career
+    where: near Warm Springs, outside the Nellis Test and Training Range
+    span: me and my partner went out to a place outside, uh, the Nellis Test and Training Range up near Warm Springs.-They
+      looked probably at least five foot.
+    teller_role: investigated
   - id: acct-this-goes-back-to-a-rather-long-story-about-time-travel
     title: A self-proclaimed time traveler who walked into a rock crevice near Sedona and never returned
     subject: an unnamed man claiming to be a time traveler
     when: during Sandia Labs' time-travel experiments, Doty's OSI era
     where: near Sedona, Arizona
     span: this goes back to a rather long story about time travel-he's never returned
+    teller_role: investigated
+  - id: acct-there-was-an-air-force-team-out-at-nellis-test-and-training-range
+    title: An extraterrestrial encountered walking along a road at the Nellis range
+    subject: an unnamed extraterrestrial encountered by an Air Force team
+    when: 1970s
+    where: Nellis Test and Training Range
+    span: there was an Air Force team out at Nellis Test and Training Range-This is verified
     teller_role: investigated
   - id: acct-the-mj-12-that-jamie-shandira-got.
     title: The chain of custody of the MJ-12 documents from Jamie Shandera to Doty
@@ -82,6 +125,14 @@ accounts:
     where: Kirtland Air Force Base
     span: We all know who Linda Howe is.-then some of it isn't.
     teller_role: investigated
+  - id: acct-these-two-people-were-legitimately-collecting-really-really-good-information-from-a-person-that-had-a-close-encounter
+    title: A deception operation to discourage two Nevada MUFON investigators from a close-encounter case
+    subject: two unnamed Nevada MUFON field investigators and an unnamed close-encounter witness
+    when: unspecified
+    where: near the Nellis Test and Training Range, Nevada
+    span: These two people were legitimately collecting really, really good information from a person that had a close encounter-we
+      didn't always win.
+    teller_role: investigated
   - id: acct-there-s-been-two-occasions-where-i-ve-been-visited-by-fbi-agents
     title: FBI visits after Gaia disclosures, and uniformed Space Force officers monitoring a UFO convention
     subject: Doty's own public disclosures and subsequent government attention
@@ -91,32 +142,18 @@ accounts:
       two, three days.
     teller_role: experienced
 dropped:
-  - title: A female Air Force sergeant's repeated abductions and government surveillance operation
-    because: only 1 claims
   - title: A childhood levitation experience while jumping near a stop sign
-    because: only 0 claims
-  - title: Paul Bennewitz's photographs of a classified drone program mistaken for UFOs
-    because: only 0 claims
-  - title: A film of the Roswell crash recovery shown during Doty's briefing
     because: only 0 claims
   - title: A film of a second recovery site at Kingman, Arizona
     because: only 2 claims
-  - title: An Air National Guard A-7D pilot's missing-time UFO encounter at a New Mexico lake
-    because: only 0 claims
   - title: An Air Force technician's smuggling of the 'Alien Interview' footage out of Groom Lake
     because: only 1 claims
-  - title: A crashed disc recovered near Warm Springs with covered alien bodies
-    because: only 0 claims
   - title: A Navy submariner's recovered artifact and the resulting counterintelligence investigation
     because: only 2 claims
   - title: A witnessed opening of 'the fabric of space' during Nevada Test Site experiments
     because: only 2 claims
   - title: A Civil War-era photograph allegedly showing a jet over a Lancaster, Pennsylvania battlefield
     because: only 2 claims
-  - title: An extraterrestrial encountered walking along a road at the Nellis range
-    because: only 0 claims
-  - title: A deception operation to discourage two Nevada MUFON investigators from a close-encounter case
-    because: only 0 claims
   - title: 'The 1987 ''UFO Cover-Up: Live'' broadcast interview as ''Falcon'''
     because: only 1 claims
   - title: A UFO sighting following a tram up Sandia Crest
@@ -126,6 +163,6 @@ dropped:
   - title: A 2014 trip to Laos searching for evidence at a POW site
     because: only 1 claims
 binding:
-  bound: 100
-  unbindable: 86
-  outside: 208
+  bound: 256
+  unbindable: 5
+  outside: 133

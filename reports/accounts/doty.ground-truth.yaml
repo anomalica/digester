@@ -1,0 +1,1503 @@
+source: anomalica/master, 2026-09-08. Four independent readings of the full transcript reconciled by a fifth, then measured
+  against the deepseek-v4-flash digest.
+record: 868395b7e8a1f005c309f865abc637b573cfd56907204bec18f799c151ba648d
+accounts:
+  - title: The Mario Woods interrogation at Ellsworth Air Force Base, 1977
+    subject: Sergeant Mario Woods, a US Air Force security policeman interrogated by AFOSI after an encounter near Ellsworth
+      Air Force Base, and the second policeman, Michael Johnson, held in a separate room
+    summary: 'Doty was at Ellsworth on temporary duty for an unrelated espionage case when the Woods incident occurred. Detachment
+      commander John Brisboy sent him to the base hospital to collect Woods''s medical records, which he carried into the
+      interview room where agent Jack Green was questioning Woods. He stood there about 45 minutes, left, returned later and
+      found the questioning still running, putting the total at roughly ten hours rather than the four or five Woods recalls,
+      and by then an interrogation rather than an interview. The second security policeman, Michael Johnson, was brought from
+      the base hospital and held in a room Doty never entered. Doty explains the several minutes agents spent feeling inside
+      Woods''s mouth: Woods had said something at the hospital about his voice changing, so OSI suspected an implant in the
+      mouth or throat. He says a later classified OSI report treated the incident as real, and that Woods had six hours of
+      missing time.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: peripheral direct participant - fetched the medical file, observed part of the interrogation, no contact with
+      the second witness
+    has_established_name: true
+    nested_within: ''
+    approx_when: '1977'
+    approx_where: AFOSI detachment and base hospital, Ellsworth Air Force Base, South Dakota
+    approx_line_start: 46
+    approx_line_end: 159
+  - title: The Myrna Hansen report and the two DIA agents who visited Kirtland
+    subject: Doty's 1980 interview of Myrna Hansen, and the two Defense Intelligence Agency agents from a branch that investigates
+      abductions who came to the Kirtland OSI office about his report
+    summary: Leo Sprinkle and Allen Hynek brought Myrna Hansen to Doty when he knew nothing about abductions and did not believe
+      in them; he interviewed her, privately concluded she was psychologically unstable, and filed a report to headquarters.
+      About a week later two cleared visitors arrived at the Kirtland OSI office asking to discuss the Hansen case. Asked
+      what branch they were with, one answered that the branch investigates abductions. They found he was not briefed into
+      the relevant special access programme and had him read in, at which point he realised a DIA unit had been working the
+      subject for years - inside an agency that itself only came into existence in 1961. The subject of this account is the
+      visit and the existence of the DIA branch, not Hansen's experience, which is only referenced.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - interviewed Hansen, wrote the report, received the visitors, was briefed in
+    has_established_name: true
+    nested_within: ''
+    approx_when: '1980'
+    approx_where: AFOSI office, Kirtland Air Force Base, Albuquerque, New Mexico
+    approx_line_start: 245
+    approx_line_end: 282
+  - title: The Paul Bennewitz deception operation and the drone programme it concealed
+    subject: Paul Bennewitz, the Albuquerque businessman and APRO field investigator photographing objects near Kirtland Air
+      Force Base, and the headquarters-written operations plan Doty executed against him
+    summary: Doty describes the mechanics rather than the whole case. His reports went up through CIA to DIA, which sent back
+      a task list of roughly ten items including neighbour enquiries and a local agency check; after a call on a KY-3 secure
+      phone between him, his boss and headquarters, an operations plan was written at headquarters and passed to him to carry
+      out. He states plainly that the disinformation was planned at headquarters and that he did what he was told. What Bennewitz
+      was photographing, he says, was an Air Force drone programme in its infancy, drones launched from a C-130 or an RC-135/137
+      with a controller aboard the aircraft, which had to stay in close proximity. Because Bennewitz was already an APRO field
+      investigator and a believer who had had his own family sighting, the whole deception amounted to agreeing that the objects
+      were flying saucers. Doty says at the close of the interview that the fuller Bennewitz story was not covered here.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - field case agent executing a headquarters plan
+    has_established_name: true
+    nested_within: ''
+    approx_when: about 1980-1982, described as three and a half to four years into his OSI career
+    approx_where: Kirtland Air Force Base and Albuquerque, New Mexico
+    approx_line_start: 301
+    approx_line_end: 374
+  - title: The Sandia security guard and the craft that landed over a Kirtland weapons bunker
+    subject: An unnamed civilian Sandia National Laboratories security guard, a former army military policeman, who reported
+      a saucer landing and two entities at an experimental underground nuclear weapons bunker in a classified area of Kirtland
+      Air Force Base
+    summary: 'Doty was the case agent. Responding to an alarm on a bunker built with blast doors and a platform that lowered
+      weapons sixty feet underground, the guard saw a saucer-shaped craft hover and land; his patrol vehicle engine, mobile
+      radio and portable radio all failed. Two entities in silvery metallic suits and helmets, with arms disproportionate
+      to their bodies, heavy boots and devices in both hands, walked to the front of the bunker. When he chambered a round
+      in his shotgun the weapon left his hands and dropped to the ground, and he could not draw his sidearm; the entities
+      returned to the craft and it left. Doty checked radar approach control, which had an unknown return in the same period;
+      the guard was hypnotised by psychologists and still could not describe how the entities emerged, and passed a polygraph
+      with no deception indicated. He had a twelve-to-fourteen-year unblemished record, personnel reliability programme status
+      and a special access clearance covering an area involving alien technology, so a cover story was not viable and a senior
+      agent took the case over. The narration is split: it is opened at line 383, interrupted by the indoctrination briefing
+      and three unrelated digressions, and resumed at line 754.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - initial case agent, re-interviewed the witness, checked radar; handed on to a senior agent
+    has_established_name: false
+    nested_within: ''
+    approx_when: late 1979 to early 1980
+    approx_where: a classified area of Kirtland Air Force Base, Albuquerque, New Mexico
+    approx_line_start: 383
+    approx_line_end: 905
+  - title: The indoctrination briefing into the programme Doty calls NineQ, with the Roswell and Kingman recovery films
+    subject: A several-hour classified briefing at the Air Force special security office at Kirtland on US government contact
+      with extraterrestrials from 1947, at which Doty says films of two crash recoveries were screened to about ten people
+    summary: 'After Doty''s report on the Sandia guard, headquarters ordered him briefed into a programme he calls NineQ.
+      An Air Force colonel and a civilian briefed roughly ten people - intelligence staff, Sandia and Department of Energy
+      contractors, Air Force Weapons Laboratory scientists - of whom Doty was the only OSI agent. Documents and film were
+      shown: the Roswell/Corona recovery, with the craft, bodies outside it on a dirt mound, military tents, personnel in
+      army uniforms and debris laid out on tables, narrated by a voice added afterwards; and a second recovery at Kingman,
+      Arizona around 1953 with two differently-shaped bodies and a truck marked United States Air Force. Driving back he pulled
+      into a car park and sat trying to decide whether the whole thing was a psychological operation run on him; back at the
+      office his boss John told him it was all real. He says the material is now unclassified but his own freedom-of-information
+      request produced a refusal to confirm or deny, and that the Air Force gave Congress some of the footage but not all
+      of it. This account is causally and physically inside the Sandia guard narration - it was ordered because of that report
+      - but its claims are about the briefing, not about 1947 or 1953.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - one of about ten people briefed; later filed the freedom-of-information request himself
+    has_established_name: false
+    nested_within: The Sandia security guard and the craft that landed over a Kirtland weapons bunker
+    approx_when: 1979 or early 1980; the films depict 1947 and about 1953
+    approx_where: Air Force special security office, west side of Kirtland Air Force Base, New Mexico
+    approx_line_start: 394
+    approx_line_end: 753
+  - title: The FBI visits and the OSI phone call after Doty began speaking publicly
+    subject: 'Official approaches to Doty after his non-disclosure agreement expired in 2002: two FBI visits and one telephone
+      call from a former OSI civilian working as a contractor'
+    summary: 'Doty''s non-disclosure agreement expired in 2002 and he began speaking publicly. Since then FBI agents have
+      visited him twice to say he had said something on camera he should not have: once over an item he knew at the time was
+      still a special access programme and tried unsuccessfully to talk around, once over a document with classified information
+      that he had given to somebody, material he maintains had been on the internet for years. Separately, around his eleventh
+      Gaia episode in 2018, a man he knew - a former OSI civilian who had returned as a contractor - telephoned to ask why
+      he had mentioned particular items and told him they were still classified when Doty had assumed they were not. No visit
+      followed, so he concluded the material had been declassified. This account physically interrupts the indoctrination-briefing
+      narration; it arises from the interviewer''s question about freedom-of-information attempts.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - the person visited and telephoned
+    has_established_name: false
+    nested_within: ''
+    approx_when: 2002 to 2018; the telephone call in 2018
+    approx_where: not stated; Doty is based in New Mexico
+    approx_line_start: 529
+    approx_line_end: 590
+  - title: The three uniformed Air Force officers at the 2019 Laughlin UFO convention
+    subject: Two captains and a senior master sergeant in Air Force uniform in the audience at a UFO convention where Doty
+      spoke about Area 51, and his exchange with the female captain
+    summary: Robert Dean pointed out three people in Air Force uniform in the audience at the 2019 Laughlin convention. Doty
+      introduced himself; they said they already knew who he was, and the female captain said they were there because they
+      were interested in the subject. When he said there was no classified material in his briefing, she replied that they
+      would decide that later. He told George Knapp, who had already seen them, and suggested Knapp ask for an interview;
+      one of the officers stood at the back during Doty's interview with Knapp and attended his presentation. They stayed
+      two to four days. The episode grows directly out of the preceding account - the OSI contractor who telephoned him in
+      2018 was also at this convention - and it too interrupts the indoctrination-briefing narration.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - approached the officers and spoke to the captain himself
+    has_established_name: false
+    nested_within: ''
+    approx_when: '2019'
+    approx_where: UFO convention at Laughlin, Nevada
+    approx_line_start: 591
+    approx_line_end: 660
+  - title: The New Mexico Air National Guard A-7 pilot with contact in the air and on the ground
+    subject: An unnamed Air National Guard A-7 jet pilot in New Mexico who reported contact both airborne and on the ground
+    summary: Mentioned in passing as an illustration of why a cleared witness cannot be given the standard cover story. Doty
+      says he handled the whole case of an Air Force pilot flying A-7s with the New Mexico Air National Guard who had contact
+      in the air and on the ground. He could not tell the pilot it had been Air Force hardware because the pilot would have
+      known otherwise, so he told him he had probably encountered a real object that then went away. Because such a report
+      takes a pilot off flying status and the man wanted to fly again, Doty had him sign an undertaking never to talk about
+      it, and he agreed. A whole case compressed into eight lines, with no highlighting from the human reviewer. It may or
+      may not be the same man as the A-7D captain in the fishing account 3,100 lines later; the transcript neither states
+      nor rules it out, and the details given differ.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - by his own statement handled the whole case
+    has_established_name: false
+    nested_within: ''
+    approx_when: Doty's OSI service, roughly around 1980
+    approx_where: New Mexico Air National Guard, Kirtland Air Force Base area, New Mexico
+    approx_line_start: 910
+    approx_line_end: 925
+  - title: Recruiting and handling Bill Moore inside the UFO research groups
+    subject: Bill Moore, a UFO researcher already inside the civilian groups, recruited and run by Doty as a reporting asset
+      and later used to pass disinformation
+    summary: 'Doty says there is a Bill Moore in every UFO group, and that Moore was a person he recruited and handled, already
+      a member, initially tasked only to report back essential elements of information affecting national security. Disseminating
+      disinformation came later. He says he was part of providing Moore with disinformation to send into the groups to discredit
+      them, and that somebody in the CIA was doing the same, because Moore was being handled by both: Moore had contacts inside
+      the Soviet Union and knew scientists in the Soviet Academy of Sciences, which made him a very important asset. Another
+      person was actually feeding Moore the disinformation that reached the groups. Doty names this as the one part of his
+      service he still regrets, while maintaining he did everything by the book.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - recruiter and handler
+    has_established_name: true
+    nested_within: ''
+    approx_when: late 1970s to mid 1980s; Moore's public admission at a MUFON symposium in 1989
+    approx_where: United States; MUFON, APRO and CAUS
+    approx_line_start: 1052
+    approx_line_end: 1085
+  - title: Pressuring two Nevada MUFON investigators away from a close-encounter witness
+    subject: Two unnamed MUFON field investigators out of Nevada, and the unnamed man near the Nellis Test and Training Range
+      whose close encounter they were documenting
+    summary: 'Asked what he would have done differently, Doty names one occasion: he would not have targeted people inside
+      a UFO group. Two MUFON investigators from Nevada were legitimately collecting very good information from a man who had
+      had a close encounter not far from the Nellis Test and Training Range. Doty was part of an attempt to convince them
+      the witness was a liar already investigated and discredited, while both they and Doty knew he was not. Another agent
+      was brought in to apply more pressure. Doty says the investigators did not believe any of it, that they won and OSI
+      lost, that deception operations were not always successful, and that even the thugs from the 7602nd Intelligence Wing
+      had to operate mostly within the law. Three unnamed protagonists, and the only failed deception operation he narrates.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - part of the effort to discredit the witness, though not the agent who applied the additional
+      pressure
+    has_established_name: false
+    nested_within: ''
+    approx_when: 1980s
+    approx_where: Nevada, near the Nellis Test and Training Range
+    approx_line_start: 1088
+    approx_line_end: 1113
+  - title: The MJ-12 document reaching Jaime Shandera and the seizure of Bill Moore's copy in San Francisco
+    subject: The Majestic 12 briefing document delivered to Jaime Shandera, and Doty's seizure and onward transmission of
+      a copy taken from Bill Moore
+    summary: 'Doty says the story starts two weeks earlier: Shandera, an asset then being used by the Naval Investigative
+      Service, went to Washington and met somebody at the Botanical Gardens, where he was told certain things. About two weeks
+      later the document appeared postmarked Albuquerque, but FBI analysis found the marking was not a genuine postal mark,
+      so it was never mailed - it was placed in his box, a dead drop. Shandera contacted Moore, who later showed Doty a copy
+      of a copy in a San Francisco hotel room while the two were there on unrelated business. Doty seized it as a federal
+      agent because it bore classification markings, took it to the OSI office at Travis Air Force Base in Fairfield to be
+      packaged for the armed forces courier system, had it mailed to him at Kirtland, then forwarded it to headquarters. A
+      contact called Benjamin confirmed arrival; a month later he was told it had been passed on and that he did not need
+      to know. He concluded a deception operation had occurred and points to the Special Means Committee within DIA, which
+      produces such documents for counter-espionage passage material. He notes the FBI targeted DIA when this was investigated
+      in 1987-88 and that DIA denied it.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant in the seizure and transmission; hearsay for the document's origin
+    has_established_name: true
+    nested_within: ''
+    approx_when: document received around 1984; the FBI investigation 1987-88
+    approx_where: Washington DC; Albuquerque, New Mexico; a San Francisco hotel room; Travis Air Force Base, California; Kirtland
+      Air Force Base
+    approx_line_start: 1134
+    approx_line_end: 1240
+  - title: Colonel Law's remark about the MJ-12 documents at a UFO convention
+    subject: Colonel Law, chief of counterintelligence for AFOSI, and what he told Doty years later about whether the MJ-12
+      material was genuine
+    summary: 'Doty says he learned this years afterwards, not during the 1980s. He collected Colonel Law, then chief of counterintelligence
+      for OSI, from the airport and brought him to a UFO convention near its end. Sitting talking, the subject of Ryan Wood''s
+      father came up, and Law remarked that he never thought that material would end up where it ended up. Doty asked him
+      directly whether it was real; Law replied by asking how many counter-espionage operations Doty had run and reminding
+      him that you have to give them some of the real stuff. That was all he said. Doty takes it to mean the MJ-12 documents
+      mix legitimate information with fabricated material, while stating he cannot confirm it because he was not the author.
+      Distinct from the seizure account in time, place, participants and evidential status: this is a remark he interprets,
+      not an operation he ran.'
+    confidence: medium
+    found_by:
+      - protagonist
+      - reviewer
+    doty_role: direct participant - collected Law from the airport and had the conversation
+    has_established_name: false
+    nested_within: ''
+    approx_when: years after the 1980s; no year given
+    approx_where: a UFO convention, location not stated
+    approx_line_start: 1262
+    approx_line_end: 1282
+  - title: Showing Linda Moulton Howe a presidential briefing document at Kirtland
+    subject: Linda Moulton Howe, brought onto Kirtland Air Force Base to read a document under controlled conditions, and
+      the headquarters operation to identify her Pentagon source
+    summary: 'Doty was tasked about a week ahead to make an appointment and let Howe read material that would be sent to him.
+      A package arrived by armed forces courier which he only skimmed; on the morning of the meeting he read it properly and
+      judged it a presidential briefing document, while wondering how much of it was real. A room with a two-way mirror was
+      prepared and everything was recorded on audio and video. He cleared her through the gate and set the rules - she could
+      read it, take no notes, take no photographs - and she read it several times over about 35 to 40 minutes before he repackaged
+      it and returned it to headquarters. The wider operation was run from headquarters, not by him: Howe was making a UFO
+      documentary for HBO with information from an Air Force officer at the Pentagon, and Doty''s job was to get that officer''s
+      name so a case could be run against him. He says he was totally unsuccessful; she gave him other information but never
+      names.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - the field agent handling the meeting, not the case agent
+    has_established_name: true
+    nested_within: ''
+    approx_when: early to mid 1980s, during Howe's HBO documentary period
+    approx_where: Kirtland Air Force Base, Albuquerque, New Mexico
+    approx_line_start: 1290
+    approx_line_end: 1370
+  - title: The civilian who saw the Aurora prototype and was given an invented UFO sighting
+    subject: An unnamed civilian who witnessed what Doty identifies as the first prototype of the Aurora aircraft, and the
+      fabricated UFO sighting he was given to account for it
+    summary: 'Asked directly what he passed on knowing it to be false, Doty gives this case. A civilian saw a real experimental
+      craft, which Doty identifies as the first Aurora prototype, developed in the same period the F-117 was at Tonopah. OSI
+      invented a UFO sighting said to have occurred at the same time as the real one, and Doty fed it to him: everything he
+      told the man about that UFO was false, it came down from headquarters, and he probably embellished it further himself
+      to be convincing. The man was thoroughly convinced, and Doty then had him sign a non-disclosure agreement. The clearest
+      first-person admission in the interview of a manufactured UFO event injected into the record, attached to a witness
+      who has never been identified.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - delivered and embellished the false account, took the non-disclosure agreement
+    has_established_name: false
+    nested_within: ''
+    approx_when: 1980s, contemporaneous with F-117 operations at Tonopah
+    approx_where: not stated; implied near the Nevada test ranges, Tonopah area
+    approx_line_start: 1382
+    approx_line_end: 1396
+  - title: The paid prostitute informants around the Nellis range and the F-117 major who talked
+    subject: An AFOSI programme paying prostitutes around the Nellis Test and Training Range as informants, one of them in
+      Pahrump, and the unnamed married Air Force major flying the F-117 whom she reported
+    summary: Because prostitution was legal in Nye County and the surrounding counties in the late 1970s and 1980s, Doty's
+      job included recruiting and paying every prostitute around the Nellis range to report any Air Force person who talked
+      about his work; he calls them the best sources of information they had. One woman in Pahrump reported a regular client,
+      a major flying the F-117, who impressed her with stories about the aircraft, including that they could chase flying
+      saucers with it. On Doty's instruction she reported his next appointment; they bugged the room and recorded about twenty
+      minutes of him talking. Doty collected him from his suite at the Tonopah dormitory, left him waiting in a camera-monitored
+      interrogation room, opened by reciting his rank, flying hours, aircraft, wife at Edwards and two children, at which
+      the major started crying, then read him his Article 31 rights, had him sign, and obtained a full admission. He was taken
+      off flying status, returned to Edwards and removed from the programme.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - ran the source, arranged the bug, conducted the interrogation
+    has_established_name: false
+    nested_within: ''
+    approx_when: late 1970s to 1980s
+    approx_where: Pahrump and Tonopah, Nye County, Nevada; the major's family at Edwards Air Force Base, California
+    approx_line_start: 1400
+    approx_line_end: 1551
+  - title: The taping of the UFO Cover-Up television special in which Doty appeared as Falcon
+    subject: Doty's scripted on-camera appearance under the alias Falcon, alongside Bob Collins as Condor, recorded about
+      fifteen months before broadcast as part of a joint OSI and FBI operation
+    summary: 'Doty corrects the interviewer twice: the programme was not live, and it was recorded about fifteen months before
+      it aired, in October 1987. It was part of another operation, run by OSI with the FBI, intended to draw out somebody
+      who had disclosed classified information to a third party; he was not involved in that side and did not know at the
+      time what would happen a year later. He worked from a script. Most of what he said, he maintains, was real, with some
+      misinformation mixed in that he no longer remembers. Challenged on the strawberry ice cream detail he insists it was
+      real, tracing it to Linda Howe''s 1980 interview with the captain said to have lived with EBE-1 from 1947, while agreeing
+      that its function was that nobody would believe it. He is sure the project had a name but cannot recall it.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - the on-camera source working to a supplied script, not read into the wider operation
+    has_established_name: true
+    nested_within: ''
+    approx_when: recorded around mid-1986 to October 1987; broadcast 1987 or 1988
+    approx_where: United States; broadcast television
+    approx_line_start: 1561
+    approx_line_end: 1660
+  - title: Chris Ramsay's account of David Copperfield's father's 1945 Roswell identity card
+    subject: The father of the magician David Copperfield, said to have been stationed at Roswell Army Air Field in 1945 in
+      counterintelligence, under a different surname and a squadron designation that did not fly
+    summary: 'Narrated by the interviewer, not by Doty. Ramsay says he holds a photograph of a 1945 Roswell Army Air Field
+      identity card belonging to David Copperfield''s father, showing counterintelligence duty and Squadron C6, which he says
+      was not an actual flying squadron; the surname differs from the stage name. He says almost nobody knows this, that Copperfield''s
+      mother may also have been stationed near Roswell, and that Copperfield found the card while going through his father''s
+      belongings after his death, which was the driving force behind the long-running Las Vegas show built around a UFO and
+      an alien. Doty repeatedly says he had never heard any of it. Included because an account layer must record who is telling
+      a story: attributing this to Doty would be a straightforward error.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: none - narrated by the interviewer; Doty disclaims any knowledge of it
+    has_established_name: false
+    nested_within: ''
+    approx_when: identity card dated 1945; the discovery and the Las Vegas show much later
+    approx_where: Roswell Army Air Field, New Mexico; Las Vegas, Nevada
+    approx_line_start: 1689
+    approx_line_end: 1740
+  - title: Digging up a South Dakota rancher's buried craft for Hal Puthoff's institute
+    subject: An unnamed rancher who buried an object that crashed on his land in the 1950s or early 1960s and told nobody,
+      his grandson who eventually passed word on, and the excavation arranged decades later
+    summary: Working for Hal Puthoff, Doty was sent to interview people with connections. A UFO had crashed on a rancher's
+      land, he thinks around 1958, and the rancher buried it and never told anyone; both the grandfather and the father were
+      dead, and only the grandson was left, who passed word along a chain that reached Puthoff. Doty went to South Dakota
+      with others from the laboratory to establish what had been buried. The only marker the grandson had was a patch where
+      nothing would grow however much it was watered - that was the place. He says they saw a lot, that somebody saw what
+      was taken out of the ground, and that it was turned over to the government, probably going to Groom Lake. He places
+      the dig around 2000 to 2002 and the site in the south-west corner of the state south of Keystone, a couple of hundred
+      miles from Ellsworth Air Force Base and near a later Minuteman site, and says he set everything up but handled and analysed
+      nothing.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - located the site and set the operation up; no access to the material or its analysis
+    has_established_name: false
+    nested_within: ''
+    approx_when: crash in the 1950s or early 1960s; excavation around 2000 to 2002
+    approx_where: south-west South Dakota, south of Keystone, a couple of hundred miles from Ellsworth Air Force Base
+    approx_line_start: 1834
+    approx_line_end: 1915
+  - title: The disc found in a mine shaft, pulled out by the DART team and stored at Tonopah
+    subject: A disc about five feet across, said to have crashed in the 1960s and been placed in a mine shaft by miners, found
+      by a mining exploration team around 1980-81 and recovered by a government Down Aircraft Recovery Team
+    summary: Doty says he was physically at one crash site where the crash itself had happened years earlier and had only
+      just been discovered. A mining exploration team working a shaft found the object; investigators assumed it had come
+      down outside the shaft and that the miners, not knowing what to do with it, put it inside, with no record of any report.
+      He went as part of a team doing the counterintelligence work on the people who found it, and watched the Special Down
+      Aircraft Recovery Team pull it out. He describes a disc about five feet in diameter with one indented section, possibly
+      from impact, and no opening anyone could find. It went to Tonopah, and when he was there in 1984 it was still unopened;
+      he understood it was opened three or four years after recovery but was never told what was inside, speculating that
+      occupants would have had to be about two feet tall and that someone told him it was probably a scout craft. He identifies
+      this as the first craft he saw with his own eyes.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - counterintelligence work on the finders, eyewitness to the extraction and to the object
+      at Tonopah
+    has_established_name: false
+    nested_within: ''
+    approx_when: crash dated to the 1960s; discovery and recovery 1980 or 1981; Doty saw it again at Tonopah in 1984
+    approx_where: a mine shaft, location not stated; the object taken to Tonopah, Nevada
+    approx_line_start: 1919
+    approx_line_end: 2000
+  - title: The night callout to a crash near Warm Springs, Nevada, and the driver who had hauled round things before
+    subject: A crash site outside the Nellis Test and Training Range near Warm Springs that Doty attended as duty on-call
+      counterintelligence officer, the covered bodies there, and the trucking foreman hired to move the object
+    summary: 'Doty says this was the on-call scenario he had described earlier, and that it really happened. He and his partner
+      drove to a site near Warm Springs outside the Nellis range. Asked whether beings were involved he says yes, but is careful
+      that the bodies were already covered when he arrived, so he will not claim to have seen them; he assumed they were alien
+      and estimates at least five feet. His job was to set up what he calls the counterintelligence ring: debriefing the state
+      trooper and the Nye County sheriff''s deputy on scene, and arranging a flatbed from a trucking company in Hawthorne,
+      Nevada that regularly hauled ordnance from the army depot there. He insisted the driver be ex-military and able to take
+      orders. When he briefed the foreman that he would pick something up, move it and ask no questions, the man said he had
+      done it before - he had picked up ''these round things'' and taken them out to the base - which convinced Doty he had
+      the right man. Another agent with full access took over the recovery; Doty was not present for it.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - first agent on scene, ran the scene's counterintelligence and arranged the transport;
+      absent for the recovery
+    has_established_name: false
+    nested_within: ''
+    approx_when: Doty's OSI service, late 1970s to 1980s
+    approx_where: near Warm Springs, Nye County, Nevada, outside the Nellis Test and Training Range; haulier from Hawthorne,
+      Nevada
+    approx_line_start: 2009
+    approx_line_end: 2105
+  - title: The repeatedly abducted Air Force sergeant at Kirtland
+    subject: An unnamed female US Air Force sergeant stationed at Kirtland Air Force Base, repeatedly abducted and injured
+      over a period of years, investigated by AFOSI and the wider intelligence community, and now said to be a whistleblower
+      listed in Congress
+    summary: The case Doty names as the single thing that convinced him. Injuries began while she lived in the on-base female
+      dormitory - a fingernail or toenail removed with the skin beneath scraped, a punctured right eardrum - and were treated
+      as self-mutilation; because she held personnel reliability programme status she was moved to an administrative job,
+      which upset her. After a night in the emergency room bleeding vaginally with puncture marks between the toes of her
+      left foot, the rape protocol was run and a gynaecologist found no intercourse but that something had been inserted.
+      She was admitted, then sent to the Air Force psychiatric hospital at Sheppard Air Force Base, Wichita Falls, for months;
+      the female psychiatrist's report, which Doty read and had checked in person, concluded it was not self-mutilation and
+      that some outside entity was responsible. A base internist already co-opted by OSI referred her; Doty and a female agent
+      interviewed her, and she spoke only of somebody taking her, not of aliens. Her boyfriend was interviewed and polygraphed
+      and cleared, and described her screaming in her sleep. She passed a polygraph and then a rarely used hypnotic polygraph,
+      at which point headquarters and DIA came in fully on her side. Technical staff covertly bugged her off-base apartment;
+      the audio caught multiple echoing voices speaking clear English, as if through cheerleaders' cones, telling her to lift
+      her arm and spread her legs. A surreptitious search found only a reel-to-reel recorder that was recording, not projecting.
+      Played the tape, she confirmed it was them and said they also spoke in her head. She described being taken out through
+      her bedroom window to a craft, lying on a table in a round room she called a bubble, insect-like beings badgering her
+      about who God is while she prayed, then losing consciousness and waking in her bed. Doty says she retired, taught school,
+      is a grandmother near Baltimore, has been interviewed by members of Congress and at least two senators, that he spoke
+      with her in Washington DC in 2022, and that she has had no abductions for about thirty years. The case is introduced
+      in compressed form 2,000 lines earlier, at line 165, as the Air Force sergeant with something placed under her tongue
+      who is a whistleblower listed in Congress; that is the same person and the same case.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - one of the two agents who first interviewed her, read the psychiatric report, heard about
+      ten seconds of the covert audio, played her the tape; excluded from the technical methods and never saw the video
+    has_established_name: false
+    nested_within: ''
+    approx_when: over roughly a year or more during Doty's Kirtland service, early to mid 1980s; final contact in Washington
+      DC in 2022
+    approx_where: female dormitory at Kirtland Air Force Base then an apartment about a quarter of a mile off base, Albuquerque,
+      New Mexico; Sheppard Air Force Base, Wichita Falls, Texas
+    approx_line_start: 2203
+    approx_line_end: 2960
+  - title: The night the surveillance operation prevented the sergeant's abduction
+    subject: A multi-agency surveillance operation at the sergeant's off-base apartment on a night the government had predicted
+      she would be taken, and the FBI agent who broke down afterwards
+    summary: 'A bounded single-night episode inside the larger case. Doty says that by methods and sources he will never discuss
+      they knew when she would be taken, and set up a surveillance at her small two-storey apartment just outside Kirtland,
+      bedroom upstairs. Air Force intelligence, the FBI, OSI, the NSA and contractors were all involved. The operation succeeded:
+      the abduction was thwarted, she was not taken that night, and she was moved to a secure facility in the Sandia Laboratories
+      area of the base in case the beings came after her. An FBI agent who had worked the case for months and disbelieved
+      her throughout - a Vietnam veteran of a special operations group - sat in a room afterwards crying because he had doubted
+      her; Doty says it changed him, and that he later worked with him on the Bennewitz case. Doty identifies the species
+      as the insect-like ones on a list he has brought and says they can manipulate how they are observed. He will not say
+      what was used to stop it, only that it was not guns but a technology he knows how to use and cannot explain.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - reviewer
+    doty_role: direct participant - involved in setting up the surveillance; not present for the abductions themselves
+    has_established_name: false
+    nested_within: The repeatedly abducted Air Force sergeant at Kirtland
+    approx_when: Doty's OSI service at Kirtland, 1980s
+    approx_where: an apartment complex just outside Kirtland Air Force Base, and a secure facility in the Sandia Laboratories
+      area of the base, Albuquerque, New Mexico
+    approx_line_start: 2264
+    approx_line_end: 2400
+  - title: The footage cut from the film Disclosure Day and the private Palm Springs screening
+    subject: Claims that footage was removed from a recent Spielberg film about extraterrestrial contact at the government's
+      insistence, and a longer version said to have been screened privately to government personnel
+    summary: Doty says the widget shown in the film is real and that the director must have been briefed - he is a hundred
+      per cent sure of it. He says a reliable source, a friend at Spielberg's production company, told him footage was cut
+      because the government said it could not be shown; he has heard both eighteen and six minutes. He watched the film twice
+      and says he can almost tell where the cuts fall, particularly the abrupt ending, where he was told the woman was supposed
+      to say more and the alien voices were to be heard, and also at the scene with the alien head device and at the beginning.
+      He notes the credits acknowledge no government department, unlike other productions. He also says a man who works for
+      the government told him he had seen a longer version at a special showing and that Doty is going to visit him next week;
+      the interviewer places the screening in the Palm Springs area during Contact in the Desert and mentions private jets
+      landing, and Doty adds at least two DARPA people and an Air Force colonel. Hearsay twice over, which he flags himself.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: hearsay - relaying what a contact at the production company and a government acquaintance told him; he has
+      not seen the longer cut
+    has_established_name: false
+    nested_within: ''
+    approx_when: 2026, shortly before the interview, with a follow-up visit planned the following week
+    approx_where: a private screening in the Palm Springs area, California; Spielberg's production company
+    approx_line_start: 2972
+    approx_line_end: 3170
+  - title: The passengers taken to the S2 Annex and the van crash near Rachel
+    subject: Two visitors, later said to be Carthusian monks, being transported to the S2 Annex creature containment facility
+      at Groom Lake, and the road accident that briefly exposed them
+    summary: Doty says he knew in the 1980s of an operation at Groom Lake bringing people into what was called the S2 Annex,
+      the Creature Containment Facility, which had special environments for the extraterrestrials held there. He did not know
+      at the time who the visitors were. They flew into Las Vegas, were bussed to Nellis, spent a night there and were then
+      driven out. One of the vans crashed near Rachel; because the highway patrol was investigating, Doty had to go up and
+      interface with them, and arranged another van from Groom Lake to collect the passengers. He knew only that they were
+      important officials. Agent Harrison, who ran the counterintelligence side of the S2 Annex operation, gave him limited
+      access so he could code his report, telling him they were going up as interpreters, which is what Doty wrote. His actual
+      involvement is a road traffic accident and a coding decision, attached to an extraordinary claim.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: peripheral direct participant - handled the accident scene with the highway patrol, arranged the replacement
+      van, coded the report under limited access
+    has_established_name: false
+    nested_within: ''
+    approx_when: 1980s
+    approx_where: the road towards Groom Lake near Rachel, Nevada; Las Vegas and Nellis Air Force Base; the S2 Annex
+    approx_line_start: 3205
+    approx_line_end: 3239
+  - title: The failed attempt to reach the two Carthusian monks at the Vermont monastery
+    subject: Two elderly Carthusian monks, Brother John and another, said to have been the men who communicated with a captive
+      extraterrestrial decades earlier, and Doty's own trip to the closed Vermont monastery
+    summary: 'Thirty to forty years later the story surfaced through Jon Stewart''s circle: two Carthusian monks with a gift
+      for communicating with extraterrestrials, still alive at the monastery. Doty and another man drove up. At the foot of
+      the hill is a gift shop where the monks sell honey; they knew the men''s names but were told the monks receive no visitors
+      beyond one family member a year, that these two have no family, and that they are very old and in something like hospice
+      care. What struck Doty was a Vermont state trooper patrolling from the gift shop gate up the private road and back.
+      The local state police barracks told them to leave and that it was none of their business, and a records request returned
+      only that somebody, unnamed, pays the troopers overtime. He adds that a man called Gene, a director of security at Area
+      51 in the 1980s, told the same story of the two monks being gifted, speculates about the Vatican as the source of the
+      gift, and thinks the species they communicated with was a type of grey. A separate investigation from the 1980s episode
+      it grew out of, with a different role, different evidence and a concrete checkable anomaly.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - travelled there himself, made the enquiries and filed the records requests
+    has_established_name: false
+    nested_within: ''
+    approx_when: recent years, thirty to forty years after the 1980s operation
+    approx_where: a Carthusian monastery in northern Vermont
+    approx_line_start: 3240
+    approx_line_end: 3305
+  - title: How the Alien Interview film was smuggled out of Groom Lake
+    subject: An unnamed Air Force sergeant said to have copied the film in the Groom Lake audiovisual laboratory and passed
+      it to the man known publicly as Victor
+    summary: Doty says he knows the film is real because the man who smuggled it out has spoken to them - not Victor, who
+      released it, but the Air Force sergeant who gave it to Victor. That sergeant worked in the audiovisual laboratory at
+      Groom Lake during a period when material was being digitised and had the access needed to copy it; he kept it and eventually
+      handed it over. Doty says the technician spoke to them on a couple of separate occasions and will not allow his name
+      to be used because unauthorised disclosure of classified information carries no statute of limitations and he could
+      still be prosecuted. Pressed on whether the film could be passage material, or whether the technician might unknowingly
+      have copied a re-creation, Doty concedes the latter is possible but does not accept it, saying the man emphatically
+      told them what he did. The account is a provenance chain, not an event, and it is the only support he offers for calling
+      the film real.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant in the interviews with the source; hearsay for the smuggling itself
+    has_established_name: true
+    nested_within: ''
+    approx_when: the copying during a digitisation period, undated; the interviews more recent
+    approx_where: the audiovisual laboratory at Groom Lake, Nevada
+    approx_line_start: 3313
+    approx_line_end: 3355
+  - title: Seeing a living extraterrestrial on a closed-circuit monitor and having to report it
+    subject: A living being Doty says he watched for about twenty seconds on a closed-circuit television screen in a facility
+      he was not cleared for, and the security paperwork that followed
+    summary: Pressed on whether the Alien Interview film could be a re-creation, Doty falls back on having been at the facility
+      himself. He went in to interview somebody and found himself watching a closed-circuit feed of an alien inside a room.
+      He asked the man he was there to see what it was and was told they were talking to one of the visitors. He watched twenty
+      to twenty-five seconds - a big head and large eyes, held in something like a harness or a swing for a disabled person
+      with straps around it, moving as though talking - and could not see who else was in the room. A colonel came in and
+      told him he was not cleared to be there; when Doty produced OSI credentials the colonel appeared to assume he was cleared
+      and let it go. Back at the office he reported the unauthorised access to his boss, filled out a form 18 and one or two
+      other forms declaring he had seen material he was not cleared for, and was counselled not to do it again. His only claimed
+      direct sighting of a living being, twenty seconds long, with a paper trail.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct witness, accidentally and without clearance; also the subject of the resulting security report
+    has_established_name: false
+    nested_within: ''
+    approx_when: Doty's OSI service, 1980s
+    approx_where: a classified containment facility, implied to be the S2 Annex area at Groom Lake, Nevada
+    approx_line_start: 3439
+    approx_line_end: 3505
+  - title: The captain's wife taken from Interstate 25 near Springer and found at Eagle Nest Lake
+    subject: An unnamed dependent wife of an Air Force captain who lost six hours after a roadside breakdown on Interstate
+      25 in northern New Mexico and woke seventy miles away without her infant
+    summary: She left Kirtland driving north on Interstate 25 towards relatives in Colorado with a seven or eight month old
+      baby in a car seat. Just before the first Springer exit, about forty miles from the state line, the car developed trouble
+      and she pulled over; the car lit up, she felt dizzy and lost time. She woke six hours later walking the shoreline of
+      Eagle Nest Lake, seventy miles west, with no idea where she was and no child. A New Mexico state trooper found the vehicle
+      and the baby, ran the plate and reached her husband, who said she had left for Pueblo. A fisherman found her distraught
+      by the lake; he and another man searched for a car that could not be found, and one drove seven miles to a petrol station
+      to call. She was taken to the hospital at Raton, where staff concluded she had been raped, and the baby was taken there
+      too. The next afternoon the captain brought her to the OSI office and said she had been taken out of the vehicle into
+      a flying saucer; Doty did not believe it and assumed she was covering an affair. He interviewed her with a female agent,
+      the assault was left to the state police, who cleared the two fishermen using secretor testing when no semen was found,
+      and another agent took the case. Months later the female agent walked into his office, said only that the case was legitimate,
+      and walked out; Doty says the widget was brought in and confirmed she was telling the truth. The human reviewer highlighted
+      not one word of this 140-line passage.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: peripheral direct participant - took the initial report and one interview; another agent ran the case, and
+      the outcome reached him as a one-sentence briefing
+    has_established_name: false
+    nested_within: ''
+    approx_when: Doty's OSI service at Kirtland, late 1970s or 1980s
+    approx_where: Interstate 25 near Springer, New Mexico; Eagle Nest Lake; the hospital at Raton; the OSI office at Kirtland
+      Air Force Base
+    approx_line_start: 3530
+    approx_line_end: 3678
+  - title: The submarine crewman who took a piece of something and gave it to a Kirtland contractor
+    subject: An unnamed former US Navy submariner who removed an object during a 1970s patrol and later handed it to a defence
+      contractor at Kirtland Air Force Base to be identified
+    summary: One of only two UFO-related cases Doty says he worked with Naval Intelligence. A submarine crew member in the
+      1970s was on a boat that went somewhere, found something and took a piece of it - he calls it a widget. He left the
+      Navy, moved to Albuquerque and worked as a civilian for a contractor on Kirtland Air Force Base, where he gave the object
+      to the contractor to identify. Naval Intelligence learned of it, came to Albuquerque and wanted him picked up; because
+      he was now a civilian and it involved espionage, Doty brought in the FBI through his usual contact, agent Jerry Brown.
+      They went to the contractor's office and found the man walking out of a laboratory; they called him by name and produced
+      credentials from the FBI, OSI and Naval Investigative Service, and his first words were that they had it inside, it
+      was over there. They spoke to him in the office by the coffee area, then took him to the OSI office, where Naval Intelligence
+      ran the interrogation. Doty thinks the object stayed at the laboratory, which was already cleared for it.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - arranged the FBI involvement and was present at the approach; Naval Intelligence conducted
+      the interrogation
+    has_established_name: false
+    nested_within: ''
+    approx_when: the object taken in the 1970s; the case worked during Doty's OSI service
+    approx_where: a contractor's laboratory on Kirtland Air Force Base, Albuquerque, New Mexico
+    approx_line_start: 3773
+    approx_line_end: 3825
+  - title: The Space Force approaches and the Defense Inspector General's questions about the 1981 report
+    subject: Attempts to bring Doty back into government work after 2021, and two sessions at the Defense Inspector General's
+      office in Washington about cases he ran as an OSI agent
+    summary: Lue Elizondo telephoned Doty in 2021 or 2022, asked whether he was still working and whether he would be interested
+      in a counterintelligence post with Space Force. Doty declined, said he knew a colonel up there and asked whether that
+      colonel had given his name; Elizondo would not say. Weeks later another Space Force person called about field work and
+      whether he could recover his security clearance, naming somebody Doty had already dealt with. That name came from his
+      January 2022 trip to Washington, where the Defense Inspector General's office asked about cases he had run and handed
+      him a heavily redacted report; he recognised it as one he wrote in 1981 and asked for an unredacted copy, and was told
+      OSI would not release it because it was still classified. He returned in September 2022, when they had an unredacted
+      version to discuss. He says he never worked for Space Force and never promised to, and supposes they wanted to contract
+      him to do what he did before. The human reviewer highlighted none of it.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - the person approached and interviewed
+    has_established_name: false
+    nested_within: ''
+    approx_when: 2021 to September 2022
+    approx_where: telephone calls; the Defense Inspector General's office, Washington DC
+    approx_line_start: 3868
+    approx_line_end: 3922
+  - title: The case-file list on the internet and the freedom-of-information flood it caused
+    subject: A list of Doty's OSI case numbers and project names - Capstone White, Auburn Blue, Medlap Star, Candid Sky -
+      circulating publicly, and the AFOSI freedom-of-information monitor who telephoned him about it
+    summary: 'Shown a list by the interviewer, Doty confirms the project names are his own case files and case numbers, that
+      the list has been on the internet for about four years, and that a very large number of freedom-of-information requests
+      have followed. He says the OSI freedom-of-information monitor, a woman whose name he thinks is Fulton, telephoned him
+      and said ''you don''t know what you''ve done'', and that he replied requesters would get material but heavily redacted.
+      He points to one file, numbered 82, released as eighty-seven pages of nothing with not even the page numbers releasable,
+      and says that one genuinely should be redacted because it would disclose sources and methods and involves aliens - while
+      other files are redacted with no justification. A borderline case: a real bounded episode (a telephone call with a named
+      caller, a quote and a consequence) wrapped in commentary about redaction policy.'
+    confidence: low
+    found_by:
+      - evidence
+    doty_role: direct participant - the source of the list and the recipient of the call
+    has_established_name: false
+    nested_within: ''
+    approx_when: the list online about four years; the call after that
+    approx_where: United States; the AFOSI records system
+    approx_line_start: 3924
+    approx_line_end: 3985
+  - title: The pilot who fired two Sidewinders at a craft that repaired itself
+    subject: An unnamed Air Force pilot flying a classified escort mission out of the Groom Lake area who shot down a flying
+      saucer and watched it reassemble itself and fly away
+    summary: 'Going through the titles of his case files, Doty says some involve pilots on classified missions who had close
+      encounters, and that in two of them something was actually shot down. He describes one: a pilot flying a classified
+      mission inside the United States, escorting another highly classified aircraft, out of the Groom Lake area. A flying
+      saucer came up and passed so close it nearly hit his canopy. Angered, he banked and pursued it while still covering
+      the other aircraft; it went down, he followed and fired two Sidewinder missiles. They hit and it crashed. Being in a
+      jet he could not land, so he circled, and he reported that the object repaired itself and flew away. Doty compares it
+      to the Transformers films and says there is much more to the case that he cannot discuss and that the details would
+      rightly be classified. His role is documentary - it is one of his case files - not participatory.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: briefed only - describes it from a case file he wrote or held; not present and not the investigator on scene
+    has_established_name: false
+    nested_within: ''
+    approx_when: Doty's OSI service, late 1970s or 1980s
+    approx_where: airspace over the United States, flying out of the Groom Lake area, Nevada
+    approx_line_start: 3986
+    approx_line_end: 4015
+  - title: The A-7D captain who photographed a craft while fishing and lost thirteen hours
+    subject: An unnamed US Air Force captain and A-7D pilot stationed at Kirtland who reported an encounter and missing time
+      while camping alone at a small lake in northern New Mexico
+    summary: Doty calls this the best of his alien-encounter cases and the most serious he handled. The captain was camping
+      and fishing alone at a small lake about 250 miles north of Kirtland. About fifteen or twenty minutes into fishing, around
+      08:30, he heard a pulsating sound he had never heard before and saw an object descending with something pulsating beneath
+      it. He dropped his rod, fetched the Polaroid camera he kept for photographing his catch, crossed sixty or seventy yards
+      to the tree line at the clearing and began taking pictures. Two beings about seven feet tall, helmeted, faces not visible,
+      appeared beside him; he dropped the camera, thought he was about to be abducted although he had never been briefed on
+      abductions, began hearing voices in his head, sat down on the ground for reasons he could never explain, and woke in
+      his sleeping bag inside his tent at 21:30. Two exposures lay where he dropped the camera, one smudged and one clear,
+      showing a hovering object with distortion beneath it. He telephoned the OSI office the following Monday asking for whoever
+      handled flying saucers; Doty took the call and assumed it was a crank until the man identified himself as a captain
+      and came in in uniform with the photograph. He passed a polygraph and hypnosis. Four or five days later Doty and another
+      agent drove north with him and found the tent still standing and the fishing rod still by the water, because he had
+      left in a hurry; they took the sleeping bag and his clothing as trace evidence.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant - took the initial call, ran the investigation, visited the site and collected evidence
+    has_established_name: false
+    nested_within: ''
+    approx_when: Doty's OSI service, late 1970s or 1980s
+    approx_where: a small lake in northern New Mexico about 250 miles north of Kirtland Air Force Base, rendered in the transcript
+      as 'Lake Solidwood place'
+    approx_line_start: 4028
+    approx_line_end: 4185
+  - title: The man who walked into a rock crevice near Sedona and never came out
+    subject: An unnamed man who answered a Sandia National Laboratories advertisement claiming to be a time traveller, and
+      who Doty says entered a crevice in a rock face near Sedona under observation and never emerged
+    summary: 'Sandia National Laboratories was running experiments on time travel at Kirtland and at the Nevada Test Site
+      and placed advertisements in magazines. A man responded saying he was a time traveller and could prove it. After a full
+      investigation he took them to a site near Sedona, Arizona, saying he would walk through a time portal and return with
+      something. Doty and the Sandia party, who thought he was lying, watched from some distance as he barely squeezed into
+      a small crevice in a rock face with nothing on the other side; it was filmed. They waited for hours and he never came
+      out, and Sandia staff and contractors afterwards examined the crevice trying to work out how he could have got away.
+      The background checks are what Doty finds striking: searches of the defense index of indices, the FBI and the IRS found
+      only one person matching the name, born in 1879, he thinks in Billings, Montana - the identity the man claimed. A claimed
+      address in Barstow, California and a claimed employer in Bend, Oregon around 1934 could not be verified because the
+      company no longer existed and nobody knew of him; the only corroborating trace was a name on a ship''s manifest from
+      Cuba to New York around 1907. Doty says Sandia went on to consider hiring him and put him through psychological and
+      physical examination, in which he had no part.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct witness - present and watching when the man entered the crevice; not the lead investigator on the background
+      work
+    has_established_name: false
+    nested_within: ''
+    approx_when: 1980s
+    approx_where: a rock face near Sedona, Arizona; the programme run from Sandia National Laboratories at Kirtland Air Force
+      Base and the Nevada Test Site
+    approx_line_start: 4205
+    approx_line_end: 4295
+  - title: Watching the fabric of space open at the Nevada Test Site
+    subject: An underground facility at the Nevada Test Site with large magnets through which objects were fired, and something
+      Doty says he saw open during an experiment
+    summary: Doty says there was an underground facility at the Nevada Test Site with huge magnets through which things were
+      being shot. He stresses he is not a scientist and is describing what he saw as a layman. During one experiment something
+      opened; the scientist standing next to him told him he had just seen the fabric of space opening. He says it lasted
+      a fraction of a second, dates it to the 1980s, and invites the listener to imagine what is possible now. Short, but
+      a bounded first-hand observation with a second protagonist whose single line supplies the interpretation, and distinct
+      from the Sedona episode it is told alongside.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct witness - present in the room during the experiment
+    has_established_name: false
+    nested_within: ''
+    approx_when: 1980s
+    approx_where: an underground facility at the Nevada Test Site
+    approx_line_start: 4312
+    approx_line_end: 4328
+  - title: The Lancaster, Pennsylvania Civil War photograph with a jet in the background
+    subject: A Civil War battlefield photograph, said to have been taken at Lancaster, Pennsylvania by a Union photographer,
+      in which a modern aircraft appears in the background
+    summary: 'Doty raises this himself, calling it the Lancaster incident. He says there is a story in a very old book, written
+      in the eighteen hundreds, that Bill Moore owned. During the Civil War a photographer, whom Doty believes was Union,
+      photographed a battlefield at Lancaster, Pennsylvania with one of the large plate cameras of the period, and in the
+      background of that photograph there is a jet which looked to Doty like a B-1B bomber. A man spoke about the picture
+      at a UFO convention around 2005 or 2006 but had nothing beyond the image: no explanation, no evidence, no original -
+      a picture of a picture of a picture. The account''s whole substance is the weakness of its own provenance, which Doty
+      states himself and which is lost if the B-1B claim is extracted alone.'
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: hearsay at several removes - from an old book Bill Moore held and a convention talk
+    has_established_name: true
+    nested_within: ''
+    approx_when: the photograph from the American Civil War, 1860s; the book from the 1800s; the convention talk around 2005
+      or 2006
+    approx_where: Lancaster, Pennsylvania
+    approx_line_start: 4332
+    approx_line_end: 4360
+  - title: The Air Force team that met an extraterrestrial walking along a road inside the Nellis range
+    subject: An unnamed Air Force team travelling inside the Nellis Test and Training Range in the 1970s who encountered a
+      being walking along the road
+    summary: Asked for the most serious incident he was briefed on, Doty offers this alongside the fishing captain, noting
+      he was not directly involved. An Air Force team moving from one place to another inside the Nellis Test and Training
+      Range came across an extraterrestrial walking along the road. They panicked, their vehicle shut down, and their radio
+      calls for help eventually reached a worker rather than a policeman, from where it was reported to OSI. Doty says he
+      has the written statement of a man who was there, and that he told the story on Gaia around episode 80, some two to
+      four years before Jason Sands went public with a similar account of a blue-skinned being from the same period and area.
+      He declines to accuse Sands of lying, saying only that either Sands got it from his telling or had a different incident,
+      and that the details do not fit. The provenance dispute is a property of the telling, not of any claim inside it. The
+      human reviewer highlighted none of it despite the interviewer framing it as the most serious incident.
+    confidence: high
+    found_by:
+      - narrative
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: briefed only - not present; holds a written statement from a participant
+    has_established_name: false
+    nested_within: ''
+    approx_when: the incident in the 1970s; Doty's public telling on Gaia several years before the interview
+    approx_where: inside the Nellis Test and Training Range, Nevada
+    approx_line_start: 4379
+    approx_line_end: 4431
+  - title: Doty's two truths and a lie
+    subject: Three short first-person episodes offered as a deliberate truth-testing game - an object over the Sandia Peak
+      tram in 1980, a 1965 high-school wrestling match, and a 2014 search for prisoner-of-war evidence at Lima Site 85 in
+      Laos - one of which Doty says is false and will not identify
+    summary: 'Asked for two truths and a lie, Doty notes the game was used as a psychological test on the intelligence operations
+      course and declines to say which of his is false. First: in 1980, driving back from Santa Fe on Interstate 25 with a
+      friend he had collected from the airport, they turned towards Sandia Crest at the friend''s request to ride the tram
+      and saw the tram going up with an object above it, following it to the top of the mountain. Second: around 1965 he wrestled
+      at 130 pounds against his high school''s rival, beating the previous year''s state runner-up by one point on a predicament
+      in the third round with the match tied. Third: in 2014 he went to Laos with a group still searching for prisoners of
+      war, to Lima Site 85, a location the military had already excavated, where they found not remains but evidence of something
+      that had occurred there. The frame is load-bearing: exactly one of the three is a fabrication, and the set only means
+      anything held together. The human reviewer highlighted none of it.'
+    confidence: high
+    found_by:
+      - protagonist
+      - evidence
+      - reviewer
+    doty_role: direct participant in all three as told, one of which he states is untrue
+    has_established_name: false
+    nested_within: ''
+    approx_when: 1980, around 1965, and 2014
+    approx_where: Interstate 25 and Sandia Crest, Albuquerque, New Mexico; a high school in the United States; Lima Site 85,
+      Laos
+    approx_line_start: 4441
+    approx_line_end: 4497
+  - title: The object that followed the Sandia Peak tram, 1980
+    subject: An object seen above the Sandia Peak aerial tramway near Albuquerque by Doty and a friend in 1980
+    summary: 'In 1980, while stationed in New Mexico, Doty drove to Santa Fe to collect a friend from the airport. Returning
+      on Interstate 25, his friend pointed at Sandia Crest and asked about the tram, and Doty agreed to take him up. As they
+      turned onto the road they saw the tram climbing, and above it an object following it to the top of the mountain. Recorded
+      separately from the game that contains it only because this is the one anomalous sighting inside the set: an extraction
+      stage will pull it out as a UFO claim, and it must carry the frame that its own teller has flagged a one-in-three chance
+      it is fabricated. The wrestling match and the Laos trip are sub-tellings of the same set but carry no anomalous claim.'
+    confidence: low
+    found_by:
+      - narrative
+    doty_role: direct witness, with his friend - though possibly the fabricated one of the three
+    has_established_name: false
+    nested_within: Doty's two truths and a lie
+    approx_when: '1980'
+    approx_where: Sandia Peak tramway, near Albuquerque, New Mexico
+    approx_line_start: 4458
+    approx_line_end: 4473
+disagreements:
+  - issue: 'The abducted Air Force sergeant at Kirtland: one account, two, or three? The narrative and protagonist lenses
+      each split her into three separate tellings (the implant under the tongue at line 165, the surveillance operation at
+      2203, the full case history at 2469); the evidence lens merged all of it into one; the reviewer lens gave two (the case,
+      plus a nested thwarting operation).'
+    resolution: 'One account, with exactly one nested sub-account. Checked the transcript directly: the line 165 passage (female
+      Air Force sergeant, abducted, object under the tongue, classified identity, whistleblower listed in Congress, techniques
+      developed from her case) and the line 2203 passage (Air Force sergeant, female, abducted countless times, whistleblower,
+      the widget derived from her case) are unambiguously the same person and the same investigation - so the early passage
+      is a compressed forward reference, not a second account. The 2469 block is not a separate case either: it opens ''Well,
+      there was part of that'' and ''Well, let me go back a little bit'' and narrates the same case from its beginning, out
+      of order. What IS separable is the single night of the surveillance operation: it has its own date, its own participant
+      list (Air Force intelligence, FBI, OSI, NSA, contractors), its own outcome (the abduction was thwarted, she was moved
+      to a secure facility) and its own second protagonist (the FBI agent who broke down). That is nested, not peer - it happens
+      inside the case it belongs to.'
+  - issue: 'The Sandia guard case and the 1979 indoctrination briefing: siblings or nested? The protagonist lens treated them
+      as two peers and put the guard case at line 745, missing its opening at 383; narrative, evidence and reviewer spanned
+      the guard case across the briefing.'
+    resolution: 'Nested, with the briefing inside the guard case. The transcript settles it: the guard case is opened at 383,
+      Doty says he filed his report, headquarters ordered him briefed in before he could go further, the briefing is narrated
+      at 394-535, and at 754 he returns with ''So then I go and re-interview the witness in Sandia, the Sandia guard.'' The
+      interviewer himself loses the thread at line 716 (''so to get back to you''re in this parking lot ... now you''re on
+      your way to meet a witness'') and Doty has to correct the ordering. The briefing is causally produced by the guard''s
+      report and physically contained in its narration, so nesting is the honest structure - but the claims inside it (the
+      Roswell and Kingman films) are about the briefing, not about the guard case, and must not be merged into it.'
+  - issue: 'Colonel Law''s remark about the MJ-12 documents: part of the MJ-12 seizure account or its own? Narrative and evidence
+      folded it into the seizure; protagonist and reviewer split it out.'
+    resolution: Its own account, medium confidence. Different year (Doty says 'I found this out years later, not then, not
+      during the 80s'), different place (a UFO convention), different participants, and a completely different evidential
+      status - the seizure is an operation he ran, this is a single remark he interprets. Folding them together would attribute
+      Doty's conclusion that MJ-12 mixes real and fabricated material to the 1980s investigation, when he explicitly sources
+      it to a conversation years afterwards.
+  - issue: 'The strawberry ice cream / the captain who lived with EBE-1 (line 1629): the protagonist lens recorded this as
+      an account nested inside the television-special account. No other lens did.'
+    resolution: Artefact of the protagonist lens; excluded. It is a two-sentence sourcing statement - Linda Howe interviewed
+      the captain in 1980 and he mentioned the ice cream - with no time or place of its own, no narrated action and no episode.
+      It is a claim about provenance, correctly held inside the television-special account, not a bounded narrative unit.
+      An extraction stage should not emit it as an account.
+  - issue: 'The naming of the aviary (line 1664) and Doty''s employment with Hal Puthoff from 1994 to 2007 (line 1754): the
+      reviewer lens recorded both as accounts. No other lens did.'
+    resolution: Both artefacts of the reviewer lens, which was following highlight density rather than narrative shape; excluded.
+      The aviary passage is exposition about how a label came to be used, with no time, place or episode, although it carries
+      one contested claim (that Richard Helms was the Falcon). The Puthoff passage is biography and employment history - explicitly
+      excluded by the account definition - although it too carries a loaded moment (Doty nods when asked whether someone else
+      was interested in Puthoff's work). Both are cases where a significant claim sits in material that is not an account;
+      the claim needs a home, but the home is not an account row.
+  - issue: 'The case-file list and the freedom-of-information flood (line 3924): only the evidence lens recorded it.'
+    resolution: Kept at low confidence, judged real rather than an artefact. It contains a genuine bounded micro-episode -
+      the AFOSI freedom-of-information monitor telephoning Doty to say 'you don't know what you've done', with a named caller
+      and a stated consequence - which is the same shape as the FBI-visits account that all four lenses accepted. It is borderline
+      because roughly half the passage is commentary about which redactions are justified, which is opinion, not narrative.
+  - issue: 'Two truths and a lie: the narrative lens split this into three separate accounts (tram, wrestling match, Laos
+      trip); the other three lenses kept it as one.'
+    resolution: One parent account with the tram sighting nested inside it. The frame is load-bearing - Doty states one of
+      the three is false and refuses to say which - so splitting them into three peers destroys the only thing that makes
+      any of them interpretable. But the tram sighting is the single anomalous episode in the set and is exactly what an extraction
+      stage will pull out as a free-standing UFO sighting with a date and a location, so it needs its own row carrying the
+      parent link. The wrestling match and the Laos trip are sub-tellings too, but neither carries an anomalous claim, so
+      recording them separately adds nothing to the design target.
+  - issue: 'The A-7 Air National Guard pilot (line 910) and the A-7D captain on the fishing trip (line 4028): the same man?'
+    resolution: Kept as two accounts, with the possible identity flagged in both. Every lens raised it independently. The
+      overlap is real - both are A-7 pilots in New Mexico handled personally by Doty - but the transcript neither states nor
+      rules out identity, and the details differ (contact 'in the air and on the ground' with a signed silence undertaking,
+      against a ground-only encounter with a Polaroid, a polygraph, hypnosis and a site visit). Merging them on inference
+      would fabricate a link; recording only one would lose a case. The right behaviour for an account layer is to surface
+      the candidate duplicate rather than silently double-count or silently merge.
+  - issue: 'The Warm Springs crash (line 2009): the narrative lens noted that the truck driver''s remark - he had picked up
+      ''these round things'' before and taken them to the base - implies a second, earlier recovery, and treated it as a distinct
+      episode inside the account.'
+    resolution: Not a separate account. The prior recovery has no date, no place, no participants beyond the driver and no
+      narrated action; it is one sentence of implication. It is a claim inside the Warm Springs account, and it is the most
+      interesting claim in it, but there is no episode to bound.
+boundary_notes: 'Where boundaries actually fall in this record, and what makes them hard.
+
+
+  1. ACCOUNT SPANS ARE NOT CONTIGUOUS, AND THE INTERRUPTIONS ARE NOT DIGRESSIONS - THEY ARE OTHER ACCOUNTS. The worst case
+  in this transcript runs from line 383 to 905. The Sandia guard case opens at 383; the indoctrination briefing (a distinct
+  account, caused by the guard report) is narrated at 394-535; the briefing narration is then interrupted by the FBI-visits
+  account (529-590), which is interrupted by the Laughlin convention account (591-660), followed by general exposition on
+  briefing types and a hypothetical crash callout Doty explicitly says he is inventing (660-717); the briefing then resumes
+  at 718 with the boss John exchange; and only at 754 does the guard case resume, running to 905. That is four accounts and
+  two non-accounts interleaved inside one 520-line stretch. A window-based or paragraph-based segmenter will get every boundary
+  in this region wrong. The signal that a resumption is happening is conversational, not lexical: at line 716 the interviewer
+  himself loses the thread and re-anchors wrongly (''so to get back to you''re in this parking lot ... now you''re on your
+  way to meet a witness''), and Doty corrects him (''no no no no ... that was later''). Interviewer re-anchoring attempts
+  and speaker corrections about ordering are the strongest available cue that a span has been suspended and is being resumed.
+
+
+  2. THE SAME ACCOUNT IS INTRODUCED THOUSANDS OF LINES BEFORE IT IS TOLD. The Kirtland sergeant is first mentioned at line
+  165 - one paragraph, the object under her tongue, the congressional whistleblower status, the derived counter-abduction
+  technology - and not narrated until 2203-2960. Nothing lexical links them: the first mention gives no name (there is none),
+  no place (Kirtland is only supplied later), and no date. The only linkage is a conjunction of attributes (female Air Force
+  sergeant + abducted + implant + whistleblower listed in Congress + techniques developed from her case). Any extraction stage
+  that segments locally will produce two accounts and split her claims across them. Coreference for unnamed subjects has to
+  run over the whole document, on attribute bundles, not on strings.
+
+
+  3. NARRATION ORDER IS NOT EVENT ORDER, AND THE SPEAKER SIGNALS THE JUMP WITH A STOCK PHRASE. Within the sergeant case, the
+  climax (the thwarted abduction) is told first at 2264 and the origin (her first injuries, the psychiatric hospital, the
+  polygraphs, the bug) second at 2469. The transition markers are ''Well, let me go back a little bit'' (2629) and ''Well,
+  there was part of that'' (2469). Similar markers elsewhere: ''Now jump ahead many many 30, some 40 years'' (3240, the shift
+  from the 1980s S2 Annex episode to the recent Vermont trip), ''And now jump ahead'' (1960s mine-shaft disc to Tonopah 1984).
+  These phrases mark a time jump inside one account roughly as often as they mark a new account, so they are a trigger to
+  check, not a boundary.
+
+
+  4. THE THINNEST ACCOUNTS ARE COMPLETE AND ALMOST INVISIBLE. The A-7 National Guard pilot case (910-925) is a whole investigation
+  - contact in the air and on the ground, a witness with a clearance who cannot be given the cover story, a signed undertaking
+  of silence - in about eight lines, introduced mid-sentence as an example illustrating a general point, and highlighted by
+  the human reviewer not at all. The fabricated Aurora sighting (1382-1396) is fourteen lines and is the single clearest admission
+  in the interview. The fabric-of-space observation (4312-4328) is sixteen lines. Length is anti-correlated with importance
+  here, and ''introduced as an example of a general point'' is a common frame for a real account: ''if a pilot and i had these
+  happened at an A7...''.
+
+
+  5. THE HUMAN REVIEWER''S HIGHLIGHTS ARE NOT A USABLE SIGNAL FOR ACCOUNT PRESENCE. The captain''s wife taken near Springer
+  (3530-3678) runs 148 lines of dense specifics - named towns, distances, a state trooper, two fishermen, a hospital, a forensic
+  exclusion - and carries zero highlighted passages. So do the Space Force / Defense Inspector General episode, the Nellis
+  road encounter that the interviewer explicitly frames as the most serious incident, the A-7 National Guard pilot, and the
+  whole two-truths-and-a-lie set. Meanwhile the mine-shaft disc drew roughly fifteen highlights. If highlight density is used
+  as the account detector, about a fifth of the record vanishes.
+
+
+  6. NESTING IS REAL AND HAS TWO DIFFERENT SHAPES. (a) Causal-and-contained: the indoctrination briefing sits inside the Sandia
+  guard case because the guard''s report is what triggered it. (b) An episode inside a long case: the one-night surveillance
+  operation inside the sergeant''s multi-year case, with its own agencies, its own outcome and a second protagonist (the FBI
+  agent) who exists nowhere else. A third shape appears with the two-truths-and-a-lie set, where the parent is a frame rather
+  than an event and the children are unrelated to each other - but the frame determines the truth value of every child, so
+  flattening it would let the platform record an admitted fabrication as testimony.
+
+
+  7. THE HARDEST NEGATIVE CASES ARE THE ONES THAT LOOK LIKE ACCOUNTS. Four things in this transcript have the texture of an
+  account and are not one: the naming of the aviary (a contested identification with no episode), Doty''s employment with
+  Puthoff (biography, containing a loaded silent nod), the strawberry ice cream provenance chain (a sourcing statement about
+  a person who never appears), and the truck driver''s ''I''ve done it before ... these round things'' (an implied prior recovery
+  with nothing bounded around it). Each carries a claim worth keeping. The design consequence: an account layer needs somewhere
+  for a significant claim that has no account, or the pressure to create a spurious account will be constant.
+
+
+  8. AND THE HARDEST POSITIVE CASES ARE THE ONES THAT LOOK LIKE COMMENTARY. The hypothetical crash callout at 660-717 is narrated
+  in full operational detail and is explicitly invented (''I''m making this up, okay?'') - then at 2009 Doty says ''The story
+  I gave you earlier about being on call and getting a call, I did'', and narrates the real one at Warm Springs. A detector
+  keying on narrative texture will take the fabricated illustration as an account and may then merge it with the real episode
+  1,300 lines later.
+
+
+  9. WHO IS SPEAKING IS PART OF THE BOUNDARY. The Copperfield identity-card account is narrated entirely by the interviewer,
+  with a physical artefact he says he holds, and Doty says four times that he had never heard of it. Attributing it to Doty
+  would turn a podcast host''s private research into a former intelligence officer''s claim. Speaker attribution has to be
+  an account-level field, not left implicit in the span.
+
+
+  10. EVIDENTIAL DISTANCE VARIES WITHIN A SINGLE ACCOUNT AND IS THE THING MOST EASILY LOST. Doty is repeatedly precise about
+  the limits of what he saw - the Warm Springs bodies were covered, so he will not say he saw them; he heard about ten seconds
+  of the sergeant''s audio and never saw the video; he took the initial report on the Springer case and learned the outcome
+  as a one-sentence remark months later; the Sidewinder engagement is a file he held, not an event he attended. That qualification
+  lives in the account and is exactly what atomising into claims destroys. Recording doty_role per account (direct participant
+  / peripheral participant / briefed only / hearsay / none) is not decoration; it is the field that keeps the record honest,
+  and it should be allowed to differ between a parent account and a nested one.'
+gap_against_existing_digest:
+  captured:
+    - account: The Mario Woods interrogation at Ellsworth Air Force Base, 1977
+      node_name: Mario Woods incident (1977)
+      quality: Best case in the digest. Well named (protagonist + year), and 21 of the 27 claims falling in transcript lines
+        46-159 reference it. The 6 that do not are the ones about Michael Johnson and the mouth search. Works because the
+        case has a named, famous protagonist who is also a person node.
+    - account: The Myrna Hansen report and the two DIA agents who visited Kirtland
+      node_name: Myrna Hansen abduction (1980)
+      quality: Node exists, subject is wrong. The ground-truth account is the DIA visit and the discovery that a DIA branch
+        investigates abductions; the node names Hansen's abduction, which the transcript only references. 7 of the 10 in-span
+        claims ref it, 2 more ref the Bennewitz node. There is no node for the DIA branch or the visit, so the account's actual
+        point has no anchor.
+    - account: The Paul Bennewitz deception operation and the drone programme it concealed
+      node_name: Paul Bennewitz case (1979-1980)
+      quality: 'Well named but leaky, and it is the digest''s catch-all. Only 3 of the 12 claims in lines 301-374 ref it (9
+        of those 12 have empty refs entirely), while its other 10 references are scattered across four other accounts: 5 in
+        unbound biography claims at lines 18-36, 2 in the Hansen account, 2 in the Bill Moore account, 1 in the sergeant surveillance
+        night. It is being used as a topic tag for ''Doty disinformation'', not as an episode.'
+    - account: The Sandia security guard and the craft that landed over a Kirtland weapons bunker
+      node_name: Kirtland AFB landing incident (1979)
+      quality: 'Correct account, badly named, and actively contaminated. Name identifies the base but not the unnamed protagonist,
+        which is the whole point of the case. 17 of its 20 in-span claims ref it. But 10 further claims from the Warm Springs,
+        Nevada callout (a different incident, different state, 1,100 lines later) also ref it, and their claim TEXT was rewritten
+        around it: ''Beings were involved in the Kirtland Air Force Base landing incident (1979)'', ''The government contracted
+        a trucking company from Hawthorne, Nevada to transport the craft from the Kirtland Air Force Base landing incident
+        (1979) on a flatbed.'' Those statements are false. The absence of an account layer did not merely lose structure,
+        it manufactured wrong facts.'
+    - account: The indoctrination briefing into the programme Doty calls NineQ, with the Roswell and Kingman recovery films
+      node_name: Doty UFO briefing (1979)
+      quality: Node exists and is correctly scoped, but ZERO claims reference it. 19 of the 20 claims in lines 394-753 have
+        completely empty refs. The node is a dangling label; nothing about the films, the ten attendees, the colonel, or the
+        drive home is attached to it.
+    - account: The three uniformed Air Force officers at the 2019 Laughlin UFO convention
+      node_name: Laughlin UFO convention (2019)
+      quality: Node exists, ZERO claims reference it. All 3 claims in lines 591-660 have empty refs, including one whose own
+        text names the node ('At the 2019 Laughlin UFO convention, three uniformed United States Air Force officers attended...').
+        One of those 3 also has a null location field, so it cannot even be placed by timestamp.
+    - account: Recruiting and handling Bill Moore inside the UFO research groups
+      node_name: 1989 MUFON Conference
+      quality: Only partial, and it names the wrong thing. The account is the recruitment and running of Moore as an asset
+        over roughly a decade; the only event node in range is the 1989 conference where Moore confessed, referenced by 1
+        claim. The other 4 claims in lines 1052-1085 attach to Bill Moore the person and the Bennewitz case node.
+    - account: The night callout to a crash near Warm Springs, Nevada, and the driver who had hauled round things before
+      node_name: Warm Springs crash incident
+      quality: Node exists with the right name and ZERO claims reference it, while all 10 of its claims reference the Kirtland
+        node instead. The extractor created the correct container and then filed the contents in the wrong one.
+    - account: The repeatedly abducted Air Force sergeant at Kirtland
+      node_name: Kirtland AFB Air Force sergeant abduction case
+      quality: 'Good name for an unnamed protagonist. Coverage is thin: 8 of the 61 claims in lines 2203-2960 reference it.
+        A further 8 claims about the same woman sit at lines 163-222, roughly 90 minutes earlier in the recording, and only
+        1 of those 8 refs the node.'
+    - account: The man who walked into a rock crevice near Sedona and never came out
+      node_name: Sedona time portal incident (1980s) / Sandia time travel experiments (1980s)
+      quality: Two nodes for one account, and BOTH have zero claims referencing them. All 16 claims in lines 4205-4295 hang
+        off place and organisation nodes (Sedona, Arizona; Sandia National Laboratories) instead. The 1879 birth date, the
+        Billings identity, the ship's manifest from Cuba - the evidential spine - are loose facts about a place.
+    - account: The Lancaster, Pennsylvania Civil War photograph with a jet in the background
+      node_name: Lancaster battlefield photograph event (Civil War)
+      quality: 'Correctly named, 1 of 1 claim wired. Also the smallest account, which is why it survived: it fits in a single
+        claim, so there is no shape to lose.'
+    - account: The Air Force team that met an extraterrestrial walking along a road inside the Nellis range
+      node_name: Nellis AFB extraterrestrial encounter (1970s)
+      quality: Correctly named and both claims in lines 4379-4431 ref it. But one of the two ALSO refs 'Kirtland AFB landing
+        incident (1979)', a different incident 2,000 km away. The Jason Sands provenance dispute, which is the substance of
+        Doty's telling, is not extracted.
+    - account: The object that followed the Sandia Peak tram, 1980
+      node_name: Albuquerque tram UFO sighting (1980)
+      quality: Node exists and 1 claim refs it, but it is named and stated as a real sighting. Nothing in the digest records
+        that Doty offered it inside 'two truths and a lie' and refused to say which was false. A search of all 388 claim texts
+        and quotes for the frame returns nothing. The digest asserts a UFO sighting its own source flagged as possibly fabricated.
+  missed:
+    - account: The A-7D captain who photographed a craft while fishing and lost thirteen hours (lines 4028-4185)
+      claims_orphaned: '5 claims, all in lines 4058-4170. They hang off ''Lake Solidwood, New Mexico'' (a transcription artefact
+        of a place name), ''Missing time'', ''Polygraph'', ''Hypnosis''. Examples: ''The pilot experienced approximately 10
+        hours of missing time; he sat down voluntarily after hearing voices in his head, and woke up in his sleeping bag''
+        - refs ONLY [''Missing time'']; ''The Air Force captain passed a polygraph examination and a hypnosis session regarding
+        his encounter'' - refs [''Polygraph'',''Hypnosis''], so the only thing binding it to this pilot is the timestamp;
+        ''Richard Doty considers the Lake Solidwood incident a legitimate case and believes most of its file should be unredacted.'''
+      why_it_matters: Doty calls this the best of his alien-encounter cases and the most serious he handled. It is a 157-line
+        narration with photographs, trace evidence collected, a polygraph, a site revisit - the single most evidentially loaded
+        episode in the interview. It produced 5 claims and no container. The Polaroid, the two exposures, the standing tent,
+        the seized sleeping bag are gone.
+      why_the_extractor_missed_it: The protagonist is an unnamed captain. The only proper noun available is a garbled lake
+        name, so the extractor made a place node out of the transcription error and hung the physics on it. Where a case has
+        no named person, this extractor produces no event node - it names events after the entity it already extracted.
+    - account: The civilian who saw the Aurora prototype and was given an invented UFO sighting (lines 1382-1396)
+      claims_orphaned: 2 claims. 'A civilian saw the first prototype of the Aurora aircraft, and OSI created a fabricated
+        UFO sighting story to cover it up' - refs Aurora aircraft, F-117 Nighthawk, Tonopah, AFOSI, UAP; and 'The Aurora aircraft
+        was being developed at the same time as the F-117 Nighthawk at Tonopah, Nevada.' The second is aviation background;
+        the first carries the entire admission in one sentence.
+      why_it_matters: 'This is the clearest first-person admission in the interview that a UFO event was manufactured and
+        injected into the record - a witness given a false sighting, then made to sign a non-disclosure agreement. For a platform
+        whose purpose is documenting anomalous phenomena, a confirmed fabricated sighting is a load-bearing datum: it is a
+        known-false entry in the corpus with a known author. Compressed to a single claim, it can never be linked to whatever
+        secondary sources later repeat that sighting as real.'
+      why_the_extractor_missed_it: Short (15 lines) and the protagonist is 'a civilian'. The extractor built nodes for the
+        two aircraft instead. Aurora and the F-117 are name-droppable; the deception is not.
+    - account: The captain's wife taken from Interstate 25 near Springer and found at Eagle Nest Lake (lines 3530-3678)
+      claims_orphaned: '8 claims across lines 3563-3667, split across three place nodes: Springer (3), Eagle Nest Lake (2),
+        Raton (2). Examples: ''Richard Doty stated that during the alleged abduction case, the woman lost approximately six
+        hours of time and woke up at Eagle Nest Lake, New Mexico'' - refs [''Richard Doty'',''Springer, New Mexico'',''Eagle
+        Nest Lake, New Mexico'']; ''Richard Doty stated that months later, a female Air Force Office of Special Investigations
+        agent told him that the abduction case involving the captain''s wife was legitimate'' - refs only [''Richard Doty'',''AFOSI''];
+        ''Richard Doty stated that the woman was taken to a hospital in Raton, New Mexico, where doctors concluded she had
+        been raped, but no semen was found.'''
+      why_it_matters: A 149-line narration with an abandoned infant, a state trooper, two fishermen cleared by secretor testing,
+        a hospital, and a reversal of Doty's own disbelief. Nothing connects the woman on Interstate 25 to the woman at Eagle
+        Nest Lake to the woman in the Raton hospital except adjacency in the recording. Three towns, three claim clusters,
+        one person - and the graph cannot say she is one person. The human reviewer highlighted none of these 149 lines, so
+        this loss is invisible to review as well.
+      why_the_extractor_missed_it: Unnamed protagonist ('a female dependent wife of a captain'), and the episode moves across
+        four locations. With no person node to name the event after, each geographic move started a new cluster of place-anchored
+        claims.
+    - account: The MJ-12 document reaching Jaime Shandera and the seizure of Bill Moore's copy in San Francisco (lines 1134-1240)
+      claims_orphaned: '13 claims, the largest orphan block. All hang off the document node ''Majestic 12 (MJ-12) documents''
+        plus scattered places. Examples: ''Bill Moore showed Richard Doty a copy of the MJ-12 document in San Francisco''
+        - refs include ''Santa Fe, New Mexico'', which is a wrong place ref; ''An OSI agent named Benjamin (Benji) confirmed
+        receipt of the MJ-12 document at headquarters''; ''The FBI determined that the postmark on the MJ-12 document was
+        not a genuine postal marking.'''
+      why_it_matters: This is a chain-of-custody narrative - dead drop, seizure, courier, headquarters, silence - and the
+        sequence IS the evidence. Reduced to 13 facts about a document node, the causal chain is unrecoverable. Doty's conclusion
+        (a DIA Special Means Committee deception operation) sits as one more fact beside the postmark analysis, with nothing
+        marking it as his inference from the preceding chain rather than an observation.
+      why_the_extractor_missed_it: 'There IS a strong named entity here, but it is a document, not a person or an event, so
+        the extractor made a document node and hung everything on it. The account has a named subject and still got no event
+        node, which shows the failure is not only about anonymity: the extractor produces event nodes only for things already
+        labelled ''incident'', ''case'' or ''crash''.'
+    - account: The paid prostitute informants around the Nellis range and the F-117 major who talked (lines 1400-1551)
+      claims_orphaned: '10 claims across 151 lines. Two have EMPTY refs entirely (''The major signed a document acknowledging
+        his rights under Article 31''; ''The prostitute was required to sign a non-disclosure agreement''), leaving them attached
+        to nothing at all. Others hang off the aircraft node: ''The major was taken off flying status and removed from the
+        F-117 program'' - refs [''F-117 Nighthawk'',''Edwards Air Force Base'']; ''The major who compromised the F-117 program
+        was married with two children'' - refs [''F-117 Nighthawk''].'
+      why_it_matters: A complete counterintelligence operation - source recruitment, a bugged room, an interrogation, a career
+        ended - narrated end to end. Both protagonists are unnamed, so the whole thing is currently a set of facts about an
+        aeroplane. The claim that the major's children exist is filed under 'F-117 Nighthawk'.
+      why_the_extractor_missed_it: Two unnamed protagonists and no incident-shaped label. The only durable proper nouns are
+        the aircraft and the towns, so the aircraft became the anchor. Note also the extractor produced a stray contradictory
+        claim at line 1551 ('the Air Force... never obtained any information from it') sitting next to nine claims describing
+        information obtained - with no account frame, nothing flags the contradiction.
+    - account: The night the surveillance operation prevented the sergeant's abduction (lines 2264-2400)
+      claims_orphaned: '9 claims. 5 do ref the parent ''Kirtland AFB Air Force sergeant abduction case'' node, so they land
+        in the right case but with no way to say they are one night. Examples: ''The surveillance operation thwarted an abduction
+        of the female Air Force sergeant, preventing it and moving her to a safe location''; ''An FBI agent who had doubted
+        the female Air Force sergeant''s abduction claims... [broke down]''. Two claims in this span are unrelated digressions
+        that inherit the same neighbourhood.'
+      why_it_matters: 'This is the only episode in the interview where the government claims to have predicted and stopped
+        an abduction. It needs to be separable from the surrounding year-long case: different participants (NSA, FBI, contractors),
+        a single date, a specific outcome. Collapsed into the parent, the assembler cannot write about the night without dragging
+        in the psychiatric hospital and the covert audio.'
+      why_the_extractor_missed_it: Nesting. The extractor has no way to express a bounded episode inside a longer one, so
+        anything inside a case it already recognised gets absorbed. The 61 parent claims and these 9 are indistinguishable
+        to a consumer.
+    - account: Showing Linda Moulton Howe a presidential briefing document at Kirtland (lines 1290-1370)
+      claims_orphaned: '8 claims. All anchor on the person node ''Linda Howe''. Examples: ''Richard Doty allowed Linda Howe
+        to read the document but prohibited note-taking and photography''; ''The Linda Howe operation was handled at OSI headquarters,
+        not by Richard Doty as a field agent''; ''Jerry Miller was involved in the Linda Howe operation.'''
+      why_it_matters: A named, well-documented episode with two-way mirrors, an audio and video record, and a stated intelligence
+        objective (identify her Pentagon source) that failed. Two of the eight claims literally use the phrase 'the Linda
+        Howe operation' - the extractor knows an operation exists and has no node type in which to put it.
+      why_the_extractor_missed_it: A named protagonist absorbed the account. When a person node is available the extractor
+        hangs everything there and never creates the event; the person node then means both 'Linda Howe the researcher' and
+        'the operation run against her'.
+    - account: The Space Force approaches and the Defense Inspector General's questions about the 1981 report (lines 3868-3922)
+      claims_orphaned: '7 claims, anchored on ''United States Space Force (USSF)'' and ''Department of Defense Office of Inspector
+        General (DoD OIG)''. Examples: ''The DoD OIG showed Richard Doty a heavily redacted report from 1981 that Doty had
+        authored''; ''In September 2022, Richard Doty returned to the DoD OIG in Washington, D.C., where he was shown an unredacted
+        version.'''
+      why_it_matters: The most checkable material in the interview - two dated visits to a named federal office, a specific
+        1981 report, a named caller (Lue Elizondo). As two organisation nodes plus loose dates, the claim that the same 1981
+        report was redacted in January and unredacted in September loses the fact that it is one continuing interaction. The
+        human reviewer highlighted none of it.
+    - account: The passengers taken to the S2 Annex and the van crash near Rachel (lines 3205-3239)
+      claims_orphaned: '6 claims on ''S2 Annex, Nevada'', ''Groom Lake'', ''Rachel, Nevada'', ''Harrison''. Examples: ''One
+        of the vans transporting the Carthusian monks was involved in an accident near Rachel, Nevada''; ''The official cover
+        story used in AFOSI reports for the role of the Carthusian monks transported to S2 Annex was that they were interpreters.'''
+      why_it_matters: Doty's actual involvement is narrow and specific - a road accident and a report-coding decision - attached
+        to an extreme claim about a creature containment facility. That calibration is exactly what an account's role field
+        would carry. Without it, a claim about a facility holding extraterrestrials reads with the same weight as the claim
+        about the highway patrol, and the fact that Doty did not know who the passengers were at the time is one more unranked
+        sentence.
+    - account: The failed attempt to reach the two Carthusian monks at the Vermont monastery (lines 3240-3305)
+      claims_orphaned: '6 claims, all anchored on the place node ''Charterhouse of the Transfiguration (Carthusian monastery),
+        Vermont''. Examples: ''A Vermont State Police trooper was observed regularly patrolling the road from the gate to
+        the monastery''; ''Freedom of Information requests submitted by Richard Doty and his companion revealed that an unnamed
+        entity pays overtime for Vermont State Police troopers.'''
+      why_it_matters: This is a separate investigation thirty to forty years after the S2 Annex episode, with a different
+        role for Doty, different evidence, and the one concretely checkable anomaly in the whole interview (who pays the overtime).
+        Merged into a place node with the 1980s transport operation, the two cannot be told apart, and the records-request
+        finding loses the trip that produced it.
+    - account: Seeing a living extraterrestrial on a closed-circuit monitor and having to report it (lines 3439-3505)
+      claims_orphaned: '6 claims, all anchored on ''Groom Lake, Nevada''. Examples: ''In 1979, Richard Doty viewed a closed-circuit
+        television feed at a facility at Groom Lake, Nevada, showing an alien being with a large head and large eyes''; ''Richard
+        Doty stated that upon returning to his OSI office, he reported his unauthorised access at Groom Lake, filled out a
+        Form 18, and was counselled.'' One claim wrongly refs ''Colonel Law'', conflating the unnamed colonel who challenged
+        him with the named counterintelligence chief from an unrelated account 2,000 lines earlier.'
+      why_it_matters: Doty's only claimed direct sighting of a living being, and it comes with a paper trail he says exists
+        (a Form 18 security report). That pairing - extraordinary claim plus a specific, requestable document - is the whole
+        value, and it is now two unrelated facts about a place. The Colonel Law misref is a concrete cross-account contamination
+        caused by having no account boundary.
+    - account: The taping of the UFO Cover-Up television special in which Doty appeared as Falcon (lines 1561-1660)
+      claims_orphaned: '5 claims. There IS a document node ''UFO Cover-Up (TV special, 1987)'' holding four of them, but no
+        event node for the taping or the operation. One claim refs ''Roswell crash (1947)'' - the only reference that node
+        receives anywhere in the digest. The digest''s own terminology block records ''Falcon refers_to Richard Helms'' and
+        ''Condor refers_to Robin Collins'', both wrong: Falcon is Doty and Condor is Bob Collins.'
+      why_it_matters: The alias misresolution is severe. The digest has created person nodes 'Richard Helms' and 'Robin Collins'
+        and attached Doty's own on-camera appearance to them. An account layer that recorded 'Doty appeared as Falcon' as
+        a property of the telling would have forced the alias to bind to the speaker instead of inventing two people.
+    - account: Digging up a South Dakota rancher's buried craft for Hal Puthoff's institute (lines 1834-1915)
+      claims_orphaned: '5 claims on ''Hal Puthoff'', ''Ellsworth Air Force Base'', ''Groom Lake''. Example: ''Richard Doty
+        stated that at the South Dakota crash site, the grandson of the rancher said nothing grows around the buried area
+        despite repeated watering.'' Worse, the fifth claim at line 1913.9 is the OPENING of the NEXT account (the mine-shaft
+        disc), swept into this cluster.'
+      why_it_matters: Two distinct crash-recovery accounts, twenty years and a state apart, run together with no boundary.
+        The one marker the grandson could offer - the patch where nothing grows - is now a property of Hal Puthoff the person.
+        The dig's date (around 2000-2002) and the crash date (around 1958) sit in the same undifferentiated bundle.
+    - account: The FBI visits and the OSI phone call after Doty began speaking publicly (lines 529-590)
+      claims_orphaned: '4 claims, ALL FOUR with completely empty refs - attached to nothing in the graph at all. ''Richard
+        Doty''s non-disclosure agreement expired in 2002, after which he began talking publicly''; ''Between 2002 and 2026,
+        Richard Doty was visited twice by FBI agents: once for saying something on camera that was still classified, and once
+        for giving out a document with classified information''; ''Richard Doty never received a visit from law enforcement
+        after the 2018 OSI phone call.'''
+      why_it_matters: 'This is the interview''s own account of what Doty is and is not permitted to say - the frame that qualifies
+        every other claim in the source. It is currently four sentences bound to no node whatsoever. Its position also proves
+        the timestamp problem: it physically interrupts the indoctrination-briefing narration, so any timestamp-based grouping
+        would file it inside the 1979 briefing.'
+    - account: The footage cut from the film Disclosure Day and the private Palm Springs screening (lines 2972-3170)
+      claims_orphaned: 4 claims on the document node 'Disclosure Day (film)'. 'An anonymous source within Steven Spielberg's
+        production company told Richard Doty that approximately 18 minutes (or 6 minutes by another account) was cut'; 'At
+        least two personnel from DARPA and an Air Force colonel attended the special screening of a longer version.'
+      why_it_matters: Doubly-removed hearsay that Doty flags as such himself. The claim-level attestation field marks most
+        of these first_hand because Doty is the speaker - the field measures who spoke, not how far the speaker is from the
+        event. Only an account with a role field ('hearsay - has not seen the longer cut') carries that. Four unqualified
+        assertions about a named living director are the highest-risk output in the digest.
+    - account: The case-file list on the internet and the freedom-of-information flood it caused (lines 3924-3985)
+      claims_orphaned: 4 claims, all refs ['Richard Doty'] only. 'The case file coded with one of the listed project names
+        is 87 pages long but contains nothing but redactions, with even the page numbers classified'; 'Richard Doty does not
+        believe the United States ever had a treaty with extraterrestrials.'
+      why_it_matters: The four project codenames (Capstone White, Auburn Blue, Medlap Star, Candid Sky) are the most directly
+        actionable research leads in the source. None became nodes. The unrelated treaty opinion sits in the same span with
+        identical refs, so nothing distinguishes an opinion from a records fact.
+    - account: Pressuring two Nevada MUFON investigators away from a close-encounter witness (lines 1088-1113)
+      claims_orphaned: 3 claims. One refs '1989 MUFON Conference', which is a different event, in a different year, about
+        a different person. 'Richard Doty was involved in a disinformation operation targeting two MUFON investigators in
+        Nevada who had obtained legitimate close encounter information'; 'The 7602nd Air Intelligence Wing was involved in
+        deception operations but operated under the law' - that second one has a malformed location field containing quote
+        text where a timestamp should be.
+      why_it_matters: The only failed deception operation Doty narrates, and the one thing he says he would do differently.
+        Three unnamed protagonists (two investigators and a witness) and no node for any of them.
+    - account: Watching the fabric of space open at the Nevada Test Site (lines 4312-4328)
+      claims_orphaned: 3 claims on 'Nevada Test Site' and the topic 'Time travel'. 'During an experiment at the Nevada Test
+        Site in the 1980s, Richard Doty saw the fabric of space opening for a split second, as described by a scientist standing
+        next to him.'
+      why_it_matters: A bounded first-hand observation with a second protagonist supplying the interpretation. It is told
+        immediately after the Sedona episode and shares the Sandia programme, so with no boundary the two run together; the
+        'Sandia time travel experiments (1980s)' node that might have separated them has zero claims.
+    - account: The New Mexico Air National Guard A-7 pilot with contact in the air and on the ground (lines 910-925)
+      claims_orphaned: 2 claims on the object node 'A-7 Corsair II'. 'Richard Doty handled a case involving an A-7 Corsair
+        II jet pilot from the New Mexico Air National Guard who had a UFO encounter in the air and on the ground'; the second
+        claim has a malformed location field containing quote text instead of a timestamp, so it cannot be placed in the recording
+        at all.
+      why_it_matters: A whole case Doty says he handled personally, compressed into eight transcript lines and now two facts
+        about an aircraft type. Critically, it may or may not be the same man as the A-7D fishing captain 3,100 lines later;
+        both are now claims about 'A-7' nodes with no case identity, so the question cannot even be posed against the data,
+        let alone answered.
+    - account: How the Alien Interview film was smuggled out of Groom Lake (lines 3313-3355)
+      claims_orphaned: 2 claims on 'The Alien Interview' and 'Groom Lake'. Both begin 'Richard Doty stated that an Air Force
+        sergeant who worked in the audiovisual laboratory at Groom Lake... smuggled out a copy'.
+      why_it_matters: This is a provenance chain, not an event - the only support Doty offers for calling the film authentic,
+        and he concedes under pressure that the technician might have copied a re-creation. That concession is not extracted.
+        Two flat claims now assert a smuggling that its own narrator partially retracted.
+    - account: The submarine crewman who took a piece of something and gave it to a Kirtland contractor (lines 3773-3825)
+      claims_orphaned: 2 claims, one of which carries EIGHT organisation refs (DOJ, NIS, ONI, FBI, AFOSI...) and no event.
+        'A United States Navy submarine crew member in the 1970s found an unidentified widget, which he took after leaving
+        the Navy and living in Albuquerque.'
+      why_it_matters: One of only two UFO cases Doty says he worked with Naval Intelligence, with a named FBI contact (Jerry
+        Brown) and a physical object still held by a contractor. Squeezing a 52-line multi-agency operation into two claims
+        with eight agency refs and no event node produces a claim that is about every agency and about nothing.
+    - account: Colonel Law's remark about the MJ-12 documents at a UFO convention (lines 1262-1282)
+      claims_orphaned: '1 claim: ''Colonel Law, chief of counterintelligence for OSI, stated that the MJ-12 documents contain
+        some legitimate information mixed with disinformation.'''
+      why_it_matters: Law never said that. He asked Doty how many counter-espionage operations he had run and said you have
+        to give them some of the real stuff; the interpretation is Doty's, and Doty says so explicitly. The extractor has
+        turned an inference into a direct attribution to a named intelligence officer. Without an account to hold 'this is
+        a remark Doty interprets', there is nowhere for the qualification to live, so it was dropped. This is the single most
+        consequential single-claim error in the digest.
+    - account: The pilot who fired two Sidewinders at a craft that repaired itself (lines 3986-4015)
+      claims_orphaned: 1 claim, refs ['Groom Lake, Nevada','AIM-9 Sidewinder']. 'A pilot flying a classified mission out of
+        the Groom Lake, Nevada, area encountered a flying saucer that came up and almost hit his cockpit; the pilot [fired].'
+      why_it_matters: A shoot-down and a self-repairing craft, one of only two such incidents in Doty's files, reduced to
+        one claim about a missile type. Doty's role here is documentary - he read the file, he was not there - and nothing
+        records that.
+    - account: The disc found in a mine shaft, pulled out by the DART team and stored at Tonopah (lines 1919-2000)
+      claims_orphaned: 1 claim within its own span ('it took 3-4 years to open the craft from the mine shaft, and he never
+        learned what was found inside'), plus its opening claim swept into the preceding South Dakota bucket at line 1913.9.
+      why_it_matters: Doty identifies this as the first craft he saw with his own eyes - an 80-line narration of a five-foot
+        disc with an indented section and no visible opening. One claim survives, and it is about not knowing what was inside.
+        The dimensions, the miners, the DART extraction, the 1984 Tonopah sighting are gone.
+    - account: Chris Ramsay's account of David Copperfield's father's 1945 Roswell identity card (lines 1689-1740)
+      claims_orphaned: 1 claim, correctly attributed to Chris Ramsay as speaker. But 51 lines of narration produced one claim,
+        and Doty's repeated statements that he had never heard any of it are not extracted.
+      why_it_matters: The speaker field saves this from outright misattribution, which is worth noting - it is the one structural
+        defence the current schema has. But 3 of 388 claims name Ramsay as speaker, so the mechanism is barely exercised,
+        and it records who uttered a sentence, not whose story it is.
+    - account: Doty's two truths and a lie (lines 4441-4497) - the frame itself
+      claims_orphaned: 'ZERO claims in the frame''s own span, but 3 sub-telling claims sit inside it, each stated as flat
+        fact: ''In 1980, Richard Doty and a friend saw an object following a tram up to Sandia Crest''; ''In approximately
+        1965, Richard Doty wrestled at the 130-pound weight class...''; ''In 2014, Richard Doty went to Laos with a group
+        searching for evidence of POWs at Lima Site 85 and found remnants indicating something.'' A search of all 388 claim
+        texts and quotes for ''two truths'' or the lie frame returns nothing.'
+      why_it_matters: The worst single loss in the digest. Doty's own stated condition is that exactly one of the three is
+        false and he will not say which. The digest asserts all three as first_hand fact and promotes two of them to event
+        nodes ('Albuquerque tram UFO sighting (1980)', 'Laos POW search (2014)'). A downstream article would cite a UFO sighting
+        that its source flagged as possibly fabricated, and there is no data anywhere in the file from which the error could
+        be caught.
+      why_the_extractor_missed_it: The frame is a property of the TELLING, not of any fact inside it - which is precisely
+        the thing an account layer exists to hold and a claim layer structurally cannot. No amount of better claim extraction
+        fixes this.
+  claim_binding: '"No. Neither refs nor location will bind a claim to its account, and I checked both.\n\nBy refs: only 88
+    of 388 domain claims (23%) reference ANY event node; 300 reference none. 43 claims have EMPTY refs and are attached to
+    nothing at all. 283 claims (73%) reference ''Richard Doty'', which is uninformative in a Doty interview. Of the 17 event
+    nodes, 6 are referenced by zero claims (Doty UFO briefing 1979, Kingman crash 1953, Laughlin UFO convention 2019, Warm
+    Springs crash incident, Sedona time portal incident, Sandia time travel experiments) - correct labels with nothing filed
+    under them. Where refs do exist they can be wrong across accounts: ''Kirtland AFB landing incident (1979)'' is referenced
+    by 29 claims spanning four different ground-truth accounts, including all 10 claims of the Warm Springs, Nevada callout,
+    whose claim text was rewritten around the wrong incident. The result is not merely lost structure but false statements:
+    ''The government contracted a trucking company from Hawthorne, Nevada to transport the craft from the Kirtland Air Force
+    Base landing incident (1979) on a flatbed.''\n\nBy location: no. Three failures, each independently fatal.\n(a) Granularity.
+    Location spans have a median of 9.5 seconds (p90 25.2s, max 123.8s) against a 14,252-second recording - 0.07% of the source.
+    They are sentence pointers, not narrative pointers. 376 of 388 locations are distinct, so they group nothing.\n(b) Interleaving.
+    Accounts are not contiguous. The Sandia guard account''s 20 claims sit at transcript lines 383-390 and then 770-878, with
+    39 claims from three unrelated accounts (the 1979 briefing, the FBI visits, Laughlin 2019) in the gap. The abducted sergeant''s
+    claims sit at 2204-2242 and 2425-2962 with the surveillance-night account''s 9 claims in between. Worse, 8 claims about
+    that sergeant sit at lines 163-222 - roughly 90 minutes earlier in the recording, separated by six unrelated accounts.
+    No contiguous partition of the timeline can recover any of these; the timestamps are correct and still insufficient, because
+    narration order is not account order.\n(c) The field is not even reliably populated. 3 claims have a null location. 3
+    more have quote text in the location field where a timestamp should be (''we had a unit within a 7602nd Air Intelligence
+    Wing at Fort Belvoir...''). 6 of 388 (1.5%) cannot be placed in the recording at all, and one of those is a Laughlin claim
+    whose account already has a claimless node.\n\nMethod note: I recovered ground truth line numbers for claims by exact-matching
+    269 of the 388 quotes into the transcript (69%), then calibrating timestamp-to-line by piecewise interpolation on those
+    anchors. Only 1 inversion in 269 anchors, and the 42 fuzzy-matched claims agree with the interpolation to a median of
+    5 lines - so the binning below is sound, and the point stands that this reconstruction required the source text. Nothing
+    in the digest alone permits it."'
+  verdict: '"Of 39 ground-truth accounts, 13 have some corresponding event node and 26 have none; 118 of the 388 domain claims
+    fall inside an account with no container, and only 88 claims in total reference any event node at all. What survives is
+    the entity layer - people, places, aircraft, agencies - so a 151-line counterintelligence operation becomes ten facts
+    about an F-117, and an unnamed captain''s thirteen hours of missing time becomes five facts about a misspelled lake. The
+    misses share one property above all others: no named protagonist. Every account whose subject is a named person or a famous
+    case got a node; almost every account whose subject is ''a civilian'', ''a sergeant'', ''a rancher'', ''two investigators''
+    did not, because this extractor names events after entities it already has rather than after episodes it detects. Two
+    consequences go beyond lost structure: claims from the Warm Springs, Nevada crash were rewritten to assert they happened
+    at Kirtland Air Force Base, and all three items of Doty''s ''two truths and a lie'' - one of which he states is false
+    - are recorded as flat first-hand fact, two of them promoted to event nodes."'

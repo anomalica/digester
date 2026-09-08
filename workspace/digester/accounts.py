@@ -77,7 +77,56 @@ def claim_position(location: str | None) -> float | None:
     return None
 
 
-def position_in_body(claim: dict, body: str) -> float | None:
+def build_time_map(raw_body: str, materialised: str) -> list[tuple[int, float]]:
+    """Anchors mapping character offset in the materialised text to seconds.
+
+    THE MAP THE RECORD ALREADY CARRIES. A record/2 body timestamps every word -
+    35,091 of them in a single interview - so the correspondence between a
+    timecode and a position in the text is exact and free. It survives only in
+    the SOURCE file: materialise strips the tokens, which is why the model
+    marking account boundaries cannot answer in timecodes and why this looked
+    for a while like information that had been destroyed. It had not.
+
+    The two token streams are not positionally identical - materialise inserts
+    speaker labels and drops some content - so they are aligned rather than
+    zipped. On the Doty interview that matches 98.2% of words in 6 seconds and
+    the anchors come out monotonic.
+    """
+    import re as _re
+    from difflib import SequenceMatcher
+
+    from digester.realign import words_from_record2
+
+    words, times = words_from_record2(raw_body)
+    if not words:
+        return []
+    tokens = [
+        (m.group(0), m.start())
+        for m in _re.finditer(r"[a-z0-9]+", materialised.lower())
+    ]
+    matcher = SequenceMatcher(None, words, [t[0] for t in tokens], autojunk=False)
+    anchors: list[tuple[int, float]] = []
+    for block in matcher.get_matching_blocks():
+        for k in range(block.size):
+            anchors.append((tokens[block.b + k][1], times[block.a + k]))
+    return anchors
+
+
+def offset_for_time(anchors: list[tuple[int, float]], seconds: float) -> int | None:
+    """The character offset a timecode lands on, by binary search on the map."""
+    import bisect
+
+    if not anchors:
+        return None
+    i = bisect.bisect_left([a[1] for a in anchors], seconds)
+    if i >= len(anchors):
+        i = len(anchors) - 1
+    return anchors[i][0]
+
+
+def position_in_body(
+    claim: dict, body: str, anchors: list[tuple[int, float]] | None = None
+) -> float | None:
     """Where a claim sits in the text THE MODEL SAW, as a character offset.
 
     ONE COORDINATE SPACE, and this is the whole reason the function exists. A
@@ -86,19 +135,31 @@ def position_in_body(claim: dict, body: str) -> float | None:
     never sees a timecode and can only answer in phrases. Comparing seconds
     against character offsets bound nothing at all on the first run of this
     pass - 388 claims "outside" every account, on a record where the accounts
-    were right. Locating the claim's own quote puts both in the same space.
+    were right.
 
-    Falls back to a char-style location for records that carry one, and returns
-    None rather than guessing when neither works.
+    THE WORD-TIMESTAMP MAP IS THE EXACT ANSWER and is tried first: the record
+    timestamps every word, so a claim's own timecode converts to an offset with
+    no matching of any kind. Locating the claim's quote is the fallback, and it
+    is lossy - on this record 86 of 394 quotes could not be found, and every one
+    of those claims was lost from the binding until the map replaced it.
     """
     from digester.entailment import locate
 
+    location = claim.get("location") or ""
+    if anchors:
+        m = _TIMECODE.search(location)
+        if m:
+            seconds = parse_seconds(m.group(0))
+            if seconds is not None:
+                offset = offset_for_time(anchors, seconds)
+                if offset is not None:
+                    return float(offset)
+
     quote = claim.get("quote")
     if quote and body:
-        span = locate(body, quote, claim.get("location"))
+        span = locate(body, quote, location)
         if span:
             return float(span[0])
-    location = claim.get("location") or ""
     for pattern in (_CHAR_SPAN, _CH_SPAN):
         m = pattern.search(location)
         if m:
@@ -143,7 +204,70 @@ def resolve_span(account: dict, body: str) -> tuple[float, float] | None:
     return float(start), float(end)
 
 
-def bind(accounts: list[dict], claims: list[dict], body: str = "") -> dict:
+def resolve_all(accounts: list[dict], body: str) -> list[list[tuple[float, float]]]:
+    """Every account's spans, repairing one-ended ones from their neighbours.
+
+    A span is lost when EITHER phrase fails to match, and the common failure is
+    the model tidying one of them - on the Doty interview 9 of 29 accounts had
+    one end resolve and the other not, and losing all nine to that was the
+    largest remaining hole in the binding.
+
+    An interview is sequential, so a missing end can be taken from the next
+    account's start rather than guessed at or fuzzy-matched: the passage runs
+    until the next telling begins. Only ONE end may be repaired this way - an
+    account with neither end found is dropped, because a span invented from two
+    neighbours is not evidence of anything.
+    """
+    ends: list[tuple[int | None, int | None]] = []
+    for a in accounts:
+        start = locate_phrase(body, a.get("span_start") or "")
+        end_at = locate_phrase(body, a.get("span_end") or "")
+        end = (
+            None if end_at is None else end_at + len((a.get("span_end") or "").strip())
+        )
+        ends.append((start, end))
+
+    widths = [e - s for s, e in ends if s is not None and e is not None and e > s]
+    typical = sorted(widths)[len(widths) // 2] if widths else 0
+    anchors = sorted(
+        (s if s is not None else e, i)
+        for i, (s, e) in enumerate(ends)
+        if s is not None or e is not None
+    )
+    order = [i for _, i in anchors]
+
+    resolved: list[list[tuple[float, float]]] = []
+    for i, (start, end) in enumerate(ends):
+        spans: list[tuple[float, float]] = []
+        if start is not None and end is None and typical:
+            # Runs until the next telling begins, or a typical length if last.
+            later = [
+                ends[j][0]
+                for j in order
+                if ends[j][0] is not None and ends[j][0] > start
+            ]
+            end = min(later) if later else start + typical
+        elif end is not None and start is None and typical:
+            earlier = [
+                ends[j][1] for j in order if ends[j][1] is not None and ends[j][1] < end
+            ]
+            start = max(earlier) if earlier else max(0, end - typical)
+        if start is not None and end is not None and end > start:
+            spans.append((float(start), float(end)))
+        for extra in accounts[i].get("also_spans") or []:
+            span = resolve_span(extra, body)
+            if span:
+                spans.append(span)
+        resolved.append(spans)
+    return resolved
+
+
+def bind(
+    accounts: list[dict],
+    claims: list[dict],
+    body: str = "",
+    anchors: list[tuple[int, float]] | None = None,
+) -> dict:
     """Attach each claim to the account whose span contains it.
 
     Returns counts and mutates nothing: each claim gains `account_id` only via
@@ -151,23 +275,27 @@ def bind(accounts: list[dict], claims: list[dict], body: str = "") -> dict:
     spans go to the SMALLEST containing account, because a nested telling is
     more specific than the passage it sits inside.
     """
-    resolved = []
-    for i, a in enumerate(accounts):
-        spans = []
-        primary = resolve_span(a, body)
-        if primary:
-            spans.append(primary)
-        for extra in a.get("also_spans") or []:
-            span = resolve_span(extra, body)
-            if span:
-                spans.append(span)
-        resolved.append(spans)
+    if body:
+        resolved = resolve_all(accounts, body)
+    else:
+        resolved = []
+        for a in accounts:
+            spans = []
+            for candidate in [a, *(a.get("also_spans") or [])]:
+                span = resolve_span(candidate, body)
+                if span:
+                    spans.append(span)
+            resolved.append(spans)
 
     counts = {"bound": 0, "unbindable": 0, "outside": 0}
     mapping: dict[str, str] = {}
     per_account: dict[int, int] = {i: 0 for i in range(len(accounts))}
     for c in claims:
-        pos = position_in_body(c, body) if body else claim_position(c.get("location"))
+        pos = (
+            position_in_body(c, body, anchors)
+            if body or anchors
+            else claim_position(c.get("location"))
+        )
         if pos is None:
             counts["unbindable"] += 1
             continue
