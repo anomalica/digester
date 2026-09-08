@@ -582,3 +582,48 @@ class TestTheCodeFingerprint:
         from digester import extract
 
         assert extract.code_fingerprint() == extract.code_fingerprint()
+
+
+class TestTheSchemaIsProcessStable:
+    """The schema goes to the model, so its order is not cosmetic.
+
+    Two of the three enums were built from set comprehensions. Python
+    randomises string hashing per process, so every run handed the model a
+    different ordering of the same claim_type and attestation options - an
+    uncontrolled variable inside every run-to-run comparison, including the
+    measured noise floor. It cannot be caught inside one process: the seed is
+    fixed once at start-up, so the check has to cross a process boundary.
+    """
+
+    SNIPPET = (
+        "import json;"
+        "from digester.extract import build_claims_schema_v2, schema_fingerprint;"
+        "print(schema_fingerprint());"
+        "print(json.dumps(build_claims_schema_v2(['A','B'])))"
+    )
+
+    def _run(self, seed):
+        import os
+        import subprocess
+        import sys
+
+        env = {**os.environ, "PYTHONHASHSEED": str(seed)}
+        out = subprocess.run(
+            [sys.executable, "-c", self.SNIPPET],
+            capture_output=True,
+            text=True,
+            env=env,
+            timeout=120,
+        )
+        assert out.returncode == 0, out.stderr[-500:]
+        return out.stdout.strip().split("\n", 1)
+
+    def test_the_schema_is_identical_under_different_hash_seeds(self):
+        _, a = self._run(0)
+        _, b = self._run(12345)
+        assert a == b, "the model must not be shown the enums in a shuffled order"
+
+    def test_the_fingerprint_is_identical_under_different_hash_seeds(self):
+        a, _ = self._run(0)
+        b, _ = self._run(12345)
+        assert a == b, "a fingerprint that changes per process proves nothing"

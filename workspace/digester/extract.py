@@ -39,9 +39,21 @@ VALID_NODE_TYPES = {
     for t in NodeType
     if t not in (NodeType.record, NodeType.claim, NodeType.matter)
 }
-VALID_CLAIM_TYPES = {t.value for t in ClaimType}
-VALID_ATTESTATION = {t.value for t in AttestationLevel}
-VALID_ORIGIN_KINDS = sorted(k.value for k in OriginKind)
+# ORDERED, NOT SETS, and the order is the enum's own declaration order.
+#
+# These go into the JSON schema the model is constrained by, and a set has no
+# order: Python randomises string hashing per process, so every run presented
+# the model with `claim_type` and `attestation` options shuffled differently.
+# Three consecutive processes produced three different orderings of the same
+# six values. Option order biases a model's choice, so this was an uncontrolled
+# variable sitting inside every run-to-run comparison we have made - including
+# the measured noise floor, and including a schema fingerprint that was
+# supposed to prove two digests came from one configuration and was different
+# every time it was computed. VALID_ORIGIN_KINDS was already sorted, which is
+# the same bug found once and fixed in one of the three places.
+VALID_CLAIM_TYPES = tuple(t.value for t in ClaimType)
+VALID_ATTESTATION = tuple(t.value for t in AttestationLevel)
+VALID_ORIGIN_KINDS = tuple(k.value for k in OriginKind)
 
 
 SAFE_ACRONYMS = (
