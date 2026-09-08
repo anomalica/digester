@@ -491,3 +491,57 @@ class TestPinnedPrompts:
         assert extract._claims_prompt_template() == "FIRST"
         f.write_text("SECOND")
         assert extract._claims_prompt_template() == "SECOND"
+
+
+class TestPinningAConfiguration:
+    """A run must use one prompt set and STAMP THE ONE IT USED.
+
+    Prompts are read from disk per call, so an edit landing mid-run changes a
+    running extraction. Pinning the text stops that. Pinning the text WITHOUT
+    the provenance is worse than pinning neither: the run keeps the old prompt
+    and records the new one's hash, producing an artefact labelled with a
+    configuration it was not produced under.
+    """
+
+    @staticmethod
+    def _resolver(text: str, sha: str):
+        from digester.prompt_registry import PromptProvenance
+
+        def resolve(prompt_id, env_var=None):
+            return text, PromptProvenance(prompt_id, "v1", sha, f"{prompt_id}.txt")
+
+        return resolve
+
+    def _pin_then_edit(self, monkeypatch):
+        from digester import extract, prompt_registry
+
+        monkeypatch.setattr(
+            prompt_registry, "resolve_prompt", self._resolver("BEFORE", "aaa")
+        )
+        extract.pin_prompts()
+        monkeypatch.setattr(
+            prompt_registry, "resolve_prompt", self._resolver("AFTER", "bbb")
+        )
+        return extract
+
+    def test_the_nodes_prompt_is_pinned_not_only_the_claims_one(self, monkeypatch):
+        extract = self._pin_then_edit(monkeypatch)
+        try:
+            assert extract._nodes_prompt() == "BEFORE"
+        finally:
+            extract.release_prompts()
+
+    def test_the_stamped_provenance_describes_the_prompt_actually_used(
+        self, monkeypatch
+    ):
+        extract = self._pin_then_edit(monkeypatch)
+        try:
+            assert {p["sha256"] for p in extract.prompt_provenance()} == {"aaa"}
+        finally:
+            extract.release_prompts()
+
+    def test_releasing_lets_the_next_run_pick_up_the_edit(self, monkeypatch):
+        extract = self._pin_then_edit(monkeypatch)
+        extract.release_prompts()
+        assert extract._nodes_prompt() == "AFTER"
+        assert {p["sha256"] for p in extract.prompt_provenance()} == {"bbb"}

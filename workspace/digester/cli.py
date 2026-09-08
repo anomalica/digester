@@ -1401,6 +1401,75 @@ def check_cmd(
         raise SystemExit(3)
 
 
+@main.command(name="salience")
+@click.option(
+    "--digests-root",
+    type=click.Path(),
+    default=str(_ANOMALICA / "digests"),
+    help="Digests repo; every canonical digest carrying roles is read",
+)
+def salience_cmd(digests_root: str) -> None:
+    """Report the reference roles across every digest that carries them.
+
+    ACROSS DIGESTS, because one of the two instruments here is a corpus
+    statistic and reading it inside a single record inverts it: the ambient
+    prior says a term naming the whole field cannot be the subject of most
+    claims, and on a record that is genuinely about unidentified objects it
+    fired at 89% on nine edges that were right. It stays silent until a node's
+    edges span enough records to have a population.
+
+    The headline number is NOT an accuracy figure and the report says so. For
+    accuracy, score against the hand-labelled set: reports/salience/hand-labels.yaml.
+    """
+    import yaml as _yaml
+
+    from digester import salience
+
+    digests, skipped = [], 0
+    for f in sorted(Path(digests_root).glob("*.yaml")):
+        d = _yaml.safe_load(f.read_text()) or {}
+        claims = salience.claims_of(d)
+        if any(r.get("role") for c in claims for r in salience._refs(c)):
+            digests.append(d)
+        elif claims:
+            skipped += 1
+    if not digests:
+        click.echo(
+            f"No digest under {digests_root} carries reference roles. "
+            f"{skipped} carry claims without them - they predate the field."
+        )
+        raise SystemExit(1)
+
+    rep = salience.report(digests)
+    sole, first = rep["sole_reference"], rep["subject_first"]
+    click.echo(f"{len(digests)} digests with roles, {skipped} without\n")
+    click.echo(f"role mix: {rep['role_mix']}\n")
+    click.echo(
+        f"under-extraction (sole-reference claims whose one reference is not "
+        f"the subject): {sole['under_nodded']}/{sole['assessed']} = "
+        f"{sole['under_nodded_rate']}"
+    )
+    click.echo(
+        "  Read as claims whose SUBJECT HAS NO NODE, not as role errors. Forty "
+        "hand-labelled pairs found every one of these correct on that sample."
+    )
+    click.echo(
+        f"\nsubject-first accuracy: {first['wrong']}/{first['subject_first_edges']} "
+        f"wrong = {first['error_rate']}"
+    )
+    for name, r in sorted(rep["ambient"].items()):
+        flag = "OVER CEILING" if r["over_ceiling"] else "ok"
+        click.echo(
+            f"\nambient {name}: subject on {r['subject_rate']:.0%} of "
+            f"{r['edges']} edges across {r['records']} records - {flag}"
+        )
+    if not rep["ambient"]:
+        click.echo(
+            "\nambient check silent: no corpus-wide term yet spans enough "
+            "records to have a population to be ambient across."
+        )
+
+
 @main.command(name="spend")
 @click.option("--day", default=None, help="UTC day (YYYY-MM-DD); default today")
 @click.option(

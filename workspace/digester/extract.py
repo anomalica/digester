@@ -704,27 +704,41 @@ def _format_directory_v2(nodes: list[dict]) -> str:
 # is better than a rule saying not to: cached chunks make a restart cheap, so
 # nothing is lost by pinning.
 _pinned_prompts: dict[str, str] = {}
+_pinned_provenance: list[dict] = []
 
 
 def pin_prompts() -> None:
-    """Freeze this run's prompt text. Called once at the start of a run."""
-    _pinned_prompts["nodes"] = prompt_registry.prompt_text(
-        "nodes", "DIGESTER_NODES_PROMPT_FILE"
-    )
-    _pinned_prompts["claims"] = prompt_registry.prompt_text(
-        "claims", "DIGESTER_CLAIMS_PROMPT_FILE"
-    )
+    """Freeze this run's prompt text AND the provenance that describes it.
+
+    Both halves, because pinning one is worse than pinning neither. The text
+    was pinned and the provenance was not, so an edit landing mid-run left the
+    run using the old prompt and STAMPING THE NEW ONE'S HASH into the digest -
+    an artefact labelled with a configuration it was not produced under, which
+    is the failure the fingerprint exists to prevent, caused by the fix for it.
+    """
+    _pinned_prompts.clear()
+    _pinned_provenance.clear()
+    for name, env in (
+        ("nodes", "DIGESTER_NODES_PROMPT_FILE"),
+        ("claims", "DIGESTER_CLAIMS_PROMPT_FILE"),
+    ):
+        text, prov = prompt_registry.resolve_prompt(name, env)
+        _pinned_prompts[name] = text
+        _pinned_provenance.append({"pass": name, **prov.as_dict()})
 
 
 def release_prompts() -> None:
     _pinned_prompts.clear()
+    _pinned_provenance.clear()
 
 
 def _nodes_prompt() -> str:
-    """Nodes-pass prompt from the registry, overridable per run via
+    """Nodes-pass prompt, pinned for the life of a run, overridable per run via
     DIGESTER_NODES_PROMPT_FILE (lets Haiku and Sonnet carry different prompts).
     The version/hash actually used is recorded via prompt_provenance()."""
-    return prompt_registry.prompt_text("nodes", "DIGESTER_NODES_PROMPT_FILE")
+    return _pinned_prompts.get("nodes") or prompt_registry.prompt_text(
+        "nodes", "DIGESTER_NODES_PROMPT_FILE"
+    )
 
 
 def _claims_prompt_template() -> str:
@@ -741,6 +755,8 @@ def prompt_provenance() -> list[dict]:
     """Which prompt (id/version/sha256/file) each pass will use for this run,
     resolving the same env-override + registry path as the loaders above. Stamped
     into the digest so it is attributable to an exact prompt (ADR 0010 pattern)."""
+    if _pinned_provenance:
+        return [dict(p) for p in _pinned_provenance]
     nodes = prompt_registry.resolve_prompt("nodes", "DIGESTER_NODES_PROMPT_FILE")[1]
     claims = prompt_registry.resolve_prompt("claims", "DIGESTER_CLAIMS_PROMPT_FILE")[1]
     return [
