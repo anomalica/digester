@@ -312,13 +312,9 @@ EACH REFERENCE CARRIES A ROLE - what the claim is, not what it names
 A reference records that a node appears in the claim. It does NOT say the claim is about that node, and those are different things: a claim can name a city because that is where something happened, or name it because the claim is about the city. Give every reference exactly one role, decided by DELETING the node and asking what survives:
 
   - "subject": delete the node and the claim has no subject left. The claim asserts something about this node.
-  - "participant": the node acts in the claim OR IS ACTED UPON, but the claim is about an event or about another node.
+  - "participant": the node acts in the claim, but the claim is about an event or about another node.
   - "setting": where or when it happened. Delete it and the claim still asserts the same thing, less precisely.
   - "mentioned": context, comparison or aside. Delete it and nothing the claim asserts changes.
-
-APPLY THE FOUR TESTS IN THAT ORDER AND TAKE THE FIRST THAT FITS. More than one can fit the same reference, and without an order two readers disagree on a case neither got wrong.
-
-"Acted upon" is there because a claim's object is not an aside. In "Raymond Fowler wrote five books: A; B; C; D; E" each title is a participant: deleting one changes what the claim asserts, so it is not "mentioned", and the book need not act to be what the writing was done to. The subject test is still tried first, so in "a needle was inserted into Betty Andreasson's nostril" she is the subject - delete her and the claim is about nobody - rather than a participant.
 
 Apply the deletion test literally rather than judging importance. "Kevin Day tracked objects from the USS Princeton off San Diego in 2004" gives: Kevin Day subject, USS Princeton participant, San Diego setting. A claim naming a phenomenon the whole record is about - "UFO", "UAP" - is usually "mentioned", because deleting it changes nothing the claim asserts; do not mark it subject merely because it is the record's topic.
 

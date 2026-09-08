@@ -10,7 +10,11 @@
 #
 # `ambiguous: true` marks a pair where two roles are defensible under the
 # definitions as written - not a hard case for the model, a GAP IN THE TAXONOMY.
-# Scored both ways; the strict number counts them, the clean number drops them.
+# Four of the five were closed on 2026-09-08 by widening `participant` to "acts
+# OR IS ACTED UPON" and by ruling that the four tests apply IN ORDER, first fit
+# wins. THE WIDENING DID NOT RAISE THE MODEL'S SCORE - it removed the excuse for
+# three of its errors, so the strict and clean figures converged rather than the
+# model improving. One pair (i=37) stays open and says why.
 schema: anomalica/salience-labels/1
 record: 2026-08-08-video-raymond-fowler
 digest: haiku
@@ -29,12 +33,12 @@ pairs:
   - i: 2
     ref: UFOs, Interplanetary Visitors
     model: mentioned
-    gold: subject
-    ambiguous: true
+    gold: participant
     note: >-
-      "Fowler wrote five books: A; B; C; D; E." Deleting a title changes what is asserted, so `mentioned` fails its own test;
-      but a book does not act, so `participant` fails too. THE ROLE SET HAS NO SLOT FOR THE OBJECT OF A CLAIM, and this is
-      the one real taxonomy gap the sample found.
+      "Fowler wrote five books: A; B; C; D; E." This was the one real taxonomy gap the sample found: deleting a title changes
+      what is asserted, so `mentioned` failed its own test, and a book does not act, so `participant` failed too. Closed 2026-09-08
+      by widening `participant` to "acts OR IS ACTED UPON" rather than adding a fifth value - the book is what the writing
+      was done to. Still an error, and now an unambiguous one.
   - i: 3
     ref: Betty Andreasson
     model: subject
@@ -117,10 +121,10 @@ pairs:
     ref: USA, Arizona, Phoenix
     model: mentioned
     gold: setting
-    ambiguous: true
     note: >-
       a hedged destination ("either Tucson or Phoenix"). Deleting it leaves the same assertion less precisely, which is the
-      setting test; reading the hedge as an aside gives `mentioned`.
+      setting test, and setting is tried before mentioned. Reading the hedge as an aside gave `mentioned` before the ordering
+      rule existed.
   - i: 21
     ref: USA, New Mexico, White Sands
     model: setting
@@ -144,10 +148,10 @@ pairs:
     ref: Betty Andreasson
     model: subject
     gold: subject
-    ambiguous: true
     note: >-
-      she is the patient, not the agent ("a needle was inserted into her nostril"). `subject` by the deletion test; `participant`
-      says the node ACTS, which she does not. The taxonomy gap again, milder.
+      she is the patient, not the agent ("a needle was inserted into her nostril"), so the widened `participant` fits her
+      too. The four tests apply in order and subject is tried first: delete her and the claim is about nobody. Decided by
+      the ordering rule, not by judgement.
   - i: 26
     ref: Betty Andreasson
     model: mentioned
@@ -177,9 +181,8 @@ pairs:
   - i: 32
     ref: The Melchizedek Connection
     model: mentioned
-    gold: subject
-    ambiguous: true
-    note: same claim and same taxonomy gap as i=2
+    gold: participant
+    note: same claim as i=2, resolved the same way by the widened `participant`
   - i: 33
     ref: 1946 European UFO wave
     model: subject
@@ -204,7 +207,11 @@ pairs:
     model: subject
     gold: subject
     ambiguous: true
-    note: the claim is about the diplomatic mission; the wave is what it was for
+    note: >-
+      the claim is about the diplomatic mission; the wave is what the inspection was FOR. The one pair the widened `participant`
+      does not close - a purpose-clause referent is neither an actor nor a thing acted upon, and deleting it changes what
+      is asserted, so `mentioned` fails as well. Left open rather than forced: one case is not enough to move the taxonomy
+      again.
   - i: 38
     ref: Doolittle
     model: subject

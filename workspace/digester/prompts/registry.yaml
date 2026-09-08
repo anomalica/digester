@@ -61,10 +61,14 @@ prompts:
         added: '2026-07-31'
         note: node_references match the directory's natural-order names
       v5:
-        file: claims.txt
+        file: archive/claims-v5.txt
         added: '2026-09-08'
         note: every node_reference carries a role decided by the deletion test
-    active: v5
+      v6:
+        file: claims.txt
+        added: '2026-09-08'
+        note: participant covers a node acted upon; the four tests apply in order, first fit wins
+    active: v6
   extraction:
     versions:
       g249b8fd3:
