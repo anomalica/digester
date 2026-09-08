@@ -80,6 +80,26 @@ def variant_path(
     return digests_root / "variants" / _de_version(friendly_name) / f"{stem}.yaml"
 
 
+_PROMPT_SHA = re.compile(r"^[0-9a-f]{8}$")
+
+
+def split_variant_stem(stem: str) -> tuple[str, str, str]:
+    """A variant filename back into (model, prompt sha, run label).
+
+    Splitting on the first dot loses two things and both matter. A model name
+    contains dots - `openai-gpt-5.6-luna` became "openai-gpt-5" in the grade
+    table, so two providers' rows could collide. And the prompt sha is what
+    separates a comparison from a confound: a grid part-built on one claims
+    prompt and part on another ranks the prompt, not the model. The sha is the
+    one fixed-shape segment, so find it and read outwards.
+    """
+    parts = stem.split(".")
+    for i, part in enumerate(parts):
+        if _PROMPT_SHA.match(part):
+            return ".".join(parts[:i]), part, ".".join(parts[i + 1 :])
+    return stem, "", ""
+
+
 def canonical_path(digests_root: Path, friendly_name: str) -> Path:
     return digests_root / f"{_de_version(friendly_name)}.yaml"
 
