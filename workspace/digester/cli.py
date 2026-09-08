@@ -1505,7 +1505,12 @@ def accounts_cmd(
     result = extract_accounts(
         parsed.body,
         model=model,
-        record_context=build_record_context(parsed),
+        record_context=build_record_context(
+            parsed.title,
+            parsed.creators,
+            parsed.date,
+            parsed.source_type,
+        ),
         on_progress=click.echo,
         use_api=use_api,
     )
@@ -1518,7 +1523,12 @@ def accounts_cmd(
         claims = (d.get("domain_claims") or []) + (d.get("infrastructure_claims") or [])
         click.echo(f"binding {len(claims)} claims from {Path(digest).name}")
 
-    bound = accounts_mod.bind(candidates, claims, parsed.body)
+    # The MATERIALISED body: the text the model saw and the text claim quotes
+    # resolve against. parsed.body still carries the {{t:}} tokens that
+    # materialise strips, so phrase-matching against it finds nothing.
+    from anomalica_common.pre_digest import materialise
+
+    bound = accounts_mod.bind(candidates, claims, materialise(parsed.body))
     kept, dropped = accounts_mod.apply_floor(
         candidates,
         bound["per_account"],

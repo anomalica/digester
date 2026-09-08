@@ -1,0 +1,1830 @@
+run_kind: comparison
+schema: anomalica/digest/1
+extracted_at: '2026-08-28T00:47:59.288119+00:00'
+model: deepseek/deepseek-v3.2
+ai_usage:
+  - stage: digest
+    model: deepseek/deepseek-v3.2
+    model_version: deepseek/deepseek-v3.2
+    tokens:
+      input: 24943
+      output: 18364
+      real_input: 24943
+      cache_read: 0
+      cache_write: 0
+      calls: 3
+prompts:
+  - pass: nodes
+    id: nodes
+    version: v4
+    sha256: 1ca968e2b28b26a9acea5fb8df00083fa61e690577899237bf6ea47a492dd7bb
+    file: nodes.txt
+  - pass: claims
+    id: claims
+    version: v4
+    sha256: 89ec59286169096f610265f3c5cf0fb34ff5e58e9726e6682e8693e8c703fe89
+    file: claims.txt
+schema_enforcement: native
+pre_digest:
+  sha256: be799dd1df8162235bb8f53e8bbf741b076030eaf9831bf9637dfeb7b441de22
+  prep_version: 7
+record:
+  id: a665356e-6c25-46a8-9e82-927580acf467
+  title: Intelligence Officials Say U.S. Has Retrieved Craft of Non-Human Origin
+  producer: Leslie Kean
+  publisher: The Debrief
+  date: '2023-06-05'
+  medium: web
+  content_hash: sha256:5ce8e38071f914d4dbb950938474d8e00a0a59d120d4391a2e90baa5da5d4335
+  processing_version: bf54727
+  reference: |-
+    https://thedebrief.org/intelligence-officials-say-u-s-has-retrieved-non-human-craft/
+  review:
+    state: human
+    sidecar: present
+    carryover:
+      at: '2026-07-05T02:16:44Z'
+      from: 829ba5a1c0c1e05aea8a7d314e2d5f191727c659336b751c541aef5ffe3b6dcc
+      had_text_edits: true
+    observed_coverage: 1.0
+  fetched_url: |-
+    https://web.archive.org/web/20260507125226/https://thedebrief.org/intelligence-officials-say-u-s-has-retrieved-non-human-craft/
+  description: |-
+    In a Debrief exclusive, Ralph Blumenthal and Leslie Kean report that a former intelligence official turned whistleblower has told Congress and the IG that the U.S. has retrieved craft of non-human origin.
+terminology:
+  main_subject: Unidentified Aerial Phenomena (UAP)
+  acronyms:
+    - acronym: NGA
+      expansion: National Geospatial-Intelligence Agency
+    - acronym: NRO
+      expansion: National Reconnaissance Office
+    - acronym: UAP
+      expansion: Unidentified Aerial Phenomena
+    - acronym: UFO
+      expansion: Unidentified Flying Object
+    - acronym: AARO
+      expansion: All-Domain Anomaly Resolution Office
+    - acronym: ICIG
+      expansion: Intelligence Community Inspector General
+    - acronym: DoD
+      expansion: Department of Defense
+    - acronym: NASIC
+      expansion: National Air and Space Intelligence Center
+    - acronym: NDAA
+      expansion: National Defense Authorization Act
+    - acronym: FY2023
+      expansion: Fiscal Year 2023
+    - acronym: SAP
+      expansion: Special Access Programs
+    - acronym: CAP
+      expansion: Controlled Access Programs
+    - acronym: ODNI
+      expansion: Office of the Director of National Intelligence
+nodes:
+  - id: 33158552-87be-49a4-90c3-a4220241de47
+    type: person
+    name: David Charles Grusch
+  - id: f412012b-86bf-4ba5-93d4-19e095920050
+    type: person
+    name: Leslie Kean
+  - id: 9de8e371-3600-4b4e-b981-22fbee85e3d1
+    type: person
+    name: Ralph Blumenthal
+  - id: 1697c9a4-dd08-45fc-9997-701e0e3232d8
+    type: person
+    name: Karl E. Nell
+  - id: bdb68d53-99ce-4288-b57d-70c2ad367ef0
+    type: person
+    name: Christopher Mellon
+  - id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+    type: person
+    name: Jonathan Grey
+  - id: eb88e53b-6c02-4534-b9fd-145cbc3d073d
+    type: person
+    name: Kirsten Gillibrand
+  - id: d0130fcf-43ff-44e7-b500-7ef5d8440c9f
+    type: person
+    name: Marco Rubio
+  - id: bb3eab5f-7234-425f-8703-77777aa9682a
+    type: person
+    name: Laura A. Potter
+  - id: aa349c1d-13f9-4b0e-b6e1-f6b6a36ebdc8
+    type: person
+    name: Charles McCullough III
+  - id: 081c8577-08f4-4d6b-9863-b64eec8727f6
+    type: person
+    name: Avril Haines
+  - id: 3ec62467-af50-4d60-8464-00c43d8e042e
+    type: person
+    name: Garry Nolan
+  - id: b28b3b17-c8a8-4ce7-aeed-695bfa26ddb2
+    type: person
+    name: Andre Carson
+  - id: 2d07408a-7310-487d-ae11-d3c54be3af6d
+    type: person
+    name: Helene Cooper
+  - id: 5599fc8b-f683-4d7c-90ca-ce400931ccf5
+    type: person
+    name: Tim McMillan
+  - id: 58cfe091-e8d3-44bc-82fc-87c1ed3b35b3
+    type: person
+    name: Micah Hanks
+  - id: a18743b4-cd97-4033-b793-907c2b36454b
+    type: person
+    name: Craig Labadie
+  - id: 3cd5db09-bebf-499a-8d16-d1be50572cd3
+    type: person
+    name: Sean Munger
+  - id: 955b3ea9-be82-47d1-b67e-8506f897dc3f
+    type: organisation
+    name: The Debrief
+  - id: 478085f0-1f6e-42e9-bdde-237379472781
+    type: organisation
+    name: National Geospatial-Intelligence Agency (NGA)
+  - id: 699c73d5-fbaf-4b68-ae90-1d7411db4fc6
+    type: organisation
+    name: National Reconnaissance Office (NRO)
+  - id: 9d1a97e0-dd79-430b-9f5b-18cb86e717b7
+    type: organisation
+    name: Unidentified Aerial Phenomena Task Force
+  - id: c83783a3-26f0-451d-a127-f69f59ce14da
+    type: organisation
+    name: Department of the Navy
+  - id: 23c93653-8399-468c-8eaa-8307712e7ace
+    type: organisation
+    name: Office of the Under Secretary of Defense for Intelligence and Security
+  - id: 49c9b40c-192a-4973-b44a-6a1af333506c
+    type: organisation
+    name: All-Domain Anomaly Resolution Office (AARO)
+  - id: 0370b0c0-e88e-4ab9-9dfc-1dde09aacbb5
+    type: organisation
+    name: Department of Defense (DoD)
+  - id: bb7c4073-7526-453e-a338-1e6b4ea81a78
+    type: organisation
+    name: Defense Office of Prepublication and Security Review
+  - id: 4c167e86-77ef-4426-b9bc-0734dfa9c4f0
+    type: organisation
+    name: United States Air Force
+  - id: cae532e0-85b8-42d0-84b9-03e1f444809f
+    type: organisation
+    name: United States Army
+  - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+    type: organisation
+    name: United States Congress
+  - id: cf07220b-6327-478c-9a25-f4bc4f71cc04
+    type: organisation
+    name: House Permanent Select Committee on Intelligence
+  - id: eea80912-6e42-4cca-bfd1-e1b2f1c5699c
+    type: organisation
+    name: Senate Select Committee on Intelligence
+  - id: eb644eed-75e2-410d-b8a7-4200afc70f8b
+    type: organisation
+    name: Intelligence Community Inspector General (ICIG)
+  - id: f6002169-cd85-448c-9d17-71839698326b
+    type: organisation
+    name: National Air and Space Intelligence Center (NASIC)
+  - id: 8f9b2fe2-5b51-41dc-97e9-0b004cce120c
+    type: organisation
+    name: Compass Rose Legal Group
+  - id: ce934977-59b3-4063-a94e-12e3ec52e2a9
+    type: organisation
+    name: Department of Defense Inspector General
+  - id: fd7dc271-dd14-4ec7-81f1-aa502b8cb79a
+    type: organisation
+    name: Office of the Director of National Intelligence (ODNI)
+  - id: ede75098-7100-47d1-b239-90bbbb613ac8
+    type: organisation
+    name: Senate Armed Services Committee
+  - id: 9f450b9f-6f9f-44cb-9f15-289190613f17
+    type: organisation
+    name: Stanford University
+  - id: d6db0d64-b5b4-4af1-86a5-9163bd786d6c
+    type: organisation
+    name: Department of Pathology, Stanford University
+  - id: fff611e2-9a58-48fa-b9e4-2992c1e022ba
+    type: organisation
+    name: The New York Times
+  - id: ce840f4d-0aca-46eb-8256-13540efa0c6b
+    type: project
+    name: Unidentified Aerial Phenomena (UAP) Program
+  - id: 6e88b53e-6b70-45c8-ae94-c3a9e289fd59
+    type: document
+    name: FY2023 National Defense Authorization Act (NDAA)
+  - id: 6f22b960-de7b-42c4-99ae-5aa7cb37ef1c
+    type: document
+    name: National Defense Authorization Act for FY2023
+  - id: 8c7e5623-b269-44e1-aafa-9c8d2b689811
+    type: document
+    name: Disclosure of Urgent Concern(s); Complaint of Reprisal
+  - id: 8e673712-33ff-412c-a66a-4ae317bc107b
+    type: document
+    name: Dec. 17, 2017 front-page article in The New York Times
+  - id: 90114a52-65f3-42af-a66b-a15faca10843
+    type: topic
+    name: Unidentified Aerial Phenomena (UAP)
+  - id: 1bb3f229-f6e7-4620-93a7-247a6ebe2501
+    type: topic
+    name: Non-human intelligence
+  - id: e55aad4f-cb6d-4f91-b117-6e9ed83ebc13
+    type: topic
+    name: Unidentified Flying Object (UFO)
+  - id: 99075fa6-8517-4f63-81a3-dd93549870e7
+    type: topic
+    name: Special Access Programs (SAP)
+  - id: 83a72c37-bc66-49b6-b138-8bd85d1d356a
+    type: topic
+    name: Controlled Access Programs (CAP)
+  - id: 4108f74b-c0b3-40ec-adee-7b0993fdfcc8
+    type: topic
+    name: Unidentified anomalous phenomena
+  - id: e971e1ab-95d4-4e12-bcc3-e766c73a1fcc
+    type: topic
+    name: Reverse engineering
+  - id: dcc553b5-2a87-4872-9fcb-a2e12d92a555
+    type: topic
+    name: Whistleblower protection
+domain_claims:
+  - id: 29e687b7-8591-4998-9c72-cec8c3bea0e4
+    type: testimony
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: named
+      origin: David Charles Grusch
+      relay:
+        - the authors
+    attribution_in_text: true
+    location: char:258-518
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: eb644eed-75e2-410d-b8a7-4200afc70f8b
+        name: Intelligence Community Inspector General (ICIG)
+      - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+        name: United States Congress
+      - id: 1bb3f229-f6e7-4620-93a7-247a6ebe2501
+        name: Non-human intelligence
+    quote: |-
+      A former intelligence official turned whistleblower has given Congress and the Intelligence Community Inspector General extensive classified information about deeply covert programs that he says possess retrieved intact and partially intact craft of non-human origin.
+    text: |-
+      A former intelligence official turned whistleblower, David Charles Grusch, gave Congress and the Intelligence Community Inspector General extensive classified information about deeply covert programmes that he says possess retrieved intact and partially intact craft of non-human origin.
+  - id: be306625-312f-47b4-b37f-b8733bdf581f
+    type: testimony
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: named
+      origin: David Charles Grusch
+      relay:
+        - the authors
+    attribution_in_text: true
+    location: char:527-729
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+        name: United States Congress
+      - id: dcc553b5-2a87-4872-9fcb-a2e12d92a555
+        name: Whistleblower protection
+    quote: |-
+      The information, he says, has been illegally withheld from Congress, and he filed a complaint alleging that he suffered illegal retaliation for his confidential disclosures, reported here for the first time.
+    text: |-
+      David Charles Grusch filed a complaint alleging that he suffered illegal retaliation for his confidential disclosures.
+  - id: 7b2c0ffc-6d86-49c1-b642-a1ac550ae1bb
+    type: testimony
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:736-948
+    quote: |-
+      Other intelligence officials, both active and retired, with knowledge of these programs through their work in various agencies, have independently provided similar, corroborating information, both on and off the record.
+    text: |-
+      Other intelligence officials, both active and retired, with knowledge of these programmes through their work in various agencies, have independently provided similar, corroborating information, both on and off the record.
+  - id: c0ebddac-b765-4d8f-958d-5677e93daa7e
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: biographical information
+    attribution_in_text: false
+    location: char:957-1039
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+    quote: |-
+      The whistleblower, David Charles Grusch, 36, a decorated former combat officer in Afghanistan
+    text: David Charles Grusch is a decorated former combat officer in Afghanistan.
+  - id: 7e4b9dd0-d352-4fd1-9773-176ea2fb1d88
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: biographical information
+    attribution_in_text: false
+    location: char:1052-1158
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 478085f0-1f6e-42e9-bdde-237379472781
+        name: National Geospatial-Intelligence Agency (NGA)
+      - id: 699c73d5-fbaf-4b68-ae90-1d7411db4fc6
+        name: National Reconnaissance Office (NRO)
+    quote: |-
+      is a veteran of the National Geospatial-Intelligence Agency (NGA) and the National Reconnaissance Office (NRO).
+    text: |-
+      David Charles Grusch is a veteran of the National Geospatial-Intelligence Agency (NGA) and the National Reconnaissance Office (NRO).
+  - id: 0985fc0f-9614-4b62-9e4a-56d878ae3f1b
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: biographical information
+    attribution_in_text: false
+    location: char:1164-1278
+    date: 2019-2021
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 699c73d5-fbaf-4b68-ae90-1d7411db4fc6
+        name: National Reconnaissance Office (NRO)
+      - id: 9d1a97e0-dd79-430b-9f5b-18cb86e717b7
+        name: Unidentified Aerial Phenomena Task Force
+    quote: |-
+      He served as the reconnaissance office’s representative to the Unidentified Aerial Phenomena Task Force from 2019-2021.
+    text: |-
+      David Charles Grusch served as the National Reconnaissance Office's representative to the Unidentified Aerial Phenomena Task Force from 2019 to 2021.
+  - id: 16681bb0-d4e5-4c65-b878-09493a639b9e
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: biographical information
+    attribution_in_text: false
+    location: char:1284-1390
+    date: 2021-2022-07
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 478085f0-1f6e-42e9-bdde-237379472781
+        name: National Geospatial-Intelligence Agency (NGA)
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      From late 2021 to July 2022, he was the NGA’s co-lead for UAP analysis and its representative to the task force.
+    text: |-
+      From late 2021 to July 2022, David Charles Grusch was the National Geospatial-Intelligence Agency's co-lead for Unidentified Aerial Phenomena (UAP) analysis and its representative to the task force.
+  - id: b8ae6ea6-7d1e-45fe-b040-049f7d9e7ddb
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:1723-1848
+    refs:
+      - id: 9d1a97e0-dd79-430b-9f5b-18cb86e717b7
+        name: Unidentified Aerial Phenomena Task Force
+      - id: c83783a3-26f0-451d-a127-f69f59ce14da
+        name: Department of the Navy
+      - id: 23c93653-8399-468c-8eaa-8307712e7ace
+        name: Office of the Under Secretary of Defense for Intelligence and Security
+    quote: |-
+      The task force was led by the Department of the Navy under the Office of the Under Secretary of Defense for Intelligence and Security.
+    text: |-
+      The Unidentified Aerial Phenomena Task Force was led by the Department of the Navy under the Office of the Under Secretary of Defense for Intelligence and Security.
+  - id: c0db37af-8825-462d-bcbf-9a3b47f5483a
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:1858-1994
+    refs:
+      - id: 9d1a97e0-dd79-430b-9f5b-18cb86e717b7
+        name: Unidentified Aerial Phenomena Task Force
+      - id: 49c9b40c-192a-4973-b44a-6a1af333506c
+        name: All-Domain Anomaly Resolution Office (AARO)
+      - id: 4108f74b-c0b3-40ec-adee-7b0993fdfcc8
+        name: Unidentified anomalous phenomena
+    quote: |-
+      It has since been reorganized and expanded into the All-Domain Anomaly Resolution Office to include investigations of objects operating underwater.
+    text: |-
+      The Unidentified Aerial Phenomena Task Force has since been reorganised and expanded into the All-Domain Anomaly Resolution Office (AARO) to include investigations of objects operating underwater.
+  - id: 57426911-8981-4924-9d50-6d18c936ab80
+    type: hearsay
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: named
+      origin: David Charles Grusch
+      relay:
+        - the authors
+    attribution_in_text: true
+    location: char:2007-2321
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+    quote: |-
+      Grusch said the recoveries of partial fragments through and up to intact vehicles [have been made for decades](https://web.archive.org/web/20260507125226/https://www.politico.com/news/magazine/2023/06/03/ufo-crash-materials-intelligence-00100077) through the present day by the government, its allies, and defense contractors.
+    text: |-
+      David Charles Grusch said the recoveries of partial fragments through and up to intact vehicles have been made for decades through the present day by the government, its allies, and defence contractors.
+  - id: 2928e958-51a0-4df0-b861-8ce68511c6a2
+    type: hearsay
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: named
+      origin: David Charles Grusch
+      relay:
+        - the authors
+    attribution_in_text: true
+    location: char:2334-2621
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 1bb3f229-f6e7-4620-93a7-247a6ebe2501
+        name: Non-human intelligence
+    quote: |-
+      Analysis has determined that the objects retrieved are “of exotic origin (non-human intelligence, whether extraterrestrial or unknown origin) based on the vehicle morphologies and material science testing and the possession of unique atomic arrangements and radiological signatures,” he said.
+    text: |-
+      David Charles Grusch said analysis has determined that the objects retrieved are of exotic origin based on the vehicle morphologies and material science testing and the possession of unique atomic arrangements and radiological signatures.
+  - id: af174daf-e63b-4de6-ad71-4d1ba8d3b1dc
+    type: hearsay
+    attestation: first_hand
+    speaker:
+      id: 33158552-87be-49a4-90c3-a4220241de47
+      name: David Charles Grusch
+    provenance_chain:
+      origin_kind: speaker
+      origin: David Charles Grusch
+    attribution_in_text: true
+    location: char:2903-2953
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+    quote: “The material includes intact and partially intact vehicles.”
+    text: |-
+      David Charles Grusch said the material includes intact and partially intact vehicles.
+  - id: 6cad3443-6bd2-4ff0-bf72-1220c37ddf96
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:2965-3145
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: bb7c4073-7526-453e-a338-1e6b4ea81a78
+        name: Defense Office of Prepublication and Security Review
+      - id: 0370b0c0-e88e-4ab9-9dfc-1dde09aacbb5
+        name: Department of Defense (DoD)
+    quote: |-
+      In accordance with protocols, Grusch provided the Defense Office of Prepublication and Security Review at the Department of Defense with the information he intended to disclose to us.
+    text: |-
+      David Charles Grusch provided the Defense Office of Prepublication and Security Review at the Department of Defense with the information he intended to disclose.
+  - id: 3b9bed88-d476-4510-8fa8-ba2c42a88026
+    type: testimony
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:3623-3740
+    refs:
+      - id: 4c167e86-77ef-4426-b9bc-0734dfa9c4f0
+        name: United States Air Force
+      - id: e55aad4f-cb6d-4f91-b117-6e9ed83ebc13
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      For many decades, the Air Force carried out a disinformation campaign to discredit reported sightings of unexplained objects.
+    text: |-
+      For many decades, the United States Air Force carried out a disinformation campaign to discredit reported sightings of unexplained objects.
+  - id: 41fa5c74-a36b-4649-8b71-ebe9473ed6c6
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: biographical information
+    attribution_in_text: false
+    location: char:3860-4029
+    date: 2021-2022
+    refs:
+      - id: 1697c9a4-dd08-45fc-9997-701e0e3232d8
+        name: Karl E. Nell
+      - id: cae532e0-85b8-42d0-84b9-03e1f444809f
+        name: United States Army
+      - id: 9d1a97e0-dd79-430b-9f5b-18cb86e717b7
+        name: Unidentified Aerial Phenomena Task Force
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+    quote: |-
+      Karl E. Nell, a recently retired Army Colonel and current aerospace executive who was the Army’s liaison for the UAP Task Force from 2021 to 2022 and worked with Grusch there
+    text: |-
+      Karl E. Nell, a recently retired Army Colonel and current aerospace executive, was the Army's liaison for the UAP Task Force from 2021 to 2022 and worked with David Charles Grusch there.
+  - id: dc647713-1b09-4ad4-95a9-e6108a6c86a0
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 1697c9a4-dd08-45fc-9997-701e0e3232d8
+      name: Karl E. Nell
+    provenance_chain:
+      origin_kind: speaker
+      origin: Karl E. Nell
+    attribution_in_text: true
+    location: char:4036-4068
+    refs:
+      - id: 1697c9a4-dd08-45fc-9997-701e0e3232d8
+        name: Karl E. Nell
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+    quote: characterizes Grusch as “beyond reproach.”
+    text: Karl E. Nell characterises David Charles Grusch as beyond reproach.
+  - id: a10de592-ae6a-485d-999b-11e854ee276f
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: biographical information
+    attribution_in_text: false
+    location: char:4146-4291
+    refs:
+      - id: bdb68d53-99ce-4288-b57d-70c2ad367ef0
+        name: Christopher Mellon
+      - id: 0370b0c0-e88e-4ab9-9dfc-1dde09aacbb5
+        name: Department of Defense (DoD)
+    quote: |-
+      Christopher Mellon, who spent nearly twenty years in the U.S. Intelligence Community and served as the Deputy Assistant Secretary of Defense for Intelligence
+    text: |-
+      Christopher Mellon spent nearly twenty years in the US Intelligence Community and served as the Deputy Assistant Secretary of Defense for Intelligence.
+  - id: f21b9547-80b7-414a-ad6f-06ca1ef0a365
+    type: hearsay
+    attestation: first_hand
+    speaker:
+      id: bdb68d53-99ce-4288-b57d-70c2ad367ef0
+      name: Christopher Mellon
+    provenance_chain:
+      origin_kind: speaker
+      origin: Christopher Mellon
+    attribution_in_text: true
+    location: char:4376-4637
+    refs:
+      - id: bdb68d53-99ce-4288-b57d-70c2ad367ef0
+        name: Christopher Mellon
+    quote: |-
+      “A number of well-placed current and former officials have shared detailed information with me regarding this alleged program, including insights into the history, governing documents and the location where a craft was allegedly abandoned and recovered,” Mellon said.
+    text: |-
+      A number of well-placed current and former officials have shared detailed information with Christopher Mellon regarding this alleged programme, including insights into the history, governing documents and the location where a craft was allegedly abandoned and recovered.
+  - id: 4038d14e-45bf-4bb8-8c8e-844e128b099f
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: bdb68d53-99ce-4288-b57d-70c2ad367ef0
+      name: Christopher Mellon
+    provenance_chain:
+      origin_kind: speaker
+      origin: Christopher Mellon
+    attribution_in_text: true
+    location: char:4761-4936
+    refs:
+      - id: bdb68d53-99ce-4288-b57d-70c2ad367ef0
+        name: Christopher Mellon
+      - id: 49c9b40c-192a-4973-b44a-6a1af333506c
+        name: All-Domain Anomaly Resolution Office (AARO)
+      - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+        name: United States Congress
+    quote: |-
+      This is made harder by the fact that, rightly or wrongly, a number of potential sources do not trust the leadership of the All-Domain Anomaly Resolution Office established by Congress.
+    text: |-
+      Christopher Mellon said a number of potential sources do not trust the leadership of the All-Domain Anomaly Resolution Office established by Congress.
+  - id: d4f74175-d9cb-48fd-bb0c-6d7819dd12cf
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: biographical information
+    attribution_in_text: false
+    location: char:5080-5311
+    refs:
+      - id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+        name: Jonathan Grey
+      - id: f6002169-cd85-448c-9d17-71839698326b
+        name: National Air and Space Intelligence Center (NASIC)
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Jonathan Grey is a generational officer of the United States Intelligence Community with a Top-Secret Clearance who currently works for the National Air and Space Intelligence Center (NASIC), where the analysis of UAP has been his focus.
+    text: |-
+      Jonathan Grey is a generational officer of the United States Intelligence Community with a Top-Secret Clearance who currently works for the National Air and Space Intelligence Center (NASIC), where the analysis of UAP has been his focus.
+  - id: a6842c22-9a57-48ff-b461-ac11cce084af
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+      name: Jonathan Grey
+    provenance_chain:
+      origin_kind: speaker
+      origin: Jonathan Grey
+    attribution_in_text: true
+    location: char:5432-5503
+    refs:
+      - id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+        name: Jonathan Grey
+      - id: 1bb3f229-f6e7-4620-93a7-247a6ebe2501
+        name: Non-human intelligence
+    quote: “The non-human intelligence phenomenon is real. We are not alone,” Grey said.
+    text: |-
+      Jonathan Grey said the non-human intelligence phenomenon is real and that we are not alone.
+  - id: 462b6639-b8e2-4bb0-b009-a33f81e92ff3
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+      name: Jonathan Grey
+    provenance_chain:
+      origin_kind: speaker
+      origin: Jonathan Grey
+    attribution_in_text: true
+    location: char:5510-5646
+    refs:
+      - id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+        name: Jonathan Grey
+      - id: 1bb3f229-f6e7-4620-93a7-247a6ebe2501
+        name: Non-human intelligence
+    quote: |-
+      “Retrievals of this kind are not limited to the United States. This is a global phenomenon, and yet a global solution continues to elude us.”
+    text: |-
+      Jonathan Grey said retrievals of non-human intelligence craft are not limited to the United States and that it is a global phenomenon.
+  - id: e3fda7b6-b4ef-4c01-b82e-6ea814744bfb
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: biographical information
+    attribution_in_text: false
+    location: char:5652-5941
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 478085f0-1f6e-42e9-bdde-237379472781
+        name: National Geospatial-Intelligence Agency (NGA)
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      At the National Geospatial-Intelligence Agency, Grusch served as a Senior Intelligence Capabilities Integration Officer, cleared at the Top Secret/Secret Compartmented Information level, and was the agency’s Senior Technical Advisor for Unidentified Aerial Phenomena analysis/Trans-Medium Issues.
+    text: |-
+      At the National Geospatial-Intelligence Agency, David Charles Grusch served as a Senior Intelligence Capabilities Integration Officer, cleared at the Top Secret/Secret Compartmented Information level, and was the agency’s Senior Technical Advisor for Unidentified Aerial Phenomena analysis/Trans-Medium Issues.
+  - id: 0380a992-c11d-4e5e-a687-dd36f9c21716
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: biographical information
+    attribution_in_text: false
+    location: char:5949-6100
+    date: 2016-2021
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 699c73d5-fbaf-4b68-ae90-1d7411db4fc6
+        name: National Reconnaissance Office (NRO)
+    quote: |-
+      From 2016 to 2021, he served with the National Reconnaissance Office as Senior Intelligence Officer and led the production of the NRO director’s daily briefing.
+    text: |-
+      From 2016 to 2021, David Charles Grusch served with the National Reconnaissance Office as Senior Intelligence Officer and led the production of the NRO director’s daily briefing.
+  - id: 2dc2243e-70bc-454c-924d-c4606effe7f8
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: biographical information
+    attribution_in_text: false
+    location: char:6110-6168
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+    quote: Grusch was a GS-15 civilian, the military equivalent of a Colonel.
+    text: David Charles Grusch was a GS-15 civilian, the military equivalent of a Colonel.
+  - id: e01c1c1e-979e-4f4f-a70e-2925926e1152
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: biographical information
+    attribution_in_text: false
+    location: char:6178-6241
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+    quote: Grusch has served as an Intelligence Officer for over fourteen years.
+    text: |-
+      David Charles Grusch has served as an Intelligence Officer for over fourteen years.
+  - id: fc9eb78a-654f-4d63-a049-6c58582ba3f8
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: 2021 NRO Performance Report
+      relay:
+        - the authors
+    attribution_in_text: false
+    location: char:6561-6782
+    date: '2021'
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 699c73d5-fbaf-4b68-ae90-1d7411db4fc6
+        name: National Reconnaissance Office (NRO)
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+        name: United States Congress
+    quote: |-
+      According to a 2021 NRO Performance Report, Grusch was an intelligence strategist with multiple responsibilities who “analyzed unidentified aerial phenomena reports” and “boosted congressional leadership Intel gaps [in] understanding.”
+    text: |-
+      According to a 2021 National Reconnaissance Office Performance Report, David Charles Grusch was an intelligence strategist with multiple responsibilities who analysed unidentified aerial phenomena reports and boosted congressional leadership Intel gaps in understanding.
+  - id: ed2748a2-d73d-4722-bebd-99e1d8652c5d
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:7002-7293
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+        name: United States Congress
+      - id: 6e88b53e-6b70-45c8-ae94-c3a9e289fd59
+        name: FY2023 National Defense Authorization Act (NDAA)
+    quote: |-
+      Grusch prepared many briefs on unidentified aerial phenomena for Congress while in government and helped draft the language on UAP for the [FY2023 National Defense Authorization Act](https://web.archive.org/web/20260507125226/https://docs.house.gov/billsthisweek/20221205/BILLS-117hres_-SUS.pdf)
+    text: |-
+      David Charles Grusch prepared many briefs on unidentified aerial phenomena for Congress while in government and helped draft the language on UAP for the FY2023 National Defense Authorization Act.
+  - id: 9fc04918-07bc-49f0-ad93-06bbe56efa54
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: FY2023 National Defense Authorization Act
+      relay:
+        - the authors
+    attribution_in_text: false
+    location: char:7415-7565
+    date: 2022-12
+    refs:
+      - id: 6e88b53e-6b70-45c8-ae94-c3a9e289fd59
+        name: FY2023 National Defense Authorization Act (NDAA)
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+        name: United States Congress
+      - id: dcc553b5-2a87-4872-9fcb-a2e12d92a555
+        name: Whistleblower protection
+    quote: |-
+      The provision states that any person with relevant UAP information can inform Congress without retaliation, regardless of any previous non-disclosure agreements.
+    text: |-
+      The FY2023 National Defense Authorization Act provision states that any person with relevant UAP information can inform Congress without retaliation, regardless of any previous non-disclosure agreements.
+  - id: 22781ace-701c-4dcb-a8bc-a642158969cc
+    type: hearsay
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: named
+      origin: David Charles Grusch
+      relay:
+        - the authors
+    attribution_in_text: true
+    location: char:7578-7853
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: e55aad4f-cb6d-4f91-b117-6e9ed83ebc13
+        name: Unidentified Flying Object (UFO)
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 99075fa6-8517-4f63-81a3-dd93549870e7
+        name: Special Access Programs (SAP)
+    quote: |-
+      In his statements cleared for publication by the Pentagon in April, Grusch asserted that UFO “legacy programs” have long been concealed within “multiple agencies nesting UAP activities in conventional secret access programs without appropriate reporting to various oversight authorities.”
+    text: |-
+      In his statements cleared for publication by the Pentagon in April, David Charles Grusch asserted that Unidentified Flying Object (UFO) legacy programmes have long been concealed within multiple agencies nesting UAP activities in conventional secret access programmes without appropriate reporting to various oversight authorities.
+  - id: ef6591ec-1900-4b3e-8912-aa60edd23e69
+    type: hearsay
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: named
+      origin: David Charles Grusch
+      relay:
+        - the authors
+    attribution_in_text: true
+    location: char:7868-8200
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+        name: United States Congress
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: e971e1ab-95d4-4e12-bcc3-e766c73a1fcc
+        name: Reverse engineering
+    quote: |-
+      He said he reported to Congress on the existence of a decades-long “publicly unknown Cold War for recovered and exploited physical material – a competition with near-peer adversaries over the years to identify UAP crashes/landings and retrieve the material for exploitation/reverse engineering to garner asymmetric national defense advantages.”
+    text: |-
+      David Charles Grusch said he reported to Congress on the existence of a decades-long publicly unknown Cold War for recovered and exploited physical material.
+  - id: e25d836b-4790-42fe-973b-bb292db3f934
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:8214-8397
+    date: '2022'
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+        name: United States Congress
+    quote: |-
+      Beginning in 2022, Grusch provided Congress with hours of recorded classified information transcribed into hundreds of pages which included specific data about the materials recovery program.
+    text: |-
+      Beginning in 2022, David Charles Grusch provided Congress with hours of recorded classified information transcribed into hundreds of pages which included specific data about the materials recovery programme.
+  - id: e7c3392a-812c-4e08-9068-3fcdc0609c72
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:8406-8504
+    refs:
+      - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+        name: United States Congress
+      - id: 1bb3f229-f6e7-4620-93a7-247a6ebe2501
+        name: Non-human intelligence
+    quote: |-
+      Congress has not been provided with any physical materials related to wreckage or other non-human objects.
+    text: |-
+      Congress has not been provided with any physical materials related to wreckage or other non-human objects.
+  - id: d3aa264d-eeee-4fa8-8969-f5e61dc0a81c
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:8514-8658
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+    quote: |-
+      Grusch’s investigation was centered on extensive interviews with high-level intelligence officials, some of whom are directly involved with the program.
+    text: |-
+      David Charles Grusch's investigation was centred on extensive interviews with high-level intelligence officials, some of whom are directly involved with the programme.
+  - id: 43880758-1c62-40fc-9340-583033827c38
+    type: hearsay
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: named
+      origin: David Charles Grusch
+      relay:
+        - the authors
+    attribution_in_text: true
+    location: char:8667-8801
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+        name: United States Congress
+    quote: |-
+      He says the operation was illegally shielded from proper Congressional oversight and that he was targeted and harassed because of his investigation.
+    text: |-
+      David Charles Grusch says the operation was illegally shielded from proper Congressional oversight and that he was targeted and harassed because of his investigation.
+  - id: 44d165e6-fe86-497b-949b-635c2d4abd6a
+    type: hearsay
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: named
+      origin: David Charles Grusch
+      relay:
+        - the authors
+    attribution_in_text: true
+    location: char:8817-8978
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+    quote: |-
+      Grusch said that the craft recovery operations are ongoing at various levels of activity and that he knows the specific individuals, current and former, who are involved.
+    text: |-
+      David Charles Grusch said that the craft recovery operations are ongoing at various levels of activity and that he knows the specific individuals, current and former, who are involved.
+  - id: 54d5fd45-3035-4c46-b964-46a552c33d57
+    type: hearsay
+    attestation: first_hand
+    speaker:
+      id: 33158552-87be-49a4-90c3-a4220241de47
+      name: David Charles Grusch
+    provenance_chain:
+      origin_kind: speaker
+      origin: David Charles Grusch
+    attribution_in_text: true
+    location: char:8990-9311
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      “Individuals on these UAP programs approached me in my official capacity and disclosed their concerns regarding a multitude of wrongdoings, such as illegal contracting against the Federal Acquisition Regulations and other criminality and the suppression of information across a qualified industrial base and academia,” he stated.
+    text: |-
+      David Charles Grusch stated that individuals on these UAP programmes approached him in his official capacity and disclosed their concerns regarding a multitude of wrongdoings.
+  - id: 0cbb537a-5832-40dd-9cc4-bce0274e7022
+    type: hearsay
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: anonymous
+      origin: associates of David Charles Grusch
+      relay:
+        - the authors
+    attribution_in_text: true
+    location: char:9320-9509
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 1bb3f229-f6e7-4620-93a7-247a6ebe2501
+        name: Non-human intelligence
+    quote: |-
+      Associates who vouched for Grusch said his information was highly sensitive, providing evidence that materials from objects of non-human origin are in the possession of highly secret black programs.
+    text: |-
+      Associates who vouched for David Charles Grusch said his information was highly sensitive, providing evidence that materials from objects of non-human origin are in the possession of highly secret black programmes.
+  - id: 2e64d447-74de-4ac5-b9d1-2b25ee11621b
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: anonymous
+      origin: several current members of the recovery programme
+      relay:
+        - the authors
+    attribution_in_text: false
+    location: char:9686-9846
+    refs:
+      - id: eb644eed-75e2-410d-b8a7-4200afc70f8b
+        name: Intelligence Community Inspector General (ICIG)
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+    quote: |-
+      Several current members of the recovery program spoke to the Inspector General’s office and corroborated the information Grusch had provided for the classified complaint.
+    text: |-
+      Several current members of the recovery programme spoke to the Inspector General's office and corroborated the information David Charles Grusch had provided for the classified complaint.
+  - id: 1a481042-96cb-4dd6-ac9f-b7d4fd4e3f4a
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: named
+      origin: David Charles Grusch
+      relay:
+        - the authors
+    attribution_in_text: true
+    location: char:9858-9974
+    date: '2023-04-07'
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+    quote: |-
+      Grusch left the government on April 7, 2023, in order, he said, to advance government accountability through public awareness.
+    text: |-
+      David Charles Grusch left the government on 2023-04-07 in order to advance government accountability through public awareness.
+  - id: db3d2314-0090-4402-b938-66def07385e6
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 1697c9a4-dd08-45fc-9997-701e0e3232d8
+      name: Karl E. Nell
+    provenance_chain:
+      origin_kind: speaker
+      origin: Karl E. Nell
+    attribution_in_text: true
+    location: char:10097-10438
+    refs:
+      - id: 1697c9a4-dd08-45fc-9997-701e0e3232d8
+        name: Karl E. Nell
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: e971e1ab-95d4-4e12-bcc3-e766c73a1fcc
+        name: Reverse engineering
+      - id: 1bb3f229-f6e7-4620-93a7-247a6ebe2501
+        name: Non-human intelligence
+    quote: |-
+      “His assertion concerning the existence of a terrestrial arms race occurring sub-rosa over the past eighty years focused on reverse engineering technologies of unknown origin is fundamentally correct, as is the indisputable realization that at least some of these technologies of unknown origin derive from non-human intelligence,” said Karl Nell
+    text: |-
+      Karl Nell said David Charles Grusch's assertion concerning the existence of a terrestrial arms race occurring sub-rosa over the past eighty years focused on reverse engineering technologies of unknown origin is fundamentally correct.
+  - id: 054e637d-1b24-4db8-8c26-a60859e26afe
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: 2022 performance evaluation
+      relay:
+        - the authors
+    attribution_in_text: false
+    location: char:10516-10709
+    date: '2022'
+    refs:
+      - id: bb3eab5f-7234-425f-8703-77777aa9682a
+        name: Laura A. Potter
+      - name: Department of the Army
+      - id: 1697c9a4-dd08-45fc-9997-701e0e3232d8
+        name: Karl E. Nell
+    quote: |-
+      In a 2022 performance evaluation, Laura A. Potter, Deputy Chief of Staff for Intelligence, Headquarters, Department of the Army, described Nell as “an officer with the strongest possible moral compass.”
+    text: |-
+      In a 2022 performance evaluation, Laura A. Potter, Deputy Chief of Staff for Intelligence, Headquarters, Department of the Army, described Karl E. Nell as an officer with the strongest possible moral compass.
+  - id: bd4b001d-f02b-448f-bff5-72a0565729fb
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:10720-10885
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: aa349c1d-13f9-4b0e-b6e1-f6b6a36ebdc8
+        name: Charles McCullough III
+      - id: 8f9b2fe2-5b51-41dc-97e9-0b004cce120c
+        name: Compass Rose Legal Group
+      - id: eb644eed-75e2-410d-b8a7-4200afc70f8b
+        name: Intelligence Community Inspector General (ICIG)
+    quote: |-
+      Grusch is represented by Charles McCullough III, senior partner of the Compass Rose Legal Group in Washington and the original Inspector General of the Intelligence Community
+    text: |-
+      David Charles Grusch is represented by Charles McCullough III, senior partner of the Compass Rose Legal Group in Washington and the original Inspector General of the Intelligence Community.
+  - id: 0dc4300b-52ff-49ba-9b64-9072f156bafd
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: confirmation records
+      relay:
+        - the authors
+    attribution_in_text: false
+    location: char:10896-10928
+    date: '2011'
+    refs:
+      - id: aa349c1d-13f9-4b0e-b6e1-f6b6a36ebdc8
+        name: Charles McCullough III
+      - id: eb644eed-75e2-410d-b8a7-4200afc70f8b
+        name: Intelligence Community Inspector General (ICIG)
+    quote: confirmed by the U.S. Senate in 2011.
+    text: |-
+      Charles McCullough III was confirmed by the US Senate in 2011 as the original Inspector General of the Intelligence Community.
+  - id: d6447fb8-2986-4f11-ae50-7e34f88e8fc6
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: Disclosure of Urgent Concern(s); Complaint of Reprisal
+      relay:
+        - the authors
+    attribution_in_text: false
+    location: char:11134-11356
+    date: 2022-05
+    refs:
+      - id: aa349c1d-13f9-4b0e-b6e1-f6b6a36ebdc8
+        name: Charles McCullough III
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: eb644eed-75e2-410d-b8a7-4200afc70f8b
+        name: Intelligence Community Inspector General (ICIG)
+      - id: 8c7e5623-b269-44e1-aafa-9c8d2b689811
+        name: Disclosure of Urgent Concern(s); Complaint of Reprisal
+      - id: 9d1a97e0-dd79-430b-9f5b-18cb86e717b7
+        name: Unidentified Aerial Phenomena Task Force
+    quote: |-
+      In May 2022, McCullough filed a Disclosure of Urgent Concern(s); Complaint of Reprisal on behalf of Grusch with the ICIG about detailed information that Grusch had gathered beginning in 2019 while working for the UAP Task Force.
+    text: |-
+      In May 2022, Charles McCullough III filed a Disclosure of Urgent Concern(s); Complaint of Reprisal on behalf of David Charles Grusch with the Intelligence Community Inspector General about detailed information that Grusch had gathered beginning in 2019 while working for the UAP Task Force.
+  - id: a256f8d2-0c68-401d-8f05-e3864467b449
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: unclassified version of the complaint
+      relay:
+        - the authors
+    attribution_in_text: false
+    location: char:11364-11678
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+        name: United States Congress
+      - id: ce840f4d-0aca-46eb-8256-13540efa0c6b
+        name: Unidentified Aerial Phenomena (UAP) Program
+    quote: |-
+      An unclassified version of the complaint provided to us states that Grusch has direct knowledge that UAP-related classified information has been withheld and/or concealed from Congress by “elements” of the intelligence community “to purposely and intentionally thwart legitimate Congressional oversight of the UAP Program.”
+    text: |-
+      An unclassified version of the complaint provided to the authors states that David Charles Grusch has direct knowledge that UAP-related classified information has been withheld and/or concealed from Congress by elements of the intelligence community to purposely and intentionally thwart legitimate Congressional oversight of the UAP Programme.
+  - id: 7ef0453a-fca2-4c47-a61c-d23d3e64ad48
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: unclassified version of the complaint
+      relay:
+        - the authors
+    attribution_in_text: false
+    location: char:11773-11992
+    date: 2021-07
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: ce934977-59b3-4063-a94e-12e3ec52e2a9
+        name: Department of Defense Inspector General
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+        name: United States Congress
+    quote: |-
+      According to the unclassified complaint, in July 2021, Grusch had confidentially provided classified information to the Department of Defense Inspector General concerning the withholding of UAP-related information from Congress.
+    text: |-
+      According to the unclassified complaint, in July 2021, David Charles Grusch had confidentially provided classified information to the Department of Defense Inspector General concerning the withholding of UAP-related information from Congress.
+  - id: 153ca307-cc59-483f-a7b5-bbf72d08666f
+    type: hearsay
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: named
+      origin: David Charles Grusch
+      relay:
+        - the authors
+    attribution_in_text: true
+    location: char:12002-12207
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 0370b0c0-e88e-4ab9-9dfc-1dde09aacbb5
+        name: Department of Defense (DoD)
+    quote: |-
+      He believed that his identity, and the fact that he had provided testimony, were disclosed “to individuals and/or entities” within the Department of Defense and the Intelligence Community outside the IG’s office.
+    text: |-
+      David Charles Grusch believed that his identity, and the fact that he had provided testimony, were disclosed to individuals and/or entities within the Department of Defense and the Intelligence Community outside the Inspector General's office.
+  - id: 86716942-c877-4a7b-89ab-01672fe4ee25
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:12311-12418
+    date: '2021'
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+    quote: |-
+      As a result, Grusch suffered months of retaliation and reprisals related to these disclosures beginning in 2021.
+    text: |-
+      As a result, David Charles Grusch suffered months of retaliation and reprisals related to these disclosures beginning in 2021.
+  - id: f1e7a6ac-abd5-4ea1-b44e-80629917d42e
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: Intelligence Community Inspector General finding
+      relay:
+        - the authors
+    attribution_in_text: false
+    location: char:12533-12628
+    date: 2022-07
+    refs:
+      - id: eb644eed-75e2-410d-b8a7-4200afc70f8b
+        name: Intelligence Community Inspector General (ICIG)
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+    quote: |-
+      The Intelligence Community Inspector General found his complaint “credible and urgent” in July 2022.
+    text: |-
+      The Intelligence Community Inspector General found David Charles Grusch's complaint credible and urgent in July 2022.
+  - id: 3c2b4a12-5321-4571-b519-3b254f5844c3
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: named
+      origin: David Charles Grusch
+      relay:
+        - the authors
+    attribution_in_text: true
+    location: char:12634-12836
+    date: 2022-07
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 081c8577-08f4-4d6b-9863-b64eec8727f6
+        name: Avril Haines
+      - id: eea80912-6e42-4cca-bfd1-e1b2f1c5699c
+        name: Senate Select Committee on Intelligence
+      - id: cf07220b-6327-478c-9a25-f4bc4f71cc04
+        name: House Permanent Select Committee on Intelligence
+    quote: |-
+      According to Grusch, a summary was immediately submitted to the Director of National Intelligence, Avril Haines; the Senate Select Committee on Intelligence; and the House Permanent Select Committee on Intelligence.
+    text: |-
+      According to David Charles Grusch, a summary of his complaint was immediately submitted to the Director of National Intelligence, Avril Haines; the Senate Select Committee on Intelligence; and the House Permanent Select Committee on Intelligence.
+  - id: 297ebd87-1530-4da2-ba38-d3cc76d5fcf3
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:12851-12919
+    refs:
+      - id: aa349c1d-13f9-4b0e-b6e1-f6b6a36ebdc8
+        name: Charles McCullough III
+    quote: The complaint was drafted and signed by McCullough and his managing partner.
+    text: |-
+      The complaint was drafted and signed by Charles McCullough III and his managing partner.
+  - id: 3898281e-9c99-462c-a56d-680ed5e49d68
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:13138-13181
+    refs:
+      - id: dcc553b5-2a87-4872-9fcb-a2e12d92a555
+        name: Whistleblower protection
+    quote: A whistleblower reprisal investigation was launched
+    text: A whistleblower reprisal investigation was launched.
+  - id: db905571-a319-4c10-a320-f92b03fc97cd
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: named
+      origin: House Permanent Select Committee on Intelligence
+      relay:
+        - the authors
+    attribution_in_text: false
+    location: char:13542-13742
+    refs:
+      - id: cf07220b-6327-478c-9a25-f4bc4f71cc04
+        name: House Permanent Select Committee on Intelligence
+    quote: |-
+      A representative of the House Permanent Select Committee on Intelligence told us in March that the committee members are not able to comment on the content of a complaint or confirm the identity of a complainant.
+    text: |-
+      A representative of the House Permanent Select Committee on Intelligence told the authors in March that the committee members are not able to comment on the content of a complaint or confirm the identity of a complainant.
+  - id: bf6967f8-3454-487c-9051-1ece6b808d58
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:14479-14625
+    refs:
+      - id: f6002169-cd85-448c-9d17-71839698326b
+        name: National Air and Space Intelligence Center (NASIC)
+      - id: 0370b0c0-e88e-4ab9-9dfc-1dde09aacbb5
+        name: Department of Defense (DoD)
+      - id: 4c167e86-77ef-4426-b9bc-0734dfa9c4f0
+        name: United States Air Force
+    quote: |-
+      NASIC, headquartered at Wright Patterson Air Force Base, is the Department of Defense’s primary Air Force source for foreign air and space threat analysis.
+    text: |-
+      The National Air and Space Intelligence Center (NASIC) is the Department of Defense's primary Air Force source for foreign air and space threat analysis.
+  - id: 53338cbb-e384-418c-ac88-e7aa60eafcf0
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+      name: Jonathan Grey
+    provenance_chain:
+      origin_kind: speaker
+      origin: Jonathan Grey
+    attribution_in_text: true
+    location: char:15015-15204
+    refs:
+      - id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+        name: Jonathan Grey
+    quote: |-
+      “The existence of complex historical programs involving the coordinated retrieval and study of exotic materials, dating back to the early 20th century, should no longer remain a secret,” he said.
+    text: |-
+      Jonathan Grey said the existence of complex historical programmes involving the coordinated retrieval and study of exotic materials, dating back to the early 20th century, should no longer remain a secret.
+  - id: 4424af76-7545-4d8c-b21f-c6741c3ac66c
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+      name: Jonathan Grey
+    provenance_chain:
+      origin_kind: speaker
+      origin: Jonathan Grey
+    attribution_in_text: true
+    location: char:15211-15426
+    refs:
+      - id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+        name: Jonathan Grey
+    quote: |-
+      “The majority of retrieved, foreign exotic materials have a prosaic terrestrial explanation and origin – but not all, and any number higher than zero in this category represents an undeniably significant statistical percentage.”
+    text: |-
+      Jonathan Grey said the majority of retrieved, foreign exotic materials have a prosaic terrestrial explanation and origin, but not all.
+  - id: 09a35b79-7318-41b2-bd04-5d4cc25fe549
+    type: testimony
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:15642-15830
+    refs:
+      - id: 4c167e86-77ef-4426-b9bc-0734dfa9c4f0
+        name: United States Air Force
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      the Air Force [has been less forthcoming](https://web.archive.org/web/20260507125226/https://thedebrief.org/why-is-the-air-force-awol-on-the-uap-issue/) than other agencies with regard to UAP.
+    text: |-
+      The Air Force has been less forthcoming than other agencies with regard to Unidentified Aerial Phenomena (UAP).
+  - id: cd90487c-f146-4e5f-ad9b-23a1a2804b24
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:16171-16402
+    refs:
+      - id: bdb68d53-99ce-4288-b57d-70c2ad367ef0
+        name: Christopher Mellon
+      - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+        name: United States Congress
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Mellon, the former Deputy Assistant Secretary of Defense for Intelligence, has been instrumental in arranging classified briefings for members of Congress and other officials about UAP, which include references to exotic retrieved materials.
+    text: |-
+      Christopher Mellon was instrumental in arranging classified briefings for members of Congress and other officials about UAP, which include references to exotic retrieved materials.
+  - id: a1f3d20b-0bfd-4343-afc3-48894eb3be04
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: The New York Times report
+      relay:
+        - the authors
+    attribution_in_text: false
+    location: char:16413-16801
+    date: '2019-10-21'
+    refs:
+      - id: bdb68d53-99ce-4288-b57d-70c2ad367ef0
+        name: Christopher Mellon
+      - id: ede75098-7100-47d1-b239-90bbbb613ac8
+        name: Senate Armed Services Committee
+      - id: eea80912-6e42-4cca-bfd1-e1b2f1c5699c
+        name: Senate Select Committee on Intelligence
+      - id: fff611e2-9a58-48fa-b9e4-2992c1e022ba
+        name: The New York Times
+    quote: |-
+      The first briefing he facilitated on retrievals of unexplained objects was provided to staff members of the Senate Armed Services Committee on Oct. 21, 2019, and to staff members of the Senate Intelligence Committee two days later, as [reported](https://web.archive.org/web/20260507125226/https://www.nytimes.com/2020/07/23/us/politics/pentagon-ufo-harry-reid-navy.html) by *The New York Times*.
+    text: |-
+      The first briefing Christopher Mellon facilitated on retrievals of unexplained objects was provided to staff members of the Senate Armed Services Committee on 2019-10-21, and to staff members of the Senate Intelligence Committee two days later.
+  - id: 27add361-fa3b-46be-b99b-29b1b3bdcc8b
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:17309-17384
+    refs:
+      - id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+        name: Jonathan Grey
+      - id: f6002169-cd85-448c-9d17-71839698326b
+        name: National Air and Space Intelligence Center (NASIC)
+    quote: |-
+      Classified briefings are often presented for Jonathan Grey and his team at NASIC.
+    text: |-
+      Classified briefings are often presented for Jonathan Grey and his team at the National Air and Space Intelligence Center.
+  - id: 1ca8f3af-24fd-4f4e-b977-0c6f6b62b357
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+      name: Jonathan Grey
+    provenance_chain:
+      origin_kind: speaker
+      origin: Jonathan Grey
+    attribution_in_text: true
+    location: char:17392-17663
+    refs:
+      - id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+        name: Jonathan Grey
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      “High-level, classified briefing materials exist in which real-world scenarios involving UAP, as evidenced by historical examples, are made available to Intelligence Personnel on a need-to-know basis,” he told us. “I have been the recipient of such briefings for almost a decade.”
+    text: |-
+      Jonathan Grey said he has been the recipient of high-level, classified briefing materials on Unidentified Aerial Phenomena (UAP) for almost a decade.
+  - id: 37d7a2f9-a728-43e6-903f-25569460d318
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: National Defense Authorization Act for FY2023
+      relay:
+        - the authors
+    attribution_in_text: false
+    location: char:17673-17937
+    refs:
+      - id: 6f22b960-de7b-42c4-99ae-5aa7cb37ef1c
+        name: National Defense Authorization Act for FY2023
+      - id: 0370b0c0-e88e-4ab9-9dfc-1dde09aacbb5
+        name: Department of Defense (DoD)
+      - id: fd7dc271-dd14-4ec7-81f1-aa502b8cb79a
+        name: Office of the Director of National Intelligence (ODNI)
+    quote: |-
+      The National Defense Authorization Act for FY2023 tasked the Secretary of Defense, in consultation with the Director of National Intelligence, with establishing for the first time a secure mechanism for the authorized reporting of sensitive information to defense channels.
+    text: |-
+      The National Defense Authorization Act for FY2023 tasked the Secretary of Defense, in consultation with the Director of National Intelligence, with establishing for the first time a secure mechanism for the authorized reporting of sensitive information to defence channels.
+  - id: 6bfe3488-e506-4687-a4a1-15a79b5e3bd2
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: National Defense Authorization Act for FY2023
+      relay:
+        - the authors
+    attribution_in_text: false
+    location: char:17948-18155
+    refs:
+      - id: 6f22b960-de7b-42c4-99ae-5aa7cb37ef1c
+        name: National Defense Authorization Act for FY2023
+      - id: e971e1ab-95d4-4e12-bcc3-e766c73a1fcc
+        name: Reverse engineering
+      - id: 4108f74b-c0b3-40ec-adee-7b0993fdfcc8
+        name: Unidentified anomalous phenomena
+    quote: |-
+      In addition, the legislation asks for reporting on “material retrieval, material analysis, reverse engineering, research, and development” involving unidentified anomalous phenomena currently and going back decades.
+    text: |-
+      The legislation asks for reporting on material retrieval, material analysis, reverse engineering, research, and development involving unidentified anomalous phenomena currently and going back decades.
+  - id: 5aa949d4-6efc-4413-9dce-8d068de646eb
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: biographical information
+    attribution_in_text: false
+    location: char:18165-18237
+    refs:
+      - id: 3ec62467-af50-4d60-8464-00c43d8e042e
+        name: Garry Nolan
+      - id: d6db0d64-b5b4-4af1-86a5-9163bd786d6c
+        name: Department of Pathology, Stanford University
+      - id: 9f450b9f-6f9f-44cb-9f15-289190613f17
+        name: Stanford University
+    quote: |-
+      Dr. Garry Nolan, a Professor in the Department of Pathology at Stanford University
+    text: |-
+      Dr Garry Nolan is a Professor in the Department of Pathology at Stanford University.
+  - id: 38d43c26-9a03-4c49-8b8b-b7ce1cbed59b
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:18421-18570
+    refs:
+      - id: 3ec62467-af50-4d60-8464-00c43d8e042e
+        name: Garry Nolan
+    quote: |-
+      Nolan has previously applied some of those technologies to the analysis of exotic materials, publishing the first peer-reviewed paper examining such materials.
+    text: |-
+      Garry Nolan has previously applied some of his technologies to the analysis of exotic materials, publishing the first peer-reviewed paper examining such materials.
+  - id: 1db07825-5584-4408-9bc3-1aab34e59503
+    type: administrative
+    attestation: second_hand
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: document
+      origin: whistleblower legislation
+      relay:
+        - the authors
+    attribution_in_text: false
+    location: char:19281-19443
+    refs:
+      - id: dcc553b5-2a87-4872-9fcb-a2e12d92a555
+        name: Whistleblower protection
+    quote: |-
+      To encourage potential witnesses to come forward, the whistleblower legislation forbids any federal employee from retaliating against anyone providing authorized disclosure.
+    text: |-
+      To encourage potential witnesses to come forward, the whistleblower legislation forbids any federal employee from retaliating against anyone providing authorised disclosure.
+  - id: a1154202-d536-4653-be49-d0e163bee789
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:19658-19742
+    date: 2022-05
+    refs:
+      - id: b28b3b17-c8a8-4ce7-aeed-695bfa26ddb2
+        name: Andre Carson
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+      - id: 4b24d7a1-f430-4b0e-9d8a-f2a0ecd9cf61
+        name: United States Congress
+    quote: |-
+      In May 2022, Carson presided over the first open Congressional hearing on UAP since 1968.
+    text: |-
+      Representative Andre Carson presided over the first open Congressional hearing on Unidentified Aerial Phenomena (UAP) since 1968 in May 2022.
+  - id: 448c0bb1-fba3-47a6-b8db-d58116c59793
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 33158552-87be-49a4-90c3-a4220241de47
+      name: David Charles Grusch
+    provenance_chain:
+      origin_kind: speaker
+      origin: David Charles Grusch
+    attribution_in_text: false
+    location: char:20279-20447
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 1bb3f229-f6e7-4620-93a7-247a6ebe2501
+        name: Non-human intelligence
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      these advanced technologies derived from non-human intelligence exist at all or to deny that these technologies have landed, crashed, or fallen into the hands of human beings.
+    text: |-
+      The advanced technologies derived from non-human intelligence exist and have landed, crashed, or fallen into the hands of human beings.
+  - id: 569ea516-6b12-4994-b074-19a053449cbd
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+      name: Jonathan Grey
+    provenance_chain:
+      origin_kind: speaker
+      origin: Jonathan Grey
+    attribution_in_text: false
+    location: char:20473-20666
+    refs:
+      - id: 39614bd5-85e0-4e3e-89bc-c847097c73db
+        name: Jonathan Grey
+      - id: 1bb3f229-f6e7-4620-93a7-247a6ebe2501
+        name: Non-human intelligence
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      the hypothesis that the United States alone has bullied the other nations into maintaining this secrecy for nearly a century continues to prevail as the primary consensus amongst the public at large.
+    text: |-
+      The hypothesis that the United States alone has bullied other nations into maintaining secrecy around non-human intelligence technology for nearly a century prevails as the primary public consensus.
+  - id: 7ec27e7f-7c55-4187-851a-b92ef696b5fd
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 33158552-87be-49a4-90c3-a4220241de47
+      name: David Charles Grusch
+    provenance_chain:
+      origin_kind: speaker
+      origin: David Charles Grusch
+    attribution_in_text: true
+    location: char:20834-21032
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 1bb3f229-f6e7-4620-93a7-247a6ebe2501
+        name: Non-human intelligence
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Grusch said it was dangerous for this “eighty-year arms race” to continue in secrecy because it “further inhibits the world populace to be prepared for an unexpected, non-human intelligence contact scenario.”
+    text: |-
+      David Charles Grusch described an eighty-year arms race conducted in secrecy around non-human intelligence technology as dangerous because it inhibits the world populace from being prepared for an unexpected contact scenario.
+  - id: 61166d75-5c5b-44e6-b04a-a4ebd3c0c2bf
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 33158552-87be-49a4-90c3-a4220241de47
+      name: David Charles Grusch
+    provenance_chain:
+      origin_kind: speaker
+      origin: David Charles Grusch
+    attribution_in_text: true
+    location: char:21045-21217
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+      - id: 1bb3f229-f6e7-4620-93a7-247a6ebe2501
+        name: Non-human intelligence
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      “I hope this revelation serves as an ontological shock sociologically and provides a generally uniting issue for nations of the world to re-assess their priorities,” Grusch said.
+    text: |-
+      David Charles Grusch hopes the revelation about non-human intelligence technology will serve as an ontological shock sociologically and provide a uniting issue for nations to reassess their priorities.
+infrastructure_claims:
+  - id: 7a66f3dc-33c0-43b3-91fa-bd0bfe4f3231
+    type: administrative
+    speaker:
+      id: f412012b-86bf-4ba5-93d4-19e095920050
+      name: Leslie Kean
+    provenance_chain:
+      origin_kind: unattributed
+    attribution_in_text: false
+    location: char:3149-3267
+    date: '2023-04-04'
+    refs:
+      - id: 33158552-87be-49a4-90c3-a4220241de47
+        name: David Charles Grusch
+    quote: |-
+      His on-the-record statements were all “cleared for open publication” on April 4 and 6, 2023, in documents provided to us.
+    text: |-
+      David Charles Grusch's on-the-record statements were all cleared for open publication on 2023-04-04 and 2023-04-06, in documents provided to the authors.
+  - id: 22c329f4-d702-466b-8f98-24a95ca957db
+    type: administrative
+    provenance_chain:
+      origin_kind: unattributed
+      origin: unattributed narration
+    attribution_in_text: false
+    location: char:21225-21423
+    date: '2017-12-17'
+    refs:
+      - id: f412012b-86bf-4ba5-93d4-19e095920050
+        name: Leslie Kean
+      - id: 9de8e371-3600-4b4e-b981-22fbee85e3d1
+        name: Ralph Blumenthal
+      - id: 2d07408a-7310-487d-ae11-d3c54be3af6d
+        name: Helene Cooper
+      - id: fff611e2-9a58-48fa-b9e4-2992c1e022ba
+        name: The New York Times
+      - id: 8e673712-33ff-412c-a66a-4ae317bc107b
+        name: Dec. 17, 2017 front-page article in The New York Times
+      - id: 90114a52-65f3-42af-a66b-a15faca10843
+        name: Unidentified Aerial Phenomena (UAP)
+    quote: |-
+      Leslie Kean and Ralph Blumenthal, with Helene Cooper, co-authored the Dec. 17, 2017, front-page article in The New York Times that disclosed the existence of a secret Pentagon program investigating UAP.
+    text: |-
+      Leslie Kean and Ralph Blumenthal, with Helene Cooper, co-authored the 17 December 2017 front-page article in The New York Times that disclosed the existence of a secret Pentagon programme investigating Unidentified Aerial Phenomena (UAP).
+  - id: 5b3ef64d-235b-4217-aa2b-1bde20a1fdb8
+    type: administrative
+    provenance_chain:
+      origin_kind: unattributed
+      origin: unattributed narration
+    attribution_in_text: false
+    location: char:21431-21509
+    refs:
+      - id: 5599fc8b-f683-4d7c-90ca-ce400931ccf5
+        name: Tim McMillan
+      - id: 58cfe091-e8d3-44bc-82fc-87c1ed3b35b3
+        name: Micah Hanks
+      - id: a18743b4-cd97-4033-b793-907c2b36454b
+        name: Craig Labadie
+      - id: 3cd5db09-bebf-499a-8d16-d1be50572cd3
+        name: Sean Munger
+      - id: 955b3ea9-be82-47d1-b67e-8506f897dc3f
+        name: The Debrief
+    quote: |-
+      Tim McMillan, Micah Hanks, Craig Labadie ,and Sean Munger contributed to this article.
+    text: |-
+      Tim McMillan, Micah Hanks, Craig Labadie, and Sean Munger contributed to the article.

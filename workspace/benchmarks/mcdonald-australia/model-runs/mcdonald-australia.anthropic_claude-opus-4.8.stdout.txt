@@ -1,0 +1,28 @@
+Parsing record: 2026-08-11-video-ufos-in-australia-eyewitnesses-talk-to-dr-james-e-mcdonald.v2.md
+COST ESTIMATE (rough, +/-40%):
+  138,619 source chars
+  model: anthropic/claude-opus-4.8  ($5.00/$25.00 per million input/output tokens)
+  est tokens: ~178,619 in + ~51,982 out
+  est cost: ~$2.19  (range $1.32 - $3.07)
+  This spends real money on OpenRouter.
+  NOTE: this formula UNDERSTATES multi-chunk records - measured runs show 3-9x these
+  input tokens, because each chunk x iteration x pass re-sends the document and prompt.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: UFOs in Australia – Eyewitnesses Talk to Dr. James E. McDonald During His Investigative Tour (1967)
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +40 nodes (total 40) [model: complete]
+  40 nodes, 3 acronyms, main_subject='Unidentified Flying Object (UFO)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/3 (20,000 chars)
+    claims iter 1: +42 claims (chunk total 42, doc total 42) [model: complete]
+  claims chunk 2/3 (20,000 chars)
+    claims iter 1: +50 claims (chunk total 50, doc total 92) [model: complete]
+  claims chunk 3/3 (5,889 chars)
+    claims iter 1: +1 claims (chunk total 1, doc total 93)
+  93 claims total: 93 domain, 0 infrastructure
+  locations -> timecode: 91/93 aligned (2 unalignable, 2 ambiguous)
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/mcdonald-australia/model-runs/mcdonald-australia.anthropic_claude-opus-4.8.yaml
+Usage: 4 calls, in=70677 out=27694 cache_read=0 cost_equiv=$1.0457
+USAGE_JSON: {"input_tokens": 70677, "output_tokens": 27694, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 1.045735, "calls": 4}
+TRACE_JSON: [{"input_tokens": 20589, "output_tokens": 1242, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.133995, "served_by": "Claude Platform on AWS", "duration_s": 16.2}, {"input_tokens": 18489, "output_tokens": 12324, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.400545, "served_by": "Claude Platform on AWS", "duration_s": 206.2}, {"input_tokens": 18296, "output_tokens": 13787, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.436155, "served_by": "Claude Platform on AWS", "duration_s": 297.4}, {"input_tokens": 13303, "output_tokens": 341, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.07504, "served_by": "Claude Platform on AWS", "duration_s": 10.2}]

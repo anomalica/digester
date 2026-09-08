@@ -1,0 +1,26 @@
+Parsing record: 2023-06-05-web-intelligence-officials-say-u-s-has-retrieved-craft-of-non.md
+COST ESTIMATE (rough, +/-40%):
+  22,163 source chars
+  model: z-ai/glm-5.2  ($0.78/$2.45 per million input/output tokens)
+  est tokens: ~62,163 in + ~8,311 out
+  est cost: ~$0.07  (range $0.04 - $0.10)
+  This spends real money on OpenRouter.
+  NOTE: this formula UNDERSTATES multi-chunk records - measured runs show 3-9x these
+  input tokens, because each chunk x iteration x pass re-sends the document and prompt.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Intelligence Officials Say U.S. Has Retrieved Craft of Non-Human Origin
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +56 nodes (total 56) [model: complete]
+  56 nodes, 11 acronyms, main_subject='David Charles Grusch'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+    claims iter 1: +129 claims (chunk total 129, doc total 129) [model: complete]
+  claims chunk 2/2 (1,523 chars)
+    claims iter 1: +8 claims (chunk total 8, doc total 137) [model: complete]
+  137 claims total: 135 domain, 2 infrastructure
+  locations -> char offset: 137/137 aligned (0 unalignable, 0 ambiguous)
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/intel-officials-web/model-runs/intel-officials-web.z-ai_glm-5.2.yaml (run_kind: comparison)
+Usage: 3 calls, in=23410 out=40861 cache_read=0 cost_equiv=$0.2023
+USAGE_JSON: {"input_tokens": 23410, "output_tokens": 40861, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.202320186, "calls": 3}
+TRACE_JSON: [{"input_tokens": 6383, "output_tokens": 5478, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.022797186, "served_by": "Alibaba", "duration_s": 81.5}, {"input_tokens": 10258, "output_tokens": 33648, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.1624124, "served_by": "Mistral", "duration_s": 93.6}, {"input_tokens": 6769, "output_tokens": 1735, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.0171106, "served_by": "Together", "duration_s": 5.6}]

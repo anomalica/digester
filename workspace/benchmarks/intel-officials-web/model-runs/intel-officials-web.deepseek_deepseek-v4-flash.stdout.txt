@@ -1,0 +1,27 @@
+Parsing record: 2023-06-05-web-intelligence-officials-say-u-s-has-retrieved-craft-of-non.md
+COST ESTIMATE (rough, +/-40%):
+  22,163 source chars
+  model: deepseek/deepseek-v4-flash  ($0.10/$0.20 per million input/output tokens)
+  est tokens: ~62,163 in + ~8,311 out
+  est cost: ~$0.01  (range $0.00 - $0.01)
+  This spends real money on OpenRouter.
+  NOTE: this formula UNDERSTATES multi-chunk records - measured runs show 3-9x these
+  input tokens, because each chunk x iteration x pass re-sends the document and prompt.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Intelligence Officials Say U.S. Has Retrieved Craft of Non-Human Origin
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +68 nodes (total 68) [model: complete]
+  68 nodes, 14 acronyms, main_subject='David Charles Grusch'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+    claims iter 1: +138 claims (chunk total 138, doc total 138)
+    claims iter 2: +0 claims (chunk total 138, doc total 138) [model: complete]
+  claims chunk 2/2 (1,523 chars)
+    claims iter 1: +8 claims (chunk total 8, doc total 146) [model: complete]
+  146 claims total: 144 domain, 2 infrastructure
+  locations -> char offset: 146/146 aligned (0 unalignable, 0 ambiguous)
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/intel-officials-web/model-runs/intel-officials-web.deepseek_deepseek-v4-flash.yaml (run_kind: comparison)
+Usage: 4 calls, in=42463 out=44394 cache_read=0 cost_equiv=$0.0178
+USAGE_JSON: {"input_tokens": 42463, "output_tokens": 44394, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.01780964, "calls": 4}
+TRACE_JSON: [{"input_tokens": 6438, "output_tokens": 2436, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.0010179, "served_by": "DeepInfra", "duration_s": 92.8}, {"input_tokens": 10688, "output_tokens": 39956, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.012684, "served_by": "Parasail", "duration_s": 548.9}, {"input_tokens": 18159, "output_tokens": 17, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.00254702, "served_by": "CoreWeave", "duration_s": 2.7}, {"input_tokens": 7178, "output_tokens": 1985, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.00156072, "served_by": "DigitalOcean", "duration_s": 406.2}]

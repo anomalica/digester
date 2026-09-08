@@ -1,0 +1,15 @@
+Parsing record: 2026-08-11-video-ufos-in-australia-eyewitnesses-talk-to-dr-james-e-mcdonald.v2.md
+COST ESTIMATE (rough, +/-40%):
+  138,619 source chars
+  model: moonshotai/kimi-k2  ($0.57/$2.30 per million input/output tokens)
+  est tokens: ~178,619 in + ~51,982 out
+  est cost: ~$0.22  (range $0.13 - $0.31)
+  This spends real money on OpenRouter.
+  NOTE: this formula UNDERSTATES multi-chunk records - measured runs show 3-9x these
+  input tokens, because each chunk x iteration x pass re-sends the document and prompt.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: UFOs in Australia – Eyewitnesses Talk to Dr. James E. McDonald During His Investigative Tour (1967)
+Pass A: nodes (with iteration + chunking)
+Usage: 0 calls, in=0 out=0 cache_read=0 cost_equiv=$0.0000
+USAGE_JSON: {"input_tokens": 0, "output_tokens": 0, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.0, "calls": 0}
+TRACE_JSON: []

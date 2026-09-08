@@ -1,0 +1,19 @@
+Parsing record: 2023-06-05-web-intelligence-officials-say-u-s-has-retrieved-craft-of-non.md
+COST ESTIMATE (rough, +/-40%):
+  22,163 source chars
+  model: qwen/qwen3.7-flash  ($0.03/$0.13 per million input/output tokens)
+  est tokens: ~62,163 in + ~8,311 out
+  est cost: ~$0.00  (range $0.00 - $0.00)
+  This spends real money on OpenRouter.
+  NOTE: this formula UNDERSTATES multi-chunk records - measured runs show 3-9x these
+  input tokens, because each chunk x iteration x pass re-sends the document and prompt.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Intelligence Officials Say U.S. Has Retrieved Craft of Non-Human Origin
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +41 nodes (total 41) [model: complete]
+  41 nodes, 10 acronyms, main_subject='David Charles Grusch'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+Usage: 2 calls, in=18085 out=12716 cache_read=0 cost_equiv=$0.0022
+USAGE_JSON: {"input_tokens": 18085, "output_tokens": 12716, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.00219563, "calls": 2}
+TRACE_JSON: [{"input_tokens": 6936, "output_tokens": 9861, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.00149001, "served_by": "Alibaba", "duration_s": 58.0}, {"input_tokens": 11149, "output_tokens": 2855, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.00070562, "served_by": "Alibaba", "duration_s": 16.6}]

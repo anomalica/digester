@@ -1,0 +1,60 @@
+{
+  "record": "2023-06-05-web-intelligence-officials-say-u-s-has-retrieved-craft-of-non.md",
+  "rows": [
+    {
+      "model": "z-ai/glm-5.2",
+      "wall_seconds": 104.2,
+      "out": "intel-officials-web.z-ai_glm-5.2.yaml",
+      "cost_usd": 0.128902,
+      "input_tokens": 23884,
+      "output_tokens": 26211,
+      "claims": 150,
+      "nodes": 62
+    },
+    {
+      "model": "qwen/qwen3.8-flash",
+      "wall_seconds": 10.3,
+      "out": "intel-officials-web.qwen_qwen3.8-flash.yaml",
+      "error": "ns, because each chunk x iteration x pass re-sends the document and prompt.\nConfirmed (--confirm) - proceeding with the metered run.\nExtracting (two-pass) from: Intelligence Officials Say U.S. Has Retrieved Craft of Non-Human Origin\nPass A: nodes (with iteration + chunking)\nUsage: 0 calls, in=0 out=0 cache_read=0 cost_equiv=$0.0000\nUSAGE_JSON: {\"input_tokens\": 0, \"output_tokens\": 0, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_equiv_usd\": 0.0, \"calls\": 0}\nTRACE_JSON: []\n\nparent.error(\n        'http', request, response, code, msg, hdrs)\n  File \"/usr/lib64/python3.13/urllib/request.py\", line 533, in error\n    return self._call_chain(*args)\n           ~~~~~~~~~~~~~~~~^^^^^^^\n  File \"/usr/lib64/python3.13/urllib/request.py\", line 466, in _call_chain\n    result = func(*args)\n  File \"/usr/lib64/python3.13/urllib/request.py\", line 613, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 429: Too Many Requests",
+      "cost_usd": 0.0
+    },
+    {
+      "model": "openai/gpt-5.6-sol",
+      "wall_seconds": 122.1,
+      "out": "intel-officials-web.openai_gpt-5.6-sol.yaml",
+      "error": "ut_tokens\": 6668, \"output_tokens\": 7904, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_equiv_usd\": 0.080379, \"calls\": 2}\nTRACE_JSON: [{\"input_tokens\": 6668, \"output_tokens\": 7904, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_usd\": 0.080379, \"served_by\": \"OpenAI\", \"duration_s\": 105.1}, {\"input_tokens\": 0, \"output_tokens\": 0, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_usd\": 0.0, \"served_by\": \"OpenAI\", \"duration_s\": 16.6}]\n\nloads\n    return _default_decoder.decode(s)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^\n  File \"/usr/lib64/python3.13/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib64/python3.13/json/decoder.py\", line 361, in raw_decode\n    obj, end = self.scan_once(s, idx)\n               ~~~~~~~~~~~~~~^^^^^^^^\njson.decoder.JSONDecodeError: Unterminated string starting at: line 1 column 1416 (char 1415)",
+      "cost_usd": 0.080379
+    },
+    {
+      "model": "qwen/qwen3.7-flash",
+      "wall_seconds": 75.2,
+      "out": "intel-officials-web.qwen_qwen3.7-flash.yaml",
+      "error": "utput_tokens\": 12716, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_equiv_usd\": 0.00219563, \"calls\": 2}\nTRACE_JSON: [{\"input_tokens\": 6936, \"output_tokens\": 9861, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_usd\": 0.00149001, \"served_by\": \"Alibaba\", \"duration_s\": 58.0}, {\"input_tokens\": 11149, \"output_tokens\": 2855, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_usd\": 0.00070562, \"served_by\": \"Alibaba\", \"duration_s\": 16.6}]\n\nn/__init__.py\", line 352, in loads\n    return _default_decoder.decode(s)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^\n  File \"/usr/lib64/python3.13/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib64/python3.13/json/decoder.py\", line 363, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)",
+      "cost_usd": 0.00219563
+    },
+    {
+      "model": "deepseek/deepseek-v3.2",
+      "wall_seconds": 287.8,
+      "out": "intel-officials-web.deepseek_deepseek-v3.2.yaml",
+      "cost_usd": 0.031915,
+      "input_tokens": 18152,
+      "output_tokens": 25075,
+      "claims": 114,
+      "nodes": 54
+    },
+    {
+      "model": "z-ai/glm-5.3-flash",
+      "wall_seconds": 1305.3,
+      "out": "intel-officials-web.z-ai_glm-5.3-flash.yaml",
+      "error": "tokens\": 66834, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_equiv_usd\": 0.018856849999999998, \"calls\": 2}\nTRACE_JSON: [{\"input_tokens\": 6375, \"output_tokens\": 1298, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_usd\": 0.00160525, \"served_by\": \"Reka\", \"duration_s\": 15.1}, {\"input_tokens\": 11568, \"output_tokens\": 65536, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_usd\": 0.0172516, \"served_by\": \"Z.AI\", \"duration_s\": 1289.7}]\n\ne 352, in loads\n    return _default_decoder.decode(s)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^\n  File \"/usr/lib64/python3.13/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib64/python3.13/json/decoder.py\", line 361, in raw_decode\n    obj, end = self.scan_once(s, idx)\n               ~~~~~~~~~~~~~~^^^^^^^^\njson.decoder.JSONDecodeError: Expecting ',' delimiter: line 10 column 22 (char 749)",
+      "cost_usd": 0.018856849999999998
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash",
+      "error": "timeout (1800s)",
+      "cost_usd": 0.0
+    }
+  ],
+  "total_cost_usd": 0.2622,
+  "refused_for_ceiling": []
+}

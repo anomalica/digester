@@ -44,10 +44,12 @@ Opinions, background explanation, career summary, discussion of documents, and a
 THE SPAN
 ================================================================
 
-Mark where the account runs in this record, using the record's own position markers:
+Mark where the account runs by quoting its first and last words.
 
-  - If the record carries TIMECODES, give start and end as timecodes in the same form the record uses.
-  - Otherwise give start and end as the exact opening and closing PHRASES of the passage, quoted verbatim from the record, long enough to be unique (8-15 words each).
+  - `span_start`: the exact opening PHRASE of the passage, verbatim from the record, long enough to be unique - 8 to 15 words.
+  - `span_end`: the exact closing PHRASE of the passage, the same way.
+
+Both must appear in the record EXACTLY as you write them. They are matched against the text mechanically; a paraphrase, a tidied-up quote or a summary will not be found, and the account will be lost. Copy, do not compose.
 
 The span covers the telling of that story only. If the speaker returns to the same story much later, that is a SECOND span of the same account - list the account once and give its additional spans in `also_spans`.
 
@@ -78,8 +80,8 @@ OUTPUT FORMAT - valid JSON only, no markdown fencing
       "subject": "who or what it is about, unnamed is fine",
       "when": "rough time, or empty string if the record does not say",
       "where": "rough place, or empty string if the record does not say",
-      "span_start": "timecode or verbatim opening phrase",
-      "span_end": "timecode or verbatim closing phrase",
+      "span_start": "verbatim opening phrase, 8-15 words, copied exactly",
+      "span_end": "verbatim closing phrase, 8-15 words, copied exactly",
       "also_spans": [{"span_start": "...", "span_end": "..."}],
       "teller_role": "experienced|investigated|was_told|briefed_or_read|unclear"
     }

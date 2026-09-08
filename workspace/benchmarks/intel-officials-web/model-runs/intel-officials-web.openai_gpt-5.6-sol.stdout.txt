@@ -1,0 +1,19 @@
+Parsing record: 2023-06-05-web-intelligence-officials-say-u-s-has-retrieved-craft-of-non.md
+COST ESTIMATE (rough, +/-40%):
+  22,163 source chars
+  model: openai/gpt-5.6-sol  ($2.50/$15.00 per million input/output tokens)
+  est tokens: ~62,163 in + ~8,311 out
+  est cost: ~$0.28  (range $0.17 - $0.39)
+  This spends real money on OpenRouter.
+  NOTE: this formula UNDERSTATES multi-chunk records - measured runs show 3-9x these
+  input tokens, because each chunk x iteration x pass re-sends the document and prompt.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Intelligence Officials Say U.S. Has Retrieved Craft of Non-Human Origin
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +74 nodes (total 74) [model: complete]
+  74 nodes, 19 acronyms, main_subject='David Charles Grusch'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+Usage: 2 calls, in=6668 out=7904 cache_read=0 cost_equiv=$0.0804
+USAGE_JSON: {"input_tokens": 6668, "output_tokens": 7904, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.080379, "calls": 2}
+TRACE_JSON: [{"input_tokens": 6668, "output_tokens": 7904, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.080379, "served_by": "OpenAI", "duration_s": 105.1}, {"input_tokens": 0, "output_tokens": 0, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.0, "served_by": "OpenAI", "duration_s": 16.6}]

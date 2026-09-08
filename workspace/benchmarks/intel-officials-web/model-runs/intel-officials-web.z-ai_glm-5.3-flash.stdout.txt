@@ -1,0 +1,19 @@
+Parsing record: 2023-06-05-web-intelligence-officials-say-u-s-has-retrieved-craft-of-non.md
+COST ESTIMATE (rough, +/-40%):
+  22,163 source chars
+  model: z-ai/glm-5.3-flash  ($0.07/$0.25 per million input/output tokens)
+  est tokens: ~62,163 in + ~8,311 out
+  est cost: ~$0.01  (range $0.00 - $0.01)
+  This spends real money on OpenRouter.
+  NOTE: this formula UNDERSTATES multi-chunk records - measured runs show 3-9x these
+  input tokens, because each chunk x iteration x pass re-sends the document and prompt.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Intelligence Officials Say U.S. Has Retrieved Craft of Non-Human Origin
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +67 nodes (total 67) [model: complete]
+  67 nodes, 12 acronyms, main_subject='David Charles Grusch UAP whistleblower disclosures'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+Usage: 2 calls, in=17943 out=66834 cache_read=0 cost_equiv=$0.0189
+USAGE_JSON: {"input_tokens": 17943, "output_tokens": 66834, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.018856849999999998, "calls": 2}
+TRACE_JSON: [{"input_tokens": 6375, "output_tokens": 1298, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.00160525, "served_by": "Reka", "duration_s": 15.1}, {"input_tokens": 11568, "output_tokens": 65536, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.0172516, "served_by": "Z.AI", "duration_s": 1289.7}]

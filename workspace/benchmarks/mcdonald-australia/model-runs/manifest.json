@@ -1,0 +1,288 @@
+{
+  "record": "2026-08-11-video-ufos-in-australia-eyewitnesses-talk-to-dr-james-e-mcdonald.v2.md",
+  "rows": [
+    {
+      "model": "deepseek/deepseek-v4-flash",
+      "out": "mcdonald-australia.deepseek_deepseek-v4-flash.yaml",
+      "skipped": true,
+      "cost_usd": 0.0
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "wall_seconds": 250.2,
+      "out": "mcdonald-australia.anthropic_claude-haiku-4.5.yaml",
+      "cost_usd": 0.191941,
+      "input_tokens": 50296,
+      "output_tokens": 28329,
+      "claims": 136,
+      "nodes": 48
+    },
+    {
+      "model": "google/gemini-3-flash-preview",
+      "wall_seconds": 138.3,
+      "out": "mcdonald-australia.google_gemini-3-flash-preview.yaml",
+      "cost_usd": 0.057961,
+      "input_tokens": 44258,
+      "output_tokens": 11944,
+      "claims": 40,
+      "nodes": 40
+    },
+    {
+      "model": "google/gemini-3.1-flash-lite",
+      "wall_seconds": 22.0,
+      "out": "mcdonald-australia.google_gemini-3.1-flash-lite.yaml",
+      "cost_usd": 0.019586,
+      "input_tokens": 44713,
+      "output_tokens": 5605,
+      "claims": 19,
+      "nodes": 21
+    },
+    {
+      "model": "anthropic/claude-opus-4.8",
+      "wall_seconds": 530.9,
+      "out": "mcdonald-australia.anthropic_claude-opus-4.8.yaml",
+      "cost_usd": 1.045735,
+      "input_tokens": 70677,
+      "output_tokens": 27694,
+      "claims": 93,
+      "nodes": 40
+    },
+    {
+      "model": "deepseek/deepseek-v3.2",
+      "wall_seconds": 596.5,
+      "out": "mcdonald-australia.deepseek_deepseek-v3.2.yaml",
+      "cost_usd": 0.032497,
+      "input_tokens": 71908,
+      "output_tokens": 42838,
+      "claims": 198,
+      "nodes": 52
+    },
+    {
+      "model": "anthropic/claude-sonnet-4.6",
+      "wall_seconds": 600.6,
+      "out": "mcdonald-australia.anthropic_claude-sonnet-4.6.yaml",
+      "cost_usd": 0.765183,
+      "input_tokens": 67756,
+      "output_tokens": 37461,
+      "claims": 171,
+      "nodes": 58
+    },
+    {
+      "model": "google/gemini-3.5-flash",
+      "wall_seconds": 192.4,
+      "out": "mcdonald-australia.google_gemini-3.5-flash.yaml",
+      "cost_usd": 0.480104,
+      "input_tokens": 47099,
+      "output_tokens": 45495,
+      "claims": 46,
+      "nodes": 34
+    },
+    {
+      "model": "meta-llama/llama-4-maverick",
+      "wall_seconds": 143.8,
+      "out": "mcdonald-australia.meta-llama_llama-4-maverick.yaml",
+      "cost_usd": 0.01998,
+      "input_tokens": 41326,
+      "output_tokens": 9666,
+      "claims": 43,
+      "nodes": 41
+    },
+    {
+      "model": "moonshotai/kimi-k2",
+      "wall_seconds": 0.8,
+      "out": "mcdonald-australia.moonshotai_kimi-k2.yaml",
+      "error": "ration x pass re-sends the document and prompt.\nConfirmed (--confirm) - proceeding with the metered run.\nExtracting (two-pass) from: UFOs in Australia \u2013 Eyewitnesses Talk to Dr. James E. McDonald During His Investigative Tour (1967)\nPass A: nodes (with iteration + chunking)\nUsage: 0 calls, in=0 out=0 cache_read=0 cost_equiv=$0.0000\nUSAGE_JSON: {\"input_tokens\": 0, \"output_tokens\": 0, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_equiv_usd\": 0.0, \"calls\": 0}\nTRACE_JSON: []\n\n self.parent.error(\n        'http', request, response, code, msg, hdrs)\n  File \"/usr/lib64/python3.13/urllib/request.py\", line 533, in error\n    return self._call_chain(*args)\n           ~~~~~~~~~~~~~~~~^^^^^^^\n  File \"/usr/lib64/python3.13/urllib/request.py\", line 466, in _call_chain\n    result = func(*args)\n  File \"/usr/lib64/python3.13/urllib/request.py\", line 613, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 400: Bad Request",
+      "cost_usd": 0.0
+    },
+    {
+      "model": "deepseek/deepseek-v4-pro",
+      "wall_seconds": 988.1,
+      "out": "mcdonald-australia.deepseek_deepseek-v4-pro.yaml",
+      "cost_usd": 0.145957,
+      "input_tokens": 41448,
+      "output_tokens": 50481,
+      "claims": 130,
+      "nodes": 51
+    },
+    {
+      "model": "minimax/minimax-m2",
+      "wall_seconds": 431.6,
+      "out": "mcdonald-australia.minimax_minimax-m2.yaml",
+      "cost_usd": 0.10432,
+      "input_tokens": 66788,
+      "output_tokens": 70236,
+      "claims": 175,
+      "nodes": 54
+    },
+    {
+      "model": "google/gemini-3.1-pro-preview",
+      "wall_seconds": 663.6,
+      "out": "mcdonald-australia.google_gemini-3.1-pro-preview.yaml",
+      "error": "kens\": 18879, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_usd\": 0.252166, \"served_by\": \"Google\", \"duration_s\": 114.1}, {\"input_tokens\": 12698, \"output_tokens\": 11939, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_usd\": 0.168664, \"served_by\": \"Google\", \"duration_s\": 79.7}, {\"input_tokens\": 9099, \"output_tokens\": 65521, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_usd\": 0.80445, \"served_by\": \"Google\", \"duration_s\": 433.3}]\n\nn loads\n    return _default_decoder.decode(s)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^\n  File \"/usr/lib64/python3.13/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib64/python3.13/json/decoder.py\", line 361, in raw_decode\n    obj, end = self.scan_once(s, idx)\n               ~~~~~~~~~~~~~~^^^^^^^^\njson.decoder.JSONDecodeError: Unterminated string starting at: line 13 column 18 (char 480)",
+      "cost_usd": 1.321546
+    },
+    {
+      "model": "openai/gpt-5.1",
+      "wall_seconds": 331.1,
+      "out": "mcdonald-australia.openai_gpt-5.1.yaml",
+      "cost_usd": 0.487069,
+      "input_tokens": 45086,
+      "output_tokens": 43892,
+      "claims": 172,
+      "nodes": 60
+    },
+    {
+      "model": "openai/gpt-5-nano",
+      "wall_seconds": 458.5,
+      "out": "mcdonald-australia.openai_gpt-5-nano.yaml",
+      "cost_usd": 0.031274,
+      "input_tokens": 44087,
+      "output_tokens": 74258,
+      "claims": 30,
+      "nodes": 49
+    },
+    {
+      "model": "openai/gpt-5-mini",
+      "wall_seconds": 509.1,
+      "out": "mcdonald-australia.openai_gpt-5-mini.yaml",
+      "cost_usd": 0.099557,
+      "input_tokens": 43958,
+      "output_tokens": 45839,
+      "claims": 94,
+      "nodes": 50
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "wall_seconds": 191.0,
+      "out": "mcdonald-australia.openai_gpt-5.6-luna.yaml",
+      "cost_usd": 0.046761,
+      "input_tokens": 44468,
+      "output_tokens": 32485,
+      "claims": 137,
+      "nodes": 51
+    },
+    {
+      "model": "openai/gpt-5.6-luna-pro",
+      "wall_seconds": 263.5,
+      "out": "mcdonald-australia.openai_gpt-5.6-luna-pro.yaml",
+      "cost_usd": 0.150253,
+      "input_tokens": 277398,
+      "output_tokens": 95834,
+      "claims": 118,
+      "nodes": 59
+    },
+    {
+      "model": "mistralai/mistral-small-3.2-24b-instruct",
+      "wall_seconds": 1040.6,
+      "out": "mcdonald-australia.mistralai_mistral-small-3.2-24b-instruct.yaml",
+      "error": "g His Investigative Tour (1967)\nPass A: nodes (with iteration + chunking)\nUsage: 1 calls, in=13040 out=16384 cache_read=0 cost_equiv=$0.0053\nUSAGE_JSON: {\"input_tokens\": 13040, \"output_tokens\": 16384, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_equiv_usd\": 0.0053185, \"calls\": 1}\nTRACE_JSON: [{\"input_tokens\": 13040, \"output_tokens\": 16384, \"cache_read_input_tokens\": 0, \"cache_creation_input_tokens\": 0, \"cost_usd\": 0.0053185, \"served_by\": \"Venice\", \"duration_s\": 1040.1}]\n\noads\n    return _default_decoder.decode(s)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^\n  File \"/usr/lib64/python3.13/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib64/python3.13/json/decoder.py\", line 361, in raw_decode\n    obj, end = self.scan_once(s, idx)\n               ~~~~~~~~~~~~~~^^^^^^^^\njson.decoder.JSONDecodeError: Unterminated string starting at: line 1584 column 9 (char 40821)",
+      "cost_usd": 0.0053185
+    },
+    {
+      "model": "openai/gpt-5.6-terra",
+      "wall_seconds": 211.5,
+      "out": "mcdonald-australia.openai_gpt-5.6-terra.yaml",
+      "cost_usd": 0.38673,
+      "input_tokens": 44906,
+      "output_tokens": 25710,
+      "claims": 138,
+      "nodes": 58
+    },
+    {
+      "model": "openai/gpt-5.2",
+      "wall_seconds": 799.0,
+      "out": "mcdonald-australia.openai_gpt-5.2.yaml",
+      "cost_usd": 0.965936,
+      "input_tokens": 44690,
+      "output_tokens": 65022,
+      "claims": 243,
+      "nodes": 58
+    },
+    {
+      "model": "openai/gpt-5.6-terra-pro",
+      "wall_seconds": 287.1,
+      "out": "mcdonald-australia.openai_gpt-5.6-terra-pro.yaml",
+      "cost_usd": 1.088797,
+      "input_tokens": 248976,
+      "output_tokens": 66420,
+      "claims": 134,
+      "nodes": 49
+    },
+    {
+      "model": "openai/gpt-5.6-sol",
+      "wall_seconds": 664.4,
+      "out": "mcdonald-australia.openai_gpt-5.6-sol.yaml",
+      "cost_usd": 0.968849,
+      "input_tokens": 46091,
+      "output_tokens": 57977,
+      "claims": 330,
+      "nodes": 71
+    },
+    {
+      "model": "moonshotai/kimi-k3",
+      "error": "timeout (1800s)",
+      "cost_usd": 0.0
+    },
+    {
+      "model": "x-ai/grok-4.20",
+      "wall_seconds": 214.9,
+      "out": "mcdonald-australia.x-ai_grok-4.20.yaml",
+      "cost_usd": 0.112391,
+      "input_tokens": 42699,
+      "output_tokens": 23822,
+      "claims": 97,
+      "nodes": 36
+    },
+    {
+      "model": "x-ai/grok-4.3",
+      "wall_seconds": 60.4,
+      "out": "mcdonald-australia.x-ai_grok-4.3.yaml",
+      "cost_usd": 0.068977,
+      "input_tokens": 41486,
+      "output_tokens": 7063,
+      "claims": 19,
+      "nodes": 18
+    },
+    {
+      "model": "qwen/qwen3-235b-a22b-2507",
+      "wall_seconds": 422.4,
+      "out": "mcdonald-australia.qwen_qwen3-235b-a22b-2507.yaml",
+      "cost_usd": 0.02605,
+      "input_tokens": 45148,
+      "output_tokens": 20659,
+      "claims": 77,
+      "nodes": 55
+    },
+    {
+      "model": "openai/gpt-5.6-sol-pro",
+      "wall_seconds": 869.8,
+      "out": "mcdonald-australia.openai_gpt-5.6-sol-pro.yaml",
+      "cost_usd": 3.253961,
+      "input_tokens": 360400,
+      "output_tokens": 174809,
+      "claims": 310,
+      "nodes": 75
+    },
+    {
+      "model": "z-ai/glm-4.7",
+      "wall_seconds": 689.5,
+      "out": "mcdonald-australia.z-ai_glm-4.7.yaml",
+      "cost_usd": 0.097738,
+      "input_tokens": 52316,
+      "output_tokens": 37811,
+      "claims": 87,
+      "nodes": 36
+    },
+    {
+      "model": "qwen/qwen3.6-plus",
+      "wall_seconds": 1076.4,
+      "out": "mcdonald-australia.qwen_qwen3.6-plus.yaml",
+      "cost_usd": 0.136778,
+      "input_tokens": 43377,
+      "output_tokens": 62913,
+      "claims": 125,
+      "nodes": 39
+    }
+  ],
+  "total_cost_usd": 12.1112
+}

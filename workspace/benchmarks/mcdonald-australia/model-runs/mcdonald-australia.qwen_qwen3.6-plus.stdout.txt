@@ -1,0 +1,28 @@
+Parsing record: 2026-08-11-video-ufos-in-australia-eyewitnesses-talk-to-dr-james-e-mcdonald.v2.md
+COST ESTIMATE (rough, +/-40%):
+  138,619 source chars
+  model: qwen/qwen3.6-plus  ($0.33/$1.95 per million input/output tokens)
+  est tokens: ~178,619 in + ~51,982 out
+  est cost: ~$0.16  (range $0.10 - $0.22)
+  This spends real money on OpenRouter.
+  NOTE: this formula UNDERSTATES multi-chunk records - measured runs show 3-9x these
+  input tokens, because each chunk x iteration x pass re-sends the document and prompt.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: UFOs in Australia – Eyewitnesses Talk to Dr. James E. McDonald During His Investigative Tour (1967)
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +39 nodes (total 39) [model: complete]
+  39 nodes, 4 acronyms, main_subject='James E. MacDonald'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/3 (20,000 chars)
+    claims iter 1: +29 claims (chunk total 29, doc total 29) [model: complete]
+  claims chunk 2/3 (20,000 chars)
+    claims iter 1: +68 claims (chunk total 68, doc total 97) [model: complete]
+  claims chunk 3/3 (5,889 chars)
+    claims iter 1: +28 claims (chunk total 28, doc total 125) [model: complete]
+  125 claims total: 122 domain, 3 infrastructure
+  locations -> timecode: 116/125 aligned (9 unalignable, 3 ambiguous)
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/mcdonald-australia/model-runs/mcdonald-australia.qwen_qwen3.6-plus.yaml
+Usage: 4 calls, in=43377 out=62913 cache_read=0 cost_equiv=$0.1368
+USAGE_JSON: {"input_tokens": 43377, "output_tokens": 62913, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.136777875, "calls": 4}
+TRACE_JSON: [{"input_tokens": 13197, "output_tokens": 8580, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.021020025, "served_by": "Alibaba", "duration_s": 147.2}, {"input_tokens": 11320, "output_tokens": 13751, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.03049345, "served_by": "Alibaba", "duration_s": 235.0}, {"input_tokens": 11214, "output_tokens": 27132, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.05655195, "served_by": "Alibaba", "duration_s": 462.6}, {"input_tokens": 7646, "output_tokens": 13450, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.02871245, "served_by": "Alibaba", "duration_s": 230.2}]

@@ -1,0 +1,21 @@
+Parsing record: 2026-08-11-video-ufos-in-australia-eyewitnesses-talk-to-dr-james-e-mcdonald.v2.md
+COST ESTIMATE (rough, +/-40%):
+  138,619 source chars
+  model: z-ai/glm-4.5-air  ($0.13/$0.85 per million input/output tokens)
+  est tokens: ~178,619 in + ~51,982 out
+  est cost: ~$0.07  (range $0.04 - $0.09)
+  This spends real money on OpenRouter.
+  NOTE: this formula UNDERSTATES multi-chunk records - measured runs show 3-9x these
+  input tokens, because each chunk x iteration x pass re-sends the document and prompt.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: UFOs in Australia – Eyewitnesses Talk to Dr. James E. McDonald During His Investigative Tour (1967)
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +49 nodes (total 49) [model: complete]
+  49 nodes, 3 acronyms, main_subject='James E. MacDonald'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/3 (20,000 chars)
+    claims iter 1: +79 claims (chunk total 79, doc total 79) [model: complete]
+  claims chunk 2/3 (20,000 chars)
+Usage: 3 calls, in=36095 out=79613 cache_read=0 cost_equiv=$0.0936
+USAGE_JSON: {"input_tokens": 36095, "output_tokens": 79613, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.09356181999999999, "calls": 3}
+TRACE_JSON: [{"input_tokens": 12804, "output_tokens": 5107, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.00817765, "served_by": "Z.AI", "duration_s": 75.6}, {"input_tokens": 11682, "output_tokens": 33399, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.03905677, "served_by": "Z.AI", "duration_s": 487.8}, {"input_tokens": 11609, "output_tokens": 41107, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.0463274, "served_by": "Z.AI", "duration_s": 648.7}]

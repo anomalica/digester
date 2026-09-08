@@ -60,19 +60,45 @@ def parse_seconds(value: str) -> float | None:
 
 
 def claim_position(location: str | None) -> float | None:
-    """Where a claim sits, as a single comparable number.
+    """Where a claim sits, from its LOCATION alone. Seconds, or a char offset.
 
-    Timecoded records give seconds; char and chapter spans give the start
-    offset. A claim with a prose location ("page 3, paragraph 2") has no
-    position and cannot be bound - it is counted as unbindable rather than
-    guessed at, because a claim assigned to the wrong story is worse than one
-    assigned to none.
+    Only usable where the accounts are in the same coordinate space, which on a
+    timecoded record they are not - see `position_in_body`.
     """
     if not location:
         return None
     m = _TIMECODE.search(location)
     if m:
         return parse_seconds(m.group(0))
+    for pattern in (_CHAR_SPAN, _CH_SPAN):
+        m = pattern.search(location)
+        if m:
+            return float(m.group(1))
+    return None
+
+
+def position_in_body(claim: dict, body: str) -> float | None:
+    """Where a claim sits in the text THE MODEL SAW, as a character offset.
+
+    ONE COORDINATE SPACE, and this is the whole reason the function exists. A
+    timecoded record's claims carry `00:04:54.3` locations, but the timestamps
+    are stripped before extraction, so the model marking account boundaries
+    never sees a timecode and can only answer in phrases. Comparing seconds
+    against character offsets bound nothing at all on the first run of this
+    pass - 388 claims "outside" every account, on a record where the accounts
+    were right. Locating the claim's own quote puts both in the same space.
+
+    Falls back to a char-style location for records that carry one, and returns
+    None rather than guessing when neither works.
+    """
+    from digester.entailment import locate
+
+    quote = claim.get("quote")
+    if quote and body:
+        span = locate(body, quote, claim.get("location"))
+        if span:
+            return float(span[0])
+    location = claim.get("location") or ""
     for pattern in (_CHAR_SPAN, _CH_SPAN):
         m = pattern.search(location)
         if m:
@@ -141,7 +167,7 @@ def bind(accounts: list[dict], claims: list[dict], body: str = "") -> dict:
     mapping: dict[str, str] = {}
     per_account: dict[int, int] = {i: 0 for i in range(len(accounts))}
     for c in claims:
-        pos = claim_position(c.get("location"))
+        pos = position_in_body(c, body) if body else claim_position(c.get("location"))
         if pos is None:
             counts["unbindable"] += 1
             continue

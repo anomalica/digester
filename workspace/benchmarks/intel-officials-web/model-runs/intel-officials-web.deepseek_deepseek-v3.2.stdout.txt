@@ -1,0 +1,26 @@
+Parsing record: 2023-06-05-web-intelligence-officials-say-u-s-has-retrieved-craft-of-non.md
+COST ESTIMATE (rough, +/-40%):
+  22,163 source chars
+  model: deepseek/deepseek-v3.2  ($0.27/$0.40 per million input/output tokens)
+  est tokens: ~62,163 in + ~8,311 out
+  est cost: ~$0.02  (range $0.01 - $0.03)
+  This spends real money on OpenRouter.
+  NOTE: this formula UNDERSTATES multi-chunk records - measured runs show 3-9x these
+  input tokens, because each chunk x iteration x pass re-sends the document and prompt.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: Intelligence Officials Say U.S. Has Retrieved Craft of Non-Human Origin
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +54 nodes (total 54) [model: complete]
+  54 nodes, 13 acronyms, main_subject='Unidentified Aerial Phenomena (UAP)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/2 (20,000 chars)
+    claims iter 1: +69 claims (chunk total 69, doc total 69) [model: complete]
+  claims chunk 2/2 (1,523 chars)
+    claims iter 1: +6 claims (chunk total 6, doc total 75) [model: complete]
+  75 claims total: 72 domain, 3 infrastructure
+  locations -> char offset: 75/75 aligned (0 unalignable, 0 ambiguous)
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/intel-officials-web/model-runs/intel-officials-web.deepseek_deepseek-v3.2.yaml (run_kind: comparison)
+Usage: 3 calls, in=24943 out=18364 cache_read=0 cost_equiv=$0.0152
+USAGE_JSON: {"input_tokens": 24943, "output_tokens": 18364, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.01521846475, "calls": 3}
+TRACE_JSON: [{"input_tokens": 6793, "output_tokens": 1655, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.00239508, "served_by": "AtlasCloud", "duration_s": 50.8}, {"input_tokens": 11248, "output_tokens": 15365, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.00735638475, "served_by": "StreamLake", "duration_s": 339.4}, {"input_tokens": 6902, "output_tokens": 1344, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.005467, "served_by": "Friendli", "duration_s": 18.7}]

@@ -1,0 +1,28 @@
+Parsing record: 2026-08-11-video-ufos-in-australia-eyewitnesses-talk-to-dr-james-e-mcdonald.v2.md
+COST ESTIMATE (rough, +/-40%):
+  138,619 source chars
+  model: openai/gpt-5.1  ($1.25/$10.00 per million input/output tokens)
+  est tokens: ~178,619 in + ~51,982 out
+  est cost: ~$0.74  (range $0.45 - $1.04)
+  This spends real money on OpenRouter.
+  NOTE: this formula UNDERSTATES multi-chunk records - measured runs show 3-9x these
+  input tokens, because each chunk x iteration x pass re-sends the document and prompt.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: UFOs in Australia – Eyewitnesses Talk to Dr. James E. McDonald During His Investigative Tour (1967)
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +60 nodes (total 60) [model: complete]
+  60 nodes, 6 acronyms, main_subject='UFOs in Australia – Eyewitnesses Talk to Dr. James E. McDonald During His Investigative Tour (1967)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/3 (20,000 chars)
+    claims iter 1: +63 claims (chunk total 63, doc total 63) [model: complete]
+  claims chunk 2/3 (20,000 chars)
+    claims iter 1: +78 claims (chunk total 78, doc total 141) [model: complete]
+  claims chunk 3/3 (5,889 chars)
+    claims iter 1: +31 claims (chunk total 31, doc total 172) [model: complete]
+  172 claims total: 163 domain, 9 infrastructure
+  locations -> timecode: 170/172 aligned (2 unalignable, 3 ambiguous)
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/mcdonald-australia/model-runs/mcdonald-australia.openai_gpt-5.1.yaml
+Usage: 4 calls, in=45086 out=43892 cache_read=0 cost_equiv=$0.4871
+USAGE_JSON: {"input_tokens": 45086, "output_tokens": 43892, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.4870695, "calls": 4}
+TRACE_JSON: [{"input_tokens": 12596, "output_tokens": 1848, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.034225, "served_by": "OpenAI", "duration_s": 15.4}, {"input_tokens": 11972, "output_tokens": 15318, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.168145, "served_by": "OpenAI", "duration_s": 117.6}, {"input_tokens": 11872, "output_tokens": 19817, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.21301, "served_by": "OpenAI", "duration_s": 143.4}, {"input_tokens": 8646, "output_tokens": 6909, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.0716895, "served_by": "OpenAI", "duration_s": 53.3}]

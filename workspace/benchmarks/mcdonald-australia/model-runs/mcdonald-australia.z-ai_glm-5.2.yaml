@@ -1,0 +1,3642 @@
+schema: anomalica/digest/1
+extracted_at: '2026-08-18T15:59:57.121502+00:00'
+model: z-ai/glm-5.2
+ai_usage:
+  - stage: digest
+    model: z-ai/glm-5.2
+    model_version: z-ai/glm-5.2
+    tokens:
+      input: 42446
+      output: 77440
+      real_input: 42446
+      cache_read: 0
+      cache_write: 0
+      calls: 4
+prompts:
+  - pass: nodes
+    id: nodes
+    version: v4
+    sha256: 1ca968e2b28b26a9acea5fb8df00083fa61e690577899237bf6ea47a492dd7bb
+    file: nodes.txt
+  - pass: claims
+    id: claims
+    version: v4
+    sha256: 89ec59286169096f610265f3c5cf0fb34ff5e58e9726e6682e8693e8c703fe89
+    file: claims.txt
+schema_enforcement: native
+pre_digest:
+  sha256: e7027228cfcbd0a8cdb707b943872aeb3d6451d16db361d9b23a32ff5aa466c4
+  prep_version: 6
+record:
+  id: 6d84d5e6-a0b9-4d83-8887-e8258c087fa6
+  title: |-
+    UFOs in Australia – Eyewitnesses Talk to Dr. James E. McDonald During His Investigative Tour (1967)
+  publisher: Eyes On Cinema
+  date: '2026-08-11'
+  medium: video
+  duration: 2617.03
+  content_hash: sha256:1d24cbe9e49ad5279cd4975a2b37b3b3ab60a260be30a9264e34ef168d7f9e0e
+  processing_version: e4c04ad
+  reference: https://www.youtube.com/watch?v=8NIy61DkTWw
+  review:
+    state: human
+    sidecar: present
+    observed_coverage: 1.0
+  speakers:
+    - Mrs. Smith
+    - Barry Jones
+    - James E. MacDonald
+terminology:
+  main_subject: James E. McDonald
+  codenames:
+    - codename: Professor MacDonald
+      refers_to: James E. McDonald
+    - codename: Mr. James
+      refers_to: James E. McDonald
+  acronyms:
+    - acronym: UFO
+      expansion: Unidentified Flying Object
+    - acronym: UN
+      expansion: United Nations
+    - acronym: USAF
+      expansion: United States Air Force
+    - acronym: RAF
+      expansion: Royal Air Force
+nodes:
+  - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+    type: person
+    name: James E. McDonald
+  - id: cbd4c433-1fad-4f76-8dc2-0f31596c66df
+    type: person
+    name: Carl Jung
+  - id: 459fef79-f98f-460d-b975-678154d797cd
+    type: person
+    name: U Thant
+  - id: 8b36f6fc-f710-499c-93bb-c6a42bffbef3
+    type: person
+    name: Drew Pearson
+  - id: e7ac934c-c280-4836-b2b0-039b8fbe90d0
+    type: person
+    name: Barry Jones
+  - id: b8b42774-4f8d-4d8f-b9da-6d47f7b8df58
+    type: organisation
+    name: University of Arizona
+  - id: 6160c44c-3a30-4392-80f8-58d77c8e78dd
+    type: organisation
+    name: United Nations (UN)
+  - id: c0d9c8f5-b529-4d0c-9b35-8bf55174ccee
+    type: organisation
+    name: United States Air Force (USAF)
+  - id: f34d48a7-d505-4bc2-85ec-e3d3528cbd64
+    type: organisation
+    name: Royal Air Force (RAF)
+  - id: 3e142853-a9d6-4593-92f9-0917bcefb810
+    type: organisation
+    name: The Sun
+  - id: a4dbdc50-5f4b-49c0-9901-0c95a1b722b7
+    type: organisation
+    name: Herald Office
+  - id: 6dd5cfb6-54f3-4c56-8ead-61fae6021445
+    type: organisation
+    name: Victorian Flying Saucer Society
+  - id: dd869a6b-394b-4062-bcc0-808b2a296abe
+    type: project
+    name: Project Blue Book
+  - id: 5874614c-406d-47fa-943f-a28ca3f11f53
+    type: project
+    name: Outer Space Affairs Group
+  - id: 2caa84b3-0fe5-4153-bc09-e578b851b365
+    type: place
+    name: Australia, Victoria, Melbourne
+  - id: fca8b9c3-1222-4a2a-842c-0a0a1742f0b9
+    type: place
+    name: Australia, Victoria, Hawthorn
+  - id: a6c85eef-acd2-4db9-b1fa-abd97427062a
+    type: place
+    name: Australia, Victoria, South Caulfield
+  - id: e0664622-baa9-4357-b8f9-e65dbecae272
+    type: place
+    name: Australia, Victoria, East Melbourne
+  - id: 701c34f7-25b2-406f-bbcb-183549e568d1
+    type: place
+    name: Australia, Victoria, Moe
+  - id: b0c52d3a-feb0-45a6-9c5a-9c97578ffbcc
+    type: place
+    name: Australia, Victoria, East Preston
+  - id: 2623b4a1-f86c-4dac-8a2e-bafb0e686895
+    type: place
+    name: Australia, Victoria, Moorabbin
+  - id: eb3345a9-8547-4aff-8649-2aeda80aedf1
+    type: place
+    name: New Zealand, Waikato, Wairakei
+  - id: 338179dd-3f79-4c2d-9ad0-5796a0065f81
+    type: place
+    name: New Zealand, Canterbury, Christchurch
+  - id: 11219914-d23e-4744-95bc-cca89bb86de4
+    type: place
+    name: New Zealand, West Coast, Fox Glacier
+  - id: 5c34870c-3080-49f6-8668-93f976fa9a14
+    type: place
+    name: Australia, Tasmania, Hobart
+  - id: ae2e5015-a640-4a4b-86df-3d93fbbeaa63
+    type: place
+    name: United States, Arizona, Tucson
+  - id: 81128fd9-6b1d-4437-8b08-af8b126cc9fc
+    type: event
+    name: 1967 James E. McDonald Australian Investigative Tour
+    metadata:
+      date_start: '1967-01-01'
+      date_end: '1967-12-31'
+  - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+    type: event
+    name: 1949 Melbourne Cigar-Shaped Object Sighting
+    metadata:
+      date_start: '1949-01-01'
+      date_end: '1949-12-31'
+  - id: 934a1b6a-f10c-4794-ac4a-6f6a9ecda8f5
+    type: event
+    name: 1963 Moe UFO Sighting
+    metadata:
+      date_start: '1963-02-01'
+      date_end: '1963-02-28'
+  - id: 50ed8245-1128-4401-ab8b-4ad27c37f436
+    type: event
+    name: 1965 East Preston Sighting
+    metadata:
+      date_start: '1965-03-08'
+      date_end: '1965-03-08'
+  - id: 05d4ee3a-6f30-49ce-865b-a1665afd5647
+    type: event
+    name: 1955 New Zealand Train Sighting
+    metadata:
+      date_start: '1955-11-17'
+      date_end: '1955-11-17'
+  - id: f693ae3e-3a9d-4fdd-9cef-132016a1a838
+    type: event
+    name: 1967 UN Outer Space Affairs Group UFO Presentation
+    metadata:
+      date_start: '1967-06-07'
+      date_end: '1967-06-07'
+  - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+    type: topic
+    name: Unidentified Flying Object (UFO)
+  - id: c50f6b8a-a9c8-4dee-82b1-0ea0830f9d86
+    type: topic
+    name: Ball Lightning
+  - id: f879564e-7c63-4e8a-a1e1-d23463a80d78
+    type: topic
+    name: Meteor
+  - id: c945ed58-20b2-4fd1-b7df-1bd24ad72064
+    type: topic
+    name: Plasmoid
+  - id: 670e7452-f26b-418e-803c-710b8d292336
+    type: topic
+    name: Sun dog
+  - id: c47e7c1a-2870-4c21-92d1-4777bc2ef8b6
+    type: topic
+    name: Son Boom
+  - id: 933fca84-2f52-42f7-a3c4-9e35cada0eb6
+    type: topic
+    name: Geothermal power station
+  - id: c2a646b7-492b-4669-914c-673f3b2a5820
+    type: topic
+    name: Interstellar Travel
+  - id: 26def895-eb85-4d5d-b4d0-7488a64f9114
+    type: topic
+    name: Extraterrestrial Life
+domain_claims:
+  - id: a0c51128-8435-4dac-9c26-120b62d7791a
+    type: administrative
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:00:06.7-00:00:21.0
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 81128fd9-6b1d-4437-8b08-af8b126cc9fc
+        name: 1967 James E. McDonald Australian Investigative Tour
+      - id: 2caa84b3-0fe5-4153-bc09-e578b851b365
+        name: Australia, Victoria, Melbourne
+    quote: |-
+      I've been down here in Australia interviewing witnesses to find out for myself, in direct, face-to-face, or in some cases, phone interviewing, exactly what happened in individual cases and what the credibility of the witness is
+    text: |-
+      During the 1967 James E. McDonald Australian Investigative Tour, James E. McDonald interviewed witnesses in Australia face-to-face and by telephone to assess case details and witness credibility.
+  - id: 5b1a7e38-fa7c-4e94-b1e6-439cb48cc5f9
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:00:37.6-00:00:43.4
+    date: '1949'
+    refs:
+      - id: a6c85eef-acd2-4db9-b1fa-abd97427062a
+        name: Australia, Victoria, South Caulfield
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: I saw a cigar-shaped object, approximately 1949 this would be.
+    text: |-
+      An anonymous caller from South Caulfield, identifying herself as Mrs. Smith, reported seeing a cigar-shaped Unidentified Flying Object (UFO) in approximately 1949.
+  - id: db0b622b-4c0b-46d3-aa39-18751ac2f54f
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:00:48.0-00:00:50.7
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+    quote: It was about 9 to 9:30 p.m. in the evening.
+    text: |-
+      The 1949 Melbourne Cigar-Shaped Object Sighting occurred between approximately 21:00 and 21:30.
+  - id: dbb1825f-eb3c-431a-acae-89798c008189
+    type: opinion
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:00:45.1-00:00:46.9
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+    quote: And I think thousands of others saw it too, actually.
+    text: |-
+      An anonymous caller identifying herself as Mrs. Smith believed thousands of other people also saw the 1949 Melbourne cigar-shaped object.
+  - id: db403a46-7eae-4197-b8da-1c7a5cce38bc
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:00:52.0-00:00:53.3
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+    quote: it was perfectly stationary.
+    text: |-
+      The object in the 1949 Melbourne Cigar-Shaped Object Sighting was perfectly stationary.
+  - id: 76ad037d-e234-47b4-bab7-5168ccd8ccf8
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:00:54.6-00:01:01.4
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+    quote: |-
+      had a dull light inside and then as though it had an electric light globe going up and down from, you know, top to bottom continuously.
+    text: |-
+      The object in the 1949 Melbourne Cigar-Shaped Object Sighting had a dull light inside.
+  - id: 88028d4c-79d2-4e51-a1fb-93cecb4c5341
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:00:54.6-00:01:01.4
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+    quote: |-
+      had a dull light inside and then as though it had an electric light globe going up and down from, you know, top to bottom continuously.
+    text: |-
+      The object in the 1949 Melbourne Cigar-Shaped Object Sighting appeared to have an electric light globe going up and down from top to bottom continuously.
+  - id: 46a0ea09-d99b-4f2b-96bc-bd7ce9d9cb3f
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:01:03.9-00:01:11.2
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+    quote: |-
+      I watched it for some time and I got one of my daughters out of bed to verify that it was there in case people thought I'd, you know.
+    text: |-
+      An anonymous caller identifying herself as Mrs. Smith woke one of her daughters to verify the 1949 Melbourne Cigar-Shaped Object Sighting.
+  - id: da084fc2-070d-471e-844a-ac2e5bd1f78a
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:01:11.6-00:01:14.8
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+      - id: 2caa84b3-0fe5-4153-bc09-e578b851b365
+        name: Australia, Victoria, Melbourne
+      - id: fca8b9c3-1222-4a2a-842c-0a0a1742f0b9
+        name: Australia, Victoria, Hawthorn
+    quote: |-
+      Barry Jones: Where was this, over Melbourne? Mrs. Smith: Yes, in Hawthorne. We were living in Hawthorne at the time.
+    text: |-
+      The 1949 Melbourne Cigar-Shaped Object Sighting occurred over Melbourne, in Hawthorn.
+  - id: 554960c9-fdea-4117-88bd-7b389e35d45f
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:01:42.9-00:01:45.6
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+    quote: it was clear and almost cloudless but um
+    text: |-
+      The weather during the 1949 Melbourne Cigar-Shaped Object Sighting was clear and almost cloudless.
+  - id: 84f41bda-53fd-4301-b1de-5ad3f87040b3
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:03:13.6-00:03:18.4
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+    quote: |-
+      it was low down about the height that a plane would fly when it's flying fairly low.
+    text: |-
+      The object in the 1949 Melbourne Cigar-Shaped Object Sighting was low, at approximately the altitude of a plane flying fairly low.
+  - id: 9c36f854-410a-40dc-bd53-347f5545d50f
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:03:44.4-00:03:46.1
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+    quote: |-
+      James E. MacDonald: If there was no sound together... Mrs. Smith: No, not at all.
+    text: The object in the 1949 Melbourne Cigar-Shaped Object Sighting produced no sound.
+  - id: a033a928-3a27-4928-951e-44fe1298df42
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:01:47.1-00:01:48.8
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+      - id: 3e142853-a9d6-4593-92f9-0917bcefb810
+        name: The Sun
+    quote: I went in then to ring The Sun.
+    text: |-
+      An anonymous caller identifying herself as Mrs. Smith rang The Sun newspaper to report the 1949 Melbourne Cigar-Shaped Object Sighting.
+  - id: 130f182c-8f84-4e01-988f-149a69303473
+    type: hearsay
+    attestation: third_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a switchboard operator at The Sun
+      origin_ref: sun-switchboard-operator
+      relay:
+        - a caller identifying herself as Mrs. Smith from South Caulfield
+        - the radio programme
+    attribution_in_text: true
+    location: 00:02:01.3-00:02:07.9
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+      - id: 3e142853-a9d6-4593-92f9-0917bcefb810
+        name: The Sun
+    quote: |-
+      I rang The Sun and the chap on the switchboard said that he had also seen it and he was inundated with calls.
+    text: |-
+      A switchboard operator at The Sun, as relayed by an anonymous caller identifying herself as Mrs. Smith, had also seen the 1949 Melbourne cigar-shaped object and was inundated with calls about it.
+  - id: 856234f8-a9a2-419a-a35e-4df53eeb06e6
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:02:08.7-00:02:12.8
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+      - id: 3e142853-a9d6-4593-92f9-0917bcefb810
+        name: The Sun
+    quote: |-
+      But I noticed there was nothing much in the paper the next morning about it. Just a tiny little paragraph.
+    text: |-
+      Only a tiny paragraph about the 1949 Melbourne Cigar-Shaped Object Sighting appeared in the newspaper the next morning, as reported by an anonymous caller identifying herself as Mrs. Smith.
+  - id: 54e31506-fba6-4101-bbd1-eff7bffb244a
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:02:28.7-00:02:36.7
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+    quote: |-
+      when I came out from the phone, I suppose it would be a period of 10 minutes, there was a black cloud there. And I waited till the cloud went by and the object had gone.
+    text: |-
+      After approximately 10 minutes on the telephone during the 1949 Melbourne Cigar-Shaped Object Sighting, a black cloud appeared, and when it passed, the object had disappeared.
+  - id: 8114c6ff-4db5-4afe-8cfb-17ffd7073b5f
+    type: opinion
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:03:25.9-00:03:29.4
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+    quote: No, no. It's a man-made object. No doubt about it.
+    text: |-
+      An anonymous caller identifying herself as Mrs. Smith believes the object in the 1949 Melbourne Cigar-Shaped Object Sighting was man-made.
+  - id: 39a8e9b4-29eb-4a7f-8502-abb80afc8600
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:03:07.0-00:03:10.8
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+      - id: c50f6b8a-a9c8-4dee-82b1-0ea0830f9d86
+        name: Ball Lightning
+      - id: c945ed58-20b2-4fd1-b7df-1bd24ad72064
+        name: Plasmoid
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+    quote: Yes, that rules out plasmoids of the ball lightning type.
+    text: |-
+      James E. McDonald assessed that the clear sky and non-thundery conditions during the 1949 Melbourne Cigar-Shaped Object Sighting rule out plasmoids of the ball lightning type.
+  - id: 63433edd-b392-4166-8f10-555a99616239
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:03:22.7-00:03:25.5
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+      - id: f879564e-7c63-4e8a-a1e1-d23463a80d78
+        name: Meteor
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+    quote: The possibility that it's a meteoric fireball is ruled out...
+    text: |-
+      James E. McDonald assessed that the stationary aspect of the 1949 Melbourne Cigar-Shaped Object Sighting rules out a meteoric fireball.
+  - id: 1996be99-38ad-4dab-88dc-e7b3c50c6268
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:03:49.6-00:04:01.1
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+      - id: c50f6b8a-a9c8-4dee-82b1-0ea0830f9d86
+        name: Ball Lightning
+      - id: f879564e-7c63-4e8a-a1e1-d23463a80d78
+        name: Meteor
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+    quote: |-
+      Soundless objects hovering stationary in conditions that do not imply ball lightning, rule out meteors. That's an interesting case, the type of case that if we had an opportunity I'd want to pursue further.
+    text: |-
+      James E. McDonald characterised the 1949 Melbourne Cigar-Shaped Object Sighting as a soundless object hovering stationary in conditions that do not imply ball lightning, which rules out meteors.
+  - id: bd18157e-c295-42b5-8075-7bc4f1fc9514
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme
+      origin_ref: speaker-6
+    attribution_in_text: true
+    location: 00:04:34.7-00:04:42.1
+    date: 1966-12
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: f879564e-7c63-4e8a-a1e1-d23463a80d78
+        name: Meteor
+    quote: |-
+      just before Christmas last December, I saw... It was a clear night. I saw what I thought at first was a shooting star...
+    text: |-
+      An anonymous caller to the radio programme reported seeing an object she initially thought was a shooting star in December 1966, just before Christmas.
+  - id: 1e34731f-cf4a-45d6-98f0-59eb34ed0f19
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme
+      origin_ref: speaker-6
+    attribution_in_text: true
+    location: 00:04:43.5-00:04:50.0
+    date: 1966-12
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      But instead of sort of going down, it went straight across the sky in a straight line.
+    text: |-
+      An anonymous caller to the radio programme reported that the December 1966 object moved straight across the sky in a straight line rather than descending.
+  - id: 40fedca4-f27d-40c0-bfbe-2e3bca778ec1
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme
+      origin_ref: speaker-6
+    attribution_in_text: true
+    location: 00:04:57.3-00:05:05.1
+    date: 1966-12
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      it stopped for a little while, for a few minutes, and then it sort of went, started moving towards the horizon again after that.
+    text: |-
+      An anonymous caller to the radio programme reported that the December 1966 object stopped for a few minutes, then resumed moving toward the horizon.
+  - id: 68756b58-b00b-4bbb-921a-d2aa146fa38e
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme
+      origin_ref: speaker-6
+    attribution_in_text: true
+    location: 00:05:12.4-00:05:18.2
+    date: 1967-02
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: in February, I saw, with my mother-in-law and sister-in-law, we saw two of them.
+    text: |-
+      In February 1967, an anonymous caller to the radio programme reported seeing two Unidentified Flying Objects (UFOs) with her mother-in-law and sister-in-law.
+  - id: f28952b1-b9f3-49c4-b6dd-17900a5526ba
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme
+      origin_ref: speaker-6
+    attribution_in_text: true
+    location: 00:05:19.8-00:05:34.2
+    date: 1967-02
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      And the first one sort of stopped. It sort of seemed to be hovering. And then we saw another one, and that came up towards the first one, and they appeared to be having some sort of rendezvous.
+    text: |-
+      An anonymous caller to the radio programme reported that during the February 1967 sighting, the first object hovered while a second object approached it, and they appeared to rendezvous.
+  - id: 626a8c0a-bd8d-46d0-936f-ee9bc7853297
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme
+      origin_ref: speaker-6
+    attribution_in_text: true
+    location: 00:05:36.5-00:05:41.8
+    date: 1967-02
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      then the second one moved off into the horizon, and the first one just stayed there stationary.
+    text: |-
+      An anonymous caller to the radio programme reported that during the February 1967 sighting, the second object moved off toward the horizon while the first remained stationary.
+  - id: 607e7d37-a147-43fb-ab98-ad570928beda
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:06:06.2-00:06:17.3
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: f879564e-7c63-4e8a-a1e1-d23463a80d78
+        name: Meteor
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      lots of persons in the US and Australia and elsewhere are making reports just like that of lights that move across, hover, exhibit maneuvers that do not at all match meteors.
+    text: |-
+      James E. McDonald remarked that many people in the United States and Australia report lights that move, hover, and manoeuvre in ways that do not match meteors.
+  - id: f64d27de-ea51-4cfb-8c3b-8ad9405088b6
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:06:25.5-00:06:27.9
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: f879564e-7c63-4e8a-a1e1-d23463a80d78
+        name: Meteor
+    quote: I don't know of any hovering meteors in all history of mankind.
+    text: |-
+      James E. McDonald stated he knows of no hovering meteors in the history of mankind.
+  - id: e8f2fa05-9975-4406-9c5a-e9253d2de1b9
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:06:33.6-00:06:41.0
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+    quote: |-
+      Helicopters, aircraft, of course, you have to have a helicopter if you're going to have it hover, can mislead us at night.
+    text: |-
+      James E. McDonald noted that helicopters and aircraft can mislead observers at night.
+  - id: f7bbf4b8-db4a-4e00-b816-240c3879c823
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme
+      origin_ref: speaker-6
+    attribution_in_text: true
+    location: 00:06:48.6-00:06:52.2
+    date: 1967-02
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: My father-in-law came out, and he said he thought it was just a plane.
+    text: |-
+      An anonymous caller to the radio programme reported that her father-in-law believed the object she saw was a plane.
+  - id: 19b36bb1-490a-4f44-b1c6-e6f3ac34a1a5
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme
+      origin_ref: speaker-6
+    attribution_in_text: true
+    location: 00:06:52.4-00:06:56.7
+    date: '1967'
+    quote: But planes usually have flashing colored lights on them, don't they at night?
+    text: |-
+      An anonymous caller to the radio programme noted that planes typically have flashing coloured lights at night.
+  - id: 7c20d09c-71fd-4bda-b0bb-b11ca7d5379a
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:06:58.0-00:07:02.9
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+    quote: |-
+      but still there are planes, reconnaissance planes and photo planes with odd and unusual lights
+    text: |-
+      James E. McDonald acknowledged that reconnaissance planes and photo planes can have unusual lights.
+  - id: f7115bf9-f9fa-48fc-93e3-f0057a5b94d7
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:07:12.4-00:07:16.9
+    date: 1967-02
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      it appears that you've seen something of a rather unconventional nature in that instance.
+    text: |-
+      James E. McDonald considered that the anonymous caller had seen something of an unconventional nature in the February 1967 sighting.
+  - id: 8b84f897-4f60-40ce-a789-36b2e4357cc7
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme, a taxi driver
+      origin_ref: speaker-7
+    attribution_in_text: true
+    location: 00:08:23.5-00:08:33.2
+    date: '1962'
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      there was a a definite object there hovering in the sky uh cylindrical in in um in shape and uh silvery color
+    text: |-
+      An anonymous caller to the radio programme, a taxi driver, reported seeing a cylindrical, silvery object hovering in the sky approximately five years before the broadcast.
+  - id: 8d90b721-4fda-46ff-9e3b-72ed8d8ad81b
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme, a taxi driver
+      origin_ref: speaker-7
+    attribution_in_text: true
+    location: 'speaker: Speaker 7 - time and weather'
+    date: '1962'
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      it was around about nine o'clock in the morning... it was a clear, sunny morning. There was no haze or any description.
+    text: |-
+      An anonymous caller to the radio programme reported that the cylindrical object sighting occurred around 09:00 on a clear, sunny morning with no haze.
+  - id: ee3b8985-139b-4830-bb66-4abb1fdfabdc
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme, a taxi driver
+      origin_ref: speaker-7
+    attribution_in_text: true
+    location: 00:08:02.8-00:08:09.6
+    date: '1962'
+    refs:
+      - id: e0664622-baa9-4357-b8f9-e65dbecae272
+        name: Australia, Victoria, East Melbourne
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      i was driving in with this fair uh in a westerly direction that began towards the city uh it was around about nine o'clock in the morning
+    text: |-
+      An anonymous caller to the radio programme reported that he was driving in a westerly direction toward the city, near Victoria Street, heading to East Melbourne, when he saw the cylindrical object.
+  - id: 4312a64c-ef45-4cd7-9d5b-26324a633940
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme, a taxi driver
+      origin_ref: speaker-7
+    attribution_in_text: true
+    location: 00:08:41.2-00:08:45.0
+    date: '1962'
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: I brought it to the attention of the Fair. And she saw it also.
+    text: |-
+      An anonymous caller to the radio programme reported that his taxi passenger also saw the cylindrical object.
+  - id: 660578cc-cab5-47b5-bd47-5364c5d75f17
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme, a taxi driver
+      origin_ref: speaker-7
+    attribution_in_text: true
+    location: 00:08:47.7-00:08:49.2
+    date: '1962'
+    refs:
+      - id: a4dbdc50-5f4b-49c0-9901-0c95a1b722b7
+        name: Herald Office
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: I went to the Herald Office to report it.
+    text: |-
+      An anonymous caller to the radio programme went to the Herald Office to report the cylindrical object sighting.
+  - id: acb861b3-29da-4d55-ad30-48a945d3c5d3
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme, a taxi driver
+      origin_ref: speaker-7
+    attribution_in_text: true
+    location: 00:08:51.6-00:08:54.1
+    date: '1962'
+    refs:
+      - id: a4dbdc50-5f4b-49c0-9901-0c95a1b722b7
+        name: Herald Office
+    quote: fellas at the Herald Office. thought I was a bloomin' nut, I think.
+    text: |-
+      An anonymous caller to the radio programme reported that staff at the Herald Office reacted to the sighting report with scepticism and dismissiveness.
+  - id: 4e65001c-92c1-4c79-b2a2-cce39e07920d
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme, a taxi driver
+      origin_ref: speaker-7
+    attribution_in_text: true
+    location: 00:09:19.5-00:09:23.1
+    date: '1962'
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      James E. MacDonald: You saw no wings of any sort on the object? Speaker 7: No, no. It was a cylindrical object.
+    text: |-
+      An anonymous caller to the radio programme reported that the cylindrical object had no wings.
+  - id: 1e11dc0e-1694-4882-9613-75b8b87a3c35
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller to the radio programme, a taxi driver
+      origin_ref: speaker-7
+    attribution_in_text: true
+    location: 00:09:28.4-00:09:35.5
+    date: '1962'
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      Stationary, yes. It was stationary. And then all of a sudden, it just took off in a just flashed off and that was the end of it you didn't see any more of it.
+    text: |-
+      An anonymous caller to the radio programme reported that the cylindrical object was stationary, then suddenly took off and vanished.
+  - id: 3dbb67fa-7986-4598-8f90-a46083b51c4e
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:05:46.5-00:05:53.8
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      this general category of observation in which it is simply a light in the sky is an extremely dangerous category with respect to misinterpretation
+    text: |-
+      James E. McDonald considers the general category of observation involving simply a light in the sky to be extremely dangerous with respect to misinterpretation.
+  - id: 0c37ff6b-87d1-497c-81e6-05da4a221bdb
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:03:31.4-00:03:35.8
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: It takes about an hour, of course, to do justice to any good sighting
+    text: |-
+      James E. McDonald estimated it takes approximately one hour to do justice to any good Unidentified Flying Object (UFO) sighting.
+  - id: 7fd0f56a-af3d-4e77-9adb-f9ed87edc322
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: e7ac934c-c280-4836-b2b0-039b8fbe90d0
+      name: Barry Jones
+    provenance_chain:
+      origin_kind: speaker
+      origin: Barry Jones
+    attribution_in_text: false
+    location: 00:09:57.2-00:10:07.8
+    date: '1967'
+    refs:
+      - id: e7ac934c-c280-4836-b2b0-039b8fbe90d0
+        name: Barry Jones
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      the thing that puzzles me about a story like this is not the fact that the gentleman on his fare saw something like this, but the fact that, you know, X number of thousands of people didn't see it.
+    text: |-
+      Barry Jones questioned why only a handful of people reported seeing the cylindrical object if it was visible around 09:00 when many people would be commuting to work.
+  - id: 334f65db-80ad-4423-877d-aa8e259bdbd7
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:11:13.4-00:11:20.0
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      no, I didn't report it, fear of ridicule or a little reluctance to have it sensationalized or so on is involved.
+    text: |-
+      James E. McDonald observed that witnesses commonly do not report Unidentified Flying Object (UFO) sightings due to fear of ridicule or reluctance to have them sensationalised.
+  - id: 56c46fd9-311f-41dd-aecd-d54246026bfb
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:11:25.8-00:11:35.3
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      One reports it to someone and press or official channels and a certain amount of skepticism leads to a ridiculous rebuke of some sort and then nothing more is heard.
+    text: |-
+      James E. McDonald observed that when witnesses do report UFO sightings to press or official channels, scepticism often leads to rebuke and nothing further is heard.
+  - id: 6ecd9f5f-a2e5-4cb0-acdc-a9cbabc2c538
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:11:44.8-00:11:49.9
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: there are cases where dozens of people have seen objects of unconventional sort
+    text: |-
+      James E. McDonald noted that there are cases where dozens of people have seen objects of an unconventional sort.
+  - id: e7a85540-b24c-4133-acc4-3346b556c661
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:12:37.1-00:12:44.0
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      that's one of the many patterns that I find in my trip down here that's essentially the same in Australia as in the States.
+    text: |-
+      James E. McDonald observed that the pattern of rejection of UFO reports by persons in the press and radio is essentially the same in Australia as in the United States.
+  - id: afdce79e-d47e-41f5-b6bc-5fc2c1309d4c
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:12:54.0-00:13:00.9
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      when these people are in paper press or radio and so on, they tend to filter out a lot of the information that should be getting into scientific channels.
+    text: |-
+      James E. McDonald observed that people in the press and radio who reject UFO reports tend to filter out information that should be reaching scientific channels.
+  - id: e1faab64-46f5-4525-961b-259b21ce8b1f
+    type: administrative
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:13:11.0-00:13:11.8
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 81128fd9-6b1d-4437-8b08-af8b126cc9fc
+        name: 1967 James E. McDonald Australian Investigative Tour
+      - id: 5c34870c-3080-49f6-8668-93f976fa9a14
+        name: Australia, Tasmania, Hobart
+    quote: before I head down to Tasmania.
+    text: |-
+      James E. McDonald planned to travel to Tasmania during the 1967 James E. McDonald Australian Investigative Tour.
+  - id: 63822dc5-6cce-480a-907c-c022b4ec3b68
+    type: administrative
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:13:24.6-00:13:30.6
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbd4c433-1fad-4f76-8dc2-0f31596c66df
+        name: Carl Jung
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      I've read the book, of course, Barry, and talked it over with quite a few psychologists back in the States.
+    text: |-
+      James E. McDonald has read Carl Jung's book on Unidentified Flying Objects (UFOs) and discussed it with psychologists in the United States.
+  - id: b0a944d9-a13f-4647-af72-257d802c96ad
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:13:31.2-00:13:40.8
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbd4c433-1fad-4f76-8dc2-0f31596c66df
+        name: Carl Jung
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      The main difficulty is Jung was not at all addressing himself to what is the real UFO problem. He is talking about psychotic types who have some kind of psychic needs to believe.
+    text: |-
+      James E. McDonald considers that Carl Jung was not addressing the real Unidentified Flying Object (UFO) problem but rather psychotic types with psychic needs to believe.
+  - id: 58a9a769-dab6-46b9-8958-dd552d6d582a
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:13:41.8-00:13:53.6
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      one does see this sort of thing emerging in the cult and crackpot fringe, which is unfortunately very visible, particularly in America, centered around the UFO problem. People who feel that there's a salvation message being brought from Venus and all that sort of rot.
+    text: |-
+      James E. McDonald described a cult and crackpot fringe in America centred around the Unidentified Flying Object (UFO) problem, including beliefs about salvation messages from Venus.
+  - id: 90fbed6c-24f6-4d74-a5c9-16842b63c9c8
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:13:59.9-00:14:09.0
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbd4c433-1fad-4f76-8dc2-0f31596c66df
+        name: Carl Jung
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      If you read the book carefully, you find him near the end of that book taking the problem seriously in terms of the possibility there may be something other than what he's talking about in the psychological art.
+    text: |-
+      James E. McDonald noted that Carl Jung, near the end of his book, takes the Unidentified Flying Object (UFO) problem seriously.
+  - id: 75806166-9ff2-4eec-ae87-53e9001a33ae
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:14:12.0-00:14:19.4
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbd4c433-1fad-4f76-8dc2-0f31596c66df
+        name: Carl Jung
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      There are lots of cases where animals are present, dogs, horses, cows, and so on. Jung says these are psychic projections of archetypal images, you know.
+    text: |-
+      James E. McDonald cited cases where animals—dogs, horses, and cows—are present during Unidentified Flying Object (UFO) sightings, which Carl Jung attributes to psychic projections of archetypal images.
+  - id: 025d2eee-3527-426e-90d7-0e0149959c19
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:14:20.6-00:14:29.1
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbd4c433-1fad-4f76-8dc2-0f31596c66df
+        name: Carl Jung
+    quote: |-
+      it poses the puzzling question, you see, Barry, that we have to make the assumption that canine, equine, feline, bovine archetypal images are identical with ours.
+    text: |-
+      James E. McDonald raised the question of whether canine, equine, feline, and bovine archetypal images would be identical to human ones, posing a problem for Carl Jung's theory.
+  - id: c14fa3c6-d1ea-42d1-afda-77dfd8862f5f
+    type: hearsay
+    attestation: third_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a farmer in Moe identified as Brew
+      origin_ref: farmer-brew
+      relay:
+        - the Victorian Flying Saucer Society
+        - James E. McDonald
+    attribution_in_text: true
+    location: 00:14:59.7-00:15:13.9
+    date: 1963-02
+    refs:
+      - id: 934a1b6a-f10c-4794-ac4a-6f6a9ecda8f5
+        name: 1963 Moe UFO Sighting
+      - id: 701c34f7-25b2-406f-bbcb-183549e568d1
+        name: Australia, Victoria, Moe
+      - id: 6dd5cfb6-54f3-4c56-8ead-61fae6021445
+        name: Victorian Flying Saucer Society
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      We were down in Mowi, in the Gippsland area, talking to a farmer named Brew, who was milking 0700 on February of 1963. All of a sudden, coming out of the overcast was a large disc-like object which hovered over a tree 100 yards away.
+    text: |-
+      During the 1963 Moe UFO Sighting, a farmer in Moe was milking at 0700 in February 1963 when a large disc-like object emerged from the overcast, as relayed to James E. McDonald by the witness through the Victorian Flying Saucer Society.
+  - id: eb7e3ea7-a0f2-40dc-a0bd-eac8073785dc
+    type: hearsay
+    attestation: third_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a farmer in Moe identified as Brew
+      origin_ref: farmer-brew
+      relay:
+        - the Victorian Flying Saucer Society
+        - James E. McDonald
+    attribution_in_text: true
+    location: 00:15:10.8-00:15:13.9
+    date: 1963-02
+    refs:
+      - id: 934a1b6a-f10c-4794-ac4a-6f6a9ecda8f5
+        name: 1963 Moe UFO Sighting
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: a large disc-like object which hovered over a tree 100 yards away.
+    text: |-
+      The disc-like object in the 1963 Moe UFO Sighting hovered over a tree approximately 91 metres away, as relayed to James E. McDonald by the witness.
+  - id: 2b123782-6ecc-42cb-ab57-d54d34ebfcc0
+    type: hearsay
+    attestation: third_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a farmer in Moe identified as Brew
+      origin_ref: farmer-brew
+      relay:
+        - the Victorian Flying Saucer Society
+        - James E. McDonald
+    attribution_in_text: true
+    location: 00:15:16.3-00:15:24.8
+    date: 1963-02
+    refs:
+      - id: 934a1b6a-f10c-4794-ac4a-6f6a9ecda8f5
+        name: 1963 Moe UFO Sighting
+    quote: |-
+      The cattle, he was most impressed by the way in which the cattle jumped and stampeded, the dogs started barking, horses broke loose and so on.
+    text: |-
+      During the 1963 Moe UFO Sighting, cattle stampeded, dogs barked, and horses broke loose, as relayed to James E. McDonald by the farmer witness.
+  - id: fa87480e-07d9-4eb2-91b9-13d907b965ff
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:15:14.1-00:15:15.6
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 934a1b6a-f10c-4794-ac4a-6f6a9ecda8f5
+        name: 1963 Moe UFO Sighting
+      - id: 701c34f7-25b2-406f-bbcb-183549e568d1
+        name: Australia, Victoria, Moe
+    quote: I was on the spot a few days ago looking at it.
+    text: |-
+      James E. McDonald visited the 1963 Moe UFO Sighting site a few days before the broadcast.
+  - id: 3af1d109-8d9f-457f-9dc7-f29cb0e157e0
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:15:25.3-00:15:28.7
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 934a1b6a-f10c-4794-ac4a-6f6a9ecda8f5
+        name: 1963 Moe UFO Sighting
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      This is not at all unrepresentative of the kind of panic reaction that animals show.
+    text: |-
+      James E. McDonald considers the animal panic reaction during the 1963 Moe UFO Sighting not at all unrepresentative of the kind of panic reaction that animals show during Unidentified Flying Object (UFO) sightings.
+  - id: 654ed743-593b-4508-a4bd-f5d2696131d8
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:15:28.9-00:15:31.3
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbd4c433-1fad-4f76-8dc2-0f31596c66df
+        name: Carl Jung
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: I think Jung would have some time explaining that.
+    text: |-
+      James E. McDonald considers that Carl Jung would have difficulty explaining the animal panic reactions observed during Unidentified Flying Object (UFO) sightings.
+  - id: 97be30dc-a767-4a5a-a382-e817246441eb
+    type: administrative
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:15:58.7-00:16:04.9
+    date: '1967-06-07'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 6160c44c-3a30-4392-80f8-58d77c8e78dd
+        name: United Nations (UN)
+      - id: 5874614c-406d-47fa-943f-a28ca3f11f53
+        name: Outer Space Affairs Group
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: f693ae3e-3a9d-4fdd-9cef-132016a1a838
+        name: 1967 UN Outer Space Affairs Group UFO Presentation
+    quote: |-
+      On the 7th of June, I was at the United Nations speaking to the Outer Space Affairs Group about the UFO problem
+    text: |-
+      On 1967-06-07, James E. McDonald spoke at the United Nations (UN) to the Outer Space Affairs Group about the Unidentified Flying Object (UFO) problem.
+  - id: d3a7e5d6-bc54-46de-b642-c7b2ebd193dc
+    type: administrative
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:16:06.0-00:16:11.5
+    date: '1967-06-07'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 5874614c-406d-47fa-943f-a28ca3f11f53
+        name: Outer Space Affairs Group
+      - id: 6160c44c-3a30-4392-80f8-58d77c8e78dd
+        name: United Nations (UN)
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: f693ae3e-3a9d-4fdd-9cef-132016a1a838
+        name: 1967 UN Outer Space Affairs Group UFO Presentation
+    quote: submitted some formal statements to them, urging UN action on the UFO problem.
+    text: |-
+      James E. McDonald submitted formal statements to the Outer Space Affairs Group urging United Nations (UN) action on the Unidentified Flying Object (UFO) problem.
+  - id: a3a7c85e-af3b-4a00-91ae-18c054dd4322
+    type: administrative
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:16:12.0-00:16:14.1
+    date: 1967-06
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 459fef79-f98f-460d-b975-678154d797cd
+        name: U Thant
+    quote: I had a date to see U Thant, but the Mideast crisis interfered.
+    text: |-
+      James E. McDonald had a scheduled meeting with U Thant that was prevented by the Mideast crisis.
+  - id: 2e3ccf91-d170-4ed7-a225-3818fa0451f3
+    type: hearsay
+    attestation: third_hand
+    provenance_chain:
+      origin_kind: named
+      origin: U Thant
+      relay:
+        - Drew Pearson
+        - James E. McDonald
+    attribution_in_text: true
+    location: 00:16:16.2-00:16:32.3
+    date: 1967-06
+    refs:
+      - id: 459fef79-f98f-460d-b975-678154d797cd
+        name: U Thant
+      - id: 8b36f6fc-f710-499c-93bb-c6a42bffbef3
+        name: Drew Pearson
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      in some kind of an exchange with Drew Pearson, U Thant made a statement now about four or five days ago, I guess six days ago, that the UFO problem is probably the most important international problem, with the present exception of the Vietnam War.
+    text: |-
+      U Thant, in an exchange with Drew Pearson relayed to James E. McDonald, stated in approximately June 1967 that the Unidentified Flying Object (UFO) problem is probably the most important international problem, with the exception of the Vietnam War.
+  - id: ca2c2a32-8ad9-4f26-ab15-87620397d330
+    type: administrative
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:16:36.3-00:16:50.4
+    date: 1967-06
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 459fef79-f98f-460d-b975-678154d797cd
+        name: U Thant
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      I cabled U Thant a reply, endorsing the statement, but disagreeing to the extent of saying that, in my opinion, the UFO problem is probably even greater in international importance than the Vietnamese situation.
+    text: |-
+      James E. McDonald cabled U Thant endorsing the statement about the Unidentified Flying Object (UFO) problem's international importance, but disagreeing that the UFO problem is even greater in international importance than the Vietnam situation.
+  - id: c1196a72-e867-4ed4-8a9f-3c37dbd14853
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:16:43.3-00:16:50.4
+    date: 1967-06
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      in my opinion, the UFO problem is probably even greater in international importance than the Vietnamese situation.
+    text: |-
+      James E. McDonald considers the Unidentified Flying Object (UFO) problem to be even greater in international importance than the Vietnam War.
+  - id: 7f134e4e-bd02-4e34-a82c-a22b062fd8f4
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:16:52.6-00:16:55.0
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: let's hope that since it is apparently a global scale problem
+    text: |-
+      James E. McDonald considers the Unidentified Flying Object (UFO) problem to be apparently a global scale problem.
+  - id: b153e4c2-c8d5-4234-a5aa-75536f31af7d
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:01:26.7-00:01:32.6
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+    quote: |-
+      I was calling out to one neighbor and she couldn't hear me and I was afraid to leave it in case it vanished I was just rooted to the spot
+    text: |-
+      An anonymous caller to the radio programme identifying herself as Mrs. Smith reported being unable to attract a neighbour's attention during the 1949 Melbourne Cigar-Shaped Object Sighting because the neighbour could not hear her.
+  - id: ec522cfd-b0ef-4c97-8181-2384afd45822
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:01:33.8-00:01:39.1
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+    quote: |-
+      i got it at my eye on the level with a quarter of a sleep out just to see it was moving at all and it wasn't it was perfectly still
+    text: |-
+      An anonymous caller identifying herself as Mrs. Smith observed the 1949 Melbourne cigar-shaped object at eye level from a quarter of a sleep-out to check whether it was moving, and confirmed it was perfectly still.
+  - id: 96f257e6-873d-4f7d-8225-30e4e6c0ac95
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a caller identifying herself as Mrs. Smith from South Caulfield
+      origin_ref: mrs-smith
+    attribution_in_text: true
+    location: 00:02:40.1-00:02:45.8
+    date: '1949'
+    refs:
+      - id: a7a8fbec-8bdf-4c5e-b24d-a61d38059564
+        name: 1949 Melbourne Cigar-Shaped Object Sighting
+    quote: |-
+      Yes, it was more or less like, I think it would be partly moonlight from what I can remember. It was quite bright.
+    text: |-
+      An anonymous caller identifying herself as Mrs. Smith observed that the sky was bright enough during the 1949 Melbourne Cigar-Shaped Object Sighting to see a black cloud at night, likely due to moonlight.
+  - id: 45d57eb4-60d1-49c8-a9ec-21556b8757fd
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: e7ac934c-c280-4836-b2b0-039b8fbe90d0
+      name: Barry Jones
+    provenance_chain:
+      origin_kind: speaker
+      origin: Barry Jones
+    attribution_in_text: true
+    location: 00:16:57.4-00:17:06.2
+    refs:
+      - id: 6160c44c-3a30-4392-80f8-58d77c8e78dd
+        name: United Nations (UN)
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      vidence added to the American evidence and much, much other evidence clearly attested that, let's hope that UN scientific groups will get right onto it.
+    text: |-
+      Barry Jones hopes that United Nations scientific groups will investigate UFOs, given accumulated evidence from America and elsewhere.
+  - id: 0e35d8d0-fcf4-49b9-9b55-b22fc5e73e62
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: e7ac934c-c280-4836-b2b0-039b8fbe90d0
+      name: Barry Jones
+    provenance_chain:
+      origin_kind: speaker
+      origin: Barry Jones
+    attribution_in_text: true
+    location: 00:17:11.9-00:17:21.2
+    refs:
+      - id: cbd4c433-1fad-4f76-8dc2-0f31596c66df
+        name: Carl Jung
+    quote: |-
+      He was, of course, the disciple of Freud, but he's neither the first or the last disciple to break away somewhat from the teachings of his master, which he did when he reached middle life.
+    text: |-
+      Carl Jung was a disciple of Freud who broke away from Freud's teachings in middle life.
+  - id: 5206e0b5-e50c-4906-a961-a5e5eed8cdf6
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:17:42.2-00:17:50.7
+    date: '1957'
+    refs:
+      - id: eb3345a9-8547-4aff-8649-2aeda80aedf1
+        name: New Zealand, Waikato, Wairakei
+      - id: 933fca84-2f52-42f7-a3c4-9e35cada0eb6
+        name: Geothermal power station
+    quote: |-
+      I'm a civil engineer, and ten years ago I was employed by contractors building the first geothermal power station in Wairakei in New Zealand.
+    text: |-
+      An anonymous civil engineer, calling into the programme, was employed by contractors building the first geothermal power station in Wairakei, New Zealand, approximately 10 years before the 1967 interview.
+  - id: 02d9cca4-6392-4e93-91fd-43d8f1af16f7
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:18:14.3-00:18:26.0
+    date: '1957'
+    refs:
+      - id: eb3345a9-8547-4aff-8649-2aeda80aedf1
+        name: New Zealand, Waikato, Wairakei
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: 933fca84-2f52-42f7-a3c4-9e35cada0eb6
+        name: Geothermal power station
+    quote: |-
+      we both quite independently saw this grey object which for want of a better name I'll call a flying saucer, which arose out of the steam board the way over on the horizon
+    text: |-
+      An anonymous civil engineer and a Maori survey assistant, positioned approximately 90 metres apart at Wairakei, independently saw a grey saucer-shaped object arise from the steam bore area on the horizon.
+  - id: 509e0017-0879-49c9-9310-e73d4709799d
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:18:27.3-00:18:28.0
+    date: '1957'
+    refs:
+      - id: eb3345a9-8547-4aff-8649-2aeda80aedf1
+        name: New Zealand, Waikato, Wairakei
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: went vertically upwards
+    text: The object at Wairakei ascended vertically.
+  - id: a0e912dc-347f-4db1-bda9-c7a14cd12840
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:18:35.5-00:18:39.1
+    date: '1957'
+    refs:
+      - id: eb3345a9-8547-4aff-8649-2aeda80aedf1
+        name: New Zealand, Waikato, Wairakei
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: it arose in the east and went towards the northwest
+    text: The object at Wairakei traversed from east to northwest.
+  - id: ed77b0ba-cd95-43fd-9cda-e1331c5046d1
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:18:40.7-00:18:43.6
+    date: '1957'
+    refs:
+      - id: eb3345a9-8547-4aff-8649-2aeda80aedf1
+        name: New Zealand, Waikato, Wairakei
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: at a very high speed, faster than any plane we knew of at the time
+    text: |-
+      The object at Wairakei moved at a speed faster than any aircraft known to the witnesses at the time.
+  - id: 7f7488de-5573-4059-9654-0c95957aad33
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:18:49.1-00:18:54.9
+    date: '1957'
+    refs:
+      - id: eb3345a9-8547-4aff-8649-2aeda80aedf1
+        name: New Zealand, Waikato, Wairakei
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      there was broken cloud at the time, and we kept on seeing these things that would go behind clouds and reappear.
+    text: |-
+      There was broken cloud at the time of the Wairakei sighting, and the object went behind clouds and reappeared.
+  - id: 1db532e6-84a9-4ab5-90fe-80e60e16ec63
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:18:58.1-00:19:03.1
+    date: '1957'
+    refs:
+      - id: eb3345a9-8547-4aff-8649-2aeda80aedf1
+        name: New Zealand, Waikato, Wairakei
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      we both saw it quite independently and mutually drew each other's attention to it, even though we were out of air shot.
+    text: |-
+      Both witnesses at Wairakei independently saw the object and drew each other's attention to it despite being out of earshot.
+  - id: 48daa123-af2c-4727-b7ff-d55429b25ab4
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:19:09.7-00:19:22.8
+    date: '1957'
+    refs:
+      - id: eb3345a9-8547-4aff-8649-2aeda80aedf1
+        name: New Zealand, Waikato, Wairakei
+      - id: 933fca84-2f52-42f7-a3c4-9e35cada0eb6
+        name: Geothermal power station
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      I was in the area of these in the field of steam boars, which put out a terrific roar, and I don't know whether you've been to Wairakei in New Zealand, but to make anyone else hear you, you have to almost shout in their ear.
+    text: |-
+      The anonymous civil engineer could not hear any sound from the object at Wairakei due to the noise of the steam bores.
+  - id: c63c5559-1ff9-420c-9660-5864f3de3cfd
+    type: measurement
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:19:34.4-00:19:39.8
+    date: '1957'
+    refs:
+      - id: eb3345a9-8547-4aff-8649-2aeda80aedf1
+        name: New Zealand, Waikato, Wairakei
+    quote: our horizon was a hill or ridge about, say, a mile and a half away.
+    text: |-
+      The horizon at the Wairakei sighting location was a hill or ridge approximately 2.4 kilometres away.
+  - id: 2831d9a2-9cca-4ae2-8a9d-41f2bf1c8490
+    type: measurement
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:19:41.5-00:19:47.6
+    date: '1957'
+    refs:
+      - id: eb3345a9-8547-4aff-8649-2aeda80aedf1
+        name: New Zealand, Waikato, Wairakei
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      I'd estimate the clouds appearing at at least 500 feet, so the height of the thing must have been more than 500 feet.
+    text: |-
+      The clouds at the time of the Wairakei sighting were at least approximately 150 metres high, so the object must have been higher than 150 metres.
+  - id: 9a043300-6033-45f6-8dd5-d2bc8b256a28
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:19:48.2-00:19:57.0
+    date: '1957'
+    refs:
+      - id: eb3345a9-8547-4aff-8649-2aeda80aedf1
+        name: New Zealand, Waikato, Wairakei
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      It was only a dark grey saucer shaped object and I couldn't return any other detail of it.
+    text: |-
+      The object at Wairakei was a dark grey saucer-shaped object with no other detail visible to the anonymous civil engineer.
+  - id: ecb19b41-7fdc-4ecd-aa46-a52bb7878c17
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:20:02.2-00:20:06.7
+    date: '1957'
+    refs:
+      - id: eb3345a9-8547-4aff-8649-2aeda80aedf1
+        name: New Zealand, Waikato, Wairakei
+    quote: |-
+      We sort of both talked to my fellow engineers about it, who immediately rubbished us.
+    text: |-
+      Fellow engineers at the Wairakei construction site rubbished the anonymous civil engineer's account of the sighting.
+  - id: 8388301a-9147-47b1-961e-dbf364cf9b2f
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:20:21.5-00:20:29.7
+    date: '1957'
+    refs:
+      - id: eb3345a9-8547-4aff-8649-2aeda80aedf1
+        name: New Zealand, Waikato, Wairakei
+    quote: |-
+      the Maori chainman, of course, didn't like to be made fun of in such a way, so he immediately disclaimed he'd seen it.
+    text: |-
+      The Maori survey assistant at Wairakei disclaimed having seen the object after being made fun of by the other engineers.
+  - id: 5fcfb626-981c-40cc-804a-078c54bb36ff
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:20:39.9-00:20:44.9
+    date: '1957'
+    refs:
+      - id: f34d48a7-d505-4bc2-85ec-e3d3528cbd64
+        name: Royal Air Force (RAF)
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      You never reported that to the RAF or the New Zealand Air Force? ... No, not at all.
+    text: |-
+      The anonymous civil engineer never reported the Wairakei sighting to the Royal Air Force or the New Zealand Air Force.
+  - id: 3efe1ac8-32b8-4860-a4d0-612dd83617f6
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:20:54.8-00:21:01.0
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      before I sighted this thing, I was extremely skeptical of flying saucers or UFOs myself
+    text: |-
+      The anonymous civil engineer was extremely sceptical of flying saucers or UFOs before the Wairakei sighting.
+  - id: 0adf274f-4129-4809-9590-bcdc7127cdcd
+    type: opinion
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous civil engineer who called into the programme
+      origin_ref: speaker-8
+    attribution_in_text: true
+    location: 00:21:04.1-00:21:08.8
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: since then, I do believe most, although I'm still skeptical of some.
+    text: |-
+      After the Wairakei sighting, the anonymous civil engineer believes most UFO reports but remains sceptical of some.
+  - id: 799aafbc-0657-4350-9e7c-580849638b3d
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:21:11.6-00:21:16.5
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      I was skeptical, too, until I began to look at the almost incredibly large volumes of good reports.
+    text: |-
+      James E. McDonald was sceptical of UFOs until he began examining the large volumes of good reports.
+  - id: f6092f81-c712-4495-8a8f-4967b4154683
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:21:17.3-00:21:22.1
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+    quote: |-
+      I hope I might have a chance to chat with you over the phone a little later to get many more details than we can do here.
+    text: |-
+      James E. McDonald hopes to chat further by phone with the anonymous civil engineer to get more details about the Wairakei sighting.
+  - id: f744647d-faa1-4bf2-974d-a814fc2b3a8d
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:22:01.0-00:22:07.3
+    refs:
+      - id: c0d9c8f5-b529-4d0c-9b35-8bf55174ccee
+        name: United States Air Force (USAF)
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      The official position is that it's a lot of nonsense, burdensome duty that the Air Force is unable to get away with.
+    text: |-
+      The official position of the United States Air Force on UFOs is that they are nonsense and a burdensome duty the Air Force is unable to get away from.
+  - id: 59e93090-0472-4e62-ba6c-71487f3c0d7c
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:22:13.6-00:22:20.3
+    refs:
+      - id: c0d9c8f5-b529-4d0c-9b35-8bf55174ccee
+        name: United States Air Force (USAF)
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      There is expertise at the disposal of the American Air Force, but when you go digging, as I have, you find it just isn't being used and hasn't been used for 15 years.
+    text: |-
+      There is expertise at the disposal of the United States Air Force for examining UFOs, but it has not been used for 15 years.
+  - id: 3f6a890a-4cb1-4ccb-8662-b3bd47c49a44
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:22:20.7-00:22:27.8
+    refs:
+      - id: dd869a6b-394b-4062-bcc0-808b2a296abe
+        name: Project Blue Book
+      - id: c0d9c8f5-b529-4d0c-9b35-8bf55174ccee
+        name: United States Air Force (USAF)
+    quote: |-
+      Project Blue Book consists of three people at present. The American Air Force Investigatory Program is a major, a sergeant, and a secretary.
+    text: |-
+      Project Blue Book consists of three people: a major, a sergeant, and a secretary.
+  - id: 4b343142-757f-43e9-82c5-6ed3465fa2f1
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:22:31.5-00:22:34.3
+    refs:
+      - id: c0d9c8f5-b529-4d0c-9b35-8bf55174ccee
+        name: United States Air Force (USAF)
+      - id: dd869a6b-394b-4062-bcc0-808b2a296abe
+        name: Project Blue Book
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: I'm afraid it has just not been investigated at all in 15 years.
+    text: |-
+      The United States Air Force investigatory program has not properly investigated UFOs in 15 years.
+  - id: c7950bb0-b970-4ec0-98c1-0f69ff3f5924
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1955 train sighting
+      origin_ref: speaker-9
+    attribution_in_text: true
+    location: 00:22:37.1-00:22:58.3
+    date: '1955-11-17'
+    refs:
+      - id: 05d4ee3a-6f30-49ce-865b-a1665afd5647
+        name: 1955 New Zealand Train Sighting
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: 338179dd-3f79-4c2d-9ad0-5796a0065f81
+        name: New Zealand, Canterbury, Christchurch
+    quote: |-
+      I just want to verify the fact of flying saucers. I have seen two. uh they were rendezvousing um ... well i was on a train actually that went from Christchurch over to the west coast of New Zealand ... the day was the 17th of the 11th '55.
+    text: |-
+      An anonymous caller reported seeing two flying saucers rendezvousing while on a train from Christchurch to the west coast of New Zealand on 1955-11-17.
+  - id: 7a84ac09-a313-4851-ab2b-edee2f65ccba
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1955 train sighting
+      origin_ref: speaker-9
+    attribution_in_text: true
+    location: 00:22:57.1-00:23:03.1
+    date: '1955-11-17'
+    refs:
+      - id: 05d4ee3a-6f30-49ce-865b-a1665afd5647
+        name: 1955 New Zealand Train Sighting
+      - id: 11219914-d23e-4744-95bc-cca89bb86de4
+        name: New Zealand, West Coast, Fox Glacier
+    quote: |-
+      I was going to see the Fox Glacier actually and the day was the 17th of the 11th '55.
+    text: |-
+      The anonymous caller was travelling to see Fox Glacier at the time of the 1955 New Zealand train sighting.
+  - id: 07a7269f-3955-4443-912f-56b6e45f71c7
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1955 train sighting
+      origin_ref: speaker-9
+    attribution_in_text: true
+    location: 00:23:08.9-00:23:14.1
+    date: '1955-11-17'
+    refs:
+      - id: 05d4ee3a-6f30-49ce-865b-a1665afd5647
+        name: 1955 New Zealand Train Sighting
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      I saw two objects spinning in the sky. They were white in colour and disappeared after a while.
+    text: |-
+      An anonymous caller saw two objects spinning in the sky, white in colour, which disappeared after a while during the 1955 New Zealand train sighting.
+  - id: 4628316f-9b5f-4935-8622-446f1d608b71
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1955 train sighting
+      origin_ref: speaker-9
+    attribution_in_text: true
+    location: 00:23:15.2-00:23:26.5
+    date: '1955-11-17'
+    refs:
+      - id: 05d4ee3a-6f30-49ce-865b-a1665afd5647
+        name: 1955 New Zealand Train Sighting
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      I was going to call the other passengers in the train to see them, but we went through one of the many tunnels at this time and they disappeared when we came out the other side of the tunnel. They were gone.
+    text: |-
+      The train went through a tunnel during the 1955 New Zealand train sighting, and when it emerged the objects were gone.
+  - id: b78e1532-596c-4ee4-b7d8-03831125e9b4
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1955 train sighting
+      origin_ref: speaker-9
+    attribution_in_text: true
+    location: 00:23:30.4-00:23:39.2
+    date: '1955-11-17'
+    refs:
+      - id: 05d4ee3a-6f30-49ce-865b-a1665afd5647
+        name: 1955 New Zealand Train Sighting
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      Oh, they seem to be semi-circular. You know, they were just... You couldn't really make out a shape. They just seemed to be spinning at such a terrific speed.
+    text: |-
+      The objects in the 1955 New Zealand train sighting appeared semi-circular and seemed to be spinning at a terrific speed.
+  - id: 5deb9185-424e-4fb0-917e-f718093da26b
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1955 train sighting
+      origin_ref: speaker-9
+    attribution_in_text: true
+    location: 00:23:43.6-00:23:47.6
+    date: '1955-11-17'
+    refs:
+      - id: 05d4ee3a-6f30-49ce-865b-a1665afd5647
+        name: 1955 New Zealand Train Sighting
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: You know, not terribly far, you know, because I could see them quite clearly.
+    text: |-
+      The objects in the 1955 New Zealand train sighting were not terribly far away, as the anonymous caller could see them quite clearly.
+  - id: 162f7616-67f0-4949-a5fb-333ba86889fa
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1955 train sighting
+      origin_ref: speaker-9
+    attribution_in_text: true
+    location: 00:24:03.6-00:24:12.4
+    date: '1955-11-17'
+    refs:
+      - id: 05d4ee3a-6f30-49ce-865b-a1665afd5647
+        name: 1955 New Zealand Train Sighting
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      There wasn't a plane or helicopter or anything that I've ever seen before or since, really, because I hadn't seen any in Australia.
+    text: |-
+      The objects in the 1955 New Zealand train sighting were not like anything the anonymous caller had ever seen before, not resembling a plane or helicopter.
+  - id: 7abc71af-a731-4e5d-bd6c-0b925451bf51
+    type: hearsay
+    attestation: second_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an airline pilot in Auckland, New Zealand
+      origin_ref: auckland-airline-pilot
+      relay:
+        - James E. McDonald
+    attribution_in_text: true
+    location: 00:24:14.0-00:24:20.0
+    date: '1955-11-17'
+    refs:
+      - id: 05d4ee3a-6f30-49ce-865b-a1665afd5647
+        name: 1955 New Zealand Train Sighting
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      That date is interestingly close to the date of a sighting in New Zealand that I checked when I was over in Auckland, an airline pilot.
+    text: |-
+      An airline pilot in Auckland, New Zealand, whose account was relayed by James E. McDonald, reported a UFO sighting on a date close to 1955-11-17.
+  - id: 8b4dc01a-9c71-4e41-933e-104db10c262d
+    type: administrative
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:24:40.2-00:24:41.2
+    refs:
+      - id: 6dd5cfb6-54f3-4c56-8ead-61fae6021445
+        name: Victorian Flying Saucer Society
+    quote: Victorian Flying Saucers Society.
+    text: |-
+      James E. McDonald identified the Flying Saucers Society as the Victorian Flying Saucer Society.
+  - id: ebe7f4ea-fd87-4556-8e93-7b7c96217062
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1955 train sighting
+      origin_ref: speaker-9
+    attribution_in_text: true
+    location: 00:24:29.9-00:24:31.5
+    date: '1955-11-17'
+    refs:
+      - id: 05d4ee3a-6f30-49ce-865b-a1665afd5647
+        name: 1955 New Zealand Train Sighting
+    quote: It is in my diary. It's written on the day.
+    text: |-
+      The 1955 New Zealand train sighting is recorded in the anonymous caller's diary, written on the day of the sighting.
+  - id: 29de52f0-e20f-44bb-9ab2-fa00f3e6c72e
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: e7ac934c-c280-4836-b2b0-039b8fbe90d0
+      name: Barry Jones
+    provenance_chain:
+      origin_kind: speaker
+      origin: Barry Jones
+    attribution_in_text: true
+    location: 00:23:48.2-00:23:48.6
+    refs:
+      - id: 05d4ee3a-6f30-49ce-865b-a1665afd5647
+        name: 1955 New Zealand Train Sighting
+    quote: Not a very scientific...
+    text: |-
+      Barry Jones considers the 1955 New Zealand train sighting account not very scientific.
+  - id: 42667a01-dcd5-4484-a2bc-7cb1f4dca686
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1965 East Preston sighting
+      origin_ref: speaker-5
+    attribution_in_text: true
+    location: 00:25:13.4-00:25:17.7
+    date: '1965-03-08'
+    refs:
+      - id: 50ed8245-1128-4401-ab8b-4ad27c37f436
+        name: 1965 East Preston Sighting
+      - id: b0c52d3a-feb0-45a6-9c5a-9c97578ffbcc
+        name: Australia, Victoria, East Preston
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      I was sitting at the front of my place in East Preston. On the 8th of March, 1965.
+    text: |-
+      An anonymous caller reported seeing an object in the sky at East Preston on 1965-03-08.
+  - id: 3b5768d0-8eed-42a4-a890-3569535cc309
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1965 East Preston sighting
+      origin_ref: speaker-5
+    attribution_in_text: true
+    location: 00:25:21.0-00:25:31.5
+    date: '1965-03-08'
+    refs:
+      - id: 50ed8245-1128-4401-ab8b-4ad27c37f436
+        name: 1965 East Preston Sighting
+      - id: b0c52d3a-feb0-45a6-9c5a-9c97578ffbcc
+        name: Australia, Victoria, East Preston
+    quote: |-
+      my daughter was with me, married daughter, and she turned around and she said, oh, there's something moving across the sky there, and it looked like a star, but it was moving, and all the other stars were standing still.
+    text: |-
+      An anonymous caller's married daughter pointed out something moving across the sky that looked like a star but was moving, while all other stars were stationary, during the 1965 East Preston sighting.
+  - id: 8231d39e-e821-4259-b305-015837b2a3f3
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1965 East Preston sighting
+      origin_ref: speaker-5
+    attribution_in_text: true
+    location: 00:25:35.0-00:25:42.6
+    date: '1965-03-08'
+    refs:
+      - id: 50ed8245-1128-4401-ab8b-4ad27c37f436
+        name: 1965 East Preston Sighting
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      it was a metallic blue object, iridescent blue, and it was like a spinning top, only the flat type of spinning top.
+    text: |-
+      Through binoculars, an anonymous caller observed a metallic blue, iridescent blue object shaped like a flat spinning top during the 1965 East Preston sighting.
+  - id: cfe3214b-765d-429b-a3ed-78b814b6e302
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1965 East Preston sighting
+      origin_ref: speaker-5
+    attribution_in_text: true
+    location: 00:25:44.0-00:25:47.6
+    date: '1965-03-08'
+    refs:
+      - id: 50ed8245-1128-4401-ab8b-4ad27c37f436
+        name: 1965 East Preston Sighting
+      - id: b0c52d3a-feb0-45a6-9c5a-9c97578ffbcc
+        name: Australia, Victoria, East Preston
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: it was moving in the sky, in the eastern sky, from the south to the north.
+    text: |-
+      The object in the 1965 East Preston sighting was moving in the eastern sky from south to north.
+  - id: 6bc23fc9-0dab-40fc-bdb5-c84d214110f8
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1965 East Preston sighting
+      origin_ref: speaker-5
+    attribution_in_text: true
+    location: 00:25:54.4-00:26:00.0
+    date: '1965-03-08'
+    refs:
+      - id: 50ed8245-1128-4401-ab8b-4ad27c37f436
+        name: 1965 East Preston Sighting
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      fairly rapid i didn't have time i just had time to go and get the binoculars and then pick it up and it disappeared from view
+    text: |-
+      The object in the 1965 East Preston sighting moved fairly rapidly and disappeared from view shortly after the anonymous caller obtained binoculars.
+  - id: 690fc2f9-36cd-4515-88f8-d446e18f62a2
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1965 East Preston sighting
+      origin_ref: speaker-5
+    attribution_in_text: true
+    location: 00:26:08.2-00:26:11.0
+    date: '1965-03-08'
+    refs:
+      - id: 50ed8245-1128-4401-ab8b-4ad27c37f436
+        name: 1965 East Preston Sighting
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: yes it was like made out of a metal an iridescent blue color
+    text: |-
+      When viewed through binoculars, the 1965 East Preston object exhibited actual shape and structure, appearing to be made of metal with an iridescent blue colour.
+  - id: 41b0c9c9-9994-475e-ad00-d34b6ea35b48
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1965 East Preston sighting
+      origin_ref: speaker-5
+    attribution_in_text: true
+    location: 00:26:13.8-00:26:16.1
+    date: '1965-03-08'
+    refs:
+      - id: 50ed8245-1128-4401-ab8b-4ad27c37f436
+        name: 1965 East Preston Sighting
+    quote: i guess it was about eight o'clock or half past eight at night
+    text: |-
+      The 1965 East Preston sighting occurred at approximately 20:00 or 20:30 at night.
+  - id: 6fb5e570-f59a-4258-afc2-84166c2a7e7f
+    type: observation
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1965 East Preston sighting
+      origin_ref: speaker-5
+    attribution_in_text: true
+    location: 00:26:18.0-00:26:20.4
+    date: '1965-03-08'
+    refs:
+      - id: 50ed8245-1128-4401-ab8b-4ad27c37f436
+        name: 1965 East Preston Sighting
+    quote: it was a lovely starry night it was a summer night
+    text: |-
+      It was a clear, starry summer night at the time of the 1965 East Preston sighting.
+  - id: 059fbb3f-6ccb-4c53-bcd4-7c4f70734091
+    type: testimony
+    attestation: second_hand
+    provenance_chain:
+      origin_kind: anonymous
+      origin: an anonymous caller who reported a 1965 East Preston sighting
+      origin_ref: speaker-5
+    attribution_in_text: true
+    location: 00:26:00.5-00:26:03.9
+    date: '1965-03-08'
+    refs:
+      - id: 50ed8245-1128-4401-ab8b-4ad27c37f436
+        name: 1965 East Preston Sighting
+      - id: f879564e-7c63-4e8a-a1e1-d23463a80d78
+        name: Meteor
+    quote: do you think it could have been a meteor that's ... well i wouldn't know you
+    text: |-
+      The anonymous caller does not know whether the 1965 East Preston object could have been a meteor.
+  - id: a734e38a-5f01-4e90-82f1-7298f3e73f5e
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:26:22.9-00:26:26.2
+    refs:
+      - id: 50ed8245-1128-4401-ab8b-4ad27c37f436
+        name: 1965 East Preston Sighting
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+    quote: |-
+      that's that's uh moderately interesting it might be well to talk with you a little bit further if we could
+    text: |-
+      James E. McDonald found the 1965 East Preston sighting moderately interesting and suggested talking further with the caller.
+  - id: e657966d-c0ff-45c9-bc3a-00299be7aeda
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:26:47.1-00:26:51.1
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 81128fd9-6b1d-4437-8b08-af8b126cc9fc
+        name: 1967 James E. McDonald Australian Investigative Tour
+      - id: 5c34870c-3080-49f6-8668-93f976fa9a14
+        name: Australia, Tasmania, Hobart
+    quote: |-
+      I'm going back on the 10th after getting down to Tasmania and then up to the northern part of the country.
+    text: |-
+      James E. McDonald planned to return to the United States on the 10th, after visiting Tasmania and the northern part of Australia.
+  - id: 08da3881-fe9f-4a96-a2f1-ad1ac055a2bc
+    type: administrative
+    provenance_chain:
+      origin_kind: unattributed
+      origin: unnamed announcer
+    attribution_in_text: false
+    location: 00:27:00.4-00:27:10.2
+    date: '1967'
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 81128fd9-6b1d-4437-8b08-af8b126cc9fc
+        name: 1967 James E. McDonald Australian Investigative Tour
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      Professor MacDonald recorded his talk in Sydney on a recent visit to Australia, New Zealand and Tasmania to investigate UFO sightings in this part of the world.
+    text: |-
+      James E. McDonald recorded his talk in Sydney during his visit to Australia, New Zealand, and Tasmania to investigate UFO sightings.
+  - id: c24e24e8-c607-4f1a-b023-b677ce7034f8
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:27:38.2-00:27:51.0
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      I've spent about 12-13 months in the States in interviewing witnesses in key cases, attempting to unravel this very puzzling and very intriguing mystery.
+    text: |-
+      James E. McDonald spent approximately 12 to 13 months in the United States interviewing witnesses in key UFO cases.
+  - id: d4b18fa6-4d3b-4625-8473-df81e596f3ea
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:28:04.0-00:28:18.4
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      there are large numbers of reports in the publications of various private UFO investigating groups in England, America, Australia, France, and so on, that quite clearly indicate that
+    text: |-
+      Publications of private UFO investigating groups in England, America, Australia, and France contain large numbers of reports indicating sightings of essentially the same type as those in the United States.
+  - id: dc85a7e2-79f3-4aca-94ac-8ab2a11a464a
+    type: testimony
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:28:26.3-00:28:47.9
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 81128fd9-6b1d-4437-8b08-af8b126cc9fc
+        name: 1967 James E. McDonald Australian Investigative Tour
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      I've been down here in Australia interviewing witnesses to find out for myself, in direct, face-to-face, or in some cases, phone interviewing, exactly what happened in individual cases and what the credibility of the witness is, how witnesses may be, how thoroughly the cases have been checked and so on down the line.
+    text: |-
+      James E. McDonald travelled to Australia to interview witnesses directly, both face-to-face and by phone, to assess the credibility of witnesses and how thoroughly cases were checked.
+  - id: 562d1622-c088-4582-bd52-97ae3e102bf7
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:29:00.2-00:29:27.1
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: 81128fd9-6b1d-4437-8b08-af8b126cc9fc
+        name: 1967 James E. McDonald Australian Investigative Tour
+    quote: |-
+      The picture in Australia, with respect to UFO sightings, observations of unconventional objects maneuvering, sometimes quite close to ground, sometimes within tens to hundreds of feet of very credible, reliable observers, is just not appreciably different in Australia, New Zealand, and Tasmania from what it is in the States.
+    text: |-
+      UFO sightings in Australia, New Zealand, and Tasmania are not appreciably different from those in the United States.
+  - id: f43f45bf-eaa0-4e83-bf17-e239d1f92f8b
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:29:06.4-00:29:19.0
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: 81128fd9-6b1d-4437-8b08-af8b126cc9fc
+        name: 1967 James E. McDonald Australian Investigative Tour
+    quote: |-
+      observations of unconventional objects maneuvering, sometimes quite close to ground, sometimes within tens to hundreds of feet of very credible, reliable observers
+    text: |-
+      UFO sightings in Australia include observations of unconventional objects manoeuvring close to the ground, within tens to hundreds of metres of credible, reliable observers.
+  - id: 3aeb22ac-cc93-4c82-8e68-35de2d023ff9
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:29:31.0-00:29:46.9
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: 81128fd9-6b1d-4437-8b08-af8b126cc9fc
+        name: 1967 James E. McDonald Australian Investigative Tour
+    quote: |-
+      There's just a little bit of evidence that indicates to me there may even be a few more sightings per square mile or per capita here than in the States. But I wouldn't stand firmly on that feeling that I've gotten.
+    text: |-
+      James E. McDonald considers there may be slightly more UFO sightings per square kilometre or per capita in Australia than in the United States.
+  - id: 566f9c68-276e-42d0-811c-05300d27f898
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:29:50.7-00:30:02.6
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: 81128fd9-6b1d-4437-8b08-af8b126cc9fc
+        name: 1967 James E. McDonald Australian Investigative Tour
+    quote: |-
+      lots of witnesses, after 15 or 20 or 30 minutes of interviewing them, bring up the point that several other friends of theirs have also seen objects at close range.
+    text: |-
+      Many witnesses James E. McDonald interviewed mentioned that friends had also seen objects at close range.
+  - id: 2b902070-54f5-4b9e-b505-815053265bb8
+    type: measurement
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:30:15.9-00:30:20.8
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 81128fd9-6b1d-4437-8b08-af8b126cc9fc
+        name: 1967 James E. McDonald Australian Investigative Tour
+    quote: I have about 10,000 feet of tape, I noticed, when I wound this thing up.
+    text: |-
+      James E. McDonald accumulated approximately 3,000 metres of audio tape from his interviews during the 1967 Australian investigative tour.
+  - id: db9c51ad-9833-47e5-9d7c-db0410806517
+    type: measurement
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:30:22.1-00:30:25.7
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 81128fd9-6b1d-4437-8b08-af8b126cc9fc
+        name: 1967 James E. McDonald Australian Investigative Tour
+    quote: I've interviewed about 70 Australians or New Zealanders.
+    text: |-
+      James E. McDonald interviewed approximately 70 Australians or New Zealanders during his 1967 investigative tour.
+  - id: 7a34d491-6f96-41df-8e67-e119bd71475c
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:30:27.1-00:30:31.3
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 5c34870c-3080-49f6-8668-93f976fa9a14
+        name: Australia, Tasmania, Hobart
+      - id: 81128fd9-6b1d-4437-8b08-af8b126cc9fc
+        name: 1967 James E. McDonald Australian Investigative Tour
+    quote: |-
+      I've been down to Hobart, Tasmania, some extremely interesting cases in Tasmania.
+    text: |-
+      James E. McDonald visited Hobart, Tasmania, and found extremely interesting cases there during his 1967 investigative tour.
+  - id: 64715897-5c72-44c0-a569-92744e58cf7e
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:30:40.8-00:30:46.5
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      There's a great deal of reluctance to report them. That's exactly the same in the States as it seems to be down here.
+    text: |-
+      There is great reluctance among witnesses to report UFO sightings, both in the United States and in Australia.
+  - id: f75976d9-d04b-4bd3-b31f-a6ce4f597d21
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:30:47.4-00:30:56.7
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      People have been ridiculed and made fun of by official groups, by press and radio and television, and scientists too.
+    text: |-
+      Witnesses have been ridiculed and made fun of by official groups, press, radio, television, and scientists for reporting UFO sightings.
+  - id: 2aa7e7e2-9f55-405d-96db-6e6d5fd5a989
+    type: hearsay
+    attestation: second_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: anonymous
+      origin: a woman who reported a UFO sighting to a newspaper
+      origin_ref: ridiculed-woman
+      relay:
+        - James E. McDonald
+    attribution_in_text: true
+    location: 00:31:26.9-00:31:36.9
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      One woman that I interviewed not so long ago pointed out that she described her case in some detail. The reporter asked her why she didn't use more water in what she's been drinking.
+    text: |-
+      A woman, whose account was relayed by James E. McDonald, described her UFO case to a reporter, who asked her why she didn't use more water in what she'd been drinking.
+  - id: 6652a7a7-56a6-4990-99b4-701fcbc2ebb5
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:31:41.8-00:31:55.8
+    refs:
+      - id: dd869a6b-394b-4062-bcc0-808b2a296abe
+        name: Project Blue Book
+      - id: c0d9c8f5-b529-4d0c-9b35-8bf55174ccee
+        name: United States Air Force (USAF)
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      this whole attitude of ridicule has been engendered and I'm afraid greatly encouraged by the the American Air Force investigation Project Blue Book
+    text: |-
+      James E. McDonald considers that the attitude of ridicule toward UFO reports has been engendered and greatly encouraged by Project Blue Book.
+  - id: 7876da45-fcff-435b-8829-8698221361ba
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:31:55.0-00:31:58.9
+    refs:
+      - id: dd869a6b-394b-4062-bcc0-808b2a296abe
+        name: Project Blue Book
+    quote: Project Blue Book which has been in operation for about 14 years
+    text: Project Blue Book has been in operation for about 14 years.
+  - id: dc42c625-0f47-410f-bd99-f89236d94b60
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:31:59.5-00:32:09.7
+    refs:
+      - id: dd869a6b-394b-4062-bcc0-808b2a296abe
+        name: Project Blue Book
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+    quote: |-
+      which is presented certainly within the States and i've learned down here uh regarded quite highly in other parts of the world and that's completely unjustified
+    text: |-
+      Project Blue Book is regarded highly in other parts of the world, which James E. McDonald considers completely unjustified.
+  - id: 5b0e7041-6e99-4887-af96-9e680ef08bd7
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:32:10.6-00:32:22.7
+    refs:
+      - id: dd869a6b-394b-4062-bcc0-808b2a296abe
+        name: Project Blue Book
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+    quote: |-
+      I've taken an extremely good look at the official project Blue Book investigation. And to put it briefly, it's been done superficially and by persons of extremely low scientific competence.
+    text: |-
+      James E. McDonald examined the official Project Blue Book investigation and found it was done superficially by persons of extremely low scientific competence.
+  - id: e7494ae5-0ba5-49e6-90b1-f04d7abeeae0
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:32:23.8-00:32:29.7
+    refs:
+      - id: dd869a6b-394b-4062-bcc0-808b2a296abe
+        name: Project Blue Book
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+    quote: It has to be regarded as essentially zero. It is not a scientific investigation.
+    text: |-
+      James E. McDonald considers the Project Blue Book investigation to be essentially zero, not a scientific investigation.
+  - id: c7eccadd-9429-4025-a4e4-0d7d3e01543b
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:32:51.3-00:33:06.2
+    refs:
+      - id: c0d9c8f5-b529-4d0c-9b35-8bf55174ccee
+        name: United States Air Force (USAF)
+      - id: dd869a6b-394b-4062-bcc0-808b2a296abe
+        name: Project Blue Book
+    quote: |-
+      the kind of press releases that are put out about the great expertise that's used, the thorough investigations, and the indication that there are only two or three percent of unknowns, and probably those would be explained, the Air Force insists, if they add a little more data.
+    text: |-
+      The United States Air Force puts out press releases claiming great expertise, thorough investigations, and that there are only 2 to 3 percent of unknowns which would be explained with more data.
+  - id: 27beac3c-fb99-40a3-85f4-dd69dcfa9fa7
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:33:39.2-00:33:52.6
+    refs:
+      - id: c0d9c8f5-b529-4d0c-9b35-8bf55174ccee
+        name: United States Air Force (USAF)
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      the large amounts of money that seem to be at the disposal of our Air Force are misconstrued as indicating we've probably done a very large, very extensive, very thorough study of the problem. That is absolutely incorrect.
+    text: |-
+      James E. McDonald considers that the large amounts of money at the disposal of the United States Air Force are misconstrued as indicating a thorough study of the UFO problem.
+  - id: fd4dba90-6069-4142-a42f-08e3cd2340d9
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:34:00.9-00:34:05.9
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: cigar-shaped objects, disks, hovering sometimes at very low altitude
+    text: UFO sightings on record in the United States include cigar-shaped objects.
+  - id: bd96909c-75dc-4cb1-aeee-6286b0892dc3
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:34:00.9-00:34:05.9
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: cigar-shaped objects, disks, hovering sometimes at very low altitude
+    text: UFO sightings on record in the United States include disc-shaped objects.
+  - id: c61fb6e3-20bd-482b-b5d5-86b506159dc2
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:34:00.9-00:34:05.9
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: cigar-shaped objects, disks, hovering sometimes at very low altitude
+    text: |-
+      UFO sightings on record in the United States include objects hovering at very low altitude.
+  - id: 1ea3e635-b671-44f5-a494-35833a00dc00
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:34:13.2-00:34:19.3
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      Many inexplicable, scientifically inexplicable, baffling phenomena, very high accelerations.
+    text: |-
+      UFO sightings on record include scientifically inexplicable phenomena with very high accelerations.
+  - id: 4acbca24-6798-4a7e-9ab1-bf761453932b
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:34:20.6-00:34:24.9
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: c47e7c1a-2870-4c21-92d1-4777bc2ef8b6
+        name: Son Boom
+    quote: sometimes high-speed objects moving without any obvious sonic booms
+    text: |-
+      Some UFO sightings involve high-speed objects moving without obvious sonic booms.
+  - id: baff0971-e7c0-41c8-965c-10eeabf25960
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:34:25.3-00:34:32.1
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: c47e7c1a-2870-4c21-92d1-4777bc2ef8b6
+        name: Son Boom
+    quote: |-
+      though I'd hasten to interject that sometimes there are unexplained sonic booms that could be UFOs
+    text: Sometimes there are unexplained sonic booms that could be UFOs.
+  - id: 982ca5c3-9a19-4909-81e8-9abfd211e029
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:34:33.5-00:34:35.1
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: many peculiar luminous phenomena
+    text: Some UFO sightings involve peculiar luminous phenomena.
+  - id: 4a6540b8-2bfe-4660-9b24-ef386ec605ac
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:34:36.5-00:34:44.3
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      Some of them down in Australia will really baffle every scientist who ever takes a look at these.
+    text: |-
+      James E. McDonald considers that some UFO sightings in Australia will baffle every scientist who examines them.
+  - id: fa049cb3-66b0-4233-a212-f35f410a6b0d
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:35:06.4-00:35:11.9
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      there are some incompetent people who have seen something and haven't quite identified it.
+    text: |-
+      Some people who report UFO sightings are incompetent observers who misidentify things.
+  - id: 6e0cd2f2-de43-4af7-96c1-db60d15aa296
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:35:14.4-00:35:25.1
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      Certainly in the United States, there's a very annoyingly visible cultist crackpot fringe that's grown up around the problem, That discolors it and puts a lot of scientists off.
+    text: |-
+      In the United States, there is an annoyingly visible cultist crackpot fringe around the UFO problem that discolours it and puts scientists off.
+  - id: f7b8e5ce-1005-4e29-97de-55200e5711c9
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:35:36.0-00:35:42.6
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: c50f6b8a-a9c8-4dee-82b1-0ea0830f9d86
+        name: Ball Lightning
+    quote: |-
+      Balls, lightning, fireballs, luminous phenomena one time or another, even aircraft and so on.
+    text: There are sincere misidentifications of ball lightning as UFOs.
+  - id: de87b542-5ad5-4474-8159-0f174a3e2913
+    type: observation
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:35:43.8-00:35:55.4
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: 2caa84b3-0fe5-4153-bc09-e578b851b365
+        name: Australia, Victoria, Melbourne
+      - id: 5c34870c-3080-49f6-8668-93f976fa9a14
+        name: Australia, Tasmania, Hobart
+    quote: |-
+      experienced investigators such as those that have been working in Sydney and Melbourne and Tasmania and in other parts of the world, these are private investigating groups, not the official groups.
+    text: |-
+      Experienced UFO investigators working in Melbourne, Tasmania, and other parts of the world are private investigating groups, not official groups.
+  - id: abb858eb-85b3-41a7-ba87-f12d0450ed79
+    type: opinion
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: true
+    location: 00:35:55.7-00:36:06.9
+    refs:
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      The official groups, it's very hard to know what to say about them they come out with such outrageously absurd explanations that one is really hard put to know how to sort t
+    text: |-
+      James E. McDonald considers that official groups produce outrageously absurd explanations for UFO sightings.
+  - id: ab34353a-62e0-450a-8996-bf265f70e12a
+    type: opinion
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:36:09.4-00:36:23.1
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: 2caa84b3-0fe5-4153-bc09-e578b851b365
+        name: Australia, Victoria, Melbourne
+    quote: |-
+      these are sightings that are being investigated include a lot of quite unconventional phenomena that are not any product of our technology or Australia or Russian or English technology.
+    text: |-
+      The Unidentified Flying Object (UFO) sightings being investigated include unconventional phenomena that are not products of Australian, Russian, or English technology.
+  - id: 27edaee9-114c-4c5d-b1b2-72abd984a564
+    type: opinion
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:36:23.7-00:36:31.3
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: 670e7452-f26b-418e-803c-710b8d292336
+        name: Sun dog
+    quote: |-
+      They are not plasma phenomena they are not Sun dogs and pelicans and all the rest of the things that one hears about.
+    text: |-
+      The Unidentified Flying Object (UFO) sightings being investigated are not plasma phenomena, Sun dogs, or pelicans.
+  - id: 0baac18c-24ce-4a97-b82b-5e9151bd7d46
+    type: opinion
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:36:32.1-00:36:42.8
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      They are beyond the present pale of science and they're being ignored by science being ignored by official groups and that has got to change very very rapidly.
+    text: |-
+      The Unidentified Flying Object (UFO) phenomena are beyond the present pale of science and are being ignored by science and by official groups.
+  - id: e23d1027-9c24-417c-b64a-09646980298c
+    type: testimony
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:37:12.6-00:37:31.8
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      When you look at these various hypotheses, psychological, advanced technology, hoax, fabrication, fraud, poorly understood geophysical phenomena, you run through all of those. This is certainly what I've done in the past year of checking.
+    text: |-
+      James E. McDonald considered hypotheses including psychological explanations, advanced technology, hoax, fabrication, fraud, and poorly understood geophysical phenomena during his past year of checking UFO sightings.
+  - id: 7b4470de-c756-4039-860b-abf425a0e9c4
+    type: opinion
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:37:33.1-00:37:44.6
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      You find yourself ending up with the seemingly absurd, seemingly improbable hypothesis These things may be coming from somewhere else.
+    text: |-
+      James E. McDonald concluded that the seemingly absurd but improbable hypothesis is that the UFOs may be coming from somewhere else.
+  - id: 8eb89628-b6a5-4795-8d13-8aa8d3e98445
+    type: opinion
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:37:51.2-00:38:02.7
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      All that we know about the astronomy and planetary meteorology of the solar system seems to argue against a planetary, that is, intrasolar system origin of the objects.
+    text: |-
+      All that is known about the astronomy and planetary meteorology of the solar system argues against a planetary, intrasolar system origin of the UFOs.
+  - id: b5ba1344-0aa7-4ff6-a5c4-0c1d7c0748d9
+    type: opinion
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:38:04.0-00:38:15.7
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      All that we know about the structure of the galaxy makes quite clear that the next nearest source of origin is quite an embarrassing number of light years away.
+    text: |-
+      All that is known about the structure of the galaxy makes clear that the next nearest source of origin for the UFOs is quite an embarrassing number of light years away.
+  - id: 4041b3c7-9b5d-483c-a36c-4575841c5b22
+    type: opinion
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:38:34.1-00:38:59.3
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: c2a646b7-492b-4669-914c-673f3b2a5820
+        name: Interstellar Travel
+    quote: |-
+      when you when you look at it in terms of present day or foreseeable propulsion techniques it's very very baffling essentially not possible to explain how any kind of objects surveillance probes or what have you could be got into the earth's environment from an extra solar that is across interstellar distances
+    text: |-
+      In terms of present day or foreseeable propulsion techniques, it is essentially not possible to explain how any kind of objects, surveillance probes, or craft could be got into the earth's environment from an extrasolar, interstellar distance.
+  - id: f3c00147-74f5-482a-8ea7-2e3f7a6d481b
+    type: opinion
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:39:00.4-00:39:10.4
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: c2a646b7-492b-4669-914c-673f3b2a5820
+        name: Interstellar Travel
+    quote: |-
+      but the rub there the thing to keep your eye on seems to me is the proviso in terms of our present knowledge or foreseeable technology
+    text: |-
+      James E. McDonald considers the proviso to keep in mind is that the impossibility of interstellar travel is in terms of present knowledge or foreseeable technology.
+  - id: 6c4f7880-9eec-45b7-8339-fd483ec56845
+    type: opinion
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:39:11.9-00:39:33.2
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+    quote: |-
+      You've got to realize, and actually I find many laymen, I really find laymen more aware of this than some fellow scientists that are more sensitive to it. You have to realize that given another hundred years or a thousand years, terrestrial technology will be an entirely different thing from what it is now.
+    text: |-
+      James E. McDonald finds laymen more aware than some fellow scientists that terrestrial technology will be entirely different given another hundred or a thousand years.
+  - id: 16ac15ec-84bd-4a8b-b183-5589f76464c4
+    type: opinion
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:39:36.1-00:40:02.4
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+    quote: |-
+      you have only looked back a hundred years and things like radio, television, lasers, nuclear fusion, fission, countless other technological devices and systems that we take for granted now are of course incredible a hundred odd years ago and a hundred years is just nothing just a twinkling of an eye in galactic even geologic and time standards
+    text: |-
+      A hundred years ago, technologies such as radio, television, lasers, nuclear fusion, and fission were incredible, and a hundred years is a twinkling of an eye in galactic or geologic time standards.
+  - id: c9dcda37-5be9-4054-a68b-7b40a3ad979c
+    type: opinion
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:40:03.4-00:40:30.8
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 26def895-eb85-4d5d-b4d0-7488a64f9114
+        name: Extraterrestrial Life
+    quote: |-
+      so it is entirely conceivable in fact it's almost probable that elsewhere in the galaxy are advanced civilizations uh in fact this is this is very it becomes very respectable to It's generally granted by astronomers that far from here, in the reaches of the galaxy, there must be other societies that are essentially sentient beings whose technologies are swept far beyond ours.
+    text: |-
+      James E. McDonald considers it almost probable that elsewhere in the galaxy there are advanced civilisations with sentient beings whose technologies are far beyond ours.
+  - id: 2cf1f9f3-2fce-43eb-9062-0138dd15092b
+    type: opinion
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:40:17.3-00:40:30.8
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 26def895-eb85-4d5d-b4d0-7488a64f9114
+        name: Extraterrestrial Life
+    quote: |-
+      It's generally granted by astronomers that far from here, in the reaches of the galaxy, there must be other societies that are essentially sentient beings whose technologies are swept far beyond ours.
+    text: |-
+      It is generally granted by astronomers that far from Earth, in the reaches of the galaxy, there must be other societies of sentient beings whose technologies are far beyond ours.
+  - id: c41d6a38-56ef-475c-b916-d30f6906bc81
+    type: testimony
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:40:44.2-00:40:53.9
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: c2a646b7-492b-4669-914c-673f3b2a5820
+        name: Interstellar Travel
+    quote: |-
+      I certainly want to emphasize I don't have the slightest idea how anything would get here from from say Tau Ceti or Epsilon Eridani or anything 10 or 15 light years away.
+    text: |-
+      James E. McDonald does not have the slightest idea how anything would get to Earth from Tau Ceti, Epsilon Eridani, or anywhere 10 or 15 light years away.
+  - id: 9947c6ee-f50b-4349-b751-d441f407b9d9
+    type: testimony
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:40:55.3-00:41:25.4
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: 2caa84b3-0fe5-4153-bc09-e578b851b365
+        name: Australia, Victoria, Melbourne
+    quote: |-
+      I'm afraid in looking at the situation looking at Australian, American and other sightings, examining the credibility of the observers looking at the content of these observations, I'm afraid that it boils down to to craft of some kind machine-like objects that have been around for 20 years, ignored by all of us scientists, swept aside and ridiculed, and nobody has any good knowledge of this problem.
+    text: |-
+      James E. McDonald concluded, after examining Australian, American, and other sightings and the credibility of observers, that the observations boil down to craft of some kind, machine-like objects that have been around for 20 years, ignored and ridiculed by scientists.
+  - id: c5a81a8f-5aaf-404c-9596-804d1169f173
+    type: opinion
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:41:27.0-00:41:44.7
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      All these years have been wasted scientifically. We've got to get at this right away. We've got to get on it on a global scale. And with the best scientific talent, not just in United States or not just in Australia but the world's best scientific talent has to get on that.
+    text: |-
+      James E. McDonald considers that all the years of UFO investigation have been wasted scientifically and that work must begin on a global scale with the world's best scientific talent.
+  - id: 306898c4-489e-47d2-9305-022882a0c8c5
+    type: testimony
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:41:46.6-00:42:04.0
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 6160c44c-3a30-4392-80f8-58d77c8e78dd
+        name: United Nations (UN)
+      - id: 5874614c-406d-47fa-943f-a28ca3f11f53
+        name: Outer Space Affairs Group
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: f693ae3e-3a9d-4fdd-9cef-132016a1a838
+        name: 1967 UN Outer Space Affairs Group UFO Presentation
+    quote: |-
+      I spoke along these lines only a short time ago this summer in the United Nations at the outer space affairs group presented a statement to the outer space affairs group urging immediate UN action on the problem
+    text: |-
+      During the summer of 1967, James E. McDonald presented a statement to the United Nations Outer Space Affairs Group urging immediate UN action on the UFO problem.
+  - id: 4c5c7b18-8d57-4ea4-b8e1-0bac54d6dfa7
+    type: testimony
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:42:04.9-00:42:07.3
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: f693ae3e-3a9d-4fdd-9cef-132016a1a838
+        name: 1967 UN Outer Space Affairs Group UFO Presentation
+    quote: was very pleased to see that it had some effect by the way
+    text: |-
+      James E. McDonald was pleased to see that his statement to the UN Outer Space Affairs Group had some effect.
+  - id: 586b0d85-e14c-4529-a543-c3d920ecf73d
+    type: testimony
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:42:07.5-00:42:18.4
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: f693ae3e-3a9d-4fdd-9cef-132016a1a838
+        name: 1967 UN Outer Space Affairs Group UFO Presentation
+    quote: |-
+      I also sent copies of that statement to about 60 embassies in Washington, 60 foreign embassies, care of their scientific attachés, hoping to stimulate more interest in any and all parts of the world.
+    text: |-
+      James E. McDonald sent copies of his UN statement to about 60 foreign embassies in Washington, care of their scientific attachés, hoping to stimulate interest in UFOs worldwide.
+  - id: c241f173-cfdd-4366-b032-3ebace717957
+    type: testimony
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:42:19.8-00:42:28.6
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 459fef79-f98f-460d-b975-678154d797cd
+        name: U Thant
+    quote: |-
+      I didn't get a chance to talk to U Thant. I had a date to see him, but it was right in the middle of the the Security Council crisis, and he couldn't see me.
+    text: |-
+      James E. McDonald had a date to see U Thant but could not meet him because it was in the middle of the Security Council crisis.
+  - id: d4eae2e7-dc5e-48ba-b00d-06ca59cc8abd
+    type: testimony
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:42:28.7-00:42:30.6
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 459fef79-f98f-460d-b975-678154d797cd
+        name: U Thant
+    quote: I'm going to try again to see him.
+    text: James E. McDonald intends to try again to see U Thant.
+  - id: 4c8767a9-88f6-463f-965d-c0f4dd15c823
+    type: hearsay
+    attestation: third_hand
+    provenance_chain:
+      origin_kind: named
+      origin: U Thant
+      relay:
+        - Drew Pearson
+        - James E. McDonald
+    attribution_in_text: true
+    location: 00:42:31.2-00:42:54.1
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 459fef79-f98f-460d-b975-678154d797cd
+        name: U Thant
+      - id: 8b36f6fc-f710-499c-93bb-c6a42bffbef3
+        name: Drew Pearson
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      But Only A Very Short Time Ago, A Very Interesting Statement Was Made By U Thant To Drew Pearson That The Problem Of The UFOs. Now this is the Secretary General of the United Nations speaking, saying that the problem of the UFOs is the greatest international problem second only to the present one of the Vietnam War.
+    text: |-
+      U Thant told Drew Pearson that the UFO problem is the greatest international problem second only to the Vietnam War.
+  - id: 3d74db48-1caa-454e-b057-3522a6d049d0
+    type: testimony
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:42:56.3-00:43:19.9
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 459fef79-f98f-460d-b975-678154d797cd
+        name: U Thant
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+      - id: 2caa84b3-0fe5-4153-bc09-e578b851b365
+        name: Australia, Victoria, Melbourne
+    quote: |-
+      I cabled in from Australia when I heard that by long distance phone call from San Francisco. I cabled Secretary-General U Thant and strongly endorsed his statement, except I expressed disagreement. In my opinion, the UFO problem is the greatest scientific problem, the greatest international problem that stands before us.
+    text: |-
+      James E. McDonald cabled U Thant from Australia endorsing his statement about UFOs, but expressed disagreement, stating that in his opinion the UFO problem is the greatest scientific and greatest international problem facing humanity.
+  - id: 106360fd-39a3-49b2-a33e-9eee83197587
+    type: testimony
+    attestation: first_hand
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:42:56.3-00:43:02.2
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 2caa84b3-0fe5-4153-bc09-e578b851b365
+        name: Australia, Victoria, Melbourne
+    quote: |-
+      I cabled in from Australia when I heard that by long distance phone call from San Francisco.
+    text: |-
+      James E. McDonald heard about U Thant's statement via a long distance phone call from San Francisco while he was in Australia.
+  - id: 798e3749-5e60-468d-9dd7-4c93c3ae4753
+    type: administrative
+    provenance_chain:
+      origin_kind: unattributed
+      origin: Speaker 10
+    attribution_in_text: false
+    location: 00:43:28.0-00:43:34.3
+    refs:
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: b8b42774-4f8d-4d8f-b9da-6d47f7b8df58
+        name: University of Arizona
+    quote: |-
+      We've been listening to American physicist Professor James E. MacDonald of the University of Arizona.
+    text: James E. McDonald is an American physicist at the University of Arizona.
+infrastructure_claims:
+  - id: f2b860ae-6586-4a6b-a7c8-3ea7c6dde82f
+    type: administrative
+    attestation: first_hand
+    speaker:
+      id: e7ac934c-c280-4836-b2b0-039b8fbe90d0
+      name: Barry Jones
+    provenance_chain:
+      origin_kind: speaker
+      origin: Barry Jones
+    attribution_in_text: false
+    location: 00:04:12.0-00:04:16.4
+    date: '1967'
+    refs:
+      - id: e7ac934c-c280-4836-b2b0-039b8fbe90d0
+        name: Barry Jones
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: b8b42774-4f8d-4d8f-b9da-6d47f7b8df58
+        name: University of Arizona
+      - id: cbcf1d7f-dbc8-4d10-92bf-9012366a927b
+        name: Unidentified Flying Object (UFO)
+    quote: |-
+      Professor James MacDonald, the University of Arizona, talking about unidentified flying objects.
+    text: |-
+      Barry Jones introduced James E. McDonald as a professor from the University of Arizona discussing Unidentified Flying Objects (UFOs) on the radio programme.
+  - id: a5cf4ae6-286d-4a5b-8be6-7bd21ba726fc
+    type: administrative
+    attestation: first_hand
+    speaker:
+      id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+      name: James E. McDonald
+    provenance_chain:
+      origin_kind: speaker
+      origin: James E. McDonald
+    attribution_in_text: false
+    location: 00:14:54.0-00:14:59.3
+    date: '1967'
+    refs:
+      - id: 6dd5cfb6-54f3-4c56-8ead-61fae6021445
+        name: Victorian Flying Saucer Society
+      - id: 5ed16daf-e3c2-4692-8427-9cdeb5c35f0f
+        name: James E. McDonald
+      - id: 81128fd9-6b1d-4437-8b08-af8b126cc9fc
+        name: 1967 James E. McDonald Australian Investigative Tour
+    quote: |-
+      the Victorian Flying Saucer Society, very helpfully have been taking me around the countryside to some of the key witnesses.
+    text: |-
+      The Victorian Flying Saucer Society assisted James E. McDonald by taking him around the countryside to key witnesses during the 1967 James E. McDonald Australian Investigative Tour.
+  - id: 54052b57-443c-457c-9381-e2a159e4fb0f
+    type: administrative
+    attestation: first_hand
+    speaker:
+      id: e7ac934c-c280-4836-b2b0-039b8fbe90d0
+      name: Barry Jones
+    provenance_chain:
+      origin_kind: speaker
+      origin: Barry Jones
+    attribution_in_text: true
+    location: 00:24:32.2-00:24:38.8
+    refs:
+      - id: 6dd5cfb6-54f3-4c56-8ead-61fae6021445
+        name: Victorian Flying Saucer Society
+      - id: 2623b4a1-f86c-4dac-8a2e-bafb0e686895
+        name: Australia, Victoria, Moorabbin
+    quote: |-
+      If you get in touch with the society here at Box 43, that's the Flying Saucers Society at Box 43 Moorabbin.
+    text: |-
+      Barry Jones directed the anonymous caller to contact the Flying Saucers Society at Box 43, Moorabbin.

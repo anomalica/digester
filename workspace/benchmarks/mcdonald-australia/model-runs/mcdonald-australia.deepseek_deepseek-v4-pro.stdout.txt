@@ -1,0 +1,28 @@
+Parsing record: 2026-08-11-video-ufos-in-australia-eyewitnesses-talk-to-dr-james-e-mcdonald.v2.md
+COST ESTIMATE (rough, +/-40%):
+  138,619 source chars
+  model: deepseek/deepseek-v4-pro  ($0.43/$0.87 per million input/output tokens)
+  est tokens: ~178,619 in + ~51,982 out
+  est cost: ~$0.12  (range $0.07 - $0.17)
+  This spends real money on OpenRouter.
+  NOTE: this formula UNDERSTATES multi-chunk records - measured runs show 3-9x these
+  input tokens, because each chunk x iteration x pass re-sends the document and prompt.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: UFOs in Australia – Eyewitnesses Talk to Dr. James E. McDonald During His Investigative Tour (1967)
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +51 nodes (total 51) [model: complete]
+  51 nodes, 0 acronyms, main_subject='Unidentified Flying Objects (UFOs)'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/3 (20,000 chars)
+    claims iter 1: +59 claims (chunk total 59, doc total 59) [model: complete]
+  claims chunk 2/3 (20,000 chars)
+    claims iter 1: +47 claims (chunk total 47, doc total 106) [model: complete]
+  claims chunk 3/3 (5,889 chars)
+    claims iter 1: +24 claims (chunk total 24, doc total 130) [model: complete]
+  130 claims total: 119 domain, 11 infrastructure
+  locations -> timecode: 126/130 aligned (4 unalignable, 2 ambiguous)
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/mcdonald-australia/model-runs/mcdonald-australia.deepseek_deepseek-v4-pro.yaml
+Usage: 4 calls, in=41448 out=50481 cache_read=0 cost_equiv=$0.1460
+USAGE_JSON: {"input_tokens": 41448, "output_tokens": 50481, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.14595657642, "calls": 4}
+TRACE_JSON: [{"input_tokens": 12435, "output_tokens": 1858, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.01405137, "served_by": "DigitalOcean", "duration_s": 53.6}, {"input_tokens": 10810, "output_tokens": 26488, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.090320976, "served_by": "Alibaba", "duration_s": 321.0}, {"input_tokens": 10735, "output_tokens": 16660, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.02556057042, "served_by": "StreamLake", "duration_s": 311.1}, {"input_tokens": 7468, "output_tokens": 5475, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.01602366, "served_by": "DigitalOcean", "duration_s": 301.0}]

@@ -1,0 +1,28 @@
+Parsing record: 2026-08-11-video-ufos-in-australia-eyewitnesses-talk-to-dr-james-e-mcdonald.v2.md
+COST ESTIMATE (rough, +/-40%):
+  138,619 source chars
+  model: google/gemini-3-flash-preview  ($0.50/$3.00 per million input/output tokens)
+  est tokens: ~178,619 in + ~51,982 out
+  est cost: ~$0.25  (range $0.15 - $0.34)
+  This spends real money on OpenRouter.
+  NOTE: this formula UNDERSTATES multi-chunk records - measured runs show 3-9x these
+  input tokens, because each chunk x iteration x pass re-sends the document and prompt.
+Confirmed (--confirm) - proceeding with the metered run.
+Extracting (two-pass) from: UFOs in Australia – Eyewitnesses Talk to Dr. James E. McDonald During His Investigative Tour (1967)
+Pass A: nodes (with iteration + chunking)
+    nodes iter 1: +40 nodes (total 40) [model: complete]
+  40 nodes, 4 acronyms, main_subject='James E. McDonald'
+Pass B: claims (constrained to locked nodes, with iteration + chunking)
+  claims chunk 1/3 (20,000 chars)
+    claims iter 1: +17 claims (chunk total 17, doc total 17) [model: complete]
+  claims chunk 2/3 (20,000 chars)
+    claims iter 1: +13 claims (chunk total 13, doc total 30) [model: complete]
+  claims chunk 3/3 (5,889 chars)
+    claims iter 1: +10 claims (chunk total 10, doc total 40) [model: complete]
+  40 claims total: 36 domain, 4 infrastructure
+  locations -> timecode: 36/40 aligned (4 unalignable, 1 ambiguous)
+
+Written to: /home/mark/repos/anomalica/digester/workspace/benchmarks/mcdonald-australia/model-runs/mcdonald-australia.google_gemini-3-flash-preview.yaml
+Usage: 4 calls, in=44258 out=11944 cache_read=0 cost_equiv=$0.0580
+USAGE_JSON: {"input_tokens": 44258, "output_tokens": 11944, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_equiv_usd": 0.057961000000000006, "calls": 4}
+TRACE_JSON: [{"input_tokens": 13735, "output_tokens": 1485, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.0113225, "served_by": "Google", "duration_s": 30.9}, {"input_tokens": 11448, "output_tokens": 4636, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.019632, "served_by": "Google AI Studio", "duration_s": 40.2}, {"input_tokens": 11337, "output_tokens": 3349, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.0157155, "served_by": "Google AI Studio", "duration_s": 36.6}, {"input_tokens": 7738, "output_tokens": 2474, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "cost_usd": 0.011291, "served_by": "Google AI Studio", "duration_s": 29.8}]
