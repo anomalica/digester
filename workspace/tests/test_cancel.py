@@ -25,7 +25,9 @@ def test_cancel_flag_lifecycle():
 
 def test_nodes_pass_honours_cancel_before_any_model_call(monkeypatch):
     calls = []
-    monkeypatch.setattr(extract, "_call", lambda *a, **k: calls.append(1) or "{}")
+    monkeypatch.setattr(
+        extract, "call_with_document", lambda *a, **k: calls.append(1) or "{}"
+    )
     request_cancel()
     try:
         with pytest.raises(ExtractionCancelled):

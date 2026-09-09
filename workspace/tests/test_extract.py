@@ -47,7 +47,6 @@ def test_parse_json_invalid_raises():
 
 
 def test_build_record_context_pins_author():
-
     ctx = build_record_context(
         title="In Plain Sight",
         creators=["Ross Coulthart"],
@@ -63,7 +62,6 @@ def test_build_record_context_pins_author():
 
 
 def test_build_record_context_no_authors_omits_pin():
-
     ctx = build_record_context(
         title="FOIA Release 18-F-0324",
         creators=[],
@@ -77,7 +75,6 @@ def test_build_record_context_no_authors_omits_pin():
 
 
 def test_build_record_context_multiple_authors():
-
     ctx = build_record_context(
         title="Some Article",
         creators=["Helene Cooper", "Ralph Blumenthal", "Leslie Kean"],
@@ -88,7 +85,6 @@ def test_build_record_context_multiple_authors():
 
 
 def test_parse_response_surfaces_extraction_complete():
-
     raw_done = (
         '{"record_title": "T", "nodes": [], "claims": [], "extraction_complete": true}'
     )
@@ -207,6 +203,12 @@ def test_build_chunks_subsplits_oversized_chapter():
 
 
 def test_build_chunks_falls_back_to_windows_without_chapter_markers():
-    text = "No chapter markers. " * 5000  # ~100KB
+    # Sized off the constant, not a fixed 100KB: the limit went 50,000 -> 250,000
+    # when records stopped being cut to fit a context window, and a hardcoded
+    # size silently stopped exercising the split.
+    from digester.extract import CHUNK_MAX_CHARS
+
+    text = "No chapter markers. " * ((CHUNK_MAX_CHARS // 20) + 500)
+    assert len(text) > CHUNK_MAX_CHARS
     chunks = _build_chunks(text)
     assert len(chunks) > 1
