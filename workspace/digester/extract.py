@@ -487,21 +487,27 @@ def _build_chunks(text: str, max_chars: int = CHUNK_MAX_CHARS) -> list[str]:
 #       run 1   507s   112 claims
 #       run 2   681s    70 claims
 #
-# Against ANOMALICA_CLI_TIMEOUT_S = 900 that is 56% and 76% of the budget, with a
-# 174-second spread between two identical calls. There is no headroom for a third
-# run to land longer, and a whole 217,000-character record in one call is roughly
-# four times run 2 - far past the timeout.
+# The claims pass runs through call_with_document, which uses
+# ANOMALICA_CLI_LONG_TIMEOUT_S (1800s), not the 900s general CLI timeout. So those
+# runs used 28% and 38% of the budget - 50,000 characters does fit. But note the
+# 174-second spread between two identical calls, and that a whole 217,000-character
+# record in one call is roughly four times run 2, or about 45 minutes, past 1800s.
 #
-# So WALL CLOCK against the CLI timeout is the constraint here, not context and not
-# the output-token ceiling. Raising this number needs the timeout raised with it
-# (the knob exists) and a measured worst case, not just a bigger context window.
+# So WALL CLOCK is the constraint on this number, not context and not the
+# output-token ceiling. 50,000 is reachable; one call per record is not, without
+# raising the timeout and measuring a worst case.
 #
-# The cost of keeping it at 20,000: 2.5x more chunks than the nodes pass, so 2.5x
-# the cache writes and nothing shared between them, and a boundary every 20,000
-# characters for an account that is typically longer than that. Measured cost on
-# one record: 784,000 input tokens for a 20,000-token document, 38x. See
-# anomalica/architecture/prompt-caching.md.
-CLAIMS_CHUNK_MAX_CHARS = 20_000
+# The cost of keeping it at 20,000 was 2.5x more chunks than the nodes pass, so
+# 2.5x the cache writes and nothing shared between the two passes, and a boundary
+# every 20,000 characters for an account that is routinely longer than that.
+# Measured cost on one record: 784,000 input tokens for a 20,000-token document,
+# 38x. See anomalica/architecture/prompt-caching.md.
+#
+# Raised to match CHUNK_MAX_CHARS so both passes cut at the SAME boundaries and
+# see the same document text. NOT yet validated for recall - the timeout evidence
+# above is what justifies the change, and a same-record comparison against the
+# 20,000 baseline is outstanding.
+CLAIMS_CHUNK_MAX_CHARS = CHUNK_MAX_CHARS
 
 
 def _claim_key_v2(c: dict) -> tuple[str, str, str, str]:
