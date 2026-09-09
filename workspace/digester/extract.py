@@ -353,9 +353,28 @@ def format_terminology_context(terminology: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-# Hard upper bound on chunk size. Sonnet's 200K context allows much bigger,
-# but very large chunks slow per-call response. 150K chars ~ 37K tokens, well
-# inside the window with room for the prompt and growing exclude list.
+# Hard upper bound on chunk size.
+#
+# The context figure this was set from was wrong by 5x. It said "Sonnet's 200K
+# context allows much bigger". Sonnet 5 and Opus 5 both carry a 1,000,000-token
+# context window and a 128,000-token maximum output (checked 2026-09-09).
+#
+# Input is no longer the binding constraint for most of the corpus; OUTPUT is.
+# Of 332 records, the median materialises to 53,000 characters and 79% sit under
+# this limit already, so raising it changes nothing for them. The 21% above it
+# are books: the largest is 2,255,883 characters, about 560,000 tokens, which
+# still fits the context window but whose claims would run well past the
+# 128,000-token output ceiling in one call. So a record split is still needed at
+# the top of the range - it is the output limit that decides where, not 200K of
+# context.
+#
+# Chunking is not free. Each chunk is a separate cached prefix, so an eleven-
+# chunk record pays eleven cache writes and shares nothing between them; identical
+# runs diverge at boundaries where each carries a different node directory forward
+# (6.5 points of recall spread on a three-chunk record against 1.0 on a
+# single-chunk one); and an account of a single incident straddles a boundary, so
+# no pass that sees one chunk can order it. See
+# anomalica/architecture/prompt-caching.md.
 CHUNK_HARD_MAX = 150_000
 
 # Fall-back char-window settings when there is no chapter structure to use.
@@ -459,6 +478,29 @@ def _build_chunks(text: str, max_chars: int = CHUNK_MAX_CHARS) -> list[str]:
 # could not finish one inside the 900s CLI timeout and the whole run died after the
 # nodes pass had already been paid for. Chunk the claims pass smaller: same total
 # work, bounded output per call.
+#
+# This started as a Haiku workaround and Haiku is no longer the default (the model
+# policy names Sonnet 5 at low effort for this stage). But raising it back to 50,000
+# on Sonnet was measured on 2026-09-09 and it does NOT fit:
+#
+#     50,000-char claims chunk, Sonnet 5, real prompt, two runs
+#       run 1   507s   112 claims
+#       run 2   681s    70 claims
+#
+# Against ANOMALICA_CLI_TIMEOUT_S = 900 that is 56% and 76% of the budget, with a
+# 174-second spread between two identical calls. There is no headroom for a third
+# run to land longer, and a whole 217,000-character record in one call is roughly
+# four times run 2 - far past the timeout.
+#
+# So WALL CLOCK against the CLI timeout is the constraint here, not context and not
+# the output-token ceiling. Raising this number needs the timeout raised with it
+# (the knob exists) and a measured worst case, not just a bigger context window.
+#
+# The cost of keeping it at 20,000: 2.5x more chunks than the nodes pass, so 2.5x
+# the cache writes and nothing shared between them, and a boundary every 20,000
+# characters for an account that is typically longer than that. Measured cost on
+# one record: 784,000 input tokens for a 20,000-token document, 38x. See
+# anomalica/architecture/prompt-caching.md.
 CLAIMS_CHUNK_MAX_CHARS = 20_000
 
 
