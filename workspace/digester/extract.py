@@ -388,9 +388,11 @@ CHUNK_HARD_MAX = 150_000
 # on a three-piece record against 1.0 on a whole one), and an account of a single
 # incident straddles a join, so nothing that sees one piece can order it.
 #
-# 250,000 leaves 93% of the 332 records whole. What still gets cut is books, where
-# the constraint is real: the model can only WRITE about 128,000 tokens per reply,
-# and a book's claims run past that.
+# 250,000 is the window setting; CHUNK_HARD_MAX below it is the real ceiling, and
+# _build_chunks applies that to BOTH branches. Measured over all 333 records in
+# the store: 263 (79%) go through whole and no chunk exceeds the hard maximum.
+# What still gets cut is the long tail, where the constraint is real - the model
+# writes about 128,000 tokens per reply and a book's claims run past that.
 CHUNK_MAX_CHARS = 250_000
 CHUNK_MIN_CHARS = 20_000
 
@@ -470,11 +472,18 @@ def _build_chunks(text: str, max_chars: int = CHUNK_MAX_CHARS) -> list[str]:
     2. If any chapter is bigger than the hard cap, sub-chunk it on char windows.
     3. If no chapter structure, fall back to char-window chunking throughout.
     """
+    # ONE ceiling for both branches. It used to be applied only on the chapter
+    # branch, which was harmless while CHUNK_MAX_CHARS was 50,000 (the min
+    # collapsed to 50,000 and the two agreed) and became an inversion the moment
+    # it rose to 250,000: 47 unchaptered records in the store were emitting
+    # chunks of up to 249,999 characters, above a constant introduced as the
+    # "hard upper bound on chunk size". The output-ceiling argument behind
+    # CHUNK_HARD_MAX applies to a transcript exactly as it does to a chapter.
+    hard_max = min(CHUNK_HARD_MAX, max(max_chars, CHUNK_MIN_CHARS))
     chapters = _split_at_chapters(text)
     if chapters is None:
-        return _chunk_text(text, max_chars=max_chars)
+        return _chunk_text(text, max_chars=hard_max)
     final: list[str] = []
-    hard_max = min(CHUNK_HARD_MAX, max(max_chars, CHUNK_MIN_CHARS))
     for ch in chapters:
         if len(ch) > hard_max:
             final.extend(
