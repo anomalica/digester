@@ -28,7 +28,6 @@ from anomalica_common.digest import (
 from anomalica_common.llm import (
     call_with_document,
     DEFAULT_MODEL,
-    _call,
     _call_api,
     _call_cli,
     _parse_json,
@@ -378,7 +377,21 @@ def format_terminology_context(terminology: dict) -> str:
 CHUNK_HARD_MAX = 150_000
 
 # Fall-back char-window settings when there is no chapter structure to use.
-CHUNK_MAX_CHARS = 50_000
+#
+# 50,000 was set when a model held 200,000 characters and a record had to be cut
+# to fit. Sonnet 5 and Opus 5 hold about 4,000,000 - the largest video transcript
+# in the store fits sixteen times over - so for all but the books there is nothing
+# left to fit into and the cutting was pure inheritance.
+#
+# Cutting is not free: each piece is a separate cached prefix sharing nothing with
+# its neighbours, identical runs diverge at the joins (6.5 points of recall spread
+# on a three-piece record against 1.0 on a whole one), and an account of a single
+# incident straddles a join, so nothing that sees one piece can order it.
+#
+# 250,000 leaves 93% of the 332 records whole. What still gets cut is books, where
+# the constraint is real: the model can only WRITE about 128,000 tokens per reply,
+# and a book's claims run past that.
+CHUNK_MAX_CHARS = 250_000
 CHUNK_MIN_CHARS = 20_000
 
 # Iterative extraction stopping rule. The loop stops when a round adds fewer
@@ -503,10 +516,9 @@ def _build_chunks(text: str, max_chars: int = CHUNK_MAX_CHARS) -> list[str]:
 # Measured cost on one record: 784,000 input tokens for a 20,000-token document,
 # 38x. See anomalica/architecture/prompt-caching.md.
 #
-# Raised to match CHUNK_MAX_CHARS so both passes cut at the SAME boundaries and
-# see the same document text. NOT yet validated for recall - the timeout evidence
-# above is what justifies the change, and a same-record comparison against the
-# 20,000 baseline is outstanding.
+# Now just CHUNK_MAX_CHARS: both passes cut at the same points, or not at all.
+# A separate, smaller limit here only ever made the claims pass disagree with the
+# nodes pass about where a record divides.
 CLAIMS_CHUNK_MAX_CHARS = CHUNK_MAX_CHARS
 
 
@@ -1404,16 +1416,21 @@ def extract_nodes_v2(
             directory_lines = [
                 f"  - ({n['node_type']}) {name}" for name, n in merged_nodes.items()
             ]
-            prompt = record_context + _nodes_prompt()
+            # The directory grows every round, so it MUST sit after the document.
+            # Put it first and the cached prefix changes on every call, the
+            # document is re-uploaded at full price each round, and the cache
+            # earns nothing while still paying the write premium.
+            preamble = record_context + _nodes_prompt()
+            task = ""
             if directory_lines:
-                prompt = (
+                task = (
                     "EXISTING NODE DIRECTORY from previous chunks/rounds - "
                     "use these EXACT names where they apply; do NOT emit variants:\n"
                     + "\n".join(directory_lines)
-                    + "\n\n"
-                    + prompt
                 )
-            raw = _call(prompt, chunk, model, schema=NODES_SCHEMA_V2, use_api=use_api)
+            raw = call_with_document(
+                preamble, chunk, task, model, schema=NODES_SCHEMA_V2, use_api=use_api
+            )
             result = json.loads(raw) if isinstance(raw, str) else raw
 
             new_in_round = 0
@@ -1502,12 +1519,16 @@ def extract_claims_v2(
         chunk_claims: list[dict] = []
         for it in range(ITERATION_MAX):
             _check_cancel()  # stop before dispatching the next call; prior calls cached
-            prompt = record_context + _claims_prompt_template().format(
+            # preamble + chunk must be byte-identical every round for the cache
+            # to hit. The exclude list below grows each round, so it goes in the
+            # task slot AFTER the document, never in the preamble.
+            preamble = record_context + _claims_prompt_template().format(
                 directory=directory,
                 main_subject=main_subject,
                 codenames_block=codenames_block,
                 acronyms_block=acronyms_block,
             )
+            task = ""
             if chunk_claims:
                 exclude = "\n".join(
                     f"{i + 1}. {c['content']}  [type={c.get('claim_type') or '-'}"
@@ -1515,8 +1536,8 @@ def extract_claims_v2(
                     f"; attestation={c.get('attestation') or '-'}]"
                     for i, c in enumerate(chunk_claims)
                 )
-                prompt += (
-                    "\n\nALREADY EXTRACTED CLAIMS - each shown with the provenance it was "
+                task = (
+                    "ALREADY EXTRACTED CLAIMS - each shown with the provenance it was "
                     "captured under. Do NOT repeat any of these:\n"
                     + exclude
                     + "\n\nPROVENANCE EXCEPTION - this overrides the no-repeat rule. A claim is "
@@ -1533,7 +1554,9 @@ def extract_claims_v2(
                     "and set extraction_complete=true."
                 )
 
-            raw = _call(prompt, chunk, model, schema=schema, use_api=use_api)
+            raw = call_with_document(
+                preamble, chunk, task, model, schema=schema, use_api=use_api
+            )
             result = json.loads(raw) if isinstance(raw, str) else raw
 
             new_in_round = 0
