@@ -192,7 +192,11 @@ def extract_cmd(
     # park the lane and retry with backoff, never strike toward skip the way a
     # genuine extraction failure does. Grepping stderr for it would be the fragile
     # alternative.
-    from anomalica_common.llm import OpencodeRateLimited, PlanRateLimited
+    from anomalica_common.llm import (
+        OpencodeRateLimited,
+        OpencodeTimedOut,
+        PlanRateLimited,
+    )
 
     signal.signal(signal.SIGTERM, lambda *_: request_cancel())
     try:
@@ -258,6 +262,13 @@ def extract_cmd(
             f"\nRate-limited by the opencode plan: {e}\nCompleted chunks are cached; "
             "park this lane and retry with backoff - this is NOT an extraction "
             "failure."
+        )
+        ctx.exit(77)
+    except OpencodeTimedOut as e:
+        note_run_failure()
+        click.echo(
+            f"\nOpenCode call timed out: {e}\nCompleted chunks are cached; park "
+            "this lane and retry - this is NOT an extraction failure."
         )
         ctx.exit(77)
     except PlanRateLimited as e:

@@ -103,3 +103,25 @@ def test_extract_command_exits_77_on_rate_limit(tmp_path, monkeypatch):
     )
     assert result.exit_code == 77
     assert "NOT an extraction failure" in result.output
+
+
+def test_extract_command_exits_77_on_opencode_timeout(tmp_path, monkeypatch):
+    from anomalica_common.llm import OpencodeTimedOut
+
+    rec = tmp_path / "rec.md"
+    rec.write_text("---\ntitle: Test\n---\nSome body text for the record.\n")
+
+    def timed_out(*args, **kwargs):
+        raise OpencodeTimedOut(
+            "opencode timed out after 2100s (model=opencode-go/kimi-k3)"
+        )
+
+    monkeypatch.setattr(cli, "_do_extract", timed_out)
+    result = CliRunner().invoke(
+        main, ["extract", str(rec), "--model", "opencode-go/kimi-k3"]
+    )
+
+    assert result.exit_code == 77
+    assert "OpenCode call timed out" in result.output
+    assert "Completed chunks are cached" in result.output
+    assert "NOT an extraction failure" in result.output
