@@ -18,6 +18,7 @@ from anomalica_common.llm import (
     get_usage_trace,
     get_schema_enforcement,
     is_metered,
+    is_openai_subscription_model,
     is_opencode_model,
     is_openrouter_model,
     reset_schema_enforcement,
@@ -50,6 +51,16 @@ def _producer_from_creators(creators: list[str] | None) -> str | None:
         if c and not _ANNOTATION_TOKEN.match(c):
             return c
     return None
+
+
+def _uses_claude_allowance(model: str, use_api: bool) -> bool:
+    """Whether this call draws from the Claude subscription allowance."""
+    return (
+        not use_api
+        and not is_opencode_model(model)
+        and not is_openai_subscription_model(model)
+        and not is_openrouter_model(model)
+    )
 
 
 @click.group()
@@ -148,7 +159,7 @@ def extract_cmd(
     # ceiling is a pause that self-corrects when the window rolls. Running past it
     # hard-throttles the plan, which stops every component AND any supervising
     # session, since they share it - and then nothing is left to restart anything.
-    if not use_api:
+    if _uses_claude_allowance(model, use_api):
         # Headroom scales with the job: the ceiling governs whether a run STARTS,
         # so the peak is the ceiling plus whatever an admitted job goes on to
         # draw. A book admitted at 85% drew ten more points and was killed at the
@@ -1594,7 +1605,7 @@ def accounts_cmd(
     parsed = parse_record(path.read_text(errors="replace"))
 
     use_api = resolve_use_api(_USE_API_VAR)
-    if not use_api:
+    if _uses_claude_allowance(model, use_api):
         allowance = check_allowance(
             session_headroom=headroom_for(len(parsed.body or "")),
             weekly_headroom=weekly_reserve_for(len(parsed.body or "")),

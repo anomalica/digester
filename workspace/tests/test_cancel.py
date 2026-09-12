@@ -125,3 +125,60 @@ def test_extract_command_exits_77_on_opencode_timeout(tmp_path, monkeypatch):
     assert "OpenCode call timed out" in result.output
     assert "Completed chunks are cached" in result.output
     assert "NOT an extraction failure" in result.output
+
+
+@pytest.mark.parametrize(
+    ("model", "use_api", "expected"),
+    [
+        ("sonnet", False, True),
+        ("sonnet", True, False),
+        ("opencode-go/kimi-k3", False, False),
+        ("openai-subscription/gpt-5.6-luna", False, False),
+        ("openai/gpt-5.6-luna", True, False),
+    ],
+)
+def test_claude_allowance_gate_is_route_specific(model, use_api, expected):
+    assert cli._uses_claude_allowance(model, use_api) is expected
+
+
+def test_closed_claude_allowance_does_not_block_opencode(tmp_path, monkeypatch):
+    rec = tmp_path / "rec.md"
+    rec.write_text("---\ntitle: Test\n---\nSome body text for the record.\n")
+    reached = []
+
+    monkeypatch.setattr(
+        cli,
+        "check_allowance",
+        lambda **kwargs: pytest.fail("OpenCode must not read Claude allowance"),
+    )
+
+    def extract(*args, **kwargs):
+        reached.append(True)
+
+    monkeypatch.setattr(cli, "_do_extract", extract)
+    result = CliRunner().invoke(
+        main, ["extract", str(rec), "--model", "opencode-go/kimi-k3"]
+    )
+
+    assert result.exit_code == 0
+    assert reached == [True]
+
+
+def test_closed_claude_allowance_still_blocks_claude(tmp_path, monkeypatch):
+    rec = tmp_path / "rec.md"
+    rec.write_text("---\ntitle: Test\n---\nSome body text for the record.\n")
+    reached = []
+
+    monkeypatch.setattr(
+        cli,
+        "check_allowance",
+        lambda **kwargs: Allowance(False, "session usage 100%"),
+    )
+    monkeypatch.setattr(
+        cli, "_do_extract", lambda *args, **kwargs: reached.append(True)
+    )
+    result = CliRunner().invoke(main, ["extract", str(rec), "--model", "sonnet"])
+
+    assert result.exit_code == 77
+    assert "Allowance ceiling: session usage 100%" in result.output
+    assert reached == []
