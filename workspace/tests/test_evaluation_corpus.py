@@ -1,6 +1,7 @@
 import copy
 import hashlib
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -210,6 +211,8 @@ def test_state_only_cli_emits_compact_private_adapter_payload():
         check=True,
         capture_output=True,
         text=True,
+        cwd=MANIFEST.parents[2],
+        env={key: value for key, value in os.environ.items() if key != "PYTHONPATH"},
     )
     state = json.loads(completed.stdout)
 

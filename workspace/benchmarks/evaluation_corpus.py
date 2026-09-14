@@ -5,13 +5,20 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sys
 from datetime import datetime
 from pathlib import Path
 
 import yaml
 
-from digester.eval import grade_digest, parse_highlights
-from digester.highlight_gold import (
+WORKSPACE = Path(__file__).resolve().parents[1]
+COMMON_SRC = Path(__file__).resolve().parents[3] / "anomalica-common/src"
+sys.path.insert(0, str(WORKSPACE))
+if COMMON_SRC.is_dir():
+    sys.path.insert(0, str(COMMON_SRC))
+
+from digester.eval import grade_digest, parse_highlights  # noqa: E402
+from digester.highlight_gold import (  # noqa: E402
     HighlightGoldError,
     validate as validate_highlight_gold,
 )
