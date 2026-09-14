@@ -25,6 +25,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from anomalica_common.llm.cost import estimate_record  # noqa: E402
+from evaluation_corpus import (  # noqa: E402
+    CorpusValidationError,
+    authorise_dispatch,
+)
 
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parent
@@ -39,6 +43,9 @@ ARTICLE = os.environ.get("BENCH_ARTICLE", "navy-pilots")
 RECORD_PATH = os.environ.get("BENCH_RECORD")
 OUT_DIR = HERE / ARTICLE / "model-runs"
 COST_CEILING_USD = float(os.environ.get("BENCH_COST_CEILING_USD", "5.0"))
+CORPUS_MANIFEST = Path(
+    os.environ.get("BENCH_MANIFEST", HERE / "evaluation-corpus.yaml")
+)
 CONCURRENCY = (
     5  # models run in parallel - one slow reasoning model can't block the rest
 )
@@ -253,8 +260,18 @@ def main() -> int:
     import os
     from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
     record = resolve_record()
+    try:
+        authorise_dispatch(
+            CORPUS_MANIFEST,
+            record,
+            use="hosted-model-inference",
+            provider="openrouter",
+            route="openrouter",
+        )
+    except CorpusValidationError as exc:
+        raise SystemExit(f"evaluation dispatch refused: {exc}") from exc
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
     record_chars = _materialised_chars(record)
     models = sys.argv[1:] or MODELS
     _key = openrouter_key()

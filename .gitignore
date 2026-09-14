@@ -12,3 +12,14 @@ grading/
 
 # Local trial/benchmark extractions - generated, must not ship in the image
 workspace/trial-*/
+
+# Private benchmark outputs may reproduce source wording. Existing tracked
+# historical artefacts are unaffected; new outputs must remain local.
+workspace/benchmarks/**/model-runs/
+workspace/benchmarks/**/review.html
+workspace/benchmarks/**/history.jsonl
+workspace/benchmarks/**/ratings.json
+workspace/benchmarks/private/
+/reports/**/*.html
+/reports/**/*.json
+/reports/**/*.yaml
