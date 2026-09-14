@@ -11,8 +11,13 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import anomalica_common.llm.transport as transport  # noqa: E402
 from anomalica_common.llm import _call  # noqa: E402
+from benchmarks.evaluation_corpus import authorise_dispatch  # noqa: E402
+from digester.input_rights import assert_authority  # noqa: E402
+from digester.record_parser import parse_record  # noqa: E402
 
 SEG = Path(__file__).resolve().parent / "segment-1.txt"
+RECORD = SEG.with_name("segment-1-record.md")
+MANIFEST = Path(__file__).resolve().parents[1] / "evaluation-corpus.yaml"
 MODEL = "anthropic/claude-fable-5"
 
 BRIEF = """You are helping define an extraction standard for Anomalica.
@@ -48,6 +53,13 @@ Return a JSON object with keys:
 
 
 def main() -> int:
+    admission = authorise_dispatch(
+        MANIFEST,
+        RECORD,
+        use="hosted-model-inference",
+        provider="openrouter",
+        route="openrouter",
+    )
     transport.authorise_metered_spend()
     import os
 
@@ -71,7 +83,13 @@ def main() -> int:
         os.environ["OPENROUTER_API_KEY"] = key
 
     transport.reset_usage()
-    raw = _call(BRIEF, SEG.read_text(), MODEL, schema={"type": "object"})
+    body = parse_record(RECORD.read_text()).body
+    assert_authority(
+        admission["input_authority"],
+        body,
+        MODEL,
+    )
+    raw = _call(BRIEF, body, MODEL, schema={"type": "object"})
     usage = transport.get_usage()
     obj = json.loads(raw)
 

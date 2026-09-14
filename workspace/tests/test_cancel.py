@@ -68,6 +68,7 @@ def _allowance_open(monkeypatch):
     exercise. The ceiling has its own tests; this one is about exit codes.
     """
     monkeypatch.setattr(cli, "check_allowance", lambda **k: Allowance(True, "test"))
+    monkeypatch.setattr(cli, "_authorise_hosted_input", lambda *a, **k: None)
 
 
 def test_extract_command_exits_75_on_cancel(tmp_path, monkeypatch):

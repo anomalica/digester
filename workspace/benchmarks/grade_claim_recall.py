@@ -3,7 +3,8 @@
 any extracted claim covers it. Uses Haiku (cheap) with forced-tool structured
 output. Routes through the digester's transport dispatcher, so it follows the
 same policy as extraction - the Claude subscription by default, the metered API
-only under ANOMALICA_USE_API=1. Usage: grade_claim_recall.py <gt.yaml> <digest.yaml> [model]"""
+only under ANOMALICA_USE_API=1. Usage: grade_claim_recall.py <gt.yaml> <digest.yaml>
+<record.md> <evaluation-corpus.yaml> [model]"""
 
 import sys
 from pathlib import Path
@@ -13,10 +14,28 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from anomalica_common.llm import _call, _parse_json  # noqa: E402
+from benchmarks.evaluation_corpus import authorise_dispatch  # noqa: E402
+from digester.input_rights import assert_authority, hosted_route  # noqa: E402
+from digester.record_parser import parse_record  # noqa: E402
 
 gt = yaml.safe_load(open(sys.argv[1]))
 dig = yaml.safe_load(open(sys.argv[2]))
-grader_model = sys.argv[3] if len(sys.argv) > 3 else "haiku"
+record_path = Path(sys.argv[3])
+manifest_path = Path(sys.argv[4])
+grader_model = sys.argv[5] if len(sys.argv) > 5 else "haiku"
+route = hosted_route(grader_model)
+admission = authorise_dispatch(
+    manifest_path,
+    record_path,
+    use="hosted-model-inference",
+    provider=route.provider,
+    route=route.route,
+)
+record_hash = admission["record_content_hash"]
+if gt.get("record_content_hash") != record_hash:
+    raise SystemExit("ground truth does not match the authorised record")
+if (dig.get("record") or {}).get("content_hash") != record_hash:
+    raise SystemExit("digest does not match the authorised record")
 
 must = [c for c in gt["claims"] if c.get("must")]
 claims = [c.get("text", "") for c in dig.get("domain_claims", []) or []]
@@ -59,6 +78,11 @@ EXTRACTED CLAIMS:
 {cl_block}
 """
 
+assert_authority(
+    admission["input_authority"],
+    parse_record(record_path.read_text()).body,
+    grader_model,
+)
 raw = _call(prompt, "", grader_model, schema=schema)
 results = _parse_json(raw)["results"]
 covered = [r for r in results if r.get("covered")]

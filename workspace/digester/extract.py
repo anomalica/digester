@@ -10,6 +10,8 @@ from __future__ import annotations
 import hashlib
 import inspect
 import json
+from contextlib import contextmanager
+from contextvars import ContextVar
 
 from digester import accounts as accounts_mod
 from anomalica_common.llm import check_route_capacity
@@ -27,12 +29,79 @@ from anomalica_common.digest import (
     OriginKind,
 )
 from anomalica_common.llm import (
-    call_with_document,
+    call_with_document as _transport_call_with_document,
     DEFAULT_MODEL,
-    _call_api,
-    _call_cli,
+    _call_api as _transport_call_api,
+    _call_cli as _transport_call_cli,
     _parse_json,
 )
+from digester.input_rights import HostedInputAuthority, assert_authority
+
+
+_hosted_input_authority: ContextVar[HostedInputAuthority | None] = ContextVar(
+    "hosted_input_authority", default=None
+)
+
+
+def call_with_document(
+    preamble: str,
+    document: str,
+    task: str,
+    model: str,
+    schema: dict | None = None,
+    use_api: bool = False,
+    attribution=None,
+) -> str:
+    """The final Digester boundary before source text reaches a provider."""
+    authority = _hosted_input_authority.get()
+    assert_authority(authority, authority_body(authority), model, use_api)
+    return _transport_call_with_document(
+        preamble,
+        document,
+        task,
+        model,
+        schema=schema,
+        use_api=use_api,
+        attribution=attribution,
+    )
+
+
+def authority_body(authority: HostedInputAuthority | None) -> str:
+    """Return the body bound for this extraction without exposing a bypass flag."""
+    body = _hosted_input_body.get()
+    if authority is None or body is None:
+        return ""
+    return body
+
+
+_hosted_input_body: ContextVar[str | None] = ContextVar(
+    "hosted_input_body", default=None
+)
+
+
+@contextmanager
+def provider_authority(authority: HostedInputAuthority, body: str):
+    """Bind an exact record while a non-production extraction harness runs."""
+    authority_token = _hosted_input_authority.set(authority)
+    body_token = _hosted_input_body.set(body)
+    try:
+        yield
+    finally:
+        _hosted_input_body.reset(body_token)
+        _hosted_input_authority.reset(authority_token)
+
+
+def _call_cli(prompt: str, text: str, model: str, schema: dict | None = None):
+    authority = _hosted_input_authority.get()
+    assert_authority(authority, authority_body(authority), model, False)
+    return _transport_call_cli(prompt, text, model, schema=schema)
+
+
+def _call_api(prompt: str, text: str, model: str):
+    authority = _hosted_input_authority.get()
+    assert_authority(authority, authority_body(authority), model, True)
+    return _transport_call_api(prompt, text, model)
+
 
 VALID_NODE_TYPES = {
     t.value
@@ -1710,6 +1779,7 @@ def extract_two_pass(
     record_context: str = "",
     on_progress=None,
     use_api: bool = False,
+    input_authority: HostedInputAuthority | None = None,
 ) -> dict:
     """Top-level v2 entry point. Runs nodes pass then claims pass. Returns
     a dict with keys: nodes, claims, main_subject, codenames_to_resolve,
@@ -1718,54 +1788,60 @@ def extract_two_pass(
     `use_api` is the resolved per-component metered toggle (the digester resolves
     DIGESTER_USE_API), threaded to every model call.
     """
+    authority_token = _hosted_input_authority.set(input_authority)
+    body_token = _hosted_input_body.set(text)
     reset_cancel()  # a cancel from a prior run in this process must not carry over
     # Extract from the pre-digest (ADR 0042): all deterministic model-prep. The
     # caller materialises + stores the pre-digest and records its hash; this is
     # idempotent, so a raw-text caller (benchmarks) still gets the same input.
-    text = materialise(text)
-    pin_prompts()
-    if on_progress:
-        on_progress("Pass A: nodes (with iteration + chunking)")
-    nodes_result = extract_nodes_v2(
-        text,
-        model=model,
-        record_context=record_context,
-        on_progress=on_progress,
-        use_api=use_api,
-    )
-    if on_progress:
-        on_progress(
-            f"  {len(nodes_result['nodes'])} nodes, {len(nodes_result['acronyms'])} acronyms, "
-            f"main_subject={nodes_result['main_subject']!r}"
+    try:
+        text = materialise(text)
+        pin_prompts()
+        if on_progress:
+            on_progress("Pass A: nodes (with iteration + chunking)")
+        nodes_result = extract_nodes_v2(
+            text,
+            model=model,
+            record_context=record_context,
+            on_progress=on_progress,
+            use_api=use_api,
         )
+        if on_progress:
+            on_progress(
+                f"  {len(nodes_result['nodes'])} nodes, {len(nodes_result['acronyms'])} acronyms, "
+                f"main_subject={nodes_result['main_subject']!r}"
+            )
 
-    if on_progress:
-        on_progress(
-            "Pass B: claims (constrained to locked nodes, with iteration + chunking)"
+        if on_progress:
+            on_progress(
+                "Pass B: claims (constrained to locked nodes, with iteration + chunking)"
+            )
+        claims = extract_claims_v2(
+            text,
+            nodes_result,
+            model=model,
+            record_context=record_context,
+            on_progress=on_progress,
+            use_api=use_api,
         )
-    claims = extract_claims_v2(
-        text,
-        nodes_result,
-        model=model,
-        record_context=record_context,
-        on_progress=on_progress,
-        use_api=use_api,
-    )
-    if on_progress:
-        n_dom = sum(1 for c in claims if c.get("category") == "domain")
-        n_inf = sum(1 for c in claims if c.get("category") == "infrastructure")
-        on_progress(
-            f"  {len(claims)} claims total: {n_dom} domain, {n_inf} infrastructure"
-        )
+        if on_progress:
+            n_dom = sum(1 for c in claims if c.get("category") == "domain")
+            n_inf = sum(1 for c in claims if c.get("category") == "infrastructure")
+            on_progress(
+                f"  {len(claims)} claims total: {n_dom} domain, {n_inf} infrastructure"
+            )
 
-    return {
-        "nodes": nodes_result["nodes"],
-        "main_subject": nodes_result["main_subject"],
-        "codenames_to_resolve": nodes_result["codenames_to_resolve"],
-        "acronyms": nodes_result["acronyms"],
-        "claims": claims,
-        "prompt_provenance": prompt_provenance(),
-    }
+        return {
+            "nodes": nodes_result["nodes"],
+            "main_subject": nodes_result["main_subject"],
+            "codenames_to_resolve": nodes_result["codenames_to_resolve"],
+            "acronyms": nodes_result["acronyms"],
+            "claims": claims,
+            "prompt_provenance": prompt_provenance(),
+        }
+    finally:
+        _hosted_input_body.reset(body_token)
+        _hosted_input_authority.reset(authority_token)
 
 
 def _parse_response(raw: str) -> ExtractionResult:

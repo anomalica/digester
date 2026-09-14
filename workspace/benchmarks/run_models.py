@@ -176,6 +176,8 @@ def run_one(model: str, record: Path, env: dict) -> dict:
             "--model",
             model,
             "--confirm",
+            "--evaluation-manifest",
+            str(CORPUS_MANIFEST),
             "-o",
             str(out),
         ],

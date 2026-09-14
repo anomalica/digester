@@ -215,8 +215,13 @@ def _build_per_type_prompt(node_type: str, exclude: list[str]) -> str:
     return "\n".join(parts)
 
 
-def _claude_call(prompt: str, text_path: str, model: str, schema: dict) -> dict:
+def _claude_call(
+    prompt: str, text_path: str, model: str, schema: dict, authority, body: str
+) -> dict:
     """One claude CLI invocation. Returns wrapper dict (with structured_output, usage)."""
+    from digester.input_rights import assert_authority
+
+    assert_authority(authority, body, model)
     full_prompt = f"{prompt}\n\nRead and analyse the document at: {text_path}"
     cmd = [
         "claude",
@@ -260,7 +265,9 @@ def _round_stats(
     return info
 
 
-def run_combined(model: str, text_path: str, log, record_context: str = "") -> dict:
+def run_combined(
+    model: str, text_path: str, log, record_context: str = "", authority=None, body=""
+) -> dict:
     """Iterate the combined prompt to exhaustion."""
     found: dict[str, list[dict]] = {p: [] for p in TYPES_PLURAL.values()}
     rounds_info = []
@@ -273,7 +280,9 @@ def run_combined(model: str, text_path: str, log, record_context: str = "") -> d
         prompt = record_context + _build_combined_prompt(exclude)
         log(f"  round {round_idx + 1}/{ROUND_MAX}", end="", flush=True)
         start = time.time()
-        wrapper = _claude_call(prompt, text_path, model, COMBINED_SCHEMA)
+        wrapper = _claude_call(
+            prompt, text_path, model, COMBINED_SCHEMA, authority, body
+        )
         elapsed = time.time() - start
         structured = wrapper.get("structured_output") or {}
         new_total = 0
@@ -325,7 +334,9 @@ def run_combined(model: str, text_path: str, log, record_context: str = "") -> d
     }
 
 
-def run_per_type(model: str, text_path: str, log, record_context: str = "") -> dict:
+def run_per_type(
+    model: str, text_path: str, log, record_context: str = "", authority=None, body=""
+) -> dict:
     """Run separate iterative loops for each node type."""
     found_per_type: dict[str, list[dict]] = {p: [] for p in TYPES_PLURAL.values()}
     rounds_info = []
@@ -340,7 +351,9 @@ def run_per_type(model: str, text_path: str, log, record_context: str = "") -> d
             prompt = record_context + _build_per_type_prompt(node_type, exclude)
             log(f"    round {round_idx + 1}", end="", flush=True)
             start = time.time()
-            wrapper = _claude_call(prompt, text_path, model, PER_TYPE_SCHEMA)
+            wrapper = _claude_call(
+                prompt, text_path, model, PER_TYPE_SCHEMA, authority, body
+            )
             elapsed = time.time() - start
             structured = wrapper.get("structured_output") or {}
             new = 0
@@ -425,6 +438,9 @@ def main() -> None:
     results = []
     try:
         for model in ("sonnet", "opus"):
+            from digester.input_rights import authorise_ordinary_extraction
+
+            authority = authorise_ordinary_extraction(record_path, model)
             for strategy in ("combined", "per_type"):
                 print(f"\n=== {model.upper()} / {strategy.upper()} ===", flush=True)
                 run_fn = run_combined if strategy == "combined" else run_per_type
@@ -436,7 +452,12 @@ def main() -> None:
                         print(*a, **k)
 
                     result = run_fn(
-                        model, body_path, log=_log, record_context=record_context
+                        model,
+                        body_path,
+                        log=_log,
+                        record_context=record_context,
+                        authority=authority,
+                        body=body,
                     )
                 except Exception as e:
                     result = {"strategy": strategy, "model": model, "error": str(e)}

@@ -194,6 +194,7 @@ def test_the_plain_output_path_also_stamps_run_kind(tmp_path, monkeypatch):
         False,
         None,
         None,
+        input_authority=object(),
     )
     assert out.read_text().startswith("run_kind: "), out.read_text()[:80]
     from digester.extraction_config_registry import read_registry
@@ -234,6 +235,7 @@ def test_output_names_digest_while_root_controls_storage(tmp_path, monkeypatch):
         False,
         None,
         None,
+        input_authority=object(),
     )
 
     canonical = root / "canonical-friendly.yaml"
@@ -278,6 +280,7 @@ def test_invalid_root_authority_fails_before_extraction(tmp_path, monkeypatch):
             False,
             None,
             None,
+            input_authority=object(),
         )
 
     assert calls == []
@@ -322,6 +325,7 @@ def test_copyright_status_reaches_the_record_block(tmp_path, monkeypatch):
         False,
         None,
         None,
+        input_authority=object(),
     )
     d = _yaml.safe_load(out.read_text())
     assert d["record"]["copyright_status"] == "publicly_accessible"

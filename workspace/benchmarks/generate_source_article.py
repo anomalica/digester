@@ -2,7 +2,7 @@
 """Generate a per-SOURCE narrative article by REUSING the assembler's article
 contract (prompt, claim formatting, validation), fed all of a source's claims
 instead of a single node's. Transport is the API (anomalica key), streaming.
-Usage: generate_source_article.py <digest.yaml> <out.json>"""
+Usage: generate_source_article.py <digest.yaml> <out.json> <record.md>"""
 
 import json
 import sys
@@ -14,10 +14,22 @@ import yaml
 sys.path.insert(0, "/home/mark/repos/anomalica/assembler")
 import assembler  # noqa: E402
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from digester.input_rights import (  # noqa: E402
+    assert_authority,
+    authorise_ordinary_extraction,
+)
+from digester.record_parser import parse_record  # noqa: E402
+
 digest = yaml.safe_load(open(sys.argv[1]))
 out_path = Path(sys.argv[2])
+record_path = Path(sys.argv[3])
+model = "claude-sonnet-4-6"
+authority = authorise_ordinary_extraction(record_path, model, use_api=True)
 
 rec = digest.get("record", {})
+if rec.get("content_hash") != authority.record_content_hash:
+    raise SystemExit("digest content_hash does not match the authorised record")
 title = rec.get("title", "Untitled source")
 term = digest.get("terminology", {})
 main_subject = term.get("main_subject") or title
@@ -58,8 +70,14 @@ node = {"name": title, "type": "source", "id": rec.get("id", "source")}
 prompt = assembler.build_prompt(node, claims, related)
 
 client = anthropic.Anthropic()
+assert_authority(
+    authority,
+    parse_record(record_path.read_text()).body,
+    model,
+    use_api=True,
+)
 with client.messages.stream(
-    model="claude-sonnet-4-6",
+    model=model,
     max_tokens=8000,
     messages=[{"role": "user", "content": prompt}],
 ) as stream:

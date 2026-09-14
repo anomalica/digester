@@ -50,6 +50,7 @@ RECORD = _resolve_record()
 GOLDEN = HERE / "navy-pilots" / "golden.yaml"
 GT = HERE / "ground-truth" / "2021-05-17-navy-pilots.gt.yaml"
 OUT_DIR = Path("/tmp/model-compare")
+CORPUS_MANIFEST = HERE / "evaluation-corpus.yaml"
 
 MODELS = sys.argv[1:] or ["haiku", "sonnet", "opus"]
 
@@ -69,6 +70,8 @@ def extract(model: str, out: Path) -> float:
             str(RECORD),
             "--model",
             model,
+            "--evaluation-manifest",
+            str(CORPUS_MANIFEST),
             "-o",
             str(out),
         ],
@@ -114,7 +117,14 @@ def node_grade(digest: Path, label: str) -> dict:
 
 def claim_grade(digest: Path) -> float | None:
     proc = run(
-        [sys.executable, str(HERE / "grade_claim_recall.py"), str(GT), str(digest)],
+        [
+            sys.executable,
+            str(HERE / "grade_claim_recall.py"),
+            str(GT),
+            str(digest),
+            str(RECORD),
+            str(CORPUS_MANIFEST),
+        ],
         cwd=str(WORKSPACE),
         timeout=600,
     )

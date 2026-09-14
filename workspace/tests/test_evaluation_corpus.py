@@ -33,10 +33,13 @@ def _dispatch_fixture(
     coverage=1.0,
     digestible=True,
     gold=True,
+    permission=False,
 ):
     record_hash = "sha256:" + "a" * 64
     body = "{{highlight-start: h1}}expected fact{{highlight-end: h1}}"
-    record = tmp_path / "record.md"
+    store = tmp_path / "store"
+    store.mkdir()
+    record = store / f"{'a' * 64}.md"
     record.write_text(
         f"---\ncontent_hash: {record_hash}\ncopyright:\n  status: {status}\n---\n{body}"
     )
@@ -92,6 +95,22 @@ def _dispatch_fixture(
     }
     if basis is not None:
         rights["admission_basis"] = basis
+    if permission:
+        evidence = tmp_path / "permission.yaml"
+        evidence.write_text(
+            yaml.safe_dump(
+                {
+                    "schema": "anomalica/evaluation-rights-permission/1",
+                    "record_content_hash": record_hash,
+                    "provider": "openrouter",
+                    "route": "openrouter",
+                    "use": "hosted-model-inference",
+                    "granted_by": "test reviewer",
+                    "granted_at": "2026-09-15T00:00:00Z",
+                }
+            )
+        )
+        rights["permission_evidence_path"] = evidence.name
     claim_gold = {
         "status": "human-reviewed" if gold else "missing",
         "mechanism": "highlight-gold",
@@ -480,6 +499,59 @@ def test_public_domain_record_with_complete_evidence_is_admitted_hosted(tmp_path
 
     assert admission["provider"] == "openrouter"
     assert admission["scope"] == "whole-record"
+    assert admission["input_authority"].record_content_hash == "sha256:" + "a" * 64
+
+
+def test_open_licence_status_is_admitted_hosted_without_extra_permission(tmp_path):
+    manifest, record = _dispatch_fixture(
+        tmp_path, basis="open_licence", status="open_licence"
+    )
+
+    admission = authorise_dispatch(
+        manifest,
+        record,
+        use="hosted-model-inference",
+        provider="openrouter",
+        route="openrouter",
+    )
+
+    assert admission["input_authority"].route == "openrouter"
+
+
+def test_current_evaluation_permission_cannot_widen_hosted_rights(tmp_path):
+    manifest, record = _dispatch_fixture(
+        tmp_path,
+        basis="internal_evaluation_permission",
+        status="restricted",
+        permission=True,
+    )
+
+    with pytest.raises(CorpusValidationError, match="cannot widen hosted-input rights"):
+        authorise_dispatch(
+            manifest,
+            record,
+            use="hosted-model-inference",
+            provider="openrouter",
+            route="openrouter",
+        )
+
+
+def test_run_models_passes_evaluation_authority_to_final_cli(tmp_path, monkeypatch):
+    output = tmp_path / "outputs"
+    output.mkdir()
+    monkeypatch.setattr(run_models, "OUT_DIR", output)
+    commands = []
+
+    def refuse(command, **kwargs):
+        commands.append(command)
+        return subprocess.CompletedProcess(command, 1, "", "refused")
+
+    monkeypatch.setattr(run_models.subprocess, "run", refuse)
+    run_models.run_one("openai/gpt-5-nano", tmp_path / "record.md", {})
+
+    assert "--evaluation-manifest" in commands[0]
+    index = commands[0].index("--evaluation-manifest")
+    assert commands[0][index + 1] == str(run_models.CORPUS_MANIFEST)
 
 
 def test_run_models_checks_manifest_before_reading_credentials(tmp_path, monkeypatch):

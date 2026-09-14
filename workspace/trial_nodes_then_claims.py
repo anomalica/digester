@@ -45,7 +45,8 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from digester.extract import _call_cli  # noqa: E402
+from digester.extract import _call_cli, provider_authority  # noqa: E402
+from digester.input_rights import authorise_ordinary_extraction  # noqa: E402
 from digester.record_parser import parse_record  # noqa: E402
 
 
@@ -410,6 +411,7 @@ def main() -> int:
 
     parsed = parse_record(input_path.read_text())
     body = parsed.body
+    authority = authorise_ordinary_extraction(input_path, model)
     print(f"input: {input_path} ({len(body):,} chars)")
     print(f"model: {model}")
     print(f"slot word: {SLOT_WORD}")
@@ -419,7 +421,8 @@ def main() -> int:
 
     print("\n=== PASS 1: nodes ===")
     t0 = time.time()
-    raw1 = _call_cli(nodes_prompt, body, model, schema=NODES_SCHEMA)
+    with provider_authority(authority, body):
+        raw1 = _call_cli(nodes_prompt, body, model, schema=NODES_SCHEMA)
     pass1 = json.loads(raw1) if isinstance(raw1, str) else raw1
     print(f"  elapsed: {time.time() - t0:.0f}s")
     print(f"  nodes: {len(pass1.get('nodes', []))}")
@@ -454,7 +457,10 @@ def main() -> int:
     )
 
     t0 = time.time()
-    raw2 = _call_cli(claims_prompt, body, model, schema=build_claims_schema(node_names))
+    with provider_authority(authority, body):
+        raw2 = _call_cli(
+            claims_prompt, body, model, schema=build_claims_schema(node_names)
+        )
     pass2 = json.loads(raw2) if isinstance(raw2, str) else raw2
     print(f"  elapsed: {time.time() - t0:.0f}s")
     claims = pass2.get("claims", [])

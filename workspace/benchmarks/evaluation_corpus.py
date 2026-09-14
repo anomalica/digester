@@ -22,6 +22,7 @@ from digester.highlight_gold import (  # noqa: E402
     HighlightGoldError,
     validate as validate_highlight_gold,
 )
+from digester.input_rights import _bind_verified_evaluation  # noqa: E402
 
 
 SCHEMA = "anomalica/digest-evaluation-corpus/1"
@@ -366,16 +367,13 @@ def authorise_dispatch(
         raise CorpusValidationError("unknown or incomplete evaluation dispatch route")
     if coverage != 1.0 or review.get("digestible") is not True:
         raise CorpusValidationError("hosted evaluation requires complete source review")
-    if basis == "public_domain":
+    status = (record.get("copyright") or {}).get("status")
+    if status in {"public_domain", "open_licence"}:
         pass
-    elif basis in {"open_licence", "internal_evaluation_permission"}:
-        if not _permission_covers(entry, manifest, provider, route, use):
-            raise CorpusValidationError(
-                "hosted evaluation lacks record/provider/route permission evidence"
-            )
     else:
         raise CorpusValidationError(
-            f"{basis} does not permit hosted evaluation dispatch"
+            f"{basis} does not permit hosted evaluation dispatch; the current "
+            "evaluation permission schema cannot widen hosted-input rights"
         )
     return {
         "record_content_hash": record_hash,
@@ -384,6 +382,12 @@ def authorise_dispatch(
         "route": route,
         "scope": "whole-record",
         "gold_units": gold_units,
+        "input_authority": _bind_verified_evaluation(
+            record_path,
+            provider=provider,
+            route=route,
+            use=use,
+        ),
     }
 
 
@@ -471,10 +475,10 @@ def validate(manifest_path: str | Path) -> dict:
             basis in {"open_licence", "internal_evaluation_permission"}
             and permission_evidenced
         )
-        hosted_rights = basis == "public_domain" or (
-            basis in {"open_licence", "internal_evaluation_permission"}
-            and permission_evidenced
-        )
+        hosted_rights = rights.get("status") in {
+            "public_domain",
+            "open_licence",
+        } or (basis == "internal_evaluation_permission" and permission_evidenced)
         local_ready = source_reviewed and gold_units > 0 and local_rights
         hosted_ready = source_reviewed and gold_units > 0 and hosted_rights
         local_declared = entry.get("local_evaluation_readiness")

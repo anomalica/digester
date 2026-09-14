@@ -32,6 +32,12 @@ from anomalica_common.llm import (
     usage_entry,
 )
 from anomalica_common.model_policy import PolicyRefusal
+from digester.input_rights import (
+    HostedInputAuthority,
+    HostedInputRightsError,
+    authorise_ordinary_extraction,
+    hosted_route,
+)
 from digester.record_parser import parse_record
 
 # The digester resolves its own metered toggle: DIGESTER_USE_API > global
@@ -62,6 +68,30 @@ def _uses_claude_allowance(model: str, use_api: bool) -> bool:
         and not is_openai_subscription_model(model)
         and not is_openrouter_model(model)
     )
+
+
+def _authorise_hosted_input(
+    path: Path,
+    model: str,
+    use_api: bool,
+    evaluation_manifest: Path | None = None,
+) -> HostedInputAuthority:
+    try:
+        if evaluation_manifest is None:
+            return authorise_ordinary_extraction(path, model, use_api)
+        from benchmarks.evaluation_corpus import authorise_dispatch
+
+        route = hosted_route(model, use_api)
+        admission = authorise_dispatch(
+            evaluation_manifest,
+            path,
+            use="hosted-model-inference",
+            provider=route.provider,
+            route=route.route,
+        )
+        return admission["input_authority"]
+    except (HostedInputRightsError, ValueError, OSError) as exc:
+        raise click.ClickException(f"hosted input refused: {exc}") from exc
 
 
 @click.group()
@@ -123,6 +153,12 @@ def main() -> None:
     "(required for any spend; see "
     "/home/mark/repos/anomalica/AGENTS.md spend gate)",
 )
+@click.option(
+    "--evaluation-manifest",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help="Use the canonical evaluation permission mechanism for this exact record and route.",
+)
 @click.pass_context
 def extract_cmd(
     ctx: click.Context,
@@ -134,6 +170,7 @@ def extract_cmd(
     predigests_root: str | None,
     run_label: str | None,
     confirm: bool,
+    evaluation_manifest: Path | None,
 ) -> None:
     """Extract knowledge from a record into a reviewable digest YAML file."""
     path = Path(file_path)
@@ -150,6 +187,7 @@ def extract_cmd(
     # (Claude subscription, opencode) has no price to quote, and asking for one
     # raises by design - refusing to guess is the GAP-2 behaviour.
     use_api = resolve_use_api(_USE_API_VAR)
+    input_authority = _authorise_hosted_input(path, model, use_api, evaluation_manifest)
 
     # ALLOWANCE CEILING, distinct from the spend gate below. That one guards
     # metered DOLLARS and is a no-op on the subscription transport; this guards
@@ -224,6 +262,7 @@ def extract_cmd(
             variant_only,
             Path(predigests_root) if predigests_root else None,
             run_label,
+            input_authority,
         )
     except RouteEnumLimit as e:
         # A CONDITION OF THE ROUTE, NOT A FAILURE OF THE RECORD, so the record
@@ -261,6 +300,12 @@ def extract_cmd(
             variant_only,
             Path(predigests_root) if predigests_root else None,
             run_label,
+            _authorise_hosted_input(
+                path,
+                fallback,
+                resolve_use_api(_USE_API_VAR),
+                evaluation_manifest,
+            ),
         )
     except ExtractionCancelled:
         note_run_failure()
@@ -432,6 +477,7 @@ def _do_extract(
     variant_only: bool = False,
     predigests_root: Path | None = None,
     run_label: str | None = None,
+    input_authority: HostedInputAuthority | None = None,
 ) -> Path:
     """Run the two-pass extraction for one parsed record and write the digest YAML.
 
@@ -457,6 +503,9 @@ def _do_extract(
         extract_two_pass,
     )
     from digester.extraction_config_registry import fingerprint, register
+
+    if input_authority is None:
+        input_authority = authorise_ordinary_extraction(path, model, use_api)
 
     if digests_root is not None:
         from digester.authority import synchronise
@@ -504,6 +553,7 @@ def _do_extract(
             record_context=record_context,
             on_progress=click.echo,
             use_api=use_api,
+            input_authority=input_authority,
         )
 
         # Canonicalise every claim's location from its verbatim quote, before the
@@ -720,6 +770,12 @@ def _echo_usage() -> None:
     "metered run (required for any spend; see "
     "/home/mark/repos/anomalica/AGENTS.md spend gate)",
 )
+@click.option(
+    "--evaluation-manifest",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help="Use the canonical evaluation permission mechanism for each exact record and route.",
+)
 @click.pass_context
 def batch_extract_cmd(
     ctx: click.Context,
@@ -730,6 +786,7 @@ def batch_extract_cmd(
     variant_only: bool,
     predigests_root: str | None,
     confirm: bool,
+    evaluation_manifest: Path | None,
 ) -> None:
     """Extract knowledge from many records, behind one aggregate spend gate.
 
@@ -746,6 +803,10 @@ def batch_extract_cmd(
     # SPEND GATE: one aggregate estimate for the whole batch.
     char_counts = [len(parsed.body or "") for _, parsed in parsed_records]
     use_api = resolve_use_api(_USE_API_VAR)
+    authorities = [
+        _authorise_hosted_input(path, model, use_api, evaluation_manifest)
+        for path, _ in parsed_records
+    ]
     if not spend_confirmed(
         estimate_batch(char_counts, model),
         model,
@@ -761,10 +822,22 @@ def batch_extract_cmd(
     if out_dir:
         out_dir.mkdir(parents=True, exist_ok=True)
 
-    for i, (p, parsed) in enumerate(parsed_records, 1):
+    for i, ((p, parsed), input_authority) in enumerate(
+        zip(parsed_records, authorities), 1
+    ):
         click.echo(f"\n[{i}/{len(parsed_records)}] {p.name}")
         out = out_dir / p.with_suffix(".yaml").name if out_dir else None
-        _do_extract(p, parsed, out, model, use_api, root, variant_only, pd_root)
+        _do_extract(
+            p,
+            parsed,
+            out,
+            model,
+            use_api,
+            root,
+            variant_only,
+            pd_root,
+            input_authority=input_authority,
+        )
 
 
 # --- Normalise locations: put every variant on one canonical time axis ---
@@ -1816,12 +1889,17 @@ def accounts_cmd(
     from anomalica_common.llm import ledger
 
     from digester import accounts as accounts_mod
-    from digester.extract import build_record_context, extract_accounts
+    from digester.extract import (
+        build_record_context,
+        extract_accounts,
+        provider_authority,
+    )
 
     path = Path(file_path)
     parsed = parse_record(path.read_text(errors="replace"))
 
     use_api = resolve_use_api(_USE_API_VAR)
+    input_authority = _authorise_hosted_input(path, model, use_api)
     if _uses_claude_allowance(model, use_api):
         allowance = check_allowance(
             session_headroom=headroom_for(len(parsed.body or "")),
@@ -1841,18 +1919,19 @@ def accounts_cmd(
     )
     reset_usage()
     click.echo(f"Accounts: {parsed.title or path.name}")
-    result = extract_accounts(
-        parsed.body,
-        model=model,
-        record_context=build_record_context(
-            parsed.title,
-            parsed.creators,
-            parsed.date,
-            parsed.source_type,
-        ),
-        on_progress=click.echo,
-        use_api=use_api,
-    )
+    with provider_authority(input_authority, parsed.body):
+        result = extract_accounts(
+            parsed.body,
+            model=model,
+            record_context=build_record_context(
+                parsed.title,
+                parsed.creators,
+                parsed.date,
+                parsed.source_type,
+            ),
+            on_progress=click.echo,
+            use_api=use_api,
+        )
     candidates = result.get("accounts") or []
     click.echo(f"\n{len(candidates)} candidate account(s)")
 
