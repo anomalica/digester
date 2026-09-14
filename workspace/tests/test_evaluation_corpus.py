@@ -1,6 +1,7 @@
 import copy
 import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -143,6 +144,10 @@ def test_real_corpus_evidence_is_consistent_and_honestly_blocked():
         "total": 0,
         "unit": "reference-highlight",
     }
+    assert state["decision"] == {
+        "code": "await-reference-highlights",
+        "summary": "Await authenticated human reference highlights.",
+    }
     states = state["items"]
     assert all(item["status"] == "blocked" for item in states)
     assert all(item["blocked_reason"] == MISSING_REFERENCE_REASON for item in states)
@@ -157,16 +162,60 @@ def test_real_corpus_evidence_is_consistent_and_honestly_blocked():
         "digest-claim-gold:dialogue_audio",
     ]
     assert all(item["action"]["record_id"] == item["record_id"] for item in states)
+    assert all(item["source_review"] == {"status": "reviewed"} for item in states)
+    assert all(item["gold"]["reviewed"] == 0 for item in states)
+    assert all(item["digest_sha256"].startswith("sha256:") for item in states)
+    assert all(item["action"]["route"] == "record-highlights" for item in states)
+    assert all(item["action"]["starts_from_zero"] is True for item in states)
+    assert all(
+        item["action"]["model_drafted_suggestions"] == "optional-provisional"
+        for item in states
+    )
     assert all("title" not in item and "path" not in item for item in states)
     assert state["evidence"][0]["artifact_id"] == "digest-evaluation-corpus-manifest"
-    expected_evidence_hash = hashlib.sha256(
-        json.dumps(state["evidence"], sort_keys=True, separators=(",", ":")).encode()
-    ).hexdigest()
+    assert all(item["sha256"].startswith("sha256:") for item in state["evidence"])
+    expected_evidence_hash = (
+        "sha256:"
+        + hashlib.sha256(
+            json.dumps(
+                state["evidence"],
+                sort_keys=True,
+                separators=(",", ":"),
+                ensure_ascii=False,
+            ).encode()
+        ).hexdigest()
+    )
     assert state["evidence_sha256"] == expected_evidence_hash
     assert result["multilingual"] == {
         "status": "blocked",
         "record_content_hash": None,
     }
+
+
+def test_state_only_cli_emits_compact_private_adapter_payload():
+    manifest = yaml.safe_load(MANIFEST.read_text())
+    first_record = (MANIFEST.parent / manifest["records"][0]["record_path"]).resolve()
+    if not first_record.exists():
+        pytest.skip(
+            "real corpus lives in sibling repositories not mounted in this test"
+        )
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(MANIFEST.with_name("evaluation_corpus.py")),
+            str(MANIFEST),
+            "--state-only",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    state = json.loads(completed.stdout)
+
+    assert state["schema"] == "anomalica/evaluation-state/1"
+    assert state["evaluation_id"] == "digest-evaluation-corpus"
+    assert "records" not in state
 
 
 def test_provisional_external_spans_cannot_masquerade_as_human_gold(tmp_path):

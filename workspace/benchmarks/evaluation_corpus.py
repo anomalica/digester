@@ -279,7 +279,7 @@ def _permission_covers(
 def _evidence_item(artifact_id: str, path: Path) -> dict:
     return {
         "artifact_id": artifact_id,
-        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        "sha256": "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest(),
     }
 
 
@@ -486,6 +486,8 @@ def validate(manifest_path: str | Path) -> dict:
             else None
         )
         evidence.append(_evidence_item(f"{slot}:source-review", review_path))
+        digest_evidence = _evidence_item(f"{slot}:baseline-digest", digest_path)
+        evidence.append(digest_evidence)
         if gold_path is not None:
             evidence.append(_evidence_item(f"{slot}:claim-gold", gold_path))
         blocked_reason = None
@@ -493,11 +495,20 @@ def validate(manifest_path: str | Path) -> dict:
             blocked_reason = MISSING_REFERENCE_REASON
         elif not local_rights:
             blocked_reason = "Record rights do not permit local deterministic grading."
-        decision = "Admitted for deterministic local evaluation."
+        decision = {
+            "code": "admitted-local-evaluation",
+            "summary": "Admitted for deterministic local evaluation.",
+        }
         if not gold_units:
-            decision = "Await authenticated human reference highlights."
+            decision = {
+                "code": "await-reference-highlights",
+                "summary": "Await authenticated human reference highlights.",
+            }
         elif not local_rights:
-            decision = "Resolve local deterministic-grading rights."
+            decision = {
+                "code": "resolve-local-rights",
+                "summary": "Resolve local deterministic-grading rights.",
+            }
         state_item = {
             "id": slot,
             "status": "reviewed" if local_ready else "blocked",
@@ -509,7 +520,9 @@ def validate(manifest_path: str | Path) -> dict:
             },
             "decision": decision,
             "record_id": expected_hash,
+            "digest_sha256": digest_evidence["sha256"],
             "review_id": review_id,
+            "source_review": {"status": "reviewed"},
             "readiness": {
                 "local": "ready" if local_ready else "blocked",
                 "hosted": "ready" if hosted_ready else "blocked",
@@ -519,10 +532,13 @@ def validate(manifest_path: str | Path) -> dict:
             state_item["blocked_reason"] = blocked_reason
         if not gold_units:
             state_item["action"] = {
-                "kind": "review-reference-highlights",
+                "kind": "create-reference-highlights",
+                "route": "record-highlights",
                 "record_id": expected_hash,
                 "review_id": review_id,
                 "reason": blocked_reason,
+                "starts_from_zero": gold_units == 0,
+                "model_drafted_suggestions": "optional-provisional",
             }
         state_items.append(state_item)
         summaries.append(
@@ -560,8 +576,14 @@ def validate(manifest_path: str | Path) -> dict:
         "schema": STATE_SCHEMA,
         "evaluation_id": "digest-evaluation-corpus",
         "evidence": evidence,
-        "evidence_sha256": hashlib.sha256(
-            json.dumps(evidence, sort_keys=True, separators=(",", ":")).encode()
+        "evidence_sha256": "sha256:"
+        + hashlib.sha256(
+            json.dumps(
+                evidence,
+                sort_keys=True,
+                separators=(",", ":"),
+                ensure_ascii=False,
+            ).encode()
         ).hexdigest(),
         "status": "reviewed" if aggregate_ready else "blocked",
         "gold": {
@@ -570,15 +592,26 @@ def validate(manifest_path: str | Path) -> dict:
             "total": aggregate_total,
             "unit": "reference-highlight",
         },
-        "decision": (
-            "Corpus admitted for deterministic local evaluation."
-            if aggregate_ready
-            else (
-                "Await authenticated human reference highlights."
-                if blocked_reasons == {MISSING_REFERENCE_REASON}
-                else "Resolve starter-record evaluation blockers."
-            )
-        ),
+        "decision": {
+            "code": (
+                "admitted-local-evaluation"
+                if aggregate_ready
+                else (
+                    "await-reference-highlights"
+                    if blocked_reasons == {MISSING_REFERENCE_REASON}
+                    else "resolve-evaluation-blockers"
+                )
+            ),
+            "summary": (
+                "Corpus admitted for deterministic local evaluation."
+                if aggregate_ready
+                else (
+                    "Await authenticated human reference highlights."
+                    if blocked_reasons == {MISSING_REFERENCE_REASON}
+                    else "Resolve starter-record evaluation blockers."
+                )
+            ),
+        },
         "items": state_items,
     }
     if blocked_reasons:
@@ -611,8 +644,14 @@ def main() -> int:
         nargs="?",
         default=Path(__file__).with_name("evaluation-corpus.yaml"),
     )
+    parser.add_argument(
+        "--state-only",
+        action="store_true",
+        help="Emit only the private evaluation-state adapter payload.",
+    )
     args = parser.parse_args()
-    print(json.dumps(validate(args.manifest), indent=2))
+    result = validate(args.manifest)
+    print(json.dumps(result["state"] if args.state_only else result, indent=2))
     return 0
 
 
