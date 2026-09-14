@@ -8,6 +8,7 @@ Supports two backends:
 from __future__ import annotations
 
 import hashlib
+import inspect
 import json
 
 from digester import accounts as accounts_mod
@@ -531,7 +532,7 @@ def _build_chunks(text: str, max_chars: int = CHUNK_MAX_CHARS) -> list[str]:
 CLAIMS_CHUNK_MAX_CHARS = CHUNK_MAX_CHARS
 
 
-def _claim_key_v2(c: dict) -> tuple[str, str, str, str]:
+def _claim_key_v2(c: dict) -> tuple[str, str, str, str, str]:
     """Identity of a claim: the proposition PLUS the provenance it was asserted with.
 
     Content alone is NOT identity, and the two-pass claims dedup is global across
@@ -540,11 +541,17 @@ def _claim_key_v2(c: dict) -> tuple[str, str, str, str]:
     later names who told them and how it reached them. The attributed instance is
     the one worth keeping, so the key must see the provenance.
     """
+    chain = c.get("provenance_chain") or {}
+    anonymous_root = ""
+    if chain.get("origin_kind") == "anonymous":
+        anonymous_root = str(chain.get("origin_ref") or chain.get("origin") or "")
+        anonymous_root = anonymous_root.strip().lower()
     return (
         (c.get("content") or "").strip().lower(),
         c.get("claim_type") or "",
         c.get("attestation") or "",
         (c.get("speaker") or "").strip().lower(),
+        anonymous_root,
     )
 
 
@@ -847,7 +854,7 @@ def prompt_provenance() -> list[dict]:
 
 
 def schema_fingerprint() -> str:
-    """A hash over the SHAPES the model is constrained to, node names excluded.
+    """Full hash over production schema shapes, with record-specific names excluded.
 
     Node names vary per record and would make every digest's fingerprint
     unique; what identifies a configuration is the schema's structure - which
@@ -855,14 +862,20 @@ def schema_fingerprint() -> str:
     an object carrying a role.
     """
     skeleton = json.dumps(
-        [NODES_SCHEMA_V2, build_claims_schema_v2([]), CAST_SCHEMA, ACCOUNTS_SCHEMA],
+        [NODES_SCHEMA_V2, build_claims_schema_v2([])],
         sort_keys=True,
+        separators=(",", ":"),
     )
-    return hashlib.sha256(skeleton.encode()).hexdigest()[:8]
+    return hashlib.sha256(skeleton.encode()).hexdigest()
+
+
+def _source_fingerprint(*objects) -> str:
+    source = "\n".join(inspect.getsource(obj) for obj in objects)
+    return hashlib.sha256(source.encode()).hexdigest()
 
 
 def code_fingerprint() -> str:
-    """A hash over the SOURCE that assembles a run, not the repository's state.
+    """Hash only implementation that can affect the production two-pass output.
 
     Not decoration: prompt and schema together still miss a change to how the
     request is built - chunking, iteration, the directory carried between
@@ -880,35 +893,135 @@ def code_fingerprint() -> str:
     reports and prompts are excluded: prompts carry their own hash, and the
     others cannot reach a run.
     """
-    import hashlib as _h
-    from pathlib import Path
+    from anomalica_common import pre_digest
+    from anomalica_common.digest import yaml_format
+    from anomalica_common.llm import transport
+    from digester import cli, entailment, realign
+    from digester.generation import stamp
 
-    roots = [Path(__file__).resolve().parent]
-    try:
-        import anomalica_common
-
-        common = Path(anomalica_common.__file__).resolve().parent
-        roots += [common / "llm", common / "digest"]
-        roots += sorted(common.glob("pre_digest*"))
-    except ImportError:
-        pass
-
-    digest = _h.sha256()
-    for root in roots:
-        if not root.exists():
-            continue
-        base = root.parent
-        files = [root] if root.is_file() else sorted(root.rglob("*.py"))
-        for f in files:
-            if "__pycache__" in f.parts or f.name.startswith("test_"):
-                continue
-            digest.update(str(f.relative_to(base)).encode())
-            digest.update(f.read_bytes())
-    return digest.hexdigest()[:8]
+    return _source_fingerprint(
+        _find_split_point,
+        _chunk_text,
+        _split_at_chapters,
+        _build_chunks,
+        build_record_context,
+        _format_directory_v2,
+        _claim_key_v2,
+        extract_nodes_v2,
+        extract_claims_v2,
+        extract_two_pass,
+        transport,
+        pre_digest,
+        realign,
+        cli._normalise_locations,
+        cli._entail,
+        entailment,
+        yaml_format,
+        stamp,
+    )
 
 
-def extraction_config() -> dict:
-    """Everything that decides what a run produces, as one fingerprint.
+def effective_extraction_configuration(
+    model: str = DEFAULT_MODEL,
+    *,
+    prep_version: int | None = None,
+    use_api: bool = False,
+    schema_enforcement: str | None = None,
+) -> dict:
+    """The complete effective setup for the canonical production path."""
+    from anomalica_common.llm import transport
+    from anomalica_common.pre_digest import PREP_VERSION
+    from digester import entailment
+
+    if transport.is_opencode_model(model):
+        route = "opencode"
+    elif transport.is_openai_subscription_model(model):
+        route = "openai-subscription"
+    elif transport.is_openrouter_model(model):
+        route = "openrouter"
+    elif use_api:
+        route = "api"
+    else:
+        route = "cli"
+    resolved_model = transport.API_MODEL_MAP.get(model, model)
+    prompts = prompt_provenance()
+    prompt_by_pass = {prompt["pass"]: prompt for prompt in prompts}
+    effective_schema_enforcement = schema_enforcement or (
+        "native" if route in {"cli", "api"} else "unknown"
+    )
+    return {
+        "configuration_schema": "anomalica/digest-extraction-config/1",
+        "model": {
+            "requested": model,
+            "resolved": resolved_model,
+            "version": resolved_model,
+            "route": route,
+        },
+        "passes": [
+            {
+                "name": name,
+                "prompt": {
+                    key: prompt_by_pass[name].get(key)
+                    for key in ("id", "version", "sha256")
+                },
+                "schema_sha256": hashlib.sha256(
+                    json.dumps(schema, sort_keys=True, separators=(",", ":")).encode()
+                ).hexdigest(),
+            }
+            for name, schema in (
+                ("nodes", NODES_SCHEMA_V2),
+                ("claims", build_claims_schema_v2([])),
+            )
+        ],
+        "preparation": {
+            "prep_version": PREP_VERSION if prep_version is None else prep_version
+        },
+        "chunking": {
+            "strategy": "chapter_then_natural_boundary",
+            "hard_max_chars": CHUNK_HARD_MAX,
+            "max_chars": CHUNK_MAX_CHARS,
+            "min_chars": CHUNK_MIN_CHARS,
+            "claims_max_chars": CLAIMS_CHUNK_MAX_CHARS,
+        },
+        "iteration": {
+            "maximum_rounds": ITERATION_MAX,
+            "minimum_new_items": ITERATION_MIN_NEW,
+        },
+        "decoding": {
+            "reasoning_effort": transport.CLI_EFFORT if route == "cli" else None,
+            "max_output_tokens": transport._API_MAX_TOKENS if route == "api" else None,
+            "temperature": None,
+            "top_p": None,
+            "omitted_parameters_use_provider_defaults": True,
+        },
+        "validation": {
+            "schema_enforcement": effective_schema_enforcement,
+            "record_specific_claim_reference_enum": True,
+        },
+        "post_processing": {
+            "claim_deduplication": "proposition_type_attestation_speaker_anonymous_root",
+            "location_alignment": "timed_or_materialised_pre_digest",
+            "entailment": {
+                "enabled": entailment.enabled(),
+                "available": entailment.available(),
+                "stage1_model": entailment.STAGE1_MODEL,
+                "stage2_model": entailment.STAGE2_MODEL,
+                "window_chars": entailment.WINDOW_CHARS,
+                "max_tokens": entailment.MAX_TOKENS,
+            },
+        },
+        "implementation_sha256": code_fingerprint(),
+    }
+
+
+def extraction_config(
+    model: str = DEFAULT_MODEL,
+    *,
+    prep_version: int | None = None,
+    use_api: bool = False,
+    schema_enforcement: str | None = None,
+) -> str:
+    """Full SHA-256 over canonical JSON for the effective production setup.
 
     A DIGEST MUST RECORD WHAT ACTUALLY PRODUCED IT. The prompt sha names the
     prompt text and nothing else, so two digests sharing one can still have
@@ -918,20 +1031,19 @@ def extraction_config() -> dict:
     (imported once), producing 565 claims told to emit a field their schema
     forbade. Nothing in that artefact recorded the mismatch.
 
-    `config` is the single value to compare. Two digests either provably came
-    from the same setup or provably did not.
+    The readable configuration remains deterministically reconstructable through
+    ``effective_extraction_configuration``; the digest carries the contracted
+    scalar identity only.
     """
-    prompts = prompt_provenance()
-    parts = [p.get("sha256", "") for p in prompts] + [
-        schema_fingerprint(),
-        code_fingerprint(),
-    ]
-    return {
-        "config": hashlib.sha256("".join(parts).encode()).hexdigest()[:8],
-        "prompts": prompts,
-        "schema": schema_fingerprint(),
-        "code": code_fingerprint(),
-    }
+    configuration = effective_extraction_configuration(
+        model,
+        prep_version=prep_version,
+        use_api=use_api,
+        schema_enforcement=schema_enforcement,
+    )
+    from digester.extraction_config_registry import fingerprint
+
+    return fingerprint(configuration)
 
 
 # ---------------------------------------------------------------------------
@@ -1519,7 +1631,7 @@ def extract_claims_v2(
     # content-only key silently dropped the LATER of two assertions of the same
     # proposition - and the later one is usually the one that finally names its
     # source. See _claim_key_v2.
-    seen_content: set[tuple[str, str, str, str]] = set()
+    seen_content: set[tuple[str, str, str, str, str]] = set()
 
     for ci, chunk in enumerate(chunks):
         if on_progress and len(chunks) > 1:

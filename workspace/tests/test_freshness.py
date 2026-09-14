@@ -144,3 +144,60 @@ def test_a_digest_of_a_superseded_record_resolves_to_its_replacement(
     found = health.pre_digest_freshness(digests, by_name)
     assert [f["issue"] for f in found] == ["record_changed"]
     assert found[0]["record"] == by_name / "slug.md"
+
+
+def test_an_absent_pre_digest_hash_is_reported_as_unknown(tmp_path, monkeypatch):
+    d, r = _corpus(
+        tmp_path,
+        monkeypatch,
+        digest_sha=None,
+        prep=PREP_VERSION,
+        store_body="The witness saw a light.",
+    )
+    groups = health.pre_digest_input_freshness(d, r)
+    assert len(groups["unknown"]) == 1
+    assert groups["unknown"][0]["issue"] == "pre_digest_binding_unknown"
+
+
+def test_a_materialisation_failure_is_reported_as_invalid(tmp_path, monkeypatch):
+    body = "The witness saw a light."
+    d, r = _corpus(
+        tmp_path,
+        monkeypatch,
+        digest_sha=_hash(_record(body)),
+        prep=PREP_VERSION,
+        store_body=body,
+    )
+    import anomalica_common.pre_digest as pre_digest
+
+    monkeypatch.setattr(
+        pre_digest,
+        "materialise",
+        lambda _body: (_ for _ in ()).throw(ValueError("bad")),
+    )
+    groups = health.pre_digest_input_freshness(d, r)
+    assert len(groups["invalid"]) == 1
+    assert groups["invalid"][0]["issue"] == "pre_digest_materialisation_failed"
+
+
+def test_an_unreadable_record_is_reported_as_unknown(tmp_path, monkeypatch):
+    body = "The witness saw a light."
+    d, r = _corpus(
+        tmp_path,
+        monkeypatch,
+        digest_sha=_hash(_record(body)),
+        prep=PREP_VERSION,
+        store_body=body,
+    )
+    store_path = tmp_path / "ingests" / "store" / f"{HASH}.md"
+    original = type(store_path).read_text
+
+    def read_text(path, *args, **kwargs):
+        if path == store_path:
+            raise OSError("unreadable")
+        return original(path, *args, **kwargs)
+
+    monkeypatch.setattr(type(store_path), "read_text", read_text)
+    groups = health.pre_digest_input_freshness(d, r)
+    assert len(groups["unknown"]) == 1
+    assert "cannot read" in groups["unknown"][0]["detail"]

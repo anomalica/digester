@@ -37,6 +37,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import statistics
 from pathlib import Path
 
@@ -48,7 +49,9 @@ except AttributeError:  # pragma: no cover - pure-python fallback
     _Loader = yaml.SafeLoader
 
 
-def load_digests(digests_dir: Path) -> list[tuple[str, dict]]:
+def load_digests(
+    digests_dir: Path, issues: list[dict] | None = None
+) -> list[tuple[str, dict]]:
     """Every digest, parsed ONCE.
 
     claim_yields and collapsed each used to parse the whole corpus separately,
@@ -59,11 +62,106 @@ def load_digests(digests_dir: Path) -> list[tuple[str, dict]]:
     for f in sorted(digests_dir.glob("*.yaml")):
         try:
             d = yaml.load(f.read_text(), Loader=_Loader)
-        except (OSError, yaml.YAMLError):
+        except OSError as exc:
+            if issues is not None:
+                issues.append(
+                    {"digest": f.stem, "issue": "unreadable", "detail": str(exc)}
+                )
+            continue
+        except yaml.YAMLError as exc:
+            if issues is not None:
+                issues.append(
+                    {"digest": f.stem, "issue": "malformed_yaml", "detail": str(exc)}
+                )
             continue
         if isinstance(d, dict):
             out.append((f.stem, d))
+        elif issues is not None:
+            issues.append(
+                {
+                    "digest": f.stem,
+                    "issue": "invalid_document",
+                    "detail": "top-level YAML value is not a mapping",
+                }
+            )
     return out
+
+
+def extraction_generation_freshness(
+    loaded: list[tuple[str, dict]],
+    current: int | None,
+) -> dict[str, list[dict]]:
+    """Partition digests by extraction generation without inferring old values.
+
+    Missing, malformed and future generations are unknown. If the manifest is
+    unavailable every value is likewise unknown: the local constant is not a
+    substitute for the corpus authority. ``invalid`` is reserved for digest-level
+    read or structural failures added by the reporting layer.
+    """
+    groups: dict[str, list[dict]] = {
+        "current": [],
+        "stale": [],
+        "unknown": [],
+        "invalid": [],
+    }
+    for stem, digest in loaded:
+        generation = digest.get("extraction_generation")
+        row = {"digest": stem, "generation": generation}
+        if current is None:
+            groups["unknown"].append({**row, "reason": "manifest_unavailable"})
+        elif generation is None:
+            groups["unknown"].append({**row, "reason": "generation_absent"})
+        elif isinstance(generation, int) and not isinstance(generation, bool):
+            if generation <= 0:
+                groups["unknown"].append({**row, "reason": "generation_malformed"})
+            elif generation == current:
+                groups["current"].append({**row, "distance": 0})
+            elif generation < current:
+                groups["stale"].append(
+                    {
+                        **row,
+                        "reason": "generation_behind",
+                        "distance": current - generation,
+                    }
+                )
+            else:
+                groups["unknown"].append({**row, "reason": "generation_ahead"})
+        else:
+            groups["unknown"].append({**row, "reason": "generation_malformed"})
+    return groups
+
+
+def extraction_config_freshness(
+    loaded: list[tuple[str, dict]],
+    registry: dict[str, dict] | None = None,
+) -> dict[str, list[dict]]:
+    """Partition fingerprints by exact shape and registry resolvability.
+
+    Legacy mapping values remain invalid. They are not rewritten or inferred from
+    their readable fields because that would manufacture provenance an old digest
+    never carried.
+    """
+    resolvable, unregistered, missing, invalid = [], [], [], []
+    pattern = re.compile(r"sha256:[0-9a-f]{64}")
+    registry = registry or {}
+    for stem, digest in loaded:
+        value = digest.get("extraction_config")
+        row = {"digest": stem, "extraction_config": value}
+        if value is None:
+            missing.append(row)
+        elif isinstance(value, str) and pattern.fullmatch(value):
+            if value in registry:
+                resolvable.append(row)
+            else:
+                unregistered.append(row)
+        else:
+            invalid.append(row)
+    return {
+        "resolvable": resolvable,
+        "unregistered": unregistered,
+        "missing": missing,
+        "invalid": invalid,
+    }
 
 
 # A prefix that has genuinely collapsed reads back almost nothing. The observed
@@ -652,10 +750,10 @@ def stale_record_paths(
     return out
 
 
-def pre_digest_freshness(
+def pre_digest_input_freshness(
     digests_dir: Path, records_dir: Path, loaded: list | None = None
-) -> list[dict]:
-    """Digests whose recorded pre-digest no longer matches the record.
+) -> dict[str, list[dict]]:
+    """Partition every digest by its binding to current materialised input.
 
     The recomputed hash is compared BEFORE the prep version is consulted. A
     PREP_VERSION bump changes materialise's output only for records carrying
@@ -678,11 +776,41 @@ def pre_digest_freshness(
     store = records_dir.parent / "store"
 
     cache = _cache_load()
-    out = []
+    groups: dict[str, list[dict]] = {
+        "current": [],
+        "stale": [],
+        "unknown": [],
+        "invalid": [],
+    }
     for stem, d in loaded if loaded is not None else load_digests(digests_dir):
         pd = d.get("pre_digest") or {}
+        if not isinstance(pd, dict):
+            groups["invalid"].append(
+                {
+                    "digest": stem,
+                    "issue": "pre_digest_binding_invalid",
+                    "detail": "pre_digest is not a mapping",
+                }
+            )
+            continue
         recorded, version = pd.get("sha256"), pd.get("prep_version")
         if not recorded:
+            groups["unknown"].append(
+                {
+                    "digest": stem,
+                    "issue": "pre_digest_binding_unknown",
+                    "detail": "pre_digest.sha256 is absent",
+                }
+            )
+            continue
+        if not isinstance(recorded, str) or not re.fullmatch(r"[0-9a-f]{64}", recorded):
+            groups["invalid"].append(
+                {
+                    "digest": stem,
+                    "issue": "pre_digest_binding_invalid",
+                    "detail": "pre_digest.sha256 is not 64 lowercase hexadecimal characters",
+                }
+            )
             continue
         h = ((d.get("record") or {}).get("content_hash") or "").split(":")[-1]
         rec = by_hash.get(h)
@@ -691,10 +819,10 @@ def pre_digest_freshness(
             # tree, so its freshness can never be evaluated. Reported rather than
             # skipped - a check that silently declines to examine something is
             # indistinguishable from one that examined it and found nothing.
-            out.append(
+            groups["unknown"].append(
                 {
                     "digest": stem,
-                    "issue": "orphaned",
+                    "issue": "pre_digest_binding_unknown",
                     "detail": f"no record for content_hash {h[:12] or '(absent)'}",
                 }
             )
@@ -705,20 +833,39 @@ def pre_digest_freshness(
         )
         try:
             raw = body_path.read_text(errors="replace")
-        except OSError:
+        except OSError as exc:
+            groups["unknown"].append(
+                {
+                    "digest": stem,
+                    "issue": "pre_digest_binding_unknown",
+                    "detail": f"cannot read {body_path}: {exc}",
+                    "record": rec,
+                }
+            )
             continue
         key = f"pdsha:{PREP_VERSION}:{hashlib.sha256(raw.encode()).hexdigest()}"
         actual = cache.get(key)
         if actual is None:
             try:
                 actual = pre_digest_hash(materialise(parse_record(raw).body))
-            except ValueError:
+            except Exception as exc:
+                groups["invalid"].append(
+                    {
+                        "digest": stem,
+                        "issue": "pre_digest_materialisation_failed",
+                        "detail": f"cannot materialise {body_path}: {exc}",
+                        "record": rec,
+                    }
+                )
                 continue
             cache[key] = actual
         if actual == recorded:
+            groups["current"].append(
+                {"digest": stem, "issue": "pre_digest_hash_match", "record": rec}
+            )
             continue
         if version is not None and version != PREP_VERSION:
-            out.append(
+            groups["stale"].append(
                 {
                     "digest": stem,
                     "issue": "prep_version",
@@ -730,7 +877,7 @@ def pre_digest_freshness(
                 }
             )
         else:
-            out.append(
+            groups["stale"].append(
                 {
                     "digest": stem,
                     "issue": "record_changed",
@@ -739,4 +886,12 @@ def pre_digest_freshness(
                 }
             )
     _cache_save(cache)
-    return out
+    return groups
+
+
+def pre_digest_freshness(
+    digests_dir: Path, records_dir: Path, loaded: list | None = None
+) -> list[dict]:
+    """Compatibility view containing every non-current input binding finding."""
+    groups = pre_digest_input_freshness(digests_dir, records_dir, loaded)
+    return groups["stale"] + groups["unknown"] + groups["invalid"]

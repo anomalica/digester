@@ -61,6 +61,26 @@ def test_claim_key_still_collapses_a_genuine_duplicate():
     assert _claim_key_v2(first) == _claim_key_v2(verbatim_repeat)
 
 
+def test_claim_key_distinguishes_distinct_anonymous_roots():
+    first = {
+        **_claim(_TAU_CETI, "hearsay", "second_hand"),
+        "provenance_chain": {
+            "origin_kind": "anonymous",
+            "origin": "a duty officer",
+            "origin_ref": "officer-1",
+        },
+    }
+    second = {
+        **first,
+        "provenance_chain": {
+            "origin_kind": "anonymous",
+            "origin": "a second officer",
+            "origin_ref": "officer-2",
+        },
+    }
+    assert _claim_key_v2(first) != _claim_key_v2(second)
+
+
 def test_attributed_instance_survives_dedup_against_the_bare_one():
     """The bug: the bare cold-open teaser suppressed the sourced re-statement."""
     seen: set = set()
@@ -445,13 +465,31 @@ class TestExtractionFingerprint:
     schema it had already imported.
     """
 
-    def test_the_fingerprint_covers_prompts_schema_and_code(self):
-        from digester.extract import extraction_config
+    def test_the_fingerprint_is_a_full_contract_scalar_over_the_effective_setup(self):
+        from digester.extract import (
+            effective_extraction_configuration,
+            extraction_config,
+        )
 
         c = extraction_config()
-        assert set(c) == {"config", "prompts", "schema", "code"}
-        assert len(c["config"]) == 8 and len(c["schema"]) == 8
-        assert c["prompts"], "the prompt half is still recorded, not replaced"
+        effective = effective_extraction_configuration()
+        assert len(c) == 71 and c.startswith("sha256:")
+        assert [item["name"] for item in effective["passes"]] == ["nodes", "claims"]
+        assert effective["model"]["resolved"]
+        assert effective["preparation"]["prep_version"] > 0
+        assert effective["chunking"]["hard_max_chars"] > 0
+        assert effective["implementation_sha256"]
+
+    def test_model_prep_and_validation_changes_move_the_fingerprint(self):
+        from digester.extract import extraction_config
+
+        baseline = extraction_config("sonnet", prep_version=1)
+        assert extraction_config("opus", prep_version=1) != baseline
+        assert extraction_config("sonnet", prep_version=2) != baseline
+        assert (
+            extraction_config("sonnet", prep_version=1, schema_enforcement="prompt")
+            != baseline
+        )
 
     def test_a_schema_change_changes_the_fingerprint(self, monkeypatch):
         from digester import extract
@@ -566,17 +604,27 @@ class TestTheCodeFingerprint:
         finally:
             probe.unlink()
 
-    def test_a_change_to_the_extraction_source_moves_it(self):
+    def test_a_change_to_production_extraction_source_moves_it(self, monkeypatch):
         from digester import extract
 
-        src = Path(extract.__file__)
-        before, original = extract.code_fingerprint(), src.read_bytes()
-        try:
-            src.write_bytes(original + b"\n# changed\n")
-            assert extract.code_fingerprint() != before
-        finally:
-            src.write_bytes(original)
-        assert extract.code_fingerprint() == before, "and back when reverted"
+        before = extract.code_fingerprint()
+        original = extract.inspect.getsource
+
+        def changed(obj):
+            source = original(obj)
+            return source + ("\n# changed" if obj is extract._claim_key_v2 else "")
+
+        monkeypatch.setattr(extract.inspect, "getsource", changed)
+        assert extract.code_fingerprint() != before
+
+    def test_experimental_account_schema_does_not_move_production_identity(
+        self, monkeypatch
+    ):
+        from digester import extract
+
+        before = extract.code_fingerprint()
+        monkeypatch.setattr(extract, "ACCOUNTS_SCHEMA", {"changed": True})
+        assert extract.code_fingerprint() == before
 
     def test_it_is_stable_across_calls(self):
         from digester import extract

@@ -656,15 +656,6 @@ def test_dedup_holds_across_iteration_rounds_not_only_within_one_response(
     assert len(texts) == len(set(texts)) == 4
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "_claim_key_v2 keys on the DECLARED attestation and speaker and never on "
-        "the chain, so two distinct anonymous sources asserting one proposition "
-        "inside one record collapse to a single claim, and the record then "
-        "reports one root where it names two. The key has to see origin_ref."
-    ),
-)
 def test_two_distinct_anonymous_sources_asserting_one_proposition_are_not_collapsed(
     bespoke_model,
 ):

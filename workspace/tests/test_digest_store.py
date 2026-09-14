@@ -1,5 +1,7 @@
 """Variant-aware digest storage (ADR 0039 amended): re-digests never overwrite."""
 
+import yaml
+
 from digester import digest_store as ds
 
 ACTIVE = [
@@ -193,6 +195,10 @@ def test_the_plain_output_path_also_stamps_run_kind(tmp_path, monkeypatch):
         None,
     )
     assert out.read_text().startswith("run_kind: "), out.read_text()[:80]
+    from digester.extraction_config_registry import read_registry
+
+    digest = yaml.safe_load(out.read_text())
+    assert digest["extraction_config"] in read_registry(tmp_path)
 
 
 def test_copyright_status_reaches_the_record_block(tmp_path, monkeypatch):
