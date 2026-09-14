@@ -1,5 +1,6 @@
 """Variant-aware digest storage (ADR 0039 amended): re-digests never overwrite."""
 
+import pytest
 import yaml
 
 from digester import digest_store as ds
@@ -247,6 +248,39 @@ def test_output_names_digest_while_root_controls_storage(tmp_path, monkeypatch):
     assert variant.exists()
     assert canonical.read_bytes() == variant.read_bytes()
     assert not requested.exists()
+
+
+def test_invalid_root_authority_fails_before_extraction(tmp_path, monkeypatch):
+    from digester import cli
+    from digester.generation import GenerationManifestError
+    from digester.record_parser import parse_record
+
+    rec = tmp_path / "content-hash.md"
+    rec.write_text("---\ntitle: T\ncontent_hash: 'sha256:aa'\n---\nA body.\n")
+    root = tmp_path / "digests"
+    root.mkdir()
+    (root / "digest-generation.json").write_text(
+        '{"schema":"anomalica/digest-generation/1","current_generation":2}'
+    )
+    calls = []
+
+    import digester.extract as ex
+
+    monkeypatch.setattr(ex, "extract_two_pass", lambda *a, **k: calls.append(True))
+    with pytest.raises(GenerationManifestError, match="does not match"):
+        cli._do_extract(
+            rec,
+            parse_record(rec.read_text()),
+            tmp_path / "canonical-friendly.yaml",
+            "haiku",
+            False,
+            root,
+            False,
+            None,
+            None,
+        )
+
+    assert calls == []
 
 
 def test_copyright_status_reaches_the_record_block(tmp_path, monkeypatch):

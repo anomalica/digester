@@ -458,6 +458,11 @@ def _do_extract(
     )
     from digester.extraction_config_registry import fingerprint, register
 
+    if digests_root is not None:
+        from digester.authority import synchronise
+
+        synchronise(digests_root)
+
     record_context = build_record_context(
         title=parsed.title,
         creators=parsed.creators,
@@ -613,9 +618,7 @@ def _do_extract(
 
         if digests_root is not None:
             from digester import digest_store
-            from digester.authority import synchronise
 
-            synchronise(digests_root)
             register(digests_root, effective_config)
             written = digest_store.write_digest(
                 digests_root,
