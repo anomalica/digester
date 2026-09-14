@@ -25,6 +25,11 @@ HIGHLIGHTS_PURPOSE = "digest-evaluation-claim-gold"
 HIGHLIGHT_GOLD_SCHEMA = "anomalica/highlight-gold/1"
 PERMISSION_SCHEMA = "anomalica/evaluation-rights-permission/1"
 LOCAL_ANALYSIS = "local_information_analysis"
+STATE_SCHEMA = "anomalica/evaluation-state/1"
+MISSING_REFERENCE_REASON = (
+    "Missing authenticated reference highlights. A human must mark the exact source "
+    "passages that a good digest should preserve."
+)
 
 
 class CorpusValidationError(ValueError):
@@ -271,6 +276,13 @@ def _permission_covers(
     )
 
 
+def _evidence_item(artifact_id: str, path: Path) -> dict:
+    return {
+        "artifact_id": artifact_id,
+        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+    }
+
+
 def authorise_dispatch(
     manifest_path: str | Path,
     record_path: str | Path,
@@ -391,11 +403,26 @@ def validate(manifest_path: str | Path) -> dict:
     ):
         raise CorpusValidationError("claim-gold admission policy is incomplete")
 
+    manifest_records = doc.get("records")
+    if not isinstance(manifest_records, list) or not manifest_records:
+        raise CorpusValidationError("evaluation corpus has no starter records")
     summaries = []
-    for entry in doc.get("records") or []:
+    state_items = []
+    evidence = [_evidence_item("digest-evaluation-corpus-manifest", manifest)]
+    review_ids: set[str] = set()
+    slots: set[str] = set()
+    for entry in manifest_records:
         slot = entry.get("slot")
+        if not isinstance(slot, str) or not slot or slot in slots:
+            raise CorpusValidationError("corpus slots are missing or duplicated")
+        slots.add(slot)
         expected_hash = entry.get("record_content_hash")
         rights = entry.get("rights") or {}
+        gold_evidence = entry.get("claim_gold") or {}
+        review_id = gold_evidence.get("review_id")
+        if not isinstance(review_id, str) or not review_id or review_id in review_ids:
+            raise CorpusValidationError(f"{slot} lacks a unique claim-gold review ID")
+        review_ids.add(review_id)
         if rights.get("admission_basis") not in rights_bases:
             raise CorpusValidationError(f"{slot} has no admitted rights basis")
 
@@ -453,12 +480,57 @@ def validate(manifest_path: str | Path) -> dict:
             raise CorpusValidationError(
                 f"{slot} hosted readiness contradicts its evidence"
             )
+        gold_path = (
+            _resolve(manifest, gold_evidence["path"])
+            if gold_evidence.get("path")
+            else None
+        )
+        evidence.append(_evidence_item(f"{slot}:source-review", review_path))
+        if gold_path is not None:
+            evidence.append(_evidence_item(f"{slot}:claim-gold", gold_path))
+        blocked_reason = None
+        if not gold_units:
+            blocked_reason = MISSING_REFERENCE_REASON
+        elif not local_rights:
+            blocked_reason = "Record rights do not permit local deterministic grading."
+        decision = "Admitted for deterministic local evaluation."
+        if not gold_units:
+            decision = "Await authenticated human reference highlights."
+        elif not local_rights:
+            decision = "Resolve local deterministic-grading rights."
+        state_item = {
+            "id": slot,
+            "status": "reviewed" if local_ready else "blocked",
+            "gold": {
+                "status": "human-reviewed" if gold_units else "unavailable",
+                "reviewed": gold_units,
+                "total": gold_units,
+                "unit": "reference-highlight",
+            },
+            "decision": decision,
+            "record_id": expected_hash,
+            "review_id": review_id,
+            "readiness": {
+                "local": "ready" if local_ready else "blocked",
+                "hosted": "ready" if hosted_ready else "blocked",
+            },
+        }
+        if blocked_reason:
+            state_item["blocked_reason"] = blocked_reason
+        if not gold_units:
+            state_item["action"] = {
+                "kind": "review-reference-highlights",
+                "record_id": expected_hash,
+                "review_id": review_id,
+                "reason": blocked_reason,
+            }
+        state_items.append(state_item)
         summaries.append(
             {
                 "slot": slot,
                 "record_content_hash": expected_hash,
                 "source_review": "reviewed",
-                "claim_gold": entry.get("claim_gold", {}).get("status"),
+                "claim_gold": gold_evidence.get("status"),
                 "gold_units": gold_units,
                 "local_evaluation_readiness": local_declared,
                 "hosted_evaluation_readiness": hosted_declared,
@@ -475,8 +547,49 @@ def validate(manifest_path: str | Path) -> dict:
         "record_content_hash"
     ):
         raise CorpusValidationError("ready multilingual slot has no record")
+    blocked_reasons = {
+        item["blocked_reason"] for item in state_items if item.get("blocked_reason")
+    }
+    aggregate_ready = all(item["status"] == "reviewed" for item in state_items)
+    aggregate_gold_ready = all(
+        item["gold"]["status"] == "human-reviewed" for item in state_items
+    )
+    aggregate_reviewed = sum(item["gold"]["reviewed"] for item in state_items)
+    aggregate_total = sum(item["gold"]["total"] for item in state_items)
+    state = {
+        "schema": STATE_SCHEMA,
+        "evaluation_id": "digest-evaluation-corpus",
+        "evidence": evidence,
+        "evidence_sha256": hashlib.sha256(
+            json.dumps(evidence, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest(),
+        "status": "reviewed" if aggregate_ready else "blocked",
+        "gold": {
+            "status": "human-reviewed" if aggregate_gold_ready else "unavailable",
+            "reviewed": aggregate_reviewed,
+            "total": aggregate_total,
+            "unit": "reference-highlight",
+        },
+        "decision": (
+            "Corpus admitted for deterministic local evaluation."
+            if aggregate_ready
+            else (
+                "Await authenticated human reference highlights."
+                if blocked_reasons == {MISSING_REFERENCE_REASON}
+                else "Resolve starter-record evaluation blockers."
+            )
+        ),
+        "items": state_items,
+    }
+    if blocked_reasons:
+        state["blocked_reason"] = (
+            next(iter(blocked_reasons))
+            if len(blocked_reasons) == 1
+            else "Starter records have multiple unresolved evaluation blockers."
+        )
     return {
         "schema": SCHEMA,
+        "state": state,
         "records": summaries,
         "local_ready_records": sum(
             item["local_evaluation_readiness"] == "ready" for item in summaries

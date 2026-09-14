@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "benchmarks"))
 
 from evaluation_corpus import (  # noqa: E402
     CorpusValidationError,
+    MISSING_REFERENCE_REASON,
     SCHEMA,
     authorise_dispatch,
     validate,
@@ -131,6 +132,37 @@ def test_real_corpus_evidence_is_consistent_and_honestly_blocked():
     assert all(entry["source_review"] == "reviewed" for entry in result["records"])
     assert result["local_ready_records"] == 0
     assert result["hosted_ready_records"] == 0
+    state = result["state"]
+    assert state["schema"] == "anomalica/evaluation-state/1"
+    assert state["evaluation_id"] == "digest-evaluation-corpus"
+    assert state["status"] == "blocked"
+    assert state["blocked_reason"] == MISSING_REFERENCE_REASON
+    assert state["gold"] == {
+        "status": "unavailable",
+        "reviewed": 0,
+        "total": 0,
+        "unit": "reference-highlight",
+    }
+    states = state["items"]
+    assert all(item["status"] == "blocked" for item in states)
+    assert all(item["blocked_reason"] == MISSING_REFERENCE_REASON for item in states)
+    assert [item["id"] for item in states] == [
+        "straightforward_article",
+        "difficult_long_document",
+        "dialogue_audio",
+    ]
+    assert [item["review_id"] for item in states] == [
+        "digest-claim-gold:straightforward_article",
+        "digest-claim-gold:difficult_long_document",
+        "digest-claim-gold:dialogue_audio",
+    ]
+    assert all(item["action"]["record_id"] == item["record_id"] for item in states)
+    assert all("title" not in item and "path" not in item for item in states)
+    assert state["evidence"][0]["artifact_id"] == "digest-evaluation-corpus-manifest"
+    expected_evidence_hash = hashlib.sha256(
+        json.dumps(state["evidence"], sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    assert state["evidence_sha256"] == expected_evidence_hash
     assert result["multilingual"] == {
         "status": "blocked",
         "record_content_hash": None,

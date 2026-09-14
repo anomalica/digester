@@ -43,6 +43,7 @@ records:
       status: reviewed
       mechanism: review-coverage-sidecar
     claim_gold:
+      review_id: digest-claim-gold:straightforward_article
       status: missing
       mechanism: highlight-gold
       path: null
@@ -65,6 +66,7 @@ records:
       status: reviewed
       mechanism: review-coverage-sidecar
     claim_gold:
+      review_id: digest-claim-gold:difficult_long_document
       status: missing
       mechanism: highlight-gold
       path: null
@@ -87,6 +89,7 @@ records:
       status: reviewed
       mechanism: review-coverage-sidecar
     claim_gold:
+      review_id: digest-claim-gold:dialogue_audio
       status: provisional-rejected
       mechanism: external-spans
       path: eval-gold/2026-07-11-audio-nasa-uap-d003a-gemini-7-audio-excerpt-1965.provisional.json
