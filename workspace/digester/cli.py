@@ -613,7 +613,9 @@ def _do_extract(
 
         if digests_root is not None:
             from digester import digest_store
+            from digester.authority import synchronise
 
+            synchronise(digests_root)
             register(digests_root, effective_config)
             written = digest_store.write_digest(
                 digests_root,
@@ -642,6 +644,9 @@ def _do_extract(
         from digester import digest_store  # local, matching the branch above
 
         out_path = output if output else path.with_suffix(".yaml")
+        from digester.authority import synchronise
+
+        synchronise(out_path.parent)
         register(out_path.parent, effective_config)
         kind = (
             "production"
@@ -1058,6 +1063,34 @@ def gold_batch_cmd(
     except HighlightGoldError as exc:
         raise click.ClickException(str(exc)) from exc
     click.echo(json.dumps(result, indent=2, ensure_ascii=False))
+
+
+@main.command(name="sync-authority")
+@click.argument("digests_root", type=click.Path(file_okay=False, path_type=Path))
+def sync_authority_cmd(digests_root: Path) -> None:
+    """Materialise current generation and Sonnet/Opus config authority."""
+    from digester.authority import synchronise
+
+    click.echo(json.dumps(synchronise(digests_root), indent=2, sort_keys=True))
+
+
+@main.command(name="validate-output")
+@click.argument(
+    "digests_root", type=click.Path(exists=True, file_okay=False, path_type=Path)
+)
+@click.argument("digest_path", type=click.Path(exists=True, path_type=Path))
+@click.argument("record_path", type=click.Path(exists=True, path_type=Path))
+def validate_output_cmd(
+    digests_root: Path, digest_path: Path, record_path: Path
+) -> None:
+    """Prove one canonical output matches exact authority and record input."""
+    from digester.authority import AuthorityError, validate_output
+
+    try:
+        result = validate_output(digests_root, digest_path, record_path)
+    except AuthorityError as exc:
+        raise click.ClickException(str(exc)) from exc
+    click.echo(json.dumps(result, indent=2, sort_keys=True))
 
 
 # Anchored to the repo layout, NOT to the working directory. Relative defaults

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from pathlib import Path
 
@@ -41,6 +42,27 @@ def read_manifest(digests_dir: Path) -> int:
             f"{CURRENT_EXTRACTION_GENERATION}"
         )
     return generation
+
+
+def ensure_manifest(digests_dir: Path) -> Path:
+    """Materialise the exact current authority, refusing conflicting state."""
+    path = digests_dir / "digest-generation.json"
+    if path.exists():
+        read_manifest(digests_dir)
+        return path
+    digests_dir.mkdir(parents=True, exist_ok=True)
+    document = {
+        "schema": MANIFEST_SCHEMA,
+        "current_generation": CURRENT_EXTRACTION_GENERATION,
+    }
+    tmp = path.with_suffix(f".{os.getpid()}.tmp")
+    try:
+        tmp.write_text(json.dumps(document, indent=2) + "\n")
+        tmp.replace(path)
+    except OSError:
+        tmp.unlink(missing_ok=True)
+        raise
+    return path
 
 
 def stamp(text: str) -> str:

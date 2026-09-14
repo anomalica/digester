@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 
 import pytest
 import yaml
@@ -8,6 +9,7 @@ from anomalica_common.pre_digest import PREP_VERSION, materialise, pre_digest_ha
 from click.testing import CliRunner
 
 from digester import health
+from digester.authority import AuthorityError, synchronise, validate_output
 from digester.cli import main
 from digester.generation import (
     CURRENT_EXTRACTION_GENERATION,
@@ -93,6 +95,34 @@ def test_manifest_is_the_validated_corpus_authority(tmp_path):
         )
     )
     assert read_manifest(tmp_path) == CURRENT_EXTRACTION_GENERATION
+
+
+def test_authority_reproducibly_includes_current_sonnet_and_opus(tmp_path):
+    fingerprints = synchronise(tmp_path)
+
+    assert set(fingerprints) == {"sonnet", "opus"}
+    assert read_manifest(tmp_path) == CURRENT_EXTRACTION_GENERATION
+    registry = read_registry(tmp_path)
+    assert set(registry) == set(fingerprints.values())
+    assert {
+        configuration["model"]["resolved"] for configuration in registry.values()
+    } == {"claude-sonnet-5", "claude-opus-5"}
+
+    before = {
+        path.name: path.read_bytes()
+        for path in (
+            tmp_path / "digest-generation.json",
+            tmp_path / REGISTRY_FILENAME,
+        )
+    }
+    assert synchronise(tmp_path) == fingerprints
+    assert {
+        path.name: path.read_bytes()
+        for path in (
+            tmp_path / "digest-generation.json",
+            tmp_path / REGISTRY_FILENAME,
+        )
+    } == before
 
 
 @pytest.mark.parametrize(
@@ -233,3 +263,102 @@ def test_health_reports_generation_and_input_denominators(tmp_path, monkeypatch)
     assert result.exit_code == 0, result.output
     assert "current   1/1" in result.output
     assert "Pre-digest input binding (denominator 1 digests)" in result.output
+
+
+def test_digest_and_authority_remain_current_after_clean_clone(tmp_path):
+    source = tmp_path / "source"
+    source.mkdir()
+    fingerprints = synchronise(source)
+    body = "The witness saw a light."
+    record_hash = "c" * 64
+    record = tmp_path / "record.md"
+    record.write_text(
+        f"---\nschema: anomalica/record/1\ncontent_hash: sha256:{record_hash}\n"
+        f"source_type: web\n---\n\n{body}\n"
+    )
+    digest_path = source / "record.yaml"
+    digest_path.write_text(
+        yaml.safe_dump(
+            {
+                "schema": "anomalica/digest/1",
+                "extraction_generation": CURRENT_EXTRACTION_GENERATION,
+                "extraction_config": fingerprints["sonnet"],
+                "record": {"content_hash": f"sha256:{record_hash}"},
+                "pre_digest": {
+                    "sha256": pre_digest_hash(
+                        materialise(parse_record(record.read_text()).body)
+                    ),
+                    "prep_version": PREP_VERSION,
+                },
+            }
+        )
+    )
+    subprocess.run(["git", "init", "-q", str(source)], check=True)
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(source),
+            "add",
+            "--",
+            *sorted(path.name for path in source.iterdir() if path.is_file()),
+        ],
+        check=True,
+    )
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(source),
+            "-c",
+            "user.name=Test",
+            "-c",
+            "user.email=test@example.invalid",
+            "commit",
+            "-qm",
+            "fixture",
+        ],
+        check=True,
+    )
+    checkout = tmp_path / "checkout"
+    subprocess.run(["git", "clone", "-q", str(source), str(checkout)], check=True)
+
+    result = validate_output(checkout, checkout / "record.yaml", record)
+
+    assert result["extraction_generation"] == CURRENT_EXTRACTION_GENERATION
+    assert result["extraction_config"] == fingerprints["sonnet"]
+    assert result["record_content_hash"] == f"sha256:{record_hash}"
+
+
+@pytest.mark.parametrize("broken", ["generation", "config", "pre_digest"])
+def test_output_is_current_only_when_exact_authority_and_input_match(tmp_path, broken):
+    fingerprints = synchronise(tmp_path)
+    body = "The witness saw a light."
+    record_hash = "d" * 64
+    record = tmp_path.parent / f"{tmp_path.name}-record.md"
+    record.write_text(
+        f"---\ncontent_hash: sha256:{record_hash}\nsource_type: web\n---\n\n{body}\n"
+    )
+    document = {
+        "schema": "anomalica/digest/1",
+        "extraction_generation": CURRENT_EXTRACTION_GENERATION,
+        "extraction_config": fingerprints["sonnet"],
+        "record": {"content_hash": f"sha256:{record_hash}"},
+        "pre_digest": {
+            "sha256": pre_digest_hash(
+                materialise(parse_record(record.read_text()).body)
+            ),
+            "prep_version": PREP_VERSION,
+        },
+    }
+    if broken == "generation":
+        document["extraction_generation"] += 1
+    elif broken == "config":
+        document["extraction_config"] = "sha256:" + "0" * 64
+    else:
+        document["pre_digest"]["sha256"] = "0" * 64
+    digest_path = tmp_path / "record.yaml"
+    digest_path.write_text(yaml.safe_dump(document))
+
+    with pytest.raises(AuthorityError):
+        validate_output(tmp_path, digest_path, record)
