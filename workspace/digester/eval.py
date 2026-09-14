@@ -42,9 +42,10 @@ union-by-component: a shared person-intro hub is context to many units WITHOUT
 merging them (union would collapse a 39-node web into one unit - wrong). The
 closure is CONTEXT for the coreference requirement - a faithful extraction of a
 dependent span resolves the referent (names the person a later span only calls
-"he") using its closure. Dangling context refs (an ancestor since deleted) are
-dropped as absent context, never a failure of the citing unit. The loader reports
-the unit structure (units, units-with-context, max closure depth).
+"he") using its closure. Dangling and forward context refs are reported as
+unresolved; authenticated gold must defer those dependent units. The loader
+reports the unit structure (units, units-with-context, max closure depth and
+unresolved units).
 
 Per-unit coreference is scored as a MECHANICAL proxy ("coref-mech"): a recalled
 dependent unit (bare pronoun, no own name, non-empty closure) PASSES if a covering
@@ -135,13 +136,13 @@ def _find(qn: str, search: str, start: int = 0) -> tuple[int, str]:
     return pos, qn
 
 
-def locate(quote: str, search: str, idx: list[int]) -> list[int] | None:
+def locate(quote: str, search: str, idx: list[int], start: int = 0) -> list[int] | None:
     """Raw [start, end) code-point span of `quote` in the indexed text, or None.
 
     Normalises whitespace and case (neither is a fidelity concern) and retries
     without trailing punctuation. None means the quote does not appear - a
     fabricated or paraphrased quote, or a highlight whose prose was stripped."""
-    pos, q = _find(_norm(quote), search)
+    pos, q = _find(_norm(quote), search, start)
     if pos < 0:
         return None
     return [idx[pos], idx[pos + len(q) - 1] + 1]
@@ -274,7 +275,7 @@ def _overlap(span: list[int], spans: list[tuple[int, int]]) -> int:
 
 
 def parse_highlights(body: str) -> list[dict]:
-    """Every highlight in the body as ``{id, text}`` (source order of the open).
+    """Every highlight, retaining each matched pair as a separate part.
 
     Ids match starts to ends so overlapping and nested highlights are told apart
     (ingest-format spec). Orphan handling per spec: a start with no matching end
@@ -319,12 +320,17 @@ def parse_highlights(body: str) -> list[dict]:
         # Running one part's opening into another's ending manufactures a sentence
         # the source never uttered - the false-quotation failure arriving through
         # the grader rather than through an extraction.
-        parts = sorted(spans.get(hid, []))
-        raw = " [...] ".join(body[s:e] for s, e in parts)
+        ranges = sorted(spans.get(hid, []))
+        part_docs = []
+        for start, end in ranges:
+            cleaned = strip_word_timestamps(
+                strip_overlay_markers(body[start:end])
+            ).strip()
+            part_docs.append({"start": start, "end": end, "text": cleaned})
         # The wrapped prose is source, but it may itself carry nested markers /
         # word timestamps; strip those so the inner text matches the pre-digest.
-        text = strip_word_timestamps(strip_overlay_markers(raw)).strip()
-        result.append({"id": hid, "text": text})
+        text = " [...] ".join(part["text"] for part in part_docs)
+        result.append({"id": hid, "text": text, "parts": part_docs})
     return result
 
 
@@ -368,6 +374,43 @@ def ancestor_closures(
     return closures
 
 
+def context_dependencies(
+    highlights: list[dict], chains: list[list[str]]
+) -> tuple[dict[str, set[str]], dict[str, set[str]]]:
+    """Return resolvable backwards closures and unresolved direct/transitive ids."""
+    by_id = {item["id"]: item for item in highlights}
+    first = {
+        hid: item["parts"][0]["start"]
+        for hid, item in by_id.items()
+        if item.get("parts")
+    }
+    parents: dict[str, set[str]] = {}
+    for chain in chains:
+        parents.setdefault(chain[0], set()).update(chain[1:])
+
+    closures: dict[str, set[str]] = {}
+    unresolved: dict[str, set[str]] = {}
+    for hid in by_id:
+        seen: set[tuple[str, str]] = set()
+        good: set[str] = set()
+        bad: set[str] = set()
+        stack = [(hid, target) for target in parents.get(hid, ())]
+        while stack:
+            child, target = stack.pop()
+            edge = (child, target)
+            if edge in seen:
+                continue
+            seen.add(edge)
+            if target not in by_id or first[target] >= first[child]:
+                bad.add(target)
+                continue
+            good.add(target)
+            stack.extend((target, parent) for parent in parents.get(target, ()))
+        closures[hid] = good
+        unresolved[hid] = bad
+    return closures, unresolved
+
+
 def claims_of(digest: dict) -> list[dict]:
     """The digest's claims, across both formats: the two-pass single ``claims``
     list, and the legacy ``domain_claims`` + ``infrastructure_claims`` split."""
@@ -386,6 +429,8 @@ def grade_digest(
     digest: dict,
     recall_thresh: float = RECALL_THRESH,
     gold_texts: list[str] | None = None,
+    gold_document: dict | None = None,
+    record_hash: str | None = None,
 ) -> dict:
     """Grade one digest against highlight gold.
 
@@ -406,29 +451,62 @@ def grade_digest(
     # the SAME transform the index uses (drops any speaker comments / headers /
     # line-timestamps the span crosses), so a span over a multi-speaker
     # back-and-forth still matches.
-    if gold_texts is not None:
+    gold_state = None
+    if gold_document is not None:
+        if not record_hash:
+            raise ValueError("record_hash is required with gold_document")
+        from digester.highlight_gold import validate
+
+        gold_state = validate(record_hash, record_body, gold_document)
+        accepted_ids = {item["highlight_id"] for item in gold_state["accepted_facts"]}
+        sources = [
+            item for item in gold_state["highlights"] if item["id"] in accepted_ids
+        ]
+        context_sources = gold_state["highlights"]
+        chains = parse_context_chains(record_body)
+    elif gold_texts is not None:
         sources = [{"id": str(i), "text": t} for i, t in enumerate(gold_texts)]
+        context_sources = sources
         chains: list[list[str]] = []
     else:
         sources = parse_highlights(record_body)
+        context_sources = sources
         chains = parse_context_chains(record_body)
+    source_closures, unresolved_context = context_dependencies(context_sources, chains)
     gold: list[dict] = []
     unlocatable_gold = 0
     for h in sources:
-        cleaned = searchable(h["text"])[0]
-        span = locate(cleaned, search, idx) if cleaned else None
-        if span is None:
+        source_parts = h.get("parts") or [{"text": h["text"]}]
+        located_parts: list[list[int]] = []
+        cursor = 0
+        for part in source_parts:
+            cleaned = searchable(part["text"])[0]
+            pos, matched = _find(cleaned, search, cursor) if cleaned else (-1, "")
+            if pos < 0:
+                located_parts = []
+                break
+            span = [idx[pos], idx[pos + len(matched) - 1] + 1]
+            located_parts.append(span)
+            cursor = pos + len(matched)
+        if not located_parts:
             unlocatable_gold += 1
             continue
         gold.append(
-            {"id": h["id"], "span": span, "text": pre_digest[span[0] : span[1]]}
+            {
+                "id": h["id"],
+                "spans": located_parts,
+                "text": " [...] ".join(
+                    pre_digest[span[0] : span[1]] for span in located_parts
+                ),
+            }
         )
-    gold_spans = [(g["span"][0], g["span"][1]) for g in gold]
+    gold_spans = [tuple(span) for g in gold for span in g["spans"]]
 
     # Gold-unit structure (anomalica's ruling): EACH highlight is its own unit =
     # itself + its ancestor closure (context). A shared ancestor is context to many
     # units without merging them.
-    closures = ancestor_closures([g["id"] for g in gold], chains)
+    located_ids = {g["id"] for g in gold}
+    closures = {hid: set(source_closures.get(hid, ())) for hid in located_ids}
     units_with_context = sum(1 for g in gold if closures.get(g["id"]))
     max_context = max((len(closures.get(g["id"], ())) for g in gold), default=0)
 
@@ -498,8 +576,9 @@ def grade_digest(
     unit_coverage: list[dict] = []
     missed = []
     for g in gold:
-        s, e = g["span"]
-        frac = _overlap([s, e], claim_spans) / max(1, e - s)
+        extent = sum(end - start for start, end in g["spans"])
+        covered_chars = sum(_overlap(span, claim_spans) for span in g["spans"])
+        frac = covered_chars / max(1, extent)
         coverage_sum += frac
         unit_coverage.append(
             {
@@ -522,6 +601,56 @@ def grade_digest(
         if all(_overlap([s, e], gold_spans) == 0 for s, e in c["spans"]):
             off_target.append({"quote": c["quote"][:140], "text": c["text"][:140]})
     off_target_rate = (len(off_target) / len(located)) if located else None
+
+    precision_denominator = None
+    unsupported_assertions: list[dict] = []
+    unsupported_assertion_rate = None
+    complete_ranges: list[tuple[int, int]] = []
+    if gold_state is not None:
+        from digester.highlight_gold import _claim_parts, _raw_search
+
+        complete_ranges = [
+            (review_range["start"], review_range["end"])
+            for review_range in gold_state["ranges"]
+            if review_range["complete"]
+        ]
+        raw_search, raw_index = _raw_search(record_body)
+        accepted_raw_parts = [
+            (part["start"], part["end"])
+            for item in sources
+            for part in item.get("parts", ())
+        ]
+        bounded = []
+        for claim in claims:
+            spans = _claim_parts(claim, raw_search, raw_index)
+            if spans and any(
+                all(
+                    start <= part_start and part_end <= end
+                    for part_start, part_end in spans
+                )
+                for start, end in complete_ranges
+            ):
+                bounded.append((claim, spans))
+        precision_denominator = len(bounded) if complete_ranges else None
+        for claim, spans in bounded:
+            if not any(
+                max(part_start, gold_start) < min(part_end, gold_end)
+                for part_start, part_end in spans
+                for gold_start, gold_end in accepted_raw_parts
+            ):
+                unsupported_assertions.append(
+                    {
+                        "quote": str(claim.get("quote") or "")[:140],
+                        "text": str(claim.get("text") or claim.get("claim") or "")[
+                            :140
+                        ],
+                    }
+                )
+        unsupported_assertion_rate = (
+            len(unsupported_assertions) / precision_denominator
+            if precision_denominator
+            else None
+        )
 
     # MECHANICAL fidelity: contiguous + in-order elided. Reordered and broken are
     # both failures. This is not the semantic axis (a fragment join that inverts
@@ -557,7 +686,8 @@ def grade_digest(
     # referent that appears in the unit's ANCESTOR spans, not merely name somebody.
     # A unit whose ancestors name nobody cannot test name-resolution at all, so it
     # is counted UNTESTABLE rather than silently passed or failed.
-    gold_by_id = {g["id"]: g for g in gold}
+    gold_by_id = {item["id"]: {"text": item["text"]} for item in context_sources}
+    gold_by_id.update({g["id"]: g for g in gold})
     coref_applicable = 0
     coref_passed = 0
     coref_untestable = 0
@@ -566,8 +696,11 @@ def grade_digest(
         closure = closures.get(g["id"]) or set()
         if not closure:
             continue
-        gs = (g["span"][0], g["span"][1])
-        covering = [c for c in located if _overlap(list(gs), c["spans"]) > 0]
+        covering = [
+            c
+            for c in located
+            if any(_overlap(span, c["spans"]) > 0 for span in g["spans"])
+        ]
         if not covering:
             continue  # not recalled at all -> a recall miss, not a coref failure
         candidates = _closure_referents(g["id"], closures, gold_by_id)
@@ -602,6 +735,14 @@ def grade_digest(
         "units_with_context": units_with_context,
         "max_context": max_context,
         "unlocatable_gold": unlocatable_gold,
+        "unresolved_context_units": sum(
+            bool(unresolved_context.get(hid)) for hid in located_ids
+        ),
+        "unresolved_context": {
+            hid: sorted(targets)
+            for hid, targets in unresolved_context.items()
+            if hid in located_ids and targets
+        },
         "recall": recall,  # coverage-weighted mean, NOT a hit/miss count
         "fully_covered": covered,  # units at >= recall_thresh coverage (diagnostic only)
         "quote_fidelity": fidelity,  # over DISTINCT quotes
@@ -613,6 +754,17 @@ def grade_digest(
         "broken": len(broken_quotes),
         "off_target_rate": off_target_rate,
         "off_target_count": len(off_target),
+        "complete_ranges": [list(bounds) for bounds in complete_ranges],
+        "precision_denominator": precision_denominator,
+        "precision": None,
+        "precision_reason": (
+            "fact-level semantic matches are not available to this deterministic grader"
+            if precision_denominator is not None
+            else "no complete attested range"
+        ),
+        "unsupported_assertion_rate": unsupported_assertion_rate,
+        "unsupported_assertion_count": len(unsupported_assertions),
+        "unsupported_assertions": unsupported_assertions,
         "coref_applicable": coref_applicable,
         "coref_passed": coref_passed,
         "coref_untestable": coref_untestable,  # closure names nobody to resolve to

@@ -269,6 +269,19 @@ def test_an_extended_highlight_is_one_gold_unit_joined_by_elision():
     assert "matters and its" not in text
 
 
+def test_multipart_highlight_grades_each_part_independently():
+    body = (
+        "{{highlight-start: a1}}first fact{{highlight-end: a1}} "
+        "unselected digression "
+        "{{highlight-start: a1}}second fact{{highlight-end: a1}}"
+    )
+    result = grade_digest(body, _digest(["first fact", "second fact"]))
+
+    assert result["gold_units"] == 1
+    assert result["unlocatable_gold"] == 0
+    assert result["recall"] == 1.0
+
+
 def test_coverage_counts_a_character_once_however_many_claims_quote_it():
     """Recall read above 1.0 and rewarded repetition until this was the union."""
     from digester.eval import _overlap

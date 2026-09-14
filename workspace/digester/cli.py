@@ -35,7 +35,8 @@ from anomalica_common.model_policy import PolicyRefusal
 from digester.record_parser import parse_record
 
 # The digester resolves its own metered toggle: DIGESTER_USE_API > global
-# ANOMALICA_USE_API > subscription (per-component scheme; see anomalica/CLAUDE.md).
+# ANOMALICA_USE_API > subscription (per-component scheme; see
+# /home/mark/repos/anomalica/AGENTS.md).
 _USE_API_VAR = "DIGESTER_USE_API"
 
 # Annotation tokens (e.g. {{redacted}}) can leak into a record's creators list
@@ -119,7 +120,8 @@ def main() -> None:
     "--confirm",
     is_flag=True,
     help="Confirm the printed cost estimate and proceed with the metered run "
-    "(required for any spend; see anomalica/CLAUDE.md spend gate)",
+    "(required for any spend; see "
+    "/home/mark/repos/anomalica/AGENTS.md spend gate)",
 )
 @click.pass_context
 def extract_cmd(
@@ -140,9 +142,10 @@ def extract_cmd(
     click.echo(f"Parsing record: {path.name}")
     parsed = parse_record(text)
 
-    # SPEND GATE (anomalica/CLAUDE.md operating rule): when this run will hit
-    # the metered API, print a cost estimate and refuse to proceed without an
-    # explicit --confirm. A promise/convention is not enough - this is the gate.
+    # SPEND GATE (/home/mark/repos/anomalica/AGENTS.md operating rule): when this
+    # run will hit the metered API, print a cost estimate and refuse to proceed
+    # without an explicit --confirm. A promise/convention is not enough - this is
+    # the gate.
     # Only price a run that actually costs per-token money. A flat-rate plan
     # (Claude subscription, opencode) has no price to quote, and asking for one
     # raises by design - refusing to guess is the GAP-2 behaviour.
@@ -450,9 +453,10 @@ def _do_extract(
     )
     from digester.extract import (
         build_record_context,
+        effective_extraction_configuration,
         extract_two_pass,
-        extraction_config,
     )
+    from digester.extraction_config_registry import fingerprint, register
 
     record_context = build_record_context(
         title=parsed.title,
@@ -515,6 +519,20 @@ def _do_extract(
             upstream if isinstance(upstream, list) else None,
             usage_entry("digest", model, get_usage()),
         )
+
+        config_parameters = {
+            "prep_version": PREP_VERSION,
+            "use_api": use_api,
+            "schema_enforcement": (
+                get_schema_enforcement()
+                if (is_openrouter_model(model) or is_opencode_model(model))
+                else None
+            ),
+        }
+        effective_config = effective_extraction_configuration(
+            model, **config_parameters
+        )
+        config_fingerprint = fingerprint(effective_config)
 
         text = two_pass_result_to_yaml(
             result,
@@ -584,14 +602,19 @@ def _do_extract(
                 if (is_openrouter_model(model) or is_opencode_model(model))
                 else None
             ),
-            extraction_config=extraction_config(),
+            extraction_config=config_fingerprint,
         )
+
+        from digester.generation import stamp as stamp_extraction_generation
+
+        text = stamp_extraction_generation(text)
 
         text = _entail(text, pre_digest_text, click.echo)
 
         if digests_root is not None:
             from digester import digest_store
 
+            register(digests_root, effective_config)
             written = digest_store.write_digest(
                 digests_root,
                 path.stem,
@@ -619,6 +642,7 @@ def _do_extract(
         from digester import digest_store  # local, matching the branch above
 
         out_path = output if output else path.with_suffix(".yaml")
+        register(out_path.parent, effective_config)
         kind = (
             "production"
             if digest_store.is_active_prompt(result.get("prompts"))
@@ -685,7 +709,8 @@ def _echo_usage() -> None:
     "--confirm",
     is_flag=True,
     help="Confirm the printed aggregate cost estimate and proceed with the "
-    "metered run (required for any spend; see anomalica/CLAUDE.md spend gate)",
+    "metered run (required for any spend; see "
+    "/home/mark/repos/anomalica/AGENTS.md spend gate)",
 )
 @click.pass_context
 def batch_extract_cmd(
@@ -881,15 +906,25 @@ def eval_cmd(
 
     from digester import eval as ev
 
-    body = parse_record(Path(record).read_text()).body or ""
+    parsed = parse_record(Path(record).read_text())
+    body = parsed.body or ""
     thresh = recall_threshold if recall_threshold is not None else ev.RECALL_THRESH
 
     gold_texts = None
+    gold_document = None
+    record_hash = parsed.metadata.get("content_hash")
     if gold_json:
         gold_doc = json.loads(Path(gold_json).read_text())
-        gold_texts = [s["text"] for s in gold_doc.get("spans", []) if s.get("text")]
-        gold_n = len(gold_texts)
-        provisional = gold_doc.get("provisional")
+        if gold_doc.get("schema") == "anomalica/highlight-gold/1":
+            from digester.highlight_gold import validate
+
+            gold_document = gold_doc
+            gold_n = validate(record_hash or "", body, gold_doc)["gold_units"]
+            provisional = False
+        else:
+            gold_texts = [s["text"] for s in gold_doc.get("spans", []) if s.get("text")]
+            gold_n = len(gold_texts)
+            provisional = gold_doc.get("provisional")
     else:
         gold_n = len([h for h in ev.parse_highlights(body) if h["text"]])
         provisional = False
@@ -903,7 +938,14 @@ def eval_cmd(
     results = []
     for d in digests:
         digest = yaml.safe_load(Path(d).read_text()) or {}
-        r = ev.grade_digest(body, digest, recall_thresh=thresh, gold_texts=gold_texts)
+        r = ev.grade_digest(
+            body,
+            digest,
+            recall_thresh=thresh,
+            gold_texts=gold_texts,
+            gold_document=gold_document,
+            record_hash=record_hash,
+        )
         r["digest"] = Path(d).name
         r["model"] = digest.get("model", "?")
         results.append(r)
@@ -945,6 +987,14 @@ def eval_cmd(
             f"{pct(r['quote_fidelity'])} {erb:>10} {coref:>7} {pct(r['off_target_rate'])}"
         )
     gu = results[0]["gold_units"]
+    if gold_document is not None:
+        denominator = results[0]["precision_denominator"]
+        click.echo(
+            "\nAuthenticated bounded gold: unsupported-assertion candidates use "
+            f"only the {denominator if denominator is not None else 0} claims wholly "
+            "inside complete attested ranges. Semantic precision remains n/a without "
+            "fact-level adjudication."
+        )
     click.echo(
         "\nrecall + mech-fid are gold-backed; off-target is INTERPRETIVE "
         f"(relative signal only, against {gu} gold\nunits - a sparse-gold off-target "
@@ -963,6 +1013,51 @@ def eval_cmd(
     if json_out:
         Path(json_out).write_text(json.dumps(results, indent=2, ensure_ascii=False))
         click.echo(f"\nFull results (with diagnostics): {json_out}")
+
+
+@main.command(name="gold-batch")
+@click.argument("record", type=click.Path(exists=True))
+@click.argument("gold_json", type=click.Path(exists=True))
+@click.option(
+    "--digest",
+    "digest_paths",
+    multiple=True,
+    type=click.Path(exists=True),
+    help="Current digest whose overlapping claims may be shown as proposals.",
+)
+@click.option(
+    "--range-id",
+    default=None,
+    help="Review range; defaults to the first incomplete range.",
+)
+@click.option("--limit", default=5, type=click.IntRange(3, 5), show_default=True)
+def gold_batch_cmd(
+    record: str,
+    gold_json: str,
+    digest_paths: tuple[str, ...],
+    range_id: str | None,
+    limit: int,
+) -> None:
+    """Emit the next compact human-gold batch without invoking a model."""
+    import yaml
+
+    from digester.highlight_gold import HighlightGoldError, review_batch
+
+    parsed = parse_record(Path(record).read_text())
+    document = json.loads(Path(gold_json).read_text())
+    digests = [yaml.safe_load(Path(path).read_text()) or {} for path in digest_paths]
+    try:
+        result = review_batch(
+            parsed.metadata.get("content_hash") or "",
+            parsed.body or "",
+            document,
+            digests,
+            range_id=range_id,
+            limit=limit,
+        )
+    except HighlightGoldError as exc:
+        raise click.ClickException(str(exc)) from exc
+    click.echo(json.dumps(result, indent=2, ensure_ascii=False))
 
 
 # Anchored to the repo layout, NOT to the working directory. Relative defaults
@@ -1017,7 +1112,77 @@ def health_cmd(digests: str, store: str, records: str) -> None:
         click.echo(f"\n{findings} finding(s). No corpus was read.")
         raise SystemExit(1)
 
-    loaded = health.load_digests(d)
+    load_issues: list[dict] = []
+    loaded = health.load_digests(d, load_issues)
+    from digester.generation import GenerationManifestError, read_manifest
+
+    try:
+        current_generation = read_manifest(d)
+        click.echo(f"Generation manifest: current {current_generation}")
+    except GenerationManifestError as exc:
+        current_generation = None
+        findings += 1
+        click.echo(f"Generation manifest: INVALID - {exc}")
+    generations = health.extraction_generation_freshness(loaded, current_generation)
+    generations["invalid"].extend(
+        {
+            "digest": issue["digest"],
+            "generation": None,
+            "reason": f"digest_{issue['issue']}",
+        }
+        for issue in load_issues
+    )
+    generation_total = sum(len(rows) for rows in generations.values())
+
+    click.echo(
+        f"Extraction generation (manifest current {current_generation}; "
+        f"denominator {generation_total} canonical digest files):"
+    )
+    for status in ("current", "stale", "unknown", "invalid"):
+        rows = generations[status]
+        click.echo(f"  {status:7} {len(rows):3}/{generation_total}")
+        if status != "current":
+            for row in rows:
+                findings += 1
+                value = row.get("generation")
+                detail = "absent" if value is None else repr(value)
+                if row.get("distance") is not None:
+                    detail += f" (distance {row['distance']})"
+                if row.get("reason"):
+                    detail += f" ({row['reason']})"
+                click.echo(f"    {row['digest']}: {detail}")
+
+    from digester.extraction_config_registry import (
+        ExtractionConfigRegistryError,
+        read_registry,
+    )
+
+    try:
+        registry = read_registry(d)
+        click.echo(f"\nExtraction configuration registry: {len(registry)} entries")
+    except ExtractionConfigRegistryError as exc:
+        registry = {}
+        findings += 1
+        click.echo(f"\nExtraction configuration registry: INVALID - {exc}")
+    configs = health.extraction_config_freshness(loaded, registry)
+    configs["invalid"].extend(
+        {
+            "digest": issue["digest"],
+            "extraction_config": None,
+            "reason": f"digest_{issue['issue']}",
+        }
+        for issue in load_issues
+    )
+    click.echo(f"Extraction configuration (denominator {generation_total} digests):")
+    for status in ("resolvable", "unregistered", "missing", "invalid"):
+        rows = configs[status]
+        click.echo(f"  {status:12} {len(rows):3}/{generation_total}")
+        if status != "resolvable":
+            findings += len(rows)
+            for row in rows:
+                detail = row.get("reason") or ""
+                click.echo(f"    {row['digest']}{': ' + detail if detail else ''}")
+
     _sc = health._cache_load()
     rows = health.claim_yields(d, s, loaded)
     by_type: dict[str, list[float]] = {}
@@ -1067,13 +1232,24 @@ def health_cmd(digests: str, store: str, records: str) -> None:
             f"floor {health.SURVIVAL_FLOOR}"
         )
 
-    stale = health.pre_digest_freshness(d, r, loaded)
-    click.echo(
-        f"\nSTALE PRE-DIGEST (digest no longer matches its source): {len(stale)}"
+    input_groups = health.pre_digest_input_freshness(d, r, loaded)
+    input_groups["invalid"].extend(
+        {
+            "digest": issue["digest"],
+            "issue": f"digest_{issue['issue']}",
+            "detail": issue["detail"],
+        }
+        for issue in load_issues
     )
-    for x in stale:
-        findings += 1
-        click.echo(f"  {x['digest']}: {x['issue']} - {x['detail']}")
+    input_total = sum(len(rows) for rows in input_groups.values())
+    click.echo(f"\nPre-digest input binding (denominator {input_total} digests):")
+    for status in ("current", "stale", "unknown", "invalid"):
+        rows = input_groups[status]
+        click.echo(f"  {status:7} {len(rows):3}/{input_total}")
+        if status != "current":
+            findings += len(rows)
+            for row in rows:
+                click.echo(f"    {row['digest']}: {row['issue']} - {row['detail']}")
 
     unmapped = health.unmapped_record_fields(r) if r.exists() else {}
     click.echo(f"\nUNMAPPED RECORD FIELDS (upstream added something): {len(unmapped)}")
@@ -1161,7 +1337,12 @@ def grade_record_cmd(record: str, digests_root: str) -> None:
         # prompt column was added to catch, one level down. The body carries the
         # whole configuration when it was written after that was recorded;
         # before then there is no answer, and "no answer" is its own value.
-        cfg = (d.get("extraction_config") or {}).get("config") or "-"
+        raw_config = d.get("extraction_config")
+        cfg = (
+            raw_config.get("config", "-")
+            if isinstance(raw_config, dict)
+            else raw_config or "-"
+        )
         rows.append(((f"{model} {label}".strip(), prompt_sha, cfg), r))
     # A record with no reviewer highlights grades every variant at recall None;
     # those sort last and print n/a rather than crashing the whole table.
