@@ -619,7 +619,7 @@ def _do_extract(
             register(digests_root, effective_config)
             written = digest_store.write_digest(
                 digests_root,
-                path.stem,
+                output.stem if output else path.stem,
                 text,
                 model,
                 result.get("prompt_provenance"),

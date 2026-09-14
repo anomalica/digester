@@ -201,6 +201,54 @@ def test_the_plain_output_path_also_stamps_run_kind(tmp_path, monkeypatch):
     assert digest["extraction_config"] in read_registry(tmp_path)
 
 
+def test_output_names_digest_while_root_controls_storage(tmp_path, monkeypatch):
+    from digester import cli
+    from digester.record_parser import parse_record
+
+    rec = tmp_path / "content-hash.md"
+    rec.write_text("---\ntitle: T\ncontent_hash: 'sha256:aa'\n---\nA body.\n")
+    requested = tmp_path / "scheduler" / "canonical-friendly.yaml"
+    root = tmp_path / "digests"
+
+    import digester.extract as ex
+
+    monkeypatch.setattr(
+        ex,
+        "extract_two_pass",
+        lambda *a, **k: {
+            "nodes": [],
+            "claims": [],
+            "terminology": [],
+            "prompts": ACTIVE,
+            "prompt_provenance": ACTIVE,
+        },
+    )
+    written = cli._do_extract(
+        rec,
+        parse_record(rec.read_text()),
+        requested,
+        "haiku",
+        False,
+        root,
+        False,
+        None,
+        None,
+    )
+
+    canonical = root / "canonical-friendly.yaml"
+    variant = (
+        root
+        / "variants"
+        / "canonical-friendly"
+        / f"haiku.{ds.prompt_sha8(ACTIVE)}.yaml"
+    )
+    assert canonical.exists()
+    assert written == variant
+    assert variant.exists()
+    assert canonical.read_bytes() == variant.read_bytes()
+    assert not requested.exists()
+
+
 def test_copyright_status_reaches_the_record_block(tmp_path, monkeypatch):
     """A record carrying copyright.status must serialise, not crash.
 
