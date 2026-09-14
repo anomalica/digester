@@ -7,6 +7,7 @@
 # source: 2021-05-17-video-navy-pilots-describe-encounters-with-ufos
 # hash: 1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44
 
+record_content_hash: sha256:1405206f070621abea9b5131b1512eebf13896ce9dc0ced476f4159c796c7e44
 nodes:
   people:
     - Whitaker, Bill  # 60 Minutes correspondent / narrator
@@ -49,7 +50,6 @@ nodes:
   concepts:
     - Unidentified Aerial Phenomena (UAP)
     - anomalous aerial vehicle (AAV)
-
 # Atomic claims the extraction must recover. Each is ONE fact.
 # Units: SI only in the fact; original imperial belongs only in the quote.
 # Q&A: where a fact comes from a question+answer, the quote must carry BOTH turns.
@@ -171,7 +171,7 @@ claims:
   - {id: rubio_request, fact: "In December 2020, as head of the Senate Intelligence Committee, Marco Rubio asked the Director
       of National Intelligence and the Pentagon for an unclassified report by June 2021.", loc: "00:12:34.0", must: true}
   - {id: rubio_stigma, fact: "Marco Rubio says a stigma on Capitol Hill should not stop UAP being taken seriously.", speaker: "Rubio,
-      Marco", attest: first_hand, loc: "00:12:59.0", must: false,}
+      Marco", attest: first_hand, loc: "00:12:59.0", must: false}
 
 # Notes / adversarial points to watch:
 # - cap_* MUST be 6 separate claims, not one merged sentence (atomicity test).
