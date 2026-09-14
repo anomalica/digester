@@ -1,0 +1,94 @@
+schema: anomalica/account-chronology-evaluation-manifest/1
+purpose: Offline evaluation gate for report-only narrative accounts, exact claim binding, and account-scoped chronology.
+canonical_activation: forbidden
+gold_contract:
+  schema: anomalica/account-chronology-evaluation/1
+  requires:
+    - exact pre-digest SHA-256 binding for the integer coordinate space
+    - exact digest SHA-256 binding for the evaluated claim IDs
+    - media_time_ms coordinates materialised from exact digest location starts
+    - exact record-scoped account spans, including every interrupted span
+    - authenticated human reviewer provenance
+    - one explicit assignment for every evaluated claim
+    - explicit outside and unlocatable claim decisions
+    - reviewed before, unknown, and simultaneous claim pairs per account
+records:
+  - record_content_hash: sha256:868395b7e8a1f005c309f865abc637b573cfd56907204bec18f799c151ba648d
+    name: Richard Doty interview
+    status: legacy-evidence-not-scoreable
+    claim_digest:
+      path: ../../../digests/variants/-video-ex-afosi-agent-shares-wild-alien-encounters-richard-doty-ep/deepseek-deepseek-v4-flash.e9b8b6d4.yaml
+      digest_sha256: 54f6b7de656a8d4d0de9b64316dd7cfbc12f83a4c637f059ba0dc52ea2b6c26c
+      pre_digest_sha256: 981cbaee637d41a826ea180a6313cf7e47ff6db83daa8823338e721278161453
+      record_content_hash: sha256:868395b7e8a1f005c309f865abc637b573cfd56907204bec18f799c151ba648d
+      coordinate_system: media_time_ms
+      claim_materialiser: account_chronology_eval.materialise_claims_from_digest
+    authenticated_gold:
+      status: awaiting-human-review
+      path: private/account-chronology/doty/gold.yaml
+      coordinate_system: media_time_ms
+      digest_sha256: 54f6b7de656a8d4d0de9b64316dd7cfbc12f83a4c637f059ba0dc52ea2b6c26c
+      pre_digest_sha256: 981cbaee637d41a826ea180a6313cf7e47ff6db83daa8823338e721278161453
+      record_content_hash: sha256:868395b7e8a1f005c309f865abc637b573cfd56907204bec18f799c151ba648d
+    scoreable_prediction:
+      status: blocked
+      path: null
+      coordinate_system: media_time_ms
+      reason: Current Sonnet report lacks exact spans, per-claim assignments, chronology pairs, digest hash, and pre-digest
+        hash.
+      digest_sha256: 54f6b7de656a8d4d0de9b64316dd7cfbc12f83a4c637f059ba0dc52ea2b6c26c
+      pre_digest_sha256: 981cbaee637d41a826ea180a6313cf7e47ff6db83daa8823338e721278161453
+      record_content_hash: sha256:868395b7e8a1f005c309f865abc637b573cfd56907204bec18f799c151ba648d
+    legacy_gold_path: ../../reports/accounts/doty.ground-truth.yaml
+    legacy_prediction_path: ../../reports/accounts/doty.sonnet.yaml
+    evidence:
+      reviewed_semantic_accounts: 39
+      prediction_kept_accounts: 20
+      prediction_dropped_candidates: 9
+      approximate_semantic_account_baseline:
+        matched: 15
+        predicted: 20
+        gold: 39
+        precision: 0.75
+        recall: 0.3846
+        measurable_boundary_matches: 14
+        mean_approximate_line_iou: 0.5295
+      aggregate_binding:
+        bound: 280
+        unbindable: 5
+        outside: 109
+      historical_chronology_only:
+        reverse_narration_account:
+          correct: 187
+          wrong_direction: 0
+          abstained: 3
+          possible_pairs: 190
+        in_order_account:
+          correct: 36
+          wrong_direction: 0
+          abstained: 0
+          possible_pairs: 36
+    scoring_blockers:
+      - Gold account boundaries are approximate line ranges, not exact reviewed spans.
+      - Gold and prediction have no reviewed exact claim-to-account assignments.
+      - Existing chronology labels cover only two accounts and are recorded as aggregate report results, not claim-ID pairs.
+coverage_requirements:
+  reverse_narration:
+    status: observed-but-needs-exact-gold
+    evidence: The abducted-sergeant account tells the climax before the beginning across chunks.
+  nested_accounts:
+    status: observed-but-needs-exact-gold
+    evidence: The surveillance operation is nested within the abducted-sergeant account.
+  interrupted_accounts:
+    status: observed-but-needs-exact-gold
+    evidence: The Sandia guard account resumes after briefing and unrelated digressions.
+  multiple_speakers:
+    status: observed-but-needs-exact-gold
+    evidence: The interview contains accounts narrated by Richard Doty and Chris Ramsay.
+  chunk_crossings:
+    status: observed-but-needs-exact-gold
+    evidence: The abducted-sergeant account crosses the current extraction chunk boundary.
+  unknown_order:
+    status: missing-reviewed-gold
+  simultaneous_events:
+    status: missing-reviewed-gold
