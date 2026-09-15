@@ -1,6 +1,8 @@
+import hashlib
 import json
 from pathlib import Path
 
+from anomalica_common.review_gate import parsed_record_body
 from click.testing import CliRunner
 
 from digester.cli import _producer_from_creators, main
@@ -35,6 +37,8 @@ def _ingests_tree(tmp_path: Path, *, digestible: bool):
         "digestible": digestible,
         "total_units": 1,
         "reviews": [],
+        "reviewed_body_sha256": "sha256:"
+        + hashlib.sha256(parsed_record_body(body).encode("utf-8")).hexdigest(),
     }
     (tmp_path / "store" / f"{h}.review.json").write_text(json.dumps(sidecar))
     (tmp_path / "by-name" / "rec.md").symlink_to(

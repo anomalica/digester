@@ -13,9 +13,18 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
+from datetime import datetime
 from pathlib import Path
 
-from anomalica_common.review_gate import Digestibility, digestibility
+import yaml
+from anomalica_common.review_gate import (
+    CarryoverState,
+    Digestibility,
+    ReviewBindingState,
+    digestibility,
+    parsed_record_body,
+)
 
 __all__ = [
     "Digestibility",
@@ -94,6 +103,20 @@ def review_provenance(record_md: Path, ingests_dir: Path) -> dict:
 # any version infix when deriving the sidecar name, else v2 records never find
 # their sidecar and read as unreviewed.
 _BODY_SUFFIX = re.compile(r"(\.v\d+)?\.md$")
+_RECORD_NAME = re.compile(r"(?P<hash>[0-9a-f]{64})(?:\.v\d+)?\.md$")
+
+
+def _sidecar_path(record_md: Path) -> Path | None:
+    target = record_md.resolve()
+    fname = _BODY_SUFFIX.sub(".review.json", target.name)
+    return next(
+        (
+            directory / fname
+            for directory in (target.parent, target.parent.parent)
+            if (directory / fname).is_file()
+        ),
+        None,
+    )
 
 
 def load_sidecar(record_md: Path, ingests_dir: Path) -> dict | None:
@@ -103,20 +126,227 @@ def load_sidecar(record_md: Path, ingests_dir: Path) -> dict | None:
     (the v1/ reorg moved record bodies but not sidecars), so search the
     colocated directory and walk up to the parent store dir.
     """
-    target = record_md.resolve()
-    fname = _BODY_SUFFIX.sub(".review.json", target.name)
-    for d in (target.parent, target.parent.parent):
-        sidecar = d / fname
-        if sidecar.exists():
-            try:
-                return json.loads(sidecar.read_text())
-            except (OSError, json.JSONDecodeError):
-                return None
-    return None
+    sidecar = _sidecar_path(record_md)
+    if sidecar is None:
+        return None
+    try:
+        document = json.loads(sidecar.read_bytes().decode("utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        return None
+    return document if isinstance(document, dict) else None
+
+
+def _git(repo: Path, *args: str, input_bytes: bytes | None = None) -> bytes | None:
+    try:
+        result = subprocess.run(
+            ["git", *args],
+            cwd=repo,
+            input=input_bytes,
+            capture_output=True,
+            check=False,
+        )
+    except OSError:
+        return None
+    return result.stdout if result.returncode == 0 else None
+
+
+def _repo_root(path: Path) -> Path | None:
+    raw = _git(path, "rev-parse", "--show-toplevel")
+    if raw is None:
+        return None
+    try:
+        return Path(raw.decode("utf-8").strip()).resolve()
+    except UnicodeDecodeError:
+        return None
+
+
+def _git_blob(repo: Path, revision: str, relative_path: str) -> str | None:
+    raw = _git(repo, "show", f"{revision}:{relative_path}")
+    if raw is None:
+        return None
+    try:
+        return raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return None
+
+
+def _record_content_hash(record_text: str) -> str | None:
+    match = re.match(
+        r"\A---(?:\r\n|\r|\n)(.*?)(?:\r\n|\r|\n)---(?:\r\n|\r|\n|\Z)",
+        record_text,
+        re.DOTALL,
+    )
+    if match is None:
+        return None
+    try:
+        frontmatter = yaml.load(match.group(1), Loader=yaml.BaseLoader)
+    except yaml.YAMLError:
+        return None
+    value = frontmatter.get("content_hash") if isinstance(frontmatter, dict) else None
+    return value if isinstance(value, str) else None
+
+
+def _record_at_commit(
+    repo: Path, revision: str, record_md: Path, record_hash: str
+) -> str | None:
+    try:
+        current_relative = str(record_md.resolve().relative_to(repo))
+    except ValueError:
+        return None
+    current = _git_blob(repo, revision, current_relative)
+    if current is not None and _record_content_hash(current) == record_hash:
+        return current
+
+    tree = _git(repo, "ls-tree", "-r", "--name-only", "-z", revision, "--", "store")
+    if tree is None:
+        return None
+    try:
+        paths = [item.decode("utf-8") for item in tree.split(b"\0") if item]
+    except UnicodeDecodeError:
+        return None
+    bare_hash = record_hash.removeprefix("sha256:")
+    candidates = [
+        path
+        for path in paths
+        if (name := _RECORD_NAME.fullmatch(Path(path).name))
+        and name.group("hash") == bare_hash
+    ]
+    records = [
+        record
+        for path in candidates
+        if (record := _git_blob(repo, revision, path)) is not None
+        and _record_content_hash(record) == record_hash
+    ]
+    if not records or any(
+        parsed_record_body(item) != parsed_record_body(records[0])
+        for item in records[1:]
+    ):
+        return None
+    return records[0]
+
+
+def _legacy_body_validated(
+    record_md: Path, sidecar_path: Path, sidecar: dict, record_text: str
+) -> bool:
+    repo = _repo_root(sidecar_path.parent)
+    if repo is None:
+        return False
+    try:
+        sidecar_relative = str(sidecar_path.resolve().relative_to(repo))
+    except ValueError:
+        return False
+
+    status = _git(
+        repo,
+        "status",
+        "--porcelain=v1",
+        "-z",
+        "--untracked-files=all",
+        "--",
+        sidecar_relative,
+    )
+    if status is None or status:
+        return False
+    latest_raw = _git(repo, "log", "-1", "--format=%H", "HEAD", "--", sidecar_relative)
+    if latest_raw is None:
+        return False
+    try:
+        latest = latest_raw.decode("ascii").strip()
+    except UnicodeDecodeError:
+        return False
+    if not re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", latest):
+        return False
+
+    reviews = sidecar.get("reviews")
+    latest_review = reviews[-1] if isinstance(reviews, list) and reviews else None
+    parent_commit = (
+        latest_review.get("parent_commit") if isinstance(latest_review, dict) else None
+    )
+    parents_raw = _git(repo, "rev-list", "--parents", "-n", "1", latest)
+    if parents_raw is None:
+        return False
+    try:
+        commit_and_parents = parents_raw.decode("ascii").split()
+    except UnicodeDecodeError:
+        return False
+    parents = commit_and_parents[1:]
+    if not isinstance(parent_commit, str) or parent_commit not in parents:
+        return False
+
+    # A committed delete followed by a fresh add is not continuous review evidence.
+    if not any(
+        _git_blob(repo, parent, sidecar_relative) is not None for parent in parents
+    ):
+        for parent in parents:
+            prior = _git(
+                repo, "log", "-1", "--format=%H", parent, "--", sidecar_relative
+            )
+            if prior is None or prior.strip():
+                return False
+
+    record_hash = _record_content_hash(record_text)
+    if record_hash is None:
+        return False
+    reviewed_record = _record_at_commit(repo, latest, record_md, record_hash)
+    return reviewed_record is not None and parsed_record_body(
+        reviewed_record
+    ) == parsed_record_body(record_text)
+
+
+def _carryover_state(record_text: str, sidecar: dict) -> CarryoverState:
+    match = re.match(
+        r"\A---(?:\r\n|\r|\n)(.*?)(?:\r\n|\r|\n)---(?:\r\n|\r|\n|\Z)",
+        record_text,
+        re.DOTALL,
+    )
+    if match is None:
+        return CarryoverState.ABSENT
+    try:
+        frontmatter = yaml.load(match.group(1), Loader=yaml.BaseLoader)
+    except yaml.YAMLError:
+        return CarryoverState.UNRESOLVED
+    carryover = (
+        frontmatter.get("review_carryover") if isinstance(frontmatter, dict) else None
+    )
+    if carryover is None:
+        return CarryoverState.ABSENT
+    if not isinstance(carryover, dict) or type(carryover.get("at")) is not str:
+        return CarryoverState.UNRESOLVED
+    try:
+        marker = datetime.fromisoformat(carryover["at"].replace("Z", "+00:00"))
+    except ValueError:
+        return CarryoverState.UNRESOLVED
+    if marker.tzinfo is None:
+        return CarryoverState.UNRESOLVED
+    reviews = sidecar.get("reviews")
+    if not isinstance(reviews, list):
+        return CarryoverState.UNRESOLVED
+    for review in reviews:
+        reviewed_at = review.get("at") if isinstance(review, dict) else None
+        if type(reviewed_at) is not str:
+            continue
+        try:
+            timestamp = datetime.fromisoformat(reviewed_at.replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        if timestamp.tzinfo is not None and timestamp >= marker:
+            return CarryoverState.RESOLVED
+    return CarryoverState.UNRESOLVED
 
 
 def assess_record(
     record_md: Path, ingests_dir: Path, threshold: float = 1.0
 ) -> Digestibility:
-    text = record_md.resolve().read_text()
-    return digestibility(text, load_sidecar(record_md, ingests_dir), threshold)
+    text = record_md.resolve().read_bytes().decode("utf-8")
+    sidecar_path = _sidecar_path(record_md)
+    sidecar = load_sidecar(record_md, ingests_dir)
+    if sidecar is None or sidecar_path is None:
+        return digestibility(text, None, threshold)
+    binding = ReviewBindingState(
+        legacy_body_validated=(
+            "reviewed_body_sha256" not in sidecar
+            and _legacy_body_validated(record_md, sidecar_path, sidecar, text)
+        ),
+        carryover=_carryover_state(text, sidecar),
+    )
+    return digestibility(text, sidecar, threshold, binding=binding)
