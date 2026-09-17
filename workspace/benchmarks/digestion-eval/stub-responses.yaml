@@ -1,0 +1,91 @@
+schema: anomalica/digestion-fixture-stub-responses/1
+cases:
+  ridge-rescue-reverse-narration:
+    nodes:
+      main_subject: Pine Ridge rescue
+      nodes:
+        - {name: Mara Voss, node_type: person}
+        - {name: Eli Hart, node_type: person}
+        - {name: Pine Ridge station, node_type: place}
+        - {name: Pine Ridge rescue, node_type: event}
+        - {name: Emergency communications, node_type: topic}
+        - {name: Radio, node_type: object}
+        - {name: Locator beacon, node_type: object}
+        - {name: Pine Ridge rockfall, node_type: event}
+      codenames_to_resolve: []
+      acronyms: []
+      extraction_complete: true
+    claims:
+      claims:
+        - content: Mara Voss brought Eli Hart back to Pine Ridge station.
+          original_excerpt: Mara Voss had brought the injured climber Eli Hart back to Pine Ridge station.
+          category: domain
+          claim_type: observation
+          provenance_chain: {origin_kind: unattributed, origin: '', relay: []}
+          attribution_in_text: false
+          date: '2019-10-18'
+          node_references:
+            - {name: Pine Ridge rescue, role: subject}
+            - {name: Eli Hart, role: participant}
+            - {name: Pine Ridge station, role: setting}
+        - content: Mara Voss started the rescue when she departed the station.
+          original_excerpt: The rescue had begun two nights earlier, when she left the station.
+          category: domain
+          claim_type: observation
+          provenance_chain: {origin_kind: unattributed, origin: '', relay: []}
+          attribution_in_text: false
+          date: '2019-10-16'
+          node_references:
+            - {name: Pine Ridge rescue, role: subject}
+            - {name: Mara Voss, role: participant}
+        - content: Her communications radio stopped working.
+          original_excerpt: her radio and locator beacon failed together
+          category: domain
+          claim_type: observation
+          provenance_chain: {origin_kind: unattributed, origin: '', relay: []}
+          attribution_in_text: false
+          node_references:
+            - {name: Radio, role: subject}
+            - {name: Emergency communications, role: mentioned}
+        - content: Her locator beacon failed at the same time as the radio.
+          original_excerpt: her radio and locator beacon failed together
+          category: domain
+          claim_type: observation
+          provenance_chain: {origin_kind: unattributed, origin: '', relay: []}
+          attribution_in_text: false
+          node_references:
+            - {name: Locator beacon, role: subject}
+            - {name: Radio, role: mentioned}
+        - content: Falling rocks occurred at an unknown time relative to the equipment failure.
+          original_excerpt: It was never clear whether a rockfall occurred before or after that failure.
+          category: domain
+          claim_type: observation
+          provenance_chain: {origin_kind: unattributed, origin: '', relay: []}
+          attribution_in_text: false
+          node_references:
+            - {name: Pine Ridge rockfall, role: subject}
+      extraction_complete: true
+  archive-restoration-range:
+    nodes:
+      main_subject: North Quay archive restoration
+      nodes:
+        - {name: North Quay archive, node_type: organisation}
+        - {name: Harbour logbooks, node_type: document}
+        - {name: North Quay archive restoration, node_type: event}
+      codenames_to_resolve: []
+      acronyms: []
+      extraction_complete: true
+    claims:
+      claims:
+        - content: The harbour records were conserved by the North Quay archive.
+          original_excerpt: The North Quay archive restored the harbour logbooks between 2007 and 2012.
+          category: domain
+          claim_type: administrative
+          provenance_chain: {origin_kind: unattributed, origin: '', relay: []}
+          attribution_in_text: false
+          date: '2007'
+          node_references:
+            - {name: North Quay archive, role: subject}
+            - {name: Harbour logbooks, role: mentioned}
+            - {name: North Quay archive restoration, role: mentioned}
+      extraction_complete: true

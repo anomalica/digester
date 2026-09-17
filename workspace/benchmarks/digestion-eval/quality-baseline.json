@@ -1,0 +1,346 @@
+{
+  "accepted_at": "2026-09-17T07:31:18.148877+00:00",
+  "fixture_sha256": "sha256:afeb3cc0073f5bb66e9f2f37ab60a647e64dc5d252358ba1e2183418d8c8be93",
+  "schema": "anomalica/digestion-fixture-quality-baseline/1",
+  "score": {
+    "cases": [
+      {
+        "case": "ridge-rescue-reverse-narration",
+        "dimensions": {
+          "accounts": {
+            "passed": 0,
+            "rate": 0.0,
+            "total": 1
+          },
+          "chronology": {
+            "passed": 0,
+            "rate": 0.0,
+            "total": 3
+          },
+          "context": {
+            "passed": 0,
+            "rate": 0.0,
+            "total": 1
+          },
+          "coverage": {
+            "passed": 4,
+            "rate": 0.8,
+            "total": 5
+          },
+          "dates": {
+            "passed": 1,
+            "rate": 0.5,
+            "total": 2
+          },
+          "references": {
+            "passed": 0,
+            "rate": 0.0,
+            "total": 3
+          }
+        },
+        "expectations": [
+          {
+            "adjudications": [],
+            "dimension": "coverage",
+            "evidence": "no deterministic or adjudicated match",
+            "expectation": "rescue-start",
+            "matches": [],
+            "passed": false
+          },
+          {
+            "adjudications": [],
+            "dimension": "coverage",
+            "evidence": "deterministic a66e8d0b-1b10-4498-9038-b445a326c6c9 (radio; failed)",
+            "expectation": "radio-failure",
+            "matches": [
+              {
+                "claim_id": "a66e8d0b-1b10-4498-9038-b445a326c6c9",
+                "source": "deterministic"
+              }
+            ],
+            "passed": true
+          },
+          {
+            "adjudications": [],
+            "dimension": "coverage",
+            "evidence": "deterministic 865dc464-0a2f-48c4-ba3e-e99230617e42 (beacon; failed)",
+            "expectation": "beacon-failure",
+            "matches": [
+              {
+                "claim_id": "865dc464-0a2f-48c4-ba3e-e99230617e42",
+                "source": "deterministic"
+              }
+            ],
+            "passed": true
+          },
+          {
+            "adjudications": [],
+            "dimension": "coverage",
+            "evidence": "deterministic f364703d-32d9-4c1a-bead-cc531099014c (rockfall)",
+            "expectation": "rockfall",
+            "matches": [
+              {
+                "claim_id": "f364703d-32d9-4c1a-bead-cc531099014c",
+                "source": "deterministic"
+              }
+            ],
+            "passed": true
+          },
+          {
+            "adjudications": [],
+            "dimension": "coverage",
+            "evidence": "deterministic 4ab33db2-ebb7-4201-a604-f020224ce791 (brought; Eli Hart; Pine Ridge station)",
+            "expectation": "rescue-end",
+            "matches": [
+              {
+                "claim_id": "4ab33db2-ebb7-4201-a604-f020224ce791",
+                "source": "deterministic"
+              }
+            ],
+            "passed": true
+          },
+          {
+            "dimension": "context",
+            "evidence": "candidate groups []; no required referent in grouped context",
+            "expectation": "pronoun-resolves-in-rescue-account",
+            "passed": false
+          },
+          {
+            "dimension": "dates",
+            "evidence": "observed none; accepted ['2019-10-16']",
+            "expectation": "start-date",
+            "passed": false
+          },
+          {
+            "dimension": "dates",
+            "evidence": "observed ['2019-10-18']; accepted ['2019-10-18']",
+            "expectation": "end-date",
+            "passed": true
+          },
+          {
+            "dimension": "references",
+            "evidence": "entity refs none; accepted ['Mara Voss']",
+            "expectation": "ranger-reference",
+            "passed": false
+          },
+          {
+            "dimension": "references",
+            "evidence": "event refs ['Eli Hart', 'Mara Voss', 'Rescue of Eli Hart', 'USA, Pine Ridge station']; accepted ['Pine Ridge rescue']",
+            "expectation": "rescue-event-reference",
+            "passed": false
+          },
+          {
+            "dimension": "references",
+            "evidence": "topic refs ['Mara Voss', 'Rescue of Eli Hart']; accepted ['Emergency communications']",
+            "expectation": "safety-topic-reference",
+            "passed": false
+          },
+          {
+            "dimension": "accounts",
+            "evidence": "matching prediction accounts none",
+            "expectation": "rescue-account",
+            "passed": false
+          },
+          {
+            "dimension": "chronology",
+            "evidence": "no before edge for rescue-start, rescue-end",
+            "expectation": "start-before-end",
+            "passed": false
+          },
+          {
+            "dimension": "chronology",
+            "evidence": "no simultaneous edge for radio-failure, beacon-failure",
+            "expectation": "failures-simultaneous",
+            "passed": false
+          },
+          {
+            "dimension": "chronology",
+            "evidence": "no unknown edge for radio-failure, rockfall",
+            "expectation": "rockfall-order-unknown",
+            "passed": false
+          }
+        ]
+      },
+      {
+        "case": "archive-restoration-range",
+        "dimensions": {
+          "accounts": {
+            "passed": 0,
+            "rate": null,
+            "total": 0
+          },
+          "chronology": {
+            "passed": 0,
+            "rate": null,
+            "total": 0
+          },
+          "context": {
+            "passed": 0,
+            "rate": null,
+            "total": 0
+          },
+          "coverage": {
+            "passed": 1,
+            "rate": 1.0,
+            "total": 1
+          },
+          "dates": {
+            "passed": 0,
+            "rate": 0.0,
+            "total": 1
+          },
+          "references": {
+            "passed": 1,
+            "rate": 1.0,
+            "total": 1
+          }
+        },
+        "expectations": [
+          {
+            "adjudications": [],
+            "dimension": "coverage",
+            "evidence": "deterministic 16f2810b-8fc7-4acf-959f-f607988a1e28 (restored; harbour logbooks)",
+            "expectation": "restoration",
+            "matches": [
+              {
+                "claim_id": "16f2810b-8fc7-4acf-959f-f607988a1e28",
+                "source": "deterministic"
+              }
+            ],
+            "passed": true
+          },
+          {
+            "dimension": "dates",
+            "evidence": "observed ['2007']; accepted [['2007', '2012']]",
+            "expectation": "restoration-range",
+            "passed": false
+          },
+          {
+            "dimension": "references",
+            "evidence": "entity refs ['North Quay archive', 'archive-restoration-range harbour logbook restoration (2007-2012)']; accepted ['North Quay archive']",
+            "expectation": "archive-reference",
+            "passed": true
+          }
+        ]
+      }
+    ],
+    "dimensions": {
+      "accounts": {
+        "passed": 0,
+        "rate": 0.0,
+        "total": 1
+      },
+      "chronology": {
+        "passed": 0,
+        "rate": 0.0,
+        "total": 3
+      },
+      "context": {
+        "passed": 0,
+        "rate": 0.0,
+        "total": 1
+      },
+      "coverage": {
+        "passed": 5,
+        "rate": 0.8333333333333334,
+        "total": 6
+      },
+      "dates": {
+        "passed": 1,
+        "rate": 0.3333333333333333,
+        "total": 3
+      },
+      "references": {
+        "passed": 1,
+        "rate": 0.25,
+        "total": 4
+      }
+    },
+    "schema": "anomalica/digestion-evaluation-fixtures/1"
+  },
+  "source": {
+    "code_revision": {
+      "commit": "6f84a1317c16ad3dd06c965702ad56959c6ee7a7",
+      "dirty": true
+    },
+    "completed_at": "2026-09-17T07:27:26.654874+00:00",
+    "effective_configuration": {
+      "chunking": {
+        "claims_max_chars": 250000,
+        "hard_max_chars": 150000,
+        "max_chars": 250000,
+        "min_chars": 20000,
+        "strategy": "chapter_then_natural_boundary"
+      },
+      "configuration_schema": "anomalica/digest-extraction-config/1",
+      "decoding": {
+        "max_output_tokens": null,
+        "omitted_parameters_use_provider_defaults": true,
+        "reasoning_effort": "low",
+        "temperature": null,
+        "top_p": null
+      },
+      "implementation_sha256": "23f13318902ca9d814034c0d6e0a576fce96ea9c540baf4f4ee3a5f7d970599f",
+      "iteration": {
+        "maximum_rounds": 40,
+        "minimum_new_items": 2
+      },
+      "model": {
+        "requested": "sonnet",
+        "resolved": "claude-sonnet-5",
+        "route": "cli",
+        "version": "claude-sonnet-5"
+      },
+      "passes": [
+        {
+          "name": "nodes",
+          "prompt": {
+            "id": "nodes",
+            "sha256": "1ca968e2b28b26a9acea5fb8df00083fa61e690577899237bf6ea47a492dd7bb",
+            "version": "v4"
+          },
+          "schema_sha256": "4c85e1fcc389b9588326230afd67dfab0918f8a8ba63317f3b38e4fdf2df4bf6"
+        },
+        {
+          "name": "claims",
+          "prompt": {
+            "id": "claims",
+            "sha256": "eb5ebf0a71831417028d57ae1099199fa3b9e8531970cdbb3c56770b0c0ec4dc",
+            "version": "v6"
+          },
+          "schema_sha256": "01865f407667d09519a69062cb8f0dc28acc732042366462850b4988460fe95c"
+        }
+      ],
+      "post_processing": {
+        "claim_deduplication": "proposition_type_attestation_speaker_anonymous_root",
+        "entailment": {
+          "available": true,
+          "enabled": true,
+          "max_tokens": 512,
+          "stage1_model": "MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli",
+          "stage2_model": "MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli",
+          "window_chars": 800
+        },
+        "location_alignment": "timed_or_materialised_pre_digest"
+      },
+      "preparation": {
+        "prep_version": 8
+      },
+      "validation": {
+        "record_specific_claim_reference_enum": true,
+        "schema_enforcement": "native"
+      }
+    },
+    "extraction_config": "sha256:2e993b81583b7ca7e3fd73840cbf000bdf6ad89bcb06b6f6d49c96339e7ced46",
+    "kind": "genuine-experiment-report",
+    "model": "sonnet",
+    "prediction_sha256": {
+      "archive-restoration-range": "sha256:2f182b3388b41e8ddd5c614e5c28464dc5ac09d42002a69add1013f618365d00",
+      "ridge-rescue-reverse-narration": "sha256:63a2274ae9b62a9dbd88885a892e10f9125a2e982c227a5cd9c09a580ede2001"
+    },
+    "report_sha256": "sha256:179d5a0122865546b8150df2257f40fbd9ab12eebbb48176fcc42b3556183268",
+    "run_id": "20260917T072611Z-sonnet-afeb3cc0",
+    "semantic_adjudication": null,
+    "use_api": false
+  }
+}

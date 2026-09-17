@@ -1,0 +1,4 @@
+schema: anomalica/digestion-evaluation-predictions/1
+predictions:
+  ridge-rescue-reverse-narration: predictions/ridge-rescue-reference.yaml
+  archive-restoration-range: predictions/archive-restoration-reference.yaml

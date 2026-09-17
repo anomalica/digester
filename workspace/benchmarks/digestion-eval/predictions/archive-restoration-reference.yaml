@@ -1,0 +1,9 @@
+schema: anomalica/digest/1
+model: hand-authored-reference
+nodes: []
+domain_claims:
+  - id: restoration
+    date_range: ['2007', '2012']
+    refs:
+      - {id: north-quay-archive, name: North Quay archive}
+    text: The harbour records were conserved by the North Quay archive.

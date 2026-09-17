@@ -1096,6 +1096,255 @@ def eval_cmd(
         click.echo(f"\nFull results (with diagnostics): {json_out}")
 
 
+@main.command(name="eval-fixtures")
+@click.argument("fixture", type=click.Path(exists=True, dir_okay=False, path_type=Path))
+@click.option(
+    "--variant",
+    "variants",
+    multiple=True,
+    required=True,
+    metavar="NAME=PATH",
+    help="Named digest YAML/JSON prediction; repeat to compare variants.",
+)
+@click.option(
+    "--adjudication",
+    "adjudications",
+    multiple=True,
+    metavar="NAME=PATH",
+    help="Hash-bound semantic sidecar for the named variant; repeat as needed.",
+)
+@click.option("--case", "case_id", default=None, help="Score only one fixture case id.")
+@click.option(
+    "--json-out",
+    type=click.Path(dir_okay=False, path_type=Path),
+    default=None,
+    help="Write complete machine-readable results.",
+)
+def eval_fixtures_cmd(
+    fixture: Path,
+    variants: tuple[str, ...],
+    adjudications: tuple[str, ...],
+    case_id: str | None,
+    json_out: Path | None,
+) -> None:
+    """Score digest variants against narrative behaviour fixtures.
+
+    This command never invokes a model. It can consume separately produced human
+    or model semantic adjudications bound to the exact fixture and digest bytes.
+    """
+    from digester import fixture_eval
+
+    try:
+        fixture_document, fixture_hash = fixture_eval.load_hashed_document(fixture)
+        fixture_eval.validate_fixture(fixture_document)
+        parsed_variants: list[tuple[str, Path]] = []
+        variant_names: set[str] = set()
+        for binding in variants:
+            name, separator, raw_path = binding.partition("=")
+            name = name.strip()
+            if not separator or not name or not raw_path.strip():
+                raise fixture_eval.FixtureError("--variant must be NAME=PATH")
+            if name in variant_names:
+                raise fixture_eval.FixtureError(f"duplicate variant name {name}")
+            variant_names.add(name)
+            parsed_variants.append((name, Path(raw_path)))
+
+        adjudication_paths: dict[str, Path] = {}
+        for binding in adjudications:
+            name, separator, raw_path = binding.partition("=")
+            name = name.strip()
+            if not separator or not name or not raw_path.strip():
+                raise fixture_eval.FixtureError("--adjudication must be NAME=PATH")
+            if name in adjudication_paths:
+                raise fixture_eval.FixtureError(
+                    f"duplicate adjudication for variant {name}"
+                )
+            adjudication_paths[name] = Path(raw_path)
+        unknown = set(adjudication_paths) - variant_names
+        if unknown:
+            raise fixture_eval.FixtureError(
+                f"adjudications name unknown variants {sorted(unknown)}"
+            )
+
+        results = []
+        for name, path in parsed_variants:
+            case_ids = [case["id"] for case in fixture_document.get("cases") or []]
+            predictions, prediction_hashes = fixture_eval.load_prediction_inputs(
+                path, case_ids, case_id=case_id
+            )
+            adjudication = None
+            if name in adjudication_paths:
+                adjudication_path = adjudication_paths[name]
+                adjudication = fixture_eval.validate_adjudications(
+                    fixture_eval.load_document(adjudication_path),
+                    fixture_sha256=fixture_hash,
+                    prediction_sha256=prediction_hashes,
+                    fixture=fixture_document,
+                    predictions=predictions,
+                )
+            result = fixture_eval.score(
+                fixture_document,
+                predictions,
+                case_id=case_id,
+                adjudications=adjudication,
+            )
+            result["variant"] = name
+            result["prediction"] = str(path)
+            result["adjudication"] = (
+                str(adjudication_paths[name]) if name in adjudication_paths else None
+            )
+            results.append(result)
+    except fixture_eval.FixtureError as exc:
+        raise click.ClickException(str(exc)) from exc
+
+    click.echo(fixture_eval.format_report(results))
+    if json_out is not None:
+        json_out.write_text(fixture_eval.json_report(results))
+        click.echo(f"\nFull results: {json_out}")
+
+
+_FIXTURE_EVAL_ROOT = Path(__file__).resolve().parents[1] / "benchmarks/digestion-eval"
+_FIXTURE_REPORT_ROOT = Path(__file__).resolve().parents[2] / "reports/digestion-eval"
+_FIXTURE_STUB_BASELINE = _FIXTURE_EVAL_ROOT / "stub-baseline.json"
+_FIXTURE_QUALITY_BASELINE = _FIXTURE_EVAL_ROOT / "quality-baseline.json"
+
+
+@main.command(name="fixture-experiment")
+@click.option(
+    "--fixture",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=_FIXTURE_EVAL_ROOT / "cases.yaml",
+    show_default=True,
+)
+@click.option(
+    "--baseline",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help="Comparison baseline; defaults to stub baseline with --stub-responses, otherwise quality baseline.",
+)
+@click.option(
+    "--output-root",
+    type=click.Path(file_okay=False, path_type=Path),
+    default=_FIXTURE_REPORT_ROOT,
+    show_default=True,
+)
+@click.option("--model", default="sonnet", show_default=True)
+@click.option(
+    "--stub-responses",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help="Run production extraction with canned transport responses and no provider call.",
+)
+@click.option(
+    "--adjudication",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help="Optional exact-input-bound semantic adjudication sidecar.",
+)
+@click.option(
+    "--confirm",
+    is_flag=True,
+    help="Approve the printed aggregate estimate for a metered model run.",
+)
+@click.pass_context
+def fixture_experiment_cmd(
+    ctx: click.Context,
+    fixture: Path,
+    baseline: Path | None,
+    output_root: Path,
+    model: str,
+    stub_responses: Path | None,
+    adjudication: Path | None,
+    confirm: bool,
+) -> None:
+    """Run production extraction over fixtures and compare the accepted baseline."""
+    from digester.fixture_experiment import ExperimentError, run_experiment
+
+    use_api = False if stub_responses is not None else resolve_use_api(_USE_API_VAR)
+    selected_baseline = baseline or (
+        _FIXTURE_STUB_BASELINE
+        if stub_responses is not None
+        else _FIXTURE_QUALITY_BASELINE
+    )
+
+    def dispatch_gate(prepared: list[dict]) -> dict[str, object]:
+        authorities = {
+            item["id"]: _authorise_hosted_input(item["path"], model, use_api)
+            for item in prepared
+        }
+        if stub_responses is not None:
+            return authorities
+        source_chars = [len(item["parsed"].body or "") for item in prepared]
+        total_chars = sum(source_chars)
+        if _uses_claude_allowance(model, use_api):
+            allowance = check_allowance(
+                session_headroom=headroom_for(total_chars),
+                weekly_headroom=weekly_reserve_for(total_chars),
+            )
+            if not allowance.ok:
+                raise ExperimentError(f"allowance ceiling: {allowance.reason}")
+            click.echo(f"Allowance ok ({allowance.reason})")
+        if is_metered(model, use_api) and not spend_confirmed(
+            estimate_batch(source_chars, model),
+            model,
+            confirm,
+            echo=click.echo,
+            use_api=use_api,
+        ):
+            raise ExperimentError("metered fixture experiment was not approved")
+        return authorities
+
+    try:
+        result = run_experiment(
+            fixture,
+            selected_baseline,
+            output_root,
+            model=model,
+            use_api=use_api,
+            dispatch_gate=dispatch_gate,
+            stub_responses=stub_responses,
+            adjudication_path=adjudication,
+        )
+    except (ExperimentError, ValueError, OSError) as exc:
+        raise click.ClickException(str(exc)) from exc
+    summary = (result["run_dir"] / "summary.txt").read_text()
+    click.echo(summary, nl=False)
+    click.echo(f"Artifacts: {result['run_dir']}")
+    if result["report"]["baseline_comparison"]["outcome"] in {"worse", "mixed"}:
+        ctx.exit(1)
+
+
+@main.command(name="fixture-accept-baseline")
+@click.argument("report", type=click.Path(exists=True, dir_okay=False, path_type=Path))
+@click.option(
+    "--fixture",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=_FIXTURE_EVAL_ROOT / "cases.yaml",
+    show_default=True,
+)
+@click.option(
+    "--output",
+    type=click.Path(dir_okay=False, path_type=Path),
+    default=_FIXTURE_QUALITY_BASELINE,
+    show_default=True,
+)
+def fixture_accept_baseline_cmd(report: Path, fixture: Path, output: Path) -> None:
+    """Accept a validated genuine experiment report as the quality baseline."""
+    from digester.fixture_experiment import ExperimentError, accept_quality_baseline
+
+    if output.resolve() == _FIXTURE_STUB_BASELINE.resolve():
+        raise click.ClickException(
+            "quality acceptance cannot overwrite the stub baseline"
+        )
+    try:
+        baseline = accept_quality_baseline(report, fixture, output)
+    except (ExperimentError, ValueError, OSError) as exc:
+        raise click.ClickException(str(exc)) from exc
+    click.echo(
+        f"Accepted quality baseline from {baseline['source']['run_id']}: {output}"
+    )
+
+
 @main.command(name="gold-batch")
 @click.argument("record", type=click.Path(exists=True))
 @click.argument("gold_json", type=click.Path(exists=True))

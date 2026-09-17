@@ -1,0 +1,34 @@
+schema: anomalica/digest/1
+model: hand-authored-reference
+nodes: []
+domain_claims:
+  - id: rescue-end
+    date: '2019-10-18'
+    refs:
+      - {id: pine-ridge-rescue, name: Pine Ridge rescue}
+    text: Mara Voss brought Eli Hart back to Pine Ridge station.
+  - id: rescue-start
+    date: '2019-10-16'
+    refs:
+      - {id: mara-voss, name: Mara Voss}
+    text: She started the rescue when she departed the station.
+  - id: radio-failure
+    refs:
+      - {id: emergency-communications, name: Emergency communications}
+    text: Her communications radio stopped working.
+  - id: beacon-failure
+    text: Her locator beacon failed at the same time as the radio.
+  - id: rockfall
+    text: Falling rocks occurred at an unknown time relative to the equipment failure.
+evaluation:
+  accounts:
+    - id: ridge-telling
+      claim_ids: [rescue-start, radio-failure, beacon-failure, rockfall, rescue-end]
+  chronology:
+    - account_id: ridge-telling
+      before:
+        - [rescue-start, rescue-end]
+      simultaneous:
+        - [radio-failure, beacon-failure]
+      unknown:
+        - [radio-failure, rockfall]

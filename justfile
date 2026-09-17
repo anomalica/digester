@@ -52,3 +52,23 @@ health:
     PYTHONPATH="$HOME/repos/anomalica/anomalica-common/src:workspace" \
         python3 -m digester.cli health 2>&1 | tee reports/health-latest.txt
     exit "${PIPESTATUS[0]}"
+
+# Agent gate for extraction changes: production passes with canned responses,
+# followed by behaviour scoring and comparison with the accepted baseline.
+fixture-eval:
+    PYTHONPATH="$HOME/repos/anomalica/anomalica-common/src:workspace" \
+        python3 -m digester.cli fixture-experiment \
+        --baseline workspace/benchmarks/digestion-eval/stub-baseline.json \
+        --stub-responses workspace/benchmarks/digestion-eval/stub-responses.yaml
+
+# Genuine experiment. Run once without --confirm to print a metered estimate;
+# rerun with --confirm only after that aggregate amount has explicit approval.
+fixture-experiment *ARGS:
+    PYTHONPATH="$HOME/repos/anomalica/anomalica-common/src:workspace" \
+        python3 -m digester.cli fixture-experiment \
+        --baseline workspace/benchmarks/digestion-eval/quality-baseline.json {{ARGS}}
+
+# Explicitly replace the genuine quality baseline after inspecting a complete run.
+fixture-accept-baseline REPORT *ARGS:
+    PYTHONPATH="$HOME/repos/anomalica/anomalica-common/src:workspace" \
+        python3 -m digester.cli fixture-accept-baseline "{{REPORT}}" {{ARGS}}

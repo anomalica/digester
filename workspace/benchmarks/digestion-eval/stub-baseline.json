@@ -1,0 +1,19 @@
+{
+  "schema": "anomalica/digestion-fixture-stub-baseline/1",
+  "fixture_sha256": "sha256:afeb3cc0073f5bb66e9f2f37ab60a647e64dc5d252358ba1e2183418d8c8be93",
+  "source": {
+    "kind": "deterministic-stub-experiment",
+    "model": "sonnet",
+    "stub_responses_sha256": "sha256:b02259642df5fad0ffe1503ae420826dd264c7a5d3a5e848d241eb9259867663"
+  },
+  "score": {
+    "dimensions": {
+      "coverage": {"passed": 6, "total": 6, "rate": 1.0},
+      "context": {"passed": 0, "total": 1, "rate": 0.0},
+      "dates": {"passed": 2, "total": 3, "rate": 0.6666666666666666},
+      "references": {"passed": 4, "total": 4, "rate": 1.0},
+      "accounts": {"passed": 0, "total": 1, "rate": 0.0},
+      "chronology": {"passed": 0, "total": 3, "rate": 0.0}
+    }
+  }
+}

@@ -1,0 +1,95 @@
+schema: anomalica/digestion-evaluation-fixtures/1
+cases:
+  - id: ridge-rescue-reverse-narration
+    source: |-
+      By sunrise on 18 October 2019, ranger Mara Voss had brought the injured
+      climber Eli Hart back to Pine Ridge station. The rescue had begun two
+      nights earlier, when she left the station after Hart's emergency call.
+      At 23:10 her radio and locator beacon failed together. It was never clear
+      whether a rockfall occurred before or after that failure. She reached Hart
+      shortly after midnight and sheltered with him until the weather eased.
+    expectations:
+      concepts:
+        - id: rescue-start
+          terms:
+            - [began, started]
+            - [left the station, departed the station]
+        - id: radio-failure
+          terms:
+            - [radio, communications]
+            - [failed, stopped working]
+        - id: beacon-failure
+          terms:
+            - [beacon, locator]
+            - [failed, stopped working]
+        - id: rockfall
+          terms:
+            - [rockfall, falling rocks]
+        - id: rescue-end
+          terms:
+            - [brought, returned]
+            - [Eli Hart, Hart]
+            - [Pine Ridge station, station]
+      contexts:
+        - id: pronoun-resolves-in-rescue-account
+          concepts: [rescue-start, rescue-end]
+          referents: [Mara Voss]
+      dates:
+        - id: start-date
+          concept: rescue-start
+          any_of: ['2019-10-16']
+        - id: end-date
+          concept: rescue-end
+          any_of: ['2019-10-18']
+      references:
+        - id: ranger-reference
+          concept: rescue-start
+          kind: entity
+          any_of: [Mara Voss]
+        - id: rescue-event-reference
+          concept: rescue-end
+          kind: event
+          any_of: [Pine Ridge rescue]
+        - id: safety-topic-reference
+          concept: radio-failure
+          kind: topic
+          any_of: [Emergency communications]
+      accounts:
+        - id: rescue-account
+          concepts: [rescue-start, radio-failure, beacon-failure, rockfall, rescue-end]
+      chronology:
+        - id: start-before-end
+          account: rescue-account
+          relation: before
+          concepts: [rescue-start, rescue-end]
+        - id: failures-simultaneous
+          account: rescue-account
+          relation: simultaneous
+          concepts: [radio-failure, beacon-failure]
+        - id: rockfall-order-unknown
+          account: rescue-account
+          relation: unknown
+          concepts: [radio-failure, rockfall]
+  - id: archive-restoration-range
+    source: |-
+      The North Quay archive restored the harbour logbooks between 2007 and
+      2012. Conservators digitised the collection after the restoration.
+    expectations:
+      concepts:
+        - id: restoration
+          terms:
+            - [restored, conserved]
+            - [harbour logbooks, harbour records]
+      contexts: []
+      dates:
+        - id: restoration-range
+          concept: restoration
+          any_of:
+            - ['2007', '2012']
+      references:
+        - id: archive-reference
+          concept: restoration
+          kind: entity
+          any_of: [North Quay archive]
+      accounts: []
+      chronology: []
