@@ -1,7 +1,7 @@
 # Digester Agent Guide
 
-Read `../AGENTS.md` first. It contains the workspace-wide operating rules,
-architecture sources, and resource controls that apply here.
+Parent Product and root Core instructions are loaded through `opencode.json` and remain
+mandatory.
 
 ## Component Boundary
 
@@ -51,14 +51,14 @@ Run a focused test inside the existing development image when iterating:
 ```bash
 docker run --rm \
   -v "$(pwd)/workspace:/home/nonroot/workspace" \
-  -v "$HOME/repos/anomalica/anomalica-common/src:/opt/anomalica-common:ro" \
+  -v "$HOME/repos/anomalica/product/anomalica-common/src:/opt/anomalica-common:ro" \
   --user "$(id -u):$(id -g)" \
   -w /home/nonroot/workspace \
   anomalica-digester:development \
   python -m pytest tests/test_extract.py -q
 ```
 
-Use `PYTHONPATH="$HOME/repos/anomalica/anomalica-common/src:workspace"` for
+Use `PYTHONPATH="$HOME/repos/anomalica/product/anomalica-common/src:workspace"` for
 host-side deterministic CLI commands such as `just health`.
 
 ## Extraction Safety
