@@ -104,7 +104,12 @@ def main() -> int:
                 g = grade_digest(body, d)
                 recalls.append(g["recall"])
                 prompts.add(e["prompt"])
-                configs.add((d.get("extraction_config") or {}).get("config", "-"))
+                raw_config = d.get("extraction_config")
+                configs.add(
+                    raw_config.get("config", "-")
+                    if isinstance(raw_config, dict)
+                    else raw_config or "-"
+                )
                 print(
                     f"  {model:8} {e['label']:8} recall {g['recall']:.3f}  "
                     f"fidelity {g['quote_fidelity']:.3f}  claims {g['claims']:4}"
