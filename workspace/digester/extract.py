@@ -529,7 +529,11 @@ def _split_at_chapters(text: str) -> list[str] | None:
     char-window chunking. We trust the annotation - no minimum size check.
     """
 
-    parts = re.split(r"\n(?=<!-- chapter: )", text)
+    # Split at a zero-width boundary after the newline. Consuming that newline
+    # made the chapter list lossy; the source-mapped chunk adapter correctly
+    # refused to invent offsets for chunks whose concatenation no longer equalled
+    # the materialised input.
+    parts = re.split(r"(?<=\n)(?=<!-- chapter: )", text)
     if len(parts) < 2:
         return None
     return parts

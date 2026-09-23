@@ -43,6 +43,7 @@ class ParsedRecord:
     title: str = ""
     date: str | None = None
     creators: list[str] = field(default_factory=list)
+    publisher: str | None = None
     source_type: str | None = None
     reference: str | None = None
     schema_version: str | None = None
@@ -104,14 +105,19 @@ def parse_record(text: str) -> ParsedRecord:
                     # Canonical frontmatter is `date_published` (ingest-format
                     # spec); `date` is a legacy fallback. Without this every
                     # digest carried a null date.
-                    record.date = _normalise_date(
-                        fm.get("date_published") or fm.get("date")
-                    )
                     provenance = fm.get("provenance")
                     if not isinstance(provenance, Mapping):
                         provenance = {}
+                    record.date = _normalise_date(
+                        fm.get("date_published")
+                        or fm.get("date")
+                        or provenance.get("published_date")
+                    )
                     record.creators = fm.get("creators") or provenance.get(
                         "creators", []
+                    )
+                    record.publisher = fm.get("publisher") or provenance.get(
+                        "publisher"
                     )
                     record.source_type = fm.get("source_type")
                     if not record.source_type:

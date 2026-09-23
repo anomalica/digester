@@ -2,6 +2,7 @@ import pytest
 
 from digester.extract import (
     _build_chunks,
+    _claim_chunk_spans,
     _chunk_text,
     _find_split_point,
     _parse_json,
@@ -160,8 +161,29 @@ def test_split_at_chapters_uses_record_format_markers():
     chapters = _split_at_chapters(text)
     assert chapters is not None
     assert len(chapters) == 3
+    assert "".join(chapters) == text
     assert chapters[0].startswith("<!-- chapter: 1 -->")
     assert chapters[2].startswith("<!-- chapter: 3 -->")
+
+
+def test_claim_chunk_spans_remain_exact_for_chaptered_records():
+    text = (
+        "front matter\n"
+        "<!-- chapter: 1 -->\nFirst chapter.\n"
+        "<!-- chapter: 2 -->\nSecond chapter."
+    )
+
+    spans = _claim_chunk_spans(text)
+
+    assert "".join(chunk for _, _, chunk in spans) == text
+    assert [(start, end) for start, end, _ in spans] == [
+        (0, len(spans[0][2])),
+        (len(spans[0][2]), len(spans[0][2]) + len(spans[1][2])),
+        (
+            len(spans[0][2]) + len(spans[1][2]),
+            len(text),
+        ),
+    ]
 
 
 def test_split_at_chapters_returns_none_without_chapter_markers():

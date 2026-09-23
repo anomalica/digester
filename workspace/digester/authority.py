@@ -128,6 +128,12 @@ def validate_output(digests_dir: Path, digest_path: Path, record_path: Path) -> 
                 f"canonical digest/2 binding is invalid: {exc}"
             ) from exc
     else:
+        for key in ("domain_claims", "infrastructure_claims"):
+            for claim in digest.get(key) or []:
+                if claim.get("source_anchors") is not None:
+                    raise AuthorityError(
+                        "digest/1 claims cannot carry exact source anchors"
+                    )
         expected_pre_digest = pre_digest_hash(materialise(record.body or ""))
         if (digest.get("pre_digest") or {}).get("sha256") != expected_pre_digest:
             raise AuthorityError("canonical digest pre-digest hash is not current")

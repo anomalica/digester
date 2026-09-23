@@ -125,11 +125,28 @@ def validate_digest_record_projection(
         "content_hash": snapshot.content_hash,
         **digest_record_extra(snapshot),
     }
-    for key, value in expected.items():
-        if record_block.get(key) != value:
-            raise AnchorAlignmentError(
-                f"digest Record field {key!r} disagrees with its snapshot"
-            )
+    snapshot_fields = {
+        "title",
+        "content_hash",
+        "provenance",
+        "work_provenance",
+        "assets",
+        "asset_rights",
+        "selection",
+        "page_map",
+    }
+    actual = {key: record_block[key] for key in snapshot_fields if key in record_block}
+    if actual != expected:
+        missing = object()
+        changed = sorted(
+            key
+            for key in snapshot_fields
+            if actual.get(key, missing) != expected.get(key, missing)
+        )
+        raise AnchorAlignmentError(
+            "digest Record projection disagrees with its snapshot: "
+            + ", ".join(changed)
+        )
 
 
 def _occurrences(text: str, fragment: str, bounds: tuple[int, int] | None) -> list[int]:
@@ -232,10 +249,10 @@ def _quote_fragments(quote: str) -> list[str]:
     position = 0
     for match in re.finditer(r"\.{3,}", quote):
         marker_start = match.end() - 3
-        parts.append(quote[position:marker_start].strip())
+        parts.append(quote[position:marker_start])
         position = match.end()
-    parts.append(quote[position:].strip())
-    if any(not part for part in parts):
+    parts.append(quote[position:])
+    if any(not part.strip() for part in parts):
         raise AnchorAlignmentError("an elision marker must join two quote fragments")
     return parts
 
@@ -252,7 +269,7 @@ def align_claim_source_anchors(
     quote = claim.get("original_excerpt")
     if not isinstance(quote, str) or not quote.strip():
         raise AnchorAlignmentError("digest/2 claims require a non-empty exact quote")
-    fragments = _quote_fragments(quote.strip())
+    fragments = _quote_fragments(quote)
 
     raw_bounds = claim.get("_source_chunk")
     bounds = None
@@ -384,9 +401,7 @@ def anchor_claims(
         value["source_anchors"] = [
             anchor.model_dump(mode="json") for anchor in anchors.root
         ]
-        value["original_excerpt"] = " ... ".join(
-            anchor.quote for anchor in anchors.root
-        )
+        value["original_excerpt"] = "...".join(anchor.quote for anchor in anchors.root)
         anchored.append(value)
     return anchored, rejected
 

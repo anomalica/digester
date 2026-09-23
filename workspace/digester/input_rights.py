@@ -8,6 +8,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import yaml
+from anomalica_common.records import Record3Structure
+from pydantic import ValidationError
 
 from digester.record_parser import parse_record
 
@@ -138,22 +140,38 @@ def _bind(
     require_open_status: bool,
 ) -> HostedInputAuthority:
     canonical, content_hash, raw, metadata, body = _strict_record(Path(path))
-    copyright_block = metadata.get("copyright")
-    status = (
-        copyright_block.get("status") if isinstance(copyright_block, dict) else None
-    )
-    if require_open_status and (
-        not isinstance(status, str) or status not in HOSTED_STATUSES
-    ):
-        if status is None:
-            reason = "absent"
-        elif not isinstance(status, str) or status not in KNOWN_STATUSES:
-            reason = "unrecognised or malformed"
-        else:
-            reason = status
-        raise HostedInputRightsError(
-            f"copyright.status {reason} does not permit hosted model input"
+    statuses: list[tuple[str | None, object]]
+    if metadata.get("schema") == "anomalica/record/3":
+        try:
+            structure = Record3Structure.from_frontmatter(metadata)
+        except (ValidationError, ValueError, TypeError) as exc:
+            raise HostedInputRightsError(
+                "hosted input record/3 Asset selection is malformed"
+            ) from exc
+        statuses = [
+            (asset.asset_hash, asset.copyright.status) for asset in structure.assets
+        ]
+    else:
+        copyright_block = metadata.get("copyright")
+        status = (
+            copyright_block.get("status") if isinstance(copyright_block, dict) else None
         )
+        statuses = [(None, status)]
+
+    if require_open_status:
+        for asset_hash, status in statuses:
+            if isinstance(status, str) and status in HOSTED_STATUSES:
+                continue
+            if status is None:
+                reason = "absent"
+            elif not isinstance(status, str) or status not in KNOWN_STATUSES:
+                reason = "unrecognised or malformed"
+            else:
+                reason = status
+            subject = f"Asset {asset_hash} " if asset_hash else ""
+            raise HostedInputRightsError(
+                f"{subject}copyright.status {reason} does not permit hosted model input"
+            )
     return HostedInputAuthority(
         record_path=canonical,
         record_content_hash=content_hash,

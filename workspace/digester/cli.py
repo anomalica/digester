@@ -648,7 +648,7 @@ def _do_extract(
             result,
             record_title=parsed.title,
             record_producer=_producer_from_creators(parsed.creators),
-            record_publisher=parsed.metadata.get("publisher"),
+            record_publisher=parsed.publisher,
             record_date=parsed.date,
             record_medium=parsed.source_type,
             record_duration=parsed.metadata.get("duration"),
@@ -696,7 +696,8 @@ def _do_extract(
                 # the store rather than trusting this snapshot.
                 **(
                     {"copyright_status": _cp["status"]}
-                    if isinstance(_cp := parsed.metadata.get("copyright"), dict)
+                    if snapshot is None
+                    and isinstance(_cp := parsed.metadata.get("copyright"), dict)
                     and _cp.get("status")
                     else {}
                 ),

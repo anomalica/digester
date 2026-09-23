@@ -63,6 +63,8 @@ def _frontmatter() -> dict:
         ],
         "provenance": {
             "creators": ["Example Author"],
+            "publisher": "Example Publisher",
+            "published_date": "2024",
             "source_url": "https://example.invalid/work",
         },
         "work_provenance": {
@@ -105,6 +107,8 @@ def test_record3_parser_retains_shared_structure_inputs_and_nested_provenance():
     assert is_digest2_record(structure)
     assert [page.file_page for page in record.pages] == [1, 2]
     assert record.creators == ["Example Author"]
+    assert record.publisher == "Example Publisher"
+    assert record.date == "2024"
     assert record.reference == "https://example.invalid/work"
     assert structure.page_map[0].asset_file_page == 2
 
@@ -170,6 +174,19 @@ def test_ambiguous_exact_quote_fails_closed_but_record_page_hint_disambiguates()
     ).root[0]
     assert anchor.record_page == 2
     assert anchor.asset_hash == B
+
+
+def test_realigner_does_not_repair_a_non_verbatim_quote():
+    _, _, prepared = _prepared()
+
+    with pytest.raises(AnchorAlignmentError, match="absent"):
+        align_claim_source_anchors(
+            {
+                "original_excerpt": " First fragment near boundary.",
+                "location_in_record": "record page 1",
+            },
+            prepared,
+        )
 
 
 def test_elided_fragments_remain_separate_and_missing_mapping_fails_closed():
@@ -287,6 +304,8 @@ def test_do_extract_emits_and_validates_digest2_without_a_provider(
     assert digest["pre_digest"]["source_map_sha256"].startswith("sha256:")
     assert digest["record_snapshot_sha256"].startswith("sha256:")
     assert digest["record"]["selection"] == _frontmatter()["selection"]
+    assert digest["record"]["publisher"] == "Example Publisher"
+    assert digest["record"]["date"] == "2024"
     assert [item["status"] for item in digest["record"]["asset_rights"]] == [
         "licensed",
         "public_domain",
@@ -344,6 +363,20 @@ def test_do_extract_emits_and_validates_digest2_without_a_provider(
     tampered["record"]["asset_rights"][0]["status"] = "unknown"
     output.write_text(yaml.safe_dump(tampered, sort_keys=False))
     with pytest.raises(AuthorityError, match="Record projection"):
+        validate_output(tmp_path, output, record_path)
+
+    stale_map = copy.deepcopy(digest)
+    stale_map["pre_digest"]["source_map_sha256"] = "sha256:" + "f" * 64
+    output.write_text(yaml.safe_dump(stale_map, sort_keys=False))
+    with pytest.raises(AuthorityError, match="source_map_sha256"):
+        validate_output(tmp_path, output, record_path)
+
+    stale_anchor = copy.deepcopy(digest)
+    stale_anchor["domain_claims"][0]["source_anchors"][0]["asset_text_sha256"] = (
+        "sha256:" + "f" * 64
+    )
+    output.write_text(yaml.safe_dump(stale_anchor, sort_keys=False))
+    with pytest.raises(AuthorityError, match="source anchor disagrees"):
         validate_output(tmp_path, output, record_path)
 
     output.write_text(yaml.safe_dump(digest, sort_keys=False))
@@ -415,6 +448,68 @@ def test_non_paged_record3_remains_digest1_with_a_record_snapshot(
     assert "source_map_sha256" not in digest["pre_digest"]
     assert digest["record_snapshot_sha256"].startswith("sha256:")
     assert digest["record"]["assets"][0]["source_type"] == "web"
+    validate_output(tmp_path, output, record_path)
+
+    stale_projection = copy.deepcopy(digest)
+    stale_projection["record"]["work_provenance"] = {
+        "root_id": "invented",
+        "evidence": ["not in the Record"],
+    }
+    output.write_text(yaml.safe_dump(stale_projection, sort_keys=False))
+    with pytest.raises(AuthorityError, match="Record projection"):
+        validate_output(tmp_path, output, record_path)
+
+    exact_anchor_on_digest1 = copy.deepcopy(digest)
+    exact_anchor_on_digest1["domain_claims"] = [{"source_anchors": [{"fake": True}]}]
+    output.write_text(yaml.safe_dump(exact_anchor_on_digest1, sort_keys=False))
+    with pytest.raises(AuthorityError, match="cannot carry exact source anchors"):
+        validate_output(tmp_path, output, record_path)
+
+
+def test_legacy_page_markers_remain_digest1_without_exact_anchors(
+    tmp_path: Path, monkeypatch
+):
+    monkeypatch.setenv("DIGESTER_ENTAILMENT", "off")
+    record_path = tmp_path / "legacy.md"
+    record_path.write_text(
+        "---\n"
+        "schema: anomalica/record/1\n"
+        f"content_hash: {A}\n"
+        "title: Legacy PDF\n"
+        "source_type: pdf\n"
+        "---\n"
+        "<!-- file_page: 1 -->\nLegacy page text.\n"
+    )
+    parsed = parse_record(record_path.read_text())
+    output = tmp_path / "legacy.yaml"
+
+    import digester.extract as extract
+
+    monkeypatch.setattr(
+        extract,
+        "extract_two_pass",
+        lambda *args, **kwargs: {
+            "nodes": [],
+            "claims": [],
+            "main_subject": "",
+            "codenames_to_resolve": [],
+            "acronyms": [],
+            "prompt_provenance": extract.prompt_provenance(),
+        },
+    )
+    cli._do_extract(
+        record_path,
+        parsed,
+        output,
+        "haiku",
+        input_authority=object(),
+    )
+
+    digest = yaml.safe_load(output.read_text())
+    assert digest["schema"] == "anomalica/digest/1"
+    assert digest["pre_digest"]["prep_version"] == 8
+    assert "source_map_sha256" not in digest["pre_digest"]
+    assert "record_snapshot_sha256" not in digest
     validate_output(tmp_path, output, record_path)
 
 

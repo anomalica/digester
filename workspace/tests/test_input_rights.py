@@ -3,6 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+import yaml
+from anomalica_common.identity import record_identity
 from click.testing import CliRunner
 
 from digester import cli, extract
@@ -38,6 +40,59 @@ def _record(
     return path
 
 
+def _record3(tmp_path: Path, statuses: tuple[str, str]) -> Path:
+    asset_a = "sha256:" + "b" * 64
+    asset_b = "sha256:" + "c" * 64
+    selection = [
+        {"asset_hash": asset_a, "selector": {"type": "pdf_page", "page": 2}},
+        {"asset_hash": asset_b, "selector": {"type": "whole"}},
+    ]
+    content_hash = record_identity(selection)
+    frontmatter = {
+        "schema": "anomalica/record/3",
+        "content_hash": content_hash,
+        "title": "Rights fixture",
+        # This legacy projection must never widen one restricted Asset.
+        "copyright": {"status": "public_domain"},
+        "assets": [
+            {
+                "asset_hash": asset_a,
+                "file_format": "pdf",
+                "archived_ext": "pdf",
+                "source_type": "pdf",
+                "pages": 2,
+                "acquisition": {"acquired_at": "2026-09-23T09:00:00Z"},
+                "copyright": {"status": statuses[0]},
+            },
+            {
+                "asset_hash": asset_b,
+                "file_format": "png",
+                "archived_ext": "png",
+                "source_type": "image",
+                "pages": 1,
+                "acquisition": {"acquired_at": "2026-09-23T09:01:00Z"},
+                "copyright": {"status": statuses[1]},
+            },
+        ],
+        "selection": selection,
+        "page_map": [
+            {"record_page": 1, "asset_hash": asset_a, "asset_file_page": 2},
+            {"record_page": 2, "asset_hash": asset_b, "asset_file_page": 1},
+        ],
+    }
+    store = tmp_path / "store"
+    store.mkdir(parents=True, exist_ok=True)
+    path = store / f"{content_hash.removeprefix('sha256:')}.md"
+    path.write_text(
+        "---\n"
+        + yaml.safe_dump(frontmatter, sort_keys=False)
+        + "---\n"
+        + "<!-- file_page: 1 -->\nFirst page.\n"
+        + "<!-- file_page: 2 -->\nSecond page.\n"
+    )
+    return path
+
+
 @pytest.mark.parametrize("status", ["public_domain", "open_licence"])
 @pytest.mark.parametrize("variant", [False, True], ids=["direct", "variant-only"])
 def test_open_statuses_reach_cli_extraction(tmp_path, monkeypatch, status, variant):
@@ -53,6 +108,16 @@ def test_open_statuses_reach_cli_extraction(tmp_path, monkeypatch, status, varia
     assert result.exit_code == 0, result.output
     assert len(calls) == 1
     assert calls[0] == {}
+
+
+def test_record3_requires_every_selected_asset_to_permit_hosted_input(tmp_path):
+    permitted = _record3(tmp_path / "permitted", ("public_domain", "open_licence"))
+    authority = authorise_ordinary_extraction(permitted, MODEL)
+    assert authority.record_content_hash.startswith("sha256:")
+
+    denied = _record3(tmp_path / "denied", ("public_domain", "restricted"))
+    with pytest.raises(HostedInputRightsError, match=r"Asset .* restricted"):
+        authorise_ordinary_extraction(denied, MODEL)
 
 
 @pytest.mark.parametrize("variant", [False, True], ids=["direct", "variant-only"])
