@@ -3,18 +3,19 @@ names:
   image: anomalica-digester
   workspace: workspace
   user: nonroot
-
 stages:
   base:
     from: python:3.12-slim
     steps:
+      - apt-get:
+          install:
+            - git
       - pip:
           install:
             - anthropic==0.116.0
             - click==8.4.2
             - pydantic==2.13.4
             - pyyaml==6.0.3
-
   development:
     from: base
     runtime:
@@ -26,14 +27,13 @@ stages:
         # Shared lib lives in a sibling repo, outside the build context; mount
         # its src and add it to the path (dev only). Production packaging of the
         # shared lib across container-magic projects is a flagged cm feature gap.
-        - ~/repos/anomalica/anomalica-common/src:/opt/anomalica-common:ro
+        - ~/repos/anomalica/product/anomalica-common/src:/opt/anomalica-common:ro
     steps:
       - env:
           PYTHONPATH: /opt/anomalica-common
       - pip:
           install:
             - pytest==9.1.1
-
   production:
     from: base
     steps:

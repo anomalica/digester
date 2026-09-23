@@ -31,6 +31,9 @@ RUN if [ "${USER_NAME}" != "root" ]; then \
         fi && \
         chown "${USER_UID}:${USER_GID}" "${USER_HOME}"; \
     fi
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends git && \
+    rm -rf /var/lib/apt/lists/*
 # Disable PEP 668 (externally-managed-environment): host-system protection
 # against apt/pip conflicts, not applicable inside containers where the whole
 # environment is disposable.

@@ -18,7 +18,7 @@ vault:
 
     docker run --rm \
         -v "$(pwd)/workspace:/home/nonroot/workspace" \
-        -v "$HOME/repos/anomalica/anomalica-common/src:/opt/anomalica-common:ro" \
+        -v "$HOME/repos/anomalica/product/anomalica-common/src:/opt/anomalica-common:ro" \
         -v "$OUT:/home/nonroot/vault" \
         -v "$HOME/.local/share/digester:/home/nonroot/.local/share/digester" \
         --user "$(id -u):$(id -g)" \
@@ -36,8 +36,16 @@ test:
     set -euo pipefail
     docker run --rm \
         -v "$(pwd)/workspace:/home/nonroot/workspace" \
-        -v "$HOME/repos/anomalica/anomalica-common/src:/opt/anomalica-common:ro" \
+        -v "$(pwd)/reports:/home/nonroot/reports" \
+        -v "$HOME/repos/anomalica/product/digests:/home/digests:ro" \
+        -v "$HOME/repos/anomalica/product/anomalica-common/src:/opt/anomalica-common:ro" \
+        -v "$HOME/repos/anomalica/product/anomalica/architecture:/opt/anomalica-architecture:ro" \
         --user "$(id -u):$(id -g)" \
+        -e ANOMALICA_MODEL_POLICY=/opt/anomalica-architecture/model-policy.yaml \
+        -e GIT_AUTHOR_NAME=Test \
+        -e GIT_AUTHOR_EMAIL=test@example.invalid \
+        -e GIT_COMMITTER_NAME=Test \
+        -e GIT_COMMITTER_EMAIL=test@example.invalid \
         -w /home/nonroot/workspace \
         {{IMAGE}} \
         python -m pytest tests/ -v
@@ -49,14 +57,14 @@ health:
     #!/usr/bin/env bash
     set -uo pipefail
     mkdir -p reports
-    PYTHONPATH="$HOME/repos/anomalica/anomalica-common/src:workspace" \
+    PYTHONPATH="$HOME/repos/anomalica/product/anomalica-common/src:workspace" \
         python3 -m digester.cli health 2>&1 | tee reports/health-latest.txt
     exit "${PIPESTATUS[0]}"
 
 # Agent gate for extraction changes: production passes with canned responses,
 # followed by behaviour scoring and comparison with the accepted baseline.
 fixture-eval:
-    PYTHONPATH="$HOME/repos/anomalica/anomalica-common/src:workspace" \
+    PYTHONPATH="$HOME/repos/anomalica/product/anomalica-common/src:workspace" \
         python3 -m digester.cli fixture-experiment \
         --baseline workspace/benchmarks/digestion-eval/stub-baseline.json \
         --stub-responses workspace/benchmarks/digestion-eval/stub-responses.yaml
@@ -64,11 +72,11 @@ fixture-eval:
 # Genuine experiment. Run once without --confirm to print a metered estimate;
 # rerun with --confirm only after that aggregate amount has explicit approval.
 fixture-experiment *ARGS:
-    PYTHONPATH="$HOME/repos/anomalica/anomalica-common/src:workspace" \
+    PYTHONPATH="$HOME/repos/anomalica/product/anomalica-common/src:workspace" \
         python3 -m digester.cli fixture-experiment \
         --baseline workspace/benchmarks/digestion-eval/quality-baseline.json {{ARGS}}
 
 # Explicitly replace the genuine quality baseline after inspecting a complete run.
 fixture-accept-baseline REPORT *ARGS:
-    PYTHONPATH="$HOME/repos/anomalica/anomalica-common/src:workspace" \
+    PYTHONPATH="$HOME/repos/anomalica/product/anomalica-common/src:workspace" \
         python3 -m digester.cli fixture-accept-baseline "{{REPORT}}" {{ARGS}}
