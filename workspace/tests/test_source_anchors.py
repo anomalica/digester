@@ -443,7 +443,7 @@ def test_non_paged_record3_remains_digest1_with_a_record_snapshot(
 
     digest = yaml.safe_load(output.read_text())
     assert digest["schema"] == "anomalica/digest/1"
-    assert digest["pre_digest"]["prep_version"] == 8
+    assert digest["pre_digest"]["prep_version"] == 9
     assert not digest["pre_digest"]["sha256"].startswith("sha256:")
     assert "source_map_sha256" not in digest["pre_digest"]
     assert digest["record_snapshot_sha256"].startswith("sha256:")
@@ -507,7 +507,7 @@ def test_legacy_page_markers_remain_digest1_without_exact_anchors(
 
     digest = yaml.safe_load(output.read_text())
     assert digest["schema"] == "anomalica/digest/1"
-    assert digest["pre_digest"]["prep_version"] == 8
+    assert digest["pre_digest"]["prep_version"] == 9
     assert "source_map_sha256" not in digest["pre_digest"]
     assert "record_snapshot_sha256" not in digest
     validate_output(tmp_path, output, record_path)
