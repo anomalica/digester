@@ -75,7 +75,7 @@ host-side deterministic CLI commands such as `just health`.
   deterministic and free of subscription or API spend.
 - Do not edit sibling ingest, digest, architecture, or shared-library
   repositories unless the task explicitly includes them. Report cross-component
-  defects to the owning workspace.
+  defects to Product for integration.
 
 ## Extraction Experiments
 
