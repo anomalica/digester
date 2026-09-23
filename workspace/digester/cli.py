@@ -134,9 +134,9 @@ def main() -> None:
     "--predigests-root",
     type=click.Path(),
     default=None,
-    help="Store the materialised pre-digest (ADR 0042) under this local, "
-    "gitignored dir. Its hash is recorded in the digest regardless; this stores "
-    "the artefact for the workbench's read-only pre-digest tab.",
+    help="Store the content-addressed materialised pre-digest (ADR 0042). "
+    "Page-mapped record/3 extraction requires this and stores its canonical "
+    "source map in the sibling source-maps/ directory.",
 )
 @click.option(
     "--run-label",
@@ -493,8 +493,11 @@ def _do_extract(
     from anomalica_common.digest import two_pass_result_to_yaml
     from anomalica_common.pre_digest import (
         PREP_VERSION,
+        SOURCE_MAPPED_PREP_VERSION,
         materialise,
         pre_digest_hash,
+        prepare_page_record,
+        store_source_map,
         store_pre_digest,
     )
     from digester.extract import (
@@ -503,6 +506,15 @@ def _do_extract(
         extract_two_pass,
     )
     from digester.extraction_config_registry import fingerprint, register
+    from digester.source_anchors import (
+        anchor_claims,
+        digest2_yaml,
+        digest_record_extra,
+        digest_record_snapshot,
+        is_digest2_record,
+        record3_structure,
+        record_snapshot_yaml,
+    )
 
     if input_authority is None:
         input_authority = authorise_ordinary_extraction(path, model, use_api)
@@ -519,16 +531,45 @@ def _do_extract(
         source_type=parsed.source_type,
     )
 
-    # Pre-digest (ADR 0042): the materialised model input. Its hash is recorded in
-    # every digest for exact reproducibility; the artefact is stored (gitignored,
-    # copyright-bearing) only when a predigests-root is configured.
-    pre_digest_text = materialise(parsed.body)
-    pd_sha = pre_digest_hash(pre_digest_text)
+    # Validate record/3 structurally before any provider call. Eligible PDF/image
+    # Records use the shared mapped producer; every other input remains on the
+    # legacy digest/1 preparation path and cannot infer exact anchors.
+    structure = record3_structure(parsed)
+    snapshot = digest_record_snapshot(parsed, structure) if structure else None
+    source_mapped = is_digest2_record(structure)
+    prepared = prepare_page_record(structure, parsed.body) if source_mapped else None
+    if source_mapped and predigests_root is None:
+        raise click.ClickException(
+            "page-mapped record/3 extraction requires --predigests-root so its "
+            "content-addressed preparation-v9 source map can be retained"
+        )
+
+    # Pre-digest (ADR 0042/0051): the exact model input. Page-mapped output uses
+    # labelled hashes and prep 9; legacy/non-paged output retains prep 8.
+    pre_digest_text = prepared.text if prepared else materialise(parsed.body)
+    prep_version = SOURCE_MAPPED_PREP_VERSION if prepared is not None else PREP_VERSION
+    pd_sha = prepared.sha256 if prepared else pre_digest_hash(pre_digest_text)
     if predigests_root is not None:
-        record_key = (parsed.metadata.get("content_hash") or path.stem).removeprefix(
+        record_key = (parsed.frontmatter.get("content_hash") or path.stem).removeprefix(
             "sha256:"
         )
-        store_pre_digest(predigests_root, record_key, pre_digest_text)
+        if prepared is not None:
+            store_source_map(predigests_root.parent / "source-maps", prepared)
+        stored = store_pre_digest(
+            predigests_root,
+            record_key,
+            pre_digest_text,
+            prep_version=prep_version,
+        )
+        stored_sha = (
+            f"sha256:{stored['predigest_sha256']}"
+            if prepared
+            else stored["predigest_sha256"]
+        )
+        if stored_sha != pd_sha:
+            raise click.ClickException(
+                "stored pre-digest hash disagrees with preparation"
+            )
 
     click.echo(f"Extracting (two-pass) from: {parsed.title or path.name}")
     # What this run is, for its ledger row. The transport writes the row when
@@ -554,6 +595,8 @@ def _do_extract(
             on_progress=click.echo,
             use_api=use_api,
             input_authority=input_authority,
+            prepared_text=pre_digest_text,
+            source_mapped=source_mapped,
         )
 
         # Canonicalise every claim's location from its verbatim quote, before the
@@ -564,7 +607,19 @@ def _do_extract(
         # shared string, so anything grouping claims by location saw two models that
         # never agreed. Aligning the quote discards the model's notation entirely,
         # which is why this cannot regress when a new model is added.
-        _normalise_locations(parsed, result.get("claims") or [], click.echo)
+        if prepared is not None:
+            anchored, rejected = anchor_claims(result.get("claims") or [], prepared)
+            result["claims"] = anchored
+            click.echo(
+                f"  exact source anchors: {len(anchored)} anchored, "
+                f"{len(rejected)} rejected"
+            )
+            for failure in rejected:
+                click.echo(
+                    f"    rejected anchor: {failure['reason']} ({failure['text']!r})"
+                )
+        else:
+            _normalise_locations(parsed, result.get("claims") or [], click.echo)
 
         # Public AI-usage provenance (ADR 0037 inline emission): this digest's
         # extract entry, carried forward onto any upstream chain the ingest
@@ -576,7 +631,7 @@ def _do_extract(
         )
 
         config_parameters = {
-            "prep_version": PREP_VERSION,
+            "prep_version": prep_version,
             "use_api": use_api,
             "schema_enforcement": (
                 get_schema_enforcement()
@@ -645,10 +700,19 @@ def _do_extract(
                     and _cp.get("status")
                     else {}
                 ),
+                **(digest_record_extra(snapshot) if snapshot else {}),
             },
             model=model,
             ai_usage=ai_usage,
-            pre_digest={"sha256": pd_sha, "prep_version": PREP_VERSION},
+            pre_digest={
+                "sha256": pd_sha,
+                "prep_version": prep_version,
+                **(
+                    {"source_map_sha256": prepared.source_map_sha256}
+                    if prepared
+                    else {}
+                ),
+            },
             # Omitted (None) on the Anthropic paths, which enforce the schema by
             # construction; set to native/prompt/mixed for an OpenRouter run so a
             # cross-model comparison can tell enforcement apart from quality.
@@ -659,6 +723,13 @@ def _do_extract(
             ),
             extraction_config=config_fingerprint,
         )
+
+        if prepared is not None:
+            if snapshot is None:  # pragma: no cover - source_mapped implies record/3
+                raise click.ClickException("digest/2 has no Record snapshot")
+            text = digest2_yaml(text, result.get("claims") or [], prepared, snapshot)
+        elif snapshot is not None:
+            text = record_snapshot_yaml(text, snapshot)
 
         from digester.generation import stamp as stamp_extraction_generation
 
@@ -760,8 +831,9 @@ def _echo_usage() -> None:
     "--predigests-root",
     type=click.Path(),
     default=None,
-    help="Store each record's materialised pre-digest (ADR 0042) under this "
-    "local, gitignored dir for the workbench's pre-digest tab.",
+    help="Store each content-addressed materialised pre-digest (ADR 0042). "
+    "Page-mapped record/3 extraction also stores the canonical source map in "
+    "the sibling source-maps/ directory.",
 )
 @click.option(
     "--confirm",

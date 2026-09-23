@@ -564,6 +564,37 @@ def _build_chunks(text: str, max_chars: int = CHUNK_MAX_CHARS) -> list[str]:
     return final
 
 
+def _claim_chunk_spans(
+    text: str,
+    *,
+    max_chars: int = CHUNK_MAX_CHARS,
+    overlap_chars: int = 0,
+) -> list[tuple[int, int, str]]:
+    """Return extraction chunks with exact offsets in the materialised body.
+
+    ``_build_chunks`` remains the one chunk-boundary implementation. This adapter
+    recovers its lossless offsets and optionally widens each side for page-mapped
+    multipart claims. Widening is only for claim extraction; exact realignment
+    later removes any duplicate proposition and binds the surviving quote to its
+    global code-point coordinates.
+    """
+    chunks = _build_chunks(text, max_chars=max_chars)
+    spans: list[tuple[int, int, str]] = []
+    position = 0
+    for chunk in chunks:
+        start = position
+        end = start + len(chunk)
+        if text[start:end] != chunk:
+            raise ValueError("claim chunk no longer matches the materialised text")
+        expanded_start = max(0, start - overlap_chars)
+        expanded_end = min(len(text), end + overlap_chars)
+        spans.append((expanded_start, expanded_end, text[expanded_start:expanded_end]))
+        position = end
+    if position != len(text):
+        raise ValueError("claim chunks do not cover the complete materialised text")
+    return spans
+
+
 # The claims pass emits FAR more per chunk than the nodes pass: one object per
 # claim, each now carrying a provenance chain (ADR 0044), so a 50k-char chunk asks
 # for ~90 claims and tens of thousands of output tokens in a single call. Haiku
@@ -599,6 +630,12 @@ def _build_chunks(text: str, max_chars: int = CHUNK_MAX_CHARS) -> list[str]:
 # A separate, smaller limit here only ever made the claims pass disagree with the
 # nodes pass about where a record divides.
 CLAIMS_CHUNK_MAX_CHARS = CHUNK_MAX_CHARS
+
+# Page-mapped claim extraction overlaps deterministic chunks so a claim whose
+# evidence crosses one selected page/Asset boundary is visible to one call. The
+# exact global chunk bounds travel only to deterministic realignment; they are
+# never emitted in a digest.
+PAGE_CLAIM_OVERLAP_CHARS = 8_000
 
 
 def _claim_key_v2(c: dict) -> tuple[str, str, str, str, str]:
@@ -740,11 +777,22 @@ NODES_SCHEMA_V2 = {
 CLAIM_REF_ROLES = ("subject", "participant", "setting", "mentioned")
 
 
-def build_claims_schema_v2(node_names: list[str]) -> dict:
+def build_claims_schema_v2(
+    node_names: list[str], *, require_original_excerpt: bool = False
+) -> dict:
     """JSON Schema for the claims pass. node_references items are restricted
     to the exact node names from Pass A - this is what physically prevents
     the model from introducing surface-form variants in claims.
     """
+    required = [
+        "content",
+        "category",
+        "claim_type",
+        "provenance_chain",
+        "attribution_in_text",
+    ]
+    if require_original_excerpt:
+        required.append("original_excerpt")
     return {
         "type": "object",
         "required": ["claims", "extraction_complete"],
@@ -758,18 +806,7 @@ def build_claims_schema_v2(node_names: list[str]) -> dict:
                     # field cannot be skipped - the model must answer "where did this
                     # come from?" at the moment it emits the claim. As an optional
                     # field it was simply never filled in.
-                    "required": [
-                        "content",
-                        "category",
-                        "claim_type",
-                        "provenance_chain",
-                        # Whether the text names who asserted it. DECLARED by the
-                        # model that wrote the text - never derived downstream from
-                        # origin_kind/attestation, which are only proxies for a
-                        # property of the sentence and will eventually disagree
-                        # with it (ADR 0044).
-                        "attribution_in_text",
-                    ],
+                    "required": required,
                     "properties": {
                         "content": {"type": "string"},
                         "original_excerpt": {"type": "string"},
@@ -931,7 +968,11 @@ def schema_fingerprint() -> str:
     an object carrying a role.
     """
     skeleton = json.dumps(
-        [NODES_SCHEMA_V2, build_claims_schema_v2([])],
+        [
+            NODES_SCHEMA_V2,
+            build_claims_schema_v2([]),
+            build_claims_schema_v2([], require_original_excerpt=True),
+        ],
         sort_keys=True,
         separators=(",", ":"),
     )
@@ -965,7 +1006,7 @@ def code_fingerprint() -> str:
     from anomalica_common import pre_digest
     from anomalica_common.digest import yaml_format
     from anomalica_common.llm import transport
-    from digester import cli, entailment, realign
+    from digester import cli, entailment, realign, source_anchors
     from digester.generation import stamp
 
     return _source_fingerprint(
@@ -973,6 +1014,7 @@ def code_fingerprint() -> str:
         _chunk_text,
         _split_at_chapters,
         _build_chunks,
+        _claim_chunk_spans,
         build_record_context,
         _format_directory_v2,
         _claim_key_v2,
@@ -982,9 +1024,11 @@ def code_fingerprint() -> str:
         transport,
         pre_digest,
         realign,
+        cli._do_extract,
         cli._normalise_locations,
         cli._entail,
         entailment,
+        source_anchors,
         yaml_format,
         stamp,
     )
@@ -999,7 +1043,7 @@ def effective_extraction_configuration(
 ) -> dict:
     """The complete effective setup for the canonical production path."""
     from anomalica_common.llm import transport
-    from anomalica_common.pre_digest import PREP_VERSION
+    from anomalica_common.pre_digest import PREP_VERSION, SOURCE_MAPPED_PREP_VERSION
     from digester import entailment
 
     if transport.is_opencode_model(model):
@@ -1039,7 +1083,15 @@ def effective_extraction_configuration(
             }
             for name, schema in (
                 ("nodes", NODES_SCHEMA_V2),
-                ("claims", build_claims_schema_v2([])),
+                (
+                    "claims",
+                    build_claims_schema_v2(
+                        [],
+                        require_original_excerpt=(
+                            prep_version == SOURCE_MAPPED_PREP_VERSION
+                        ),
+                    ),
+                ),
             )
         ],
         "preparation": {
@@ -1051,6 +1103,11 @@ def effective_extraction_configuration(
             "max_chars": CHUNK_MAX_CHARS,
             "min_chars": CHUNK_MIN_CHARS,
             "claims_max_chars": CLAIMS_CHUNK_MAX_CHARS,
+            "page_claim_overlap_chars": (
+                PAGE_CLAIM_OVERLAP_CHARS
+                if prep_version == SOURCE_MAPPED_PREP_VERSION
+                else 0
+            ),
         },
         "iteration": {
             "maximum_rounds": ITERATION_MAX,
@@ -1069,7 +1126,11 @@ def effective_extraction_configuration(
         },
         "post_processing": {
             "claim_deduplication": "proposition_type_attestation_speaker_anonymous_root",
-            "location_alignment": "timed_or_materialised_pre_digest",
+            "location_alignment": (
+                "exact_prep_v9_source_anchors"
+                if prep_version == SOURCE_MAPPED_PREP_VERSION
+                else "timed_or_materialised_pre_digest"
+            ),
             "entailment": {
                 "enabled": entailment.enabled(),
                 "available": entailment.available(),
@@ -1666,6 +1727,7 @@ def extract_claims_v2(
     record_context: str = "",
     on_progress=None,
     use_api: bool = False,
+    source_mapped: bool = False,
 ) -> list[dict]:
     """Pass B of the v2 architecture: extract claims, constrained to using
     only the node names from nodes_pass_result. Chunks the document and
@@ -1691,18 +1753,23 @@ def extract_claims_v2(
         for a in acronyms:
             acronyms_block += f"  - {a['acronym']} = {a['expansion']}\n"
 
-    schema = build_claims_schema_v2(node_names)
+    schema = build_claims_schema_v2(node_names, require_original_excerpt=source_mapped)
     directory = _format_directory_v2(nodes)
 
-    chunks = _build_chunks(text, max_chars=CLAIMS_CHUNK_MAX_CHARS)
+    chunks = _claim_chunk_spans(
+        text,
+        max_chars=CLAIMS_CHUNK_MAX_CHARS,
+        overlap_chars=PAGE_CLAIM_OVERLAP_CHARS if source_mapped else 0,
+    )
     merged_claims: list[dict] = []
     # Keyed on the proposition AND its provenance, and global across chunks. A
     # content-only key silently dropped the LATER of two assertions of the same
     # proposition - and the later one is usually the one that finally names its
     # source. See _claim_key_v2.
     seen_content: set[tuple[str, str, str, str, str]] = set()
+    claim_by_key: dict[tuple[str, str, str, str, str], dict] = {}
 
-    for ci, chunk in enumerate(chunks):
+    for ci, (chunk_start, chunk_end, chunk) in enumerate(chunks):
         if on_progress and len(chunks) > 1:
             on_progress(f"  claims chunk {ci + 1}/{len(chunks)} ({len(chunk):,} chars)")
 
@@ -1719,6 +1786,19 @@ def extract_claims_v2(
                 acronyms_block=acronyms_block,
             )
             task = ""
+            if source_mapped:
+                task = (
+                    "EXACT EVIDENCE REQUIREMENT: every claim MUST carry a non-empty "
+                    "original_excerpt copied character-for-character from this "
+                    "document chunk. For non-contiguous evidence, join two or more "
+                    "non-empty exact fragments with the ASCII marker ... and keep "
+                    "the fragments in source order. Do not normalise whitespace, "
+                    "punctuation or quotation marks, and do not add a speaker label "
+                    "unless those exact characters occur in the document. Include "
+                    "all fragments needed when evidence crosses a page or Asset "
+                    "boundary. location_in_record may be a rough disambiguating "
+                    "hint only; it is not stored as an exact anchor.\n\n"
+                )
             if chunk_claims:
                 exclude = "\n".join(
                     f"{i + 1}. {c['content']}  [type={c.get('claim_type') or '-'}"
@@ -1726,7 +1806,7 @@ def extract_claims_v2(
                     f"; attestation={c.get('attestation') or '-'}]"
                     for i, c in enumerate(chunk_claims)
                 )
-                task = (
+                task += (
                     "ALREADY EXTRACTED CLAIMS - each shown with the provenance it was "
                     "captured under. Do NOT repeat any of these:\n"
                     + exclude
@@ -1751,10 +1831,26 @@ def extract_claims_v2(
 
             new_in_round = 0
             for c in result.get("claims", []):
+                c = dict(c)
+                if source_mapped:
+                    c["_source_chunk"] = {
+                        "start": chunk_start,
+                        "end": chunk_end,
+                    }
                 key = _claim_key_v2(c)
                 if key in seen_content:
+                    if source_mapped:
+                        prior = claim_by_key[key]
+                        prior.setdefault("_additional_evidence", []).append(
+                            {
+                                "original_excerpt": c.get("original_excerpt"),
+                                "location_in_record": c.get("location_in_record"),
+                                "_source_chunk": c.get("_source_chunk"),
+                            }
+                        )
                     continue
                 seen_content.add(key)
+                claim_by_key[key] = c
                 chunk_claims.append(c)
                 merged_claims.append(c)
                 new_in_round += 1
@@ -1780,6 +1876,8 @@ def extract_two_pass(
     on_progress=None,
     use_api: bool = False,
     input_authority: HostedInputAuthority | None = None,
+    prepared_text: str | None = None,
+    source_mapped: bool = False,
 ) -> dict:
     """Top-level v2 entry point. Runs nodes pass then claims pass. Returns
     a dict with keys: nodes, claims, main_subject, codenames_to_resolve,
@@ -1795,7 +1893,7 @@ def extract_two_pass(
     # caller materialises + stores the pre-digest and records its hash; this is
     # idempotent, so a raw-text caller (benchmarks) still gets the same input.
     try:
-        text = materialise(text)
+        text = prepared_text if prepared_text is not None else materialise(text)
         pin_prompts()
         if on_progress:
             on_progress("Pass A: nodes (with iteration + chunking)")
@@ -1823,6 +1921,7 @@ def extract_two_pass(
             record_context=record_context,
             on_progress=on_progress,
             use_api=use_api,
+            source_mapped=source_mapped,
         )
         if on_progress:
             n_dom = sum(1 for c in claims if c.get("category") == "domain")

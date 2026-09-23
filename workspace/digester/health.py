@@ -762,15 +762,32 @@ def pre_digest_input_freshness(
     version first flagged 86 of 108 digests after the 6 -> 7 bump and buried
     the 32 whose text had actually moved.
 
+    Digest/2 is deliberately stricter: its labelled body hash, preparation 9,
+    source map and Record snapshot are one binding, so every component must be
+    current even when two preparation versions happen to yield the same text.
+
     The body is read from the content-addressed store when the digest's hash
     resolves there. `by-name/` is documented as symlinks into the store, but
     24 entries are regular files holding the body as first ingested, and two
     of those records were reviewed and rewritten in the store afterwards -
     compared against the by-name copy, both read as fresh.
     """
-    from anomalica_common.pre_digest import PREP_VERSION, materialise, pre_digest_hash
+    from anomalica_common.pre_digest import (
+        PREP_VERSION,
+        SOURCE_MAPPED_PREP_VERSION,
+        materialise,
+        pre_digest_hash,
+        prepare_page_record,
+    )
+    from anomalica_common.identity import digest_record_snapshot_identity
 
     from digester.record_parser import parse_record
+    from digester.source_anchors import (
+        digest_record_snapshot,
+        is_digest2_record,
+        record3_structure,
+        validate_digest_record_projection,
+    )
 
     by_hash = _records_by_hash(records_dir)
     store = records_dir.parent / "store"
@@ -800,15 +817,6 @@ def pre_digest_input_freshness(
                     "digest": stem,
                     "issue": "pre_digest_binding_unknown",
                     "detail": "pre_digest.sha256 is absent",
-                }
-            )
-            continue
-        if not isinstance(recorded, str) or not re.fullmatch(r"[0-9a-f]{64}", recorded):
-            groups["invalid"].append(
-                {
-                    "digest": stem,
-                    "issue": "pre_digest_binding_invalid",
-                    "detail": "pre_digest.sha256 is not 64 lowercase hexadecimal characters",
                 }
             )
             continue
@@ -843,11 +851,138 @@ def pre_digest_input_freshness(
                 }
             )
             continue
-        key = f"pdsha:{PREP_VERSION}:{hashlib.sha256(raw.encode()).hexdigest()}"
-        actual = cache.get(key)
+        try:
+            parsed_record = parse_record(raw)
+            structure = record3_structure(parsed_record)
+            expects_digest2 = is_digest2_record(structure)
+        except Exception as exc:
+            groups["invalid"].append(
+                {
+                    "digest": stem,
+                    "issue": "pre_digest_materialisation_failed",
+                    "detail": f"cannot validate {body_path}: {exc}",
+                    "record": rec,
+                }
+            )
+            continue
+
+        digest_schema = d.get("schema")
+        if expects_digest2 and digest_schema != "anomalica/digest/2":
+            groups["stale"].append(
+                {
+                    "digest": stem,
+                    "issue": "prep_version",
+                    "detail": (
+                        "page-mapped PDF/image record/3 requires digest/2 and "
+                        f"preparation {SOURCE_MAPPED_PREP_VERSION}"
+                    ),
+                    "record": rec,
+                }
+            )
+            continue
+        if digest_schema == "anomalica/digest/2" and not expects_digest2:
+            groups["invalid"].append(
+                {
+                    "digest": stem,
+                    "issue": "pre_digest_binding_invalid",
+                    "detail": "digest/2 input is not a page-mapped PDF/image record/3",
+                    "record": rec,
+                }
+            )
+            continue
+        digest2 = expects_digest2
+        expected_hash_pattern = r"sha256:[0-9a-f]{64}" if digest2 else r"[0-9a-f]{64}"
+        if not isinstance(recorded, str) or not re.fullmatch(
+            expected_hash_pattern, recorded
+        ):
+            groups["invalid"].append(
+                {
+                    "digest": stem,
+                    "issue": "pre_digest_binding_invalid",
+                    "detail": (
+                        "pre_digest.sha256 is not a full labelled lowercase SHA-256"
+                        if digest2
+                        else "pre_digest.sha256 is not 64 lowercase hexadecimal characters"
+                    ),
+                    "record": rec,
+                }
+            )
+            continue
+
+        if structure is not None:
+            try:
+                snapshot = digest_record_snapshot(parsed_record, structure)
+                snapshot_hash = digest_record_snapshot_identity(snapshot)
+            except Exception as exc:
+                groups["invalid"].append(
+                    {
+                        "digest": stem,
+                        "issue": "record_snapshot_binding_invalid",
+                        "detail": f"cannot project {body_path}: {exc}",
+                        "record": rec,
+                    }
+                )
+                continue
+            if d.get("record_snapshot_sha256") != snapshot_hash:
+                groups["stale"].append(
+                    {
+                        "digest": stem,
+                        "issue": "record_changed",
+                        "detail": "record_snapshot_sha256 is absent or not current",
+                        "record": rec,
+                    }
+                )
+                continue
+            try:
+                validate_digest_record_projection(d.get("record"), snapshot)
+            except Exception as exc:
+                groups["invalid"].append(
+                    {
+                        "digest": stem,
+                        "issue": "record_snapshot_binding_invalid",
+                        "detail": f"digest Record projection is invalid: {exc}",
+                        "record": rec,
+                    }
+                )
+                continue
+
+        active_version = SOURCE_MAPPED_PREP_VERSION if digest2 else PREP_VERSION
+        if digest2 and version != active_version:
+            groups["stale"].append(
+                {
+                    "digest": stem,
+                    "issue": "prep_version",
+                    "detail": (
+                        f"digest/2 requires prep {active_version}, recorded {version!r}"
+                    ),
+                    "record": rec,
+                }
+            )
+            continue
+        key = f"pdsha:{active_version}:{hashlib.sha256(raw.encode()).hexdigest()}"
+        # Digest/2 freshness also binds the source-map hash, so a cached body
+        # hash alone cannot prove it current.
+        actual = None if digest2 else cache.get(key)
         if actual is None:
             try:
-                actual = pre_digest_hash(materialise(parse_record(raw).body))
+                if digest2:
+                    prepared = prepare_page_record(structure, parsed_record.body)
+                    actual = prepared.sha256
+                    if pd.get("source_map_sha256") != prepared.source_map_sha256:
+                        groups["stale"].append(
+                            {
+                                "digest": stem,
+                                "issue": "record_changed",
+                                "detail": (
+                                    "source_map_sha256 does not match the current "
+                                    "canonical map"
+                                ),
+                                "record": rec,
+                            }
+                        )
+                        continue
+                else:
+                    actual = pre_digest_hash(materialise(parsed_record.body))
             except Exception as exc:
                 groups["invalid"].append(
                     {
@@ -858,19 +993,20 @@ def pre_digest_input_freshness(
                     }
                 )
                 continue
-            cache[key] = actual
+            if not digest2:
+                cache[key] = actual
         if actual == recorded:
             groups["current"].append(
                 {"digest": stem, "issue": "pre_digest_hash_match", "record": rec}
             )
             continue
-        if version is not None and version != PREP_VERSION:
+        if version is not None and version != active_version:
             groups["stale"].append(
                 {
                     "digest": stem,
                     "issue": "prep_version",
                     "detail": (
-                        f"built under prep {version}, current is {PREP_VERSION}; "
+                        f"built under prep {version}, current is {active_version}; "
                         f"recorded {recorded[:12]}, record now yields {actual[:12]}"
                     ),
                     "record": rec,

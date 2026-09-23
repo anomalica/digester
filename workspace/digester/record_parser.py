@@ -8,8 +8,8 @@ from __future__ import annotations
 
 import datetime as _dt
 import re
+from collections.abc import Mapping
 from dataclasses import dataclass, field
-
 from pathlib import Path
 
 import yaml
@@ -46,6 +46,7 @@ class ParsedRecord:
     source_type: str | None = None
     reference: str | None = None
     schema_version: str | None = None
+    frontmatter: dict = field(default_factory=dict)
     metadata: dict = field(default_factory=dict)
     body: str = ""
     pages: list[PageBreak] = field(default_factory=list)
@@ -98,6 +99,7 @@ def parse_record(text: str) -> ParsedRecord:
             try:
                 fm = yaml.safe_load(frontmatter_text)
                 if isinstance(fm, dict):
+                    record.frontmatter = dict(fm)
                     record.title = fm.get("title", "")
                     # Canonical frontmatter is `date_published` (ingest-format
                     # spec); `date` is a legacy fallback. Without this every
@@ -105,11 +107,24 @@ def parse_record(text: str) -> ParsedRecord:
                     record.date = _normalise_date(
                         fm.get("date_published") or fm.get("date")
                     )
-                    record.creators = fm.get("creators", [])
+                    provenance = fm.get("provenance")
+                    if not isinstance(provenance, Mapping):
+                        provenance = {}
+                    record.creators = fm.get("creators") or provenance.get(
+                        "creators", []
+                    )
                     record.source_type = fm.get("source_type")
+                    if not record.source_type:
+                        source_types = fm.get("source_types") or []
+                        if len(source_types) == 1:
+                            record.source_type = source_types[0]
                     # The spec has no `reference` field; the source link lives in
                     # `source_url`. Map it so the digest carries provenance.
-                    record.reference = fm.get("reference") or fm.get("source_url")
+                    record.reference = (
+                        fm.get("reference")
+                        or fm.get("source_url")
+                        or provenance.get("source_url")
+                    )
                     record.schema_version = fm.get("schema")
                     record.metadata = {
                         k: v
@@ -160,6 +175,16 @@ def parse_record(text: str) -> ParsedRecord:
         i += 1
 
     record.body = "\n".join(content_parts).strip()
+    # Canonical record/3 page annotations are HTML comments. Keep them in the
+    # body because they are useful model context, but expose their positions to
+    # deterministic source mapping. The fenced form above is legacy-readable.
+    for match in re.finditer(r"<!--\s*file_page:\s*([0-9]+)\s*-->", record.body):
+        page = int(match.group(1))
+        if not any(
+            p.file_page == page and p.offset == match.start() for p in record.pages
+        ):
+            record.pages.append(PageBreak(file_page=page, offset=match.start()))
+    record.pages.sort(key=lambda page: page.offset)
     return record
 
 
